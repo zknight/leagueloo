@@ -1,0 +1,144 @@
+                                                home
+                                                  |
+                         +-------------+----------+---------+-----------+
+                         |             |          |         |           |
+                    recreational  competitive  academy  headstart  tournaments
+                         |          |      |                            |
+                        news      teams  news                    +------+-----+
+                         |          |      |                     |            |
+                      article     team  article             cosmos cup  spring twister
+
+
+paths
+-----
+/ - default (home) view
+/:program - program view
+/news/article/:action/:id
+/news/article/:action/:id.<response type> default html, can be json or others as added
+
+/<program> - program controller, look-up program by name (which should be index?)
+program is special because it is not a resource but a landing (site?)
+
+nested resources
+----------------
+since routing is done via module/controller, how to identify RESTful stuff?
+Don't like Rails way of doing it because it is cumbersome.  How to make it
+more straight-forward, less magical?
+
+Nested resources belong to a parent.  Let parent controller handle it?
+
+not 1:1 controller <-> model.  MVC doesn't have to be this way.  break this.
+
+example: news/:id/article/[:id]
+    route to 'news' controller
+    method          action
+    ------          ------
+    GET             show_article(news_id, article_id)
+    POST            new_article(parent_id)
+    PUT             edit_article(parent_id, article_id)
+    DELETE          delete_article(parent_id, article_id)
+
+example: news/[:id]
+    GET             show(news_id)
+    POST            new()
+    PUT             edit_news(news_id)
+    DELETE          delete_news(news_id)
+
+or, should control be delegated somehow ('partial' controller?)
+Action is rendered as a subset...
+
+controllers
+-----------
+Two kinds: REST, non-REST
+BaseController is non-REST
+    actions are indepdendent of resources
+
+RESTController is REST
+    has basic REST CRUD actions
+    automatically maps args to REST actions
+
+For nested resources, must 'register' sub-resources somehow
+Multiple classes per module?
+
+example:
+    news/[:id] routes to NewsController
+    news/:id/article/:id routes to ArticleController in context of news?
+
+    what about 'nice' URLs?  Is this rest REST, wouldn't ever be used
+    to Create/Update/Delete? 
+
+    POST recreational/news/
+    GET/PUT/DELETE recreational/news/camps_in_full_swing
+    would lookup up camps_in_full_swing article under recreational news
+
+    This makes the assumption that news<->program are 1:1
+    How would this be routed?
+    Not covered by automatice routing by directory because lookup is by
+    something other than id and controller is not specified directly
+
+    If it doesn't match dir based routing, have program controller delegate to
+    another controller? 
+
+    What about recreational/camps_in_full_swing/?
+
+    program (main) controller is default, what does second thing mean?
+    
+    Program is not a resource, is it?
+
+
+routing
+-------
+Routing by controller
+    default controller checks route
+        /bulletin/:id
+        delegates to bulletin controller passing :id as bulletin_id
+
+        /recreational/bulletin/:id
+        no route matches, leftover is entire route
+        program controller checks first element and treats it as 
+        resource (program by name)
+        then delegates to bulletin controller passing :id as bulletin_id
+        and id of 'recreational' program
+        bulletin controller checks remaining route /bulletin/:id
+        should match bulletin 
+        how to do by name?
+        /recreational/bulletin/registration_is_open
+        
+        [recreational, bulletin, registration_is_open]
+              |           |             |
+              |           |             +- doesn't match /^\d+$/ or action
+              |           +- route to bulletin controller
+              +- doesn't match /^\d+$/ or action
+
+For RESTController
+1. check to see if matches controller
+2. if not, check to see if matches action
+3. if not, check to see if matches id
+4. finally, check to see if matches resource
+5. if not, 404
+
+For BaseController
+1. check to see if matches controller
+1. if not, check to see if matches action in current controller
+2. if not, 404
+
+This is multi-level routing.
+
+How to differentiate between something like this...
+ /program/:id/bulletin/ (a)
+ /team/:id/bulletin/ (b)
+
+(a) shows all bulletins associated with program[:id]
+(b) shows all bulletins associated with team[:id]
+
+hmmmm.  For RESTController, delegate?
+
+models
+------
+Use redbeanphp (fuse) to implement models
+
+        
+applets
+-------
+plug-ins (modules)
+- have their own 'controller' and 'view'

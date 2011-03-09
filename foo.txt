@@ -1,0 +1,30 @@
+testing request: test/foo
+** app/controllers/test/foo.php
+
+** remaining request parameters: 
+
+testing request: test
+!! no controller found.
+
+** remaining request parameters: 
+
+testing request: admin/foo
+!! no controller found.
+
+** remaining request parameters: foo
+
+testing request: admin/event
+** app/controllers/admin/event.php
+
+** remaining request parameters: 
+
+testing request: news/1/article/2
+** app/controllers/news.php
+
+** remaining request parameters: 1/article/2
+
+testing request: event/3
+** app/controllers/event.php
+
+** remaining request parameters: 3
+
