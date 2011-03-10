@@ -10,16 +10,78 @@ class Router
 {
     private $_default_controller;
     private $_route_map;
+    private $_log;
 
     function __construct()
     {
         global $APP_BASE_PATH;
+        global $log;
 
-        $this->_default_controller = "main";
+        $this->_log = &$log;
+        $this->_default_controller = array("main");
         $this->_GenerateMap($this->_route_map, $APP_BASE_PATH . "/controllers");
     }
 
-    function GetController(&$request, &$controller, &$path)
+    function Route($request)
+    {
+        $this->_log->logDebug("Routing request: \n" . print_r($request->GetRequest(), true));
+
+        $done = false;
+        $routed = false;
+
+        // The controller is going to do one of two things:
+        // - Dispatch the request to an action
+        // - Return a delegated controller
+        
+        if ($this->GetController($request->GetRequest(), $controller_name, $path) || 
+            $this->GetController($this->_default_controller, $controller_name, $path))
+        {
+            while (!$done)
+            {
+                require_once($path);
+                $controller = new $controller_name();
+                //array_shift($request->GetRequest());
+                $this->_log->logDebug("checking to see if $controller_name can handle \n" . print_r($request->GetRequest(), true));
+                if ($controller->CanHandle($request))
+                {
+                    $this->_log->logDebug("dispatching $controller_name");
+                    $controller->Dispatch($request);
+                    $done = true;
+                    $routed = true;
+                }
+                else
+                {
+                    $delegate = $controller->Delegate($request);
+                    if ($delegate)
+                    {
+                        if (array_key_exists('action', $delegate)) 
+                            array_unshift($request->GetRequest(), $delegate['action']);
+                        if (array_key_exists('controller', $delegate)) 
+                            array_unshift($request->GetRequest(), $delegate['controller']);
+                        if (!$this->GetController(
+                            $request->GetRequest(),
+                            $controller_name,
+                            $path))
+                        {
+                            $done = true;
+                        }
+                    }
+                    else
+                    {
+                        $done = true;
+                    }
+                }
+            }
+        }
+
+        if ($routed == false)
+        {
+            $this->_log->logDebug("Unable to route request.");
+            require_once $request->GetBasePath() . "public/error404.phtml";
+        }
+    }
+
+    private function GetController(&$request, &$controller, &$path)
     {
         $is_controller = false;
         $namespace = "\\app\\";

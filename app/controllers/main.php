@@ -13,7 +13,8 @@ class MainController extends \simp\Controller
     {
         // look at request and see if it should be delgated
         // in this case, try to find a Program with the given name 
-        $delegate = array('controller' => 'program', 'action' => 'show');
+        //$delegate = array('controller' => 'program', 'action' => 'show');
+        $delegate = array('controller' => 'program', 'action' => 'name');
         return $delegate;
     }
 

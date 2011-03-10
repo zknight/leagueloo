@@ -5,20 +5,14 @@ class ProgramController extends \simp\Controller
 
     function Setup()
     {
-        $this->AddAction('show', \simp\Request::GET, 'Show');
+        $this->AddAction('name', \simp\Request::GET, 'Index');
+        $this->AddAction('id', \simp\Request::GET, 'Index');
     }
     
     // Actions
     function Index()
     {
-        echo "<strong>program Index with {$this->_params}.</strong>\n";
+        echo "<strong>program Index with {$this->_params[0]}.</strong>\n";
         return false;
-    }
-
-    function Show()
-    {
-        global $log;
-        echo "<strong>Showing " . $this->_params[0] . "</strong>\n";
-        $log->logDebug("in program: params = {$this->_params[0]}");
     }
 }

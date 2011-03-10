@@ -136,6 +136,7 @@ hmmmm.  For RESTController, delegate?
 models
 ------
 Use redbeanphp (fuse) to implement models
+make models have 'short name' for identification (index)
 
         
 applets

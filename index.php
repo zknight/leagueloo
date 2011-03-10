@@ -1,9 +1,8 @@
 <?php
 require_once "simp/boot.php";
-require_once "app/controllers/main.php";
-
-$controller = new \app\MainController($router);
-$controller->Dispatch($req);
+//require_once "app/controllers/main.php";
+//$controller = new \app\MainController($router);
+//$controller->Dispatch($req);
 ?>
 <html>
     <head>

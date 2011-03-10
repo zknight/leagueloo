@@ -5,7 +5,6 @@ require_once "request.php";
 class Controller
 {
 
-    protected $_router;
     protected $_params;
     protected $_action_map;
     protected $_view_path;
@@ -14,27 +13,26 @@ class Controller
     protected $_content;
     protected $_method;
     protected $_default_action;
+    protected $_action;
 
-    function __construct($router)
+    function __construct()
     {
         global $APP_BASE_PATH;
-        $this->_router =& $router;
-        echo "<pre>class: " . get_class($this) . "</pre>\n";
+        global $log;
+        $log->logDebug("class: " . get_class($this));
         $class = explode("\\", 
             preg_replace("/app\\\/", "", get_class($this))
         );
-        echo "<pre>elements: "; 
-        print_r($class);
-        echo "</pre>\n";
+        $log->logDebug("elements: " . print_r($class));
         $last_index = count($class) - 1;
-        echo "class name: {$class[$last_index]}\n";
+        $log->logDebug("class name: {$class[$last_index]}");
         $view_dir = SnakeCase(preg_replace("/Controller/", "/", $class[$last_index]));
         $this->_view_path = 
             $APP_BASE_PATH . 
             "/views/" . 
             implode("/", array_slice($class, 0, $last_index-1)) .
             $view_dir;
-        echo "<pre>view_dir: " . $view_dir . " view_path: " . $this->_view_path. "\n</pre>";
+        $log->logDebug("view_dir: " . $view_dir . " view_path: " . $this->_view_path); 
         $this->_layout_path = $APP_BASE_PATH . "/views/layouts/";
         $this->_layout_name = "default";
         $this->_method = Request::GET;
@@ -73,69 +71,54 @@ class Controller
         }
     }
 
+    function CheckDefault($request)
+    {
+        global $log;
+        $handled = false;
+        if ((count($request->GetRequest()) < 1) && method_exists($this, $this->_default_action))
+        {
+            $handled = true;
+            //$this->CallAction($this->_default_action);
+            //$log->logDebug("calling default action");
+            $this->_action = $this->_default_action;
+        }
+        return $handled;
+    }
+
+    function CheckAction(&$request)
+    {
+        global $log;
+        $handled = false;
+        $request_params = &$request->GetRequest();
+        if ($action = $this->_action_map[$request_params[0]][$request->GetMethod()])
+        {
+            // Action exists.  TODO: Call "before" filter 
+            // and change this to call the mapped action
+            $this->_action = $action;
+            array_shift($request->GetRequest());
+            //$log->logDebug("calling action $action with request array " . print_r($request_params, true));
+            //$this->CallAction($action, $request_params);
+            $handled = true;
+        }
+        return $handled;
+    }
+
+    function CanHandle($request)
+    {
+        $can_handle = $this->CheckDefault($request);
+        if (!$can_handle) $can_handle = $this->CheckAction($request);
+        return $can_handle;
+    }
 
     function Dispatch($request)
     {
         global $log;
-        echo "Dispatching.\n";
         $path = '';
         $controller_name = '';
-        $request_array = &$request->GetRequest();
+        $log->logDebug("Dispatching with request:\n " . print_r($request->GetRequest(), true));
 
-        $this->_method =  $request->GetMethod();
-
-        if ((count($request_array) < 1) && method_exists($this, $this->_default_action))
-        {
-            $this->CallAction($this->_default_action);
-            $log->logDebug("calling default action");
-        }
-        // check for controller match
-        else if ($this->_router->GetController($request_array, $controller_name, $path))
-        {
-            // load controller and dispatch request
-            require_once($path);
-            $controller = new $controller_name($this->_router);
-            $log->logDebug("dispatching $controller_name");
-            $controller->Dispatch($request);
-        }
-
-        // check for action match
-        else if($action = $this->_action_map[$request_array[0]][$this->_method])
-        {
-            // Action exists.  TODO: Call "before" filter 
-            // and change this to call the mapped action
-            array_shift($request_array);
-            $log->logDebug("calling action $action with request array " . print_r($request_array, true));
-            $this->CallAction($action, $request_array);
-        }
-        // check for delegated controller
-        else if ($delegate = $this->Delegate($request_array[0]))
-        {
-            //array_shift($request_array);
-            array_unshift($request_array, $delegate['action']);
-            array_unshift($request_array, $delegate['controller']);
-            echo "<pre>delegated request array:\n";
-            print_r($request_array);
-            echo "</pre>\n";
-            if ($this->_router->GetController($request_array, $controller_name, $path))
-            {
-                // load controller and dispatch request
-                require_once($path);
-                $controller = new $controller_name($this->_router);
-                $log->logDebug("dispatching delegate $controller_name");
-                $controller->Dispatch($request);
-            }
-            else
-            {
-                //$this->Render("error404");
-            }
-
-        }
-        // 404 cuz nuffin found
-        else
-        {
-            //$this->Render("error404");
-        }
+        //$this->_method =  $request->GetMethod();
+        $this->CallAction($this->_action, $request->GetRequest());
     }
 
     function Render($view)
