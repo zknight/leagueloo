@@ -1,6 +1,7 @@
 <?
 namespace simp;
 require_once "request.php";
+require_once "helpers.php";
 
 class Controller
 {
@@ -21,16 +22,16 @@ class Controller
         global $log;
         $log->logDebug("class: " . get_class($this));
         $class = explode("\\", 
-            preg_replace("/app\\\/", "", get_class($this))
+            preg_replace("/app/", "", get_class($this))
         );
-        $log->logDebug("elements: " . print_r($class));
+        $log->logDebug("elements: " . print_r($class, true));
         $last_index = count($class) - 1;
         $log->logDebug("class name: {$class[$last_index]}");
         $view_dir = SnakeCase(preg_replace("/Controller/", "/", $class[$last_index]));
         $this->_view_path = 
             $APP_BASE_PATH . 
-            "/views/" . 
-            implode("/", array_slice($class, 0, $last_index-1)) .
+            "/views" . 
+            implode("/", array_slice($class, 0, $last_index)) . "/" .
             $view_dir;
         $log->logDebug("view_dir: " . $view_dir . " view_path: " . $this->_view_path); 
         $this->_layout_path = $APP_BASE_PATH . "/views/layouts/";
@@ -92,12 +93,8 @@ class Controller
         $request_params = &$request->GetRequest();
         if ($action = $this->_action_map[$request_params[0]][$request->GetMethod()])
         {
-            // Action exists.  TODO: Call "before" filter 
-            // and change this to call the mapped action
             $this->_action = $action;
             array_shift($request->GetRequest());
-            //$log->logDebug("calling action $action with request array " . print_r($request_params, true));
-            //$this->CallAction($action, $request_params);
             $handled = true;
         }
         return $handled;
@@ -123,6 +120,7 @@ class Controller
 
     function Render($view)
     {
+        global $REL_PATH;
         ob_start();
         require_once $this->_view_path . SnakeCase($view) . ".phtml";
         $this->content .= ob_get_contents();

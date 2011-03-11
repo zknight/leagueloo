@@ -23,15 +23,18 @@ function sess_close()
 
 function sess_read($id)
 {
+    global $log;
   //echo "sess_read($id);\n";
-  $db = DB::GetDB();
-  $res = $db->Fetch("sessions", "data", array('sess_id' => $id));
-  $new_session = true;
-  if (is_array($res) && (count($res) > 0))
-  {
-    Puts("res is array\n");
+    $db = \simp\DB::Instance();
+  //$res = $db->Fetch("sessions", "data", array('sess_id' => $id));
+
+    $session = $db->FindOne("Session", "sess_id =?", array($id));
+    $new_session = true;
+    if ($session)
+    {
+        $log->logDebug("res is array\n");
     //print_r($res);
-    $sess_str = $res[0]['data'];
+    //$sess_str = $session->sess_str;
 
     /*
      */
@@ -40,83 +43,100 @@ function sess_read($id)
   //echo "sess_str:";
   //print_r($sess_str);
 
-  if (!$new_session)
-  {
+    if (!$new_session)
+    {
     //echo "$id:sess_str = $sess_str\n";
-    return $sess_str;
-  }
-  else
-  {
-      Puts("adding session $id");
-    $db->AddRow(
-      "sessions", 
-      array(
-        'sess_id' => $id, 
-        'data' => '',
-        'touch' => time())
-    );
-  }
-  return "";
+        return $session->sess_str;
+    }
+    else
+    {
+        $log->logDebug("adding session $id");
+        $session = $db->Create("Session");
+        $session->sess_id = $id;
+        $session->data = '';
+        $session->touch = time();
+        $db->Save($session);
+    }
+    return "";
 }
 
 function sess_write($id, $data)
 {
-  Puts("sess_write($id, $data)\n");
-  $db = DB::GetDB();
-  $touch = time();
-  $db->UpdateRow(
-    "sessions", 
-    array('data' => $data, 'touch' => $touch),
-    array('sess_id' => $id)
-  );
+    $db = \simp\DB::Instance();
+    $session = $db->FindOne("Session", "sess_id =?", array($id));
+    $session->touch = time();
+    $session->data = $data;
+    $session->sess_id = $id;
+    $db->Save($session);
   
-  return true;
+    return true;
 }
 
 function sess_destroy($id)
 {
-  //echo "sess_destroy($id)\n";
+    //echo "sess_destroy($id)\n";
 }
 
 function sess_gc($maxlife)
 {
-  //echo "sess_gc($maxlife)\n";
-  return true;
+    //echo "sess_gc($maxlife)\n";
+    return true;
 }
 
 function check_current_session_timeout()
 {
-  if ($_COOKIE["PHPSESSID"])
-  {
-    $id = $_COOKIE["PHPSESSID"];
+    global $log;
+    if ($_COOKIE["PHPSESSID"])
+    {
+        $id = $_COOKIE["PHPSESSID"];
 
-    $db = DB::GetDB();
+        $db = \simp\DB::Instance();
+        $session = $db->FindOne("Session", "sess_id =?", array($id));
+
+        if ($session)
+        {
+            // TODO: make this a configurable variable
+            $max_session_min = 60;
+            $max_session = $max_session_min * 60;
+            $curtime = time();
+            $log->logDebug("\$curtime = " . print_r($curtime, true));
+            $delta = $curtime - $session->touch;
+            $log->logDebug("\$delta = $delta");
+            if ($delta > $max_session)
+            {
+                $log->logDebug("session timeout.  deleting $id");
+                unset($_COOKIE["PHPSESSID"]);
+                $db->Delete($session);
+            }
+        }
+    }
+    /*
     $res = $db->Fetch("sessions", "touch", array('sess_id' => $id));
     if (is_array($res))
     {
-      Puts(print_r($res, true));
+      $log->logDebug(print_r($res, true));
       $touch = $res[0]['touch'];
       $max_session_m = $db->Fetch("cfg_var", "value", array('name' => 'session_timeout'));
-      Puts("\$max_session_m = " . print_r($max_session_m, true));
+      $log->logDebug("\$max_session_m = " . print_r($max_session_m, true));
       $max_session = $max_session_m[0]['value'] * 60;
       if ($max_session == 0)
       {
         $max_session = MAX_SESSION;
       }
-      Puts("\$max_session = $max_session");
+      $log->logDebug("\$max_session = $max_session");
 
       $curtime = time();
-      Puts("\$curtime = " . print_r($curtime, true));
+      $log->logDebug("\$curtime = " . print_r($curtime, true));
       $delta = $curtime - $touch;
-      Puts("\$delta = $delta");
+      $log->logDebug("\$delta = $delta");
       if ($delta > $max_session)
       {
-        Puts("session timeout.  deleting $id");
         unset($_COOKIE["PHPSESSID"]);
         $db->Delete("sessions", array('sess_id' => $id));
       }
     }
   }
+     */
 }
 
 session_set_save_handler(

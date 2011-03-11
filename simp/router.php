@@ -38,7 +38,7 @@ class Router
         {
             while (!$done)
             {
-                require_once($path);
+                require_once $path;
                 $controller = new $controller_name();
                 //array_shift($request->GetRequest());
                 $this->_log->logDebug("checking to see if $controller_name can handle \n" . print_r($request->GetRequest(), true));
@@ -116,7 +116,6 @@ class Router
                     $done = true;
                     $is_controller = true;
                     $controller = "$namespace" . ClassCase($test) . "Controller";
-                    echo "found controller $controller\n";
                 }
             }
             else $done = true;
@@ -133,7 +132,6 @@ class Router
     // first request comes in after launching the application
     private function _GenerateMap(&$map, $dir)
     {
-        echo "looking at $dir\n";
         $entries = scandir($dir);
         foreach ($entries as $entry)
         {
@@ -143,14 +141,12 @@ class Router
             
                 if (is_dir($curpath))
                 {
-                    //echo "dir: $curpath";
                     $map[$entry] = array("type" => "module");
                     $this->_GenerateMap($map[$entry]['module'], $curpath);
                 }
                 else if (is_file($curpath) && preg_match("/\.php$/", $entry))
                 {
                     $name = preg_replace("/\.php/", "", $entry);
-                    //echo "file: $curpath\n";
                     $map[$name] = array("type" => "file", "file" => $curpath);
                 }
             }

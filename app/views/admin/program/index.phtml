@@ -1,0 +1,14 @@
+<p><strong>Admin Index</strong></p>
+<a href="<?=$REL_PATH;?>admin/program/new">Add New Program</a>
+<table>
+    <tr>
+        <th>Program</th>
+        <th>Description</th>
+    </tr>
+<? foreach ($this->programs as $program): ?>
+    <tr>
+        <td><?= $program->name; ?></td>
+        <td><?= $program->description; ?></td>
+    </tr>
+<? endforeach; ?>
+</table>
