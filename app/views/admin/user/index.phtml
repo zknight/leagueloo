@@ -1,0 +1,22 @@
+<p><strong>Users</strong></p>
+<?= l("Add New User", Path::admin_user_add());?>
+<table>
+    <tr>
+        <th>User</th>
+        <th>Name</th>
+        <th>Last Login</th>
+        <th>Created</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+<? foreach ($this->users as $user): ?>
+    <tr>
+        <td><?= $user->login; ?></td>
+        <td><?= $user->last_name; ?>, <?= $user->first_name; ?></td>
+        <td><?= FormatDateTime($user->last_login); ?></td>
+        <td><?= FormatDateTime($user->created_on); ?></td>
+        <td><?= l("Edit", Path::admin_user_edit($user->id)); ?></td> 
+        <td><?= l("Delete", Path::admin_program($program->id), array("method" => "delete")); ?></td>
+    </tr>
+<? endforeach; ?>
+</table>

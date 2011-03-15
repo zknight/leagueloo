@@ -36,9 +36,9 @@ class RESTController extends Controller
         //  DELETE => 
         //      id => Remove
         $log->logDebug("REST CheckAction() request_params: \n" . print_r($request_params, true));
+        $log->logDebug("REST method: " . $request->GetMethod());
         if (count($request_params) > 0)
         {
-            $log->logDebug("REST method: " . $request->GetMethod());
             switch($request->GetMethod())
             {
             case Request::GET:

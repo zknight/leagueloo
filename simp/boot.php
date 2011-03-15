@@ -26,5 +26,12 @@ $router = new Router();
 $router->Route($req);
 
 $log->logDebug('/\\ /\\ /\\');
+date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
+
+function __autoload($classname)
+{
+    global $log;
+    $log->logDebug("want to load $classname");
+}
 ?>
 

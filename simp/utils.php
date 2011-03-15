@@ -31,8 +31,9 @@ function RedirectURI($path)
 
 function Redirect($path)
 {
-    global $REL_PATH;
-    header("Location: " . $REL_PATH . $path);
+    //global $REL_PATH;
+    //header("Location: /" . $REL_PATH . $path);
+    header("Location: " . $path);
     exit();
 }
 
@@ -74,4 +75,25 @@ function GetUploadError($err)
     }
 }
 
+function SupportedTimeZones()
+{
+    return array(
+        'America/New_York'=>'EDT (US New York)', 
+        'America/Chicago'=>'CDT (US Chicago)', 
+        'America/Boise'=>'MDT (US Boise)', 
+        'America/Phoenix'=>'MST (US Phoenix)', 
+        'America/Los_Angeles'=>'PDT (US Los Angeles)', 
+        'America/Juneau'=>'AKDT (US Juneau)', 
+        'Pacific/Honolulu'=>'HST (US Honolulu)', 
+        'America/Puerto_Rico'=>'AST (Puerto Rico)', 
+        'Pacific/Guam'=>'ChST (Guam)', 
+        'Pacific/Samoa'=>'SST (Samoa)', 
+        'Pacific/Wake'=>'WAKT (Wake)',
+    );
+}
+
+function DateTimeDefaultFormat()
+{
+    return "U";
+}
 ?>

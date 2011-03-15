@@ -1,10 +1,51 @@
 <?
-if (file_exists("app/helpers/master.php"))
-  include ("app/helpers/master.php");
+// leaving these in the global namespace.
+class Path
+{
+    public static function __callStatic($name, $arguments)
+    {
+        global $REL_PATH;
+        global $log;
+        $log->logDebug("Path::{$name}({$arguments[0]})");
+        $name_arr = explode('_', $name);
+        if (isset($arguments[0]))
+        {
+            $name_arr[] = $arguments[0];
+        }
+        $path = $REL_PATH . implode('/', $name_arr);
+        return $path;
+    }
+}
 
 function h($str)
 {
   return htmlentities($str, ENT_QUOTES);
+}
+
+function FormTag($name, $method, $action = NULL)
+{
+    $html = "<form name=\"{$name}\" method=\"post\"";
+    if (isset($action)) $html .= " action=\"{$action}\"";
+    $html .= ">\n";
+    switch ($method)
+    {
+    case \simp\Request::DELETE:
+        $value = 'delete';
+        break;
+    case \simp\Request::PUT:
+        $value = 'put';
+        break;
+    case \simp\Request::GET:
+        $value = 'get';
+        break;
+    }
+    if (isset($value)) $html .= "\n\t<input type=\"hidden\" name=\"method\" value=\"{$value}\"/>";
+    return $html;
+}
+
+function EndForm()
+{
+    return "</form>";
 }
 
 function TextField($model, $field, $size = "20", $class = NULL, $id = NULL)
@@ -13,7 +54,7 @@ function TextField($model, $field, $size = "20", $class = NULL, $id = NULL)
   $input_field = $field;
   if (isset($model))
   {
-    $mname = get_class($model);
+    $mname = $model;
     $input_field = $mname . "[$field]";
     /*
     $err = $model->GetError($field);
@@ -61,7 +102,7 @@ function CheckBoxField($model, $field, $class = NULL)
     $input_field = $field;
     if (isset($model))
     {
-        $mname = get_class($model);
+        $mname = $model;
         $input_field = $mname . "[$field]";
         /*
         $err = $model->GetError($field);
@@ -88,44 +129,93 @@ function CheckBoxField($model, $field, $class = NULL)
     return $html;
 }
 
-function l($text, $pathAr, $opts = array())
+function TextArea($model, $field, $rows = 3, $cols = 80, $class = NULL, $id = NULL)
 {
-  global $REL_PATH;
-  $pathstr = $REL_PATH;
-  $class = '';
-  $target = '';
-  if (isset($pathAr['namespace']))
-  {
-    $path[] = $pathAr['namespace'];
-  }
-  if (isset($pathAr['controller']))
-  {
-    $path[] = $pathAr['controller'];
-  }
-  if (isset($pathAr['action']))
-  {
-    $path[] = $pathAr['action'];
-  }
-  if (isset($pathAr['id']))
-  {
-    $path[] = $pathAr['id'];
-  }
+    $value = "";
+    $html = "<textarea";
+    if (isset($class)) $html .= " class=\"{$class}\"";
+    if (isset($id)) $html .= " id=\"{$id}\"";
+    if (isset($model))
+    {
+        $mname = $model;
+        $input_field = $mname . "[{$field}]";
+        $html .= " name=\"$input_field\"";
+        $value = $model->__get($field);
+    }
+    $html .= " rows=\"${rows}\" cols=\"${cols}\">$value</textarea>\n";
+    return $html;
+}
 
-  $pathstr .= implode($path, '/');
-  if (isset($opts['class']))
-  {
-    $c = $opts['class'];
-    $class = "class='$c'";
-  }
-  if (isset($opts['target']))
-  {
-      $t = $opts['target'];
-      $target = "target='$t'";
-  }
+function SimpleSelect($model, $field, $options, $class = NULL, $id = NULL)
+{
+    $html = "<select";
+    if (isset($class)) $html .= " class=\"{$class}\"";
+    if (isset($id)) $html .= " id=\"{$id}\"";
+    if (isset($model))
+    {
+        $mname = $model;
+        $input_field = $mname . "[{$field}]";
+        $html .= " name=\"$input_field\"";
+        $value = $model->__get($field);
+    }
+    $html .= ">\n";
+    foreach($options as $val => $text)
+    {
+        $html .= "\t<option value=\"{$val}\"";
+        if ($val == $value) $html .= " selected=\"selected\"";
+        $html .= ">{$text}</option>\n";
+    }
+    $html .= "</select>";
+    return $html;
+}
 
-  $html = "<a href='$pathstr' $class $target>$text</a>";
+function rand_str($length = 10)
+{
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXyZ";
+    $str = "";
+    for ($i = 0; $i<$length; $i++)
+    {
+        $str .= $chars{mt_rand(0, strlen($chars))};
+    }
+    return $str;
+}
+    
+function l($text, $path, $opts = array())
+{
+    global $REL_PATH;
+    $pathstr = $REL_PATH;
+    $class = '';
+    $target = '';
 
-  return $html;
+    if (isset($opts['class']))
+    {
+        $c = $opts['class'];
+        $class = "class='$c'";
+    }
+    if (isset($opts['target']))
+    {
+        $t = $opts['target'];
+        $target = "target='$t'";
+    }
+    if (isset($opts['method']))
+    {
+        $method = $opts['method'];
+        $name = rand_str();
+        $html = <<<HERE
+        <form name="$name" method="post" action="$path">
+            <input type="hidden" name="method" value="$method"/>
+            <script type="text/javascript">function submit_$name() { document.$name.submit();}</script>
+        </form>
+        <a href="javascript:submit_$name();">$text</a>
+HERE;
+   
+    }
+    else
+    {
+        $html = "<a href='$path' $class $target>$text</a>";
+    }
+    
+    return $html;
 }
 
 function ObsEmailLink($email)
@@ -144,6 +234,22 @@ function ObsEmailLink($email)
 </script>
 EOD;
     return $html;
+}
+
+function FormatDateTime($timestamp, $format = NULL)
+{
+    if (!$timestamp)
+    {
+        return "never";
+    }
+    $dt = new DateTime();
+    $dt->setTimestamp($timestamp);
+    if (!isset($format))
+    {
+        $format = "Y/m/d @ H:i:s T";
+    }
+    return $dt->format($format);
+
 }
 
 function GetURI()
@@ -244,29 +350,20 @@ function GetCurrentName()
   return $usr->first_name . " " . $usr->last_name . " (" . $usr->login . ")";
 }
 
-function GetCurrentBusinessIdForUser()
-{
-  $usr = Doctrine_Query::create()
-    ->select('u.business_id')
-    ->from('User u')
-    ->where('u.id = ?', GetCurrentUser())
-    ->fetchOne();
-  return $usr->business_id;
-}
-
 function GetCfgVar($name, $default = NULL)
 {
-  $var = Doctrine_Query::create()
-    ->select('c.value')
-    ->from('CfgVar c')
-    ->where('c.name = ?', $name)
-    ->fetchOne();
+  $var = \simp\DB::Instance()->FindOne("CfgVar", "name=?", array($name));
 
-  if ($var == FALSE)
+  if (!$var)
   {
     return $default;
   }
   return $var->value;
+}
+
+function SiteName()
+{
+    return GetCfgVar("site_name", "Leagueloo");
 }
 
 function GetBasePath()
@@ -297,3 +394,4 @@ function IncludeJS($filename)
     $js_include .= '"></script>' . "\n";
     return $js_include;
 }
+

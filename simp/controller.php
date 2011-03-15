@@ -15,6 +15,7 @@ class Controller
     protected $_method;
     protected $_default_action;
     protected $_action;
+    protected $_form_vars;
 
     function __construct()
     {
@@ -53,6 +54,16 @@ class Controller
         if (!method_exists($this, $action)) die("$action doesn't exist for :" . get_class($this));
         if (!$this->_action_map[$key]) $this->_action_map[$key] = array();
         $this->_action_map[$key][$method] = $action;
+    }
+
+    function GetFormVariable($name)
+    {
+        return $this->_form_vars[$name];
+    }
+
+    function GetParam($index)
+    {
+        return $this->_params[$index];
     }
 
     /// override this to have your controller Delegate to another
@@ -102,8 +113,8 @@ class Controller
 
     function CanHandle($request)
     {
-        $can_handle = $this->CheckDefault($request);
-        if (!$can_handle) $can_handle = $this->CheckAction($request);
+        $can_handle = $this->CheckAction($request);
+        if (!$can_handle) $can_handle = $this->CheckDefault($request);
         return $can_handle;
     }
 
@@ -115,6 +126,7 @@ class Controller
         $log->logDebug("Dispatching with request:\n " . print_r($request->GetRequest(), true));
 
         //$this->_method =  $request->GetMethod();
+        $this->_form_vars = $request->GetVariables();
         $this->CallAction($this->_action, $request->GetRequest());
     }
 

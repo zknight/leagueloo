@@ -1,0 +1,12 @@
+<table>
+    <tr>
+        <th>Login:</th><td><?=TextField($this->user, 'login');?></td>
+    </tr>
+    <tr>
+        <th>First Name:</th><td><?=TextField($this->user, 'first_name');?></td>
+        <th>Last Name:</th><td><?=TextField($this->user, 'last_name');?></td>
+    </tr>
+    <tr>
+        <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
+    </tr>
+</table>

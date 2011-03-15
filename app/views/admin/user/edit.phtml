@@ -1,0 +1,5 @@
+<h1>Edit User</h1>
+<? FormTag("program", \simp\Request::PUT, path::admin_user($this->program_id)) ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

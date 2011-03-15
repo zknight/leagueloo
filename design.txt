@@ -143,3 +143,10 @@ applets
 -------
 plug-ins (modules)
 - have their own 'controller' and 'view'
+
+view paths
+----------
+app/views/[dir1]/[dir2]/[view]/[action]
+admin_program() => app/views/admin/program/
+admin_program($id) => app/views/admin/program/:id
+admin_program_edit($id) => app/views/admin/program

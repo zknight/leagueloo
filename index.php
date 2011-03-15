@@ -4,6 +4,7 @@ require_once "simp/boot.php";
 //$controller = new \app\MainController($router);
 //$controller->Dispatch($req);
 ?>
+<!--
 <html>
     <head>
         <title>test</title>
@@ -33,3 +34,4 @@ require_once "simp/boot.php";
 
     </body>
 </html>
+-->

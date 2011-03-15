@@ -1,0 +1,5 @@
+<h1>Create New User</h1>
+<?= FormTag("user", \simp\Request::POST, path::admin_user()) ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Add"/>
+<?= EndForm(); ?>

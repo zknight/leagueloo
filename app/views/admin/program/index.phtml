@@ -1,14 +1,18 @@
-<p><strong>Admin Index</strong></p>
-<a href="<?=$REL_PATH;?>admin/program/new">Add New Program</a>
+<p><strong>Programs</strong></p>
+<?= l("Add New Program", path::admin_program_add());?>
 <table>
     <tr>
         <th>Program</th>
         <th>Description</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
     </tr>
 <? foreach ($this->programs as $program): ?>
     <tr>
         <td><?= $program->name; ?></td>
         <td><?= $program->description; ?></td>
+        <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
+        <td><?= l("Delete", Path::admin_program($program->id), array("method" => "delete")); ?></td>
     </tr>
 <? endforeach; ?>
 </table>

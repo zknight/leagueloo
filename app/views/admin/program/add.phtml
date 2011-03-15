@@ -1,1 +1,5 @@
-<h2>Create New Program</h2>
+<h1>Create New Program</h1>
+<?= FormTag("program", \simp\Request::POST, path::admin_program()) ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Add"/>
+<?= EndForm(); ?>

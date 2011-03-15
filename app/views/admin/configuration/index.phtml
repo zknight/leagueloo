@@ -1,0 +1,62 @@
+<h1>Site Configuration</h1>
+<?= FormTag(
+    "site_name", 
+    \simp\Request::PUT, 
+    path::admin_configuration_update($this->site_name->id)); 
+?>
+    <fieldset><legend>Site Name</legend>
+    <strong>The site name is what is presented to the user as the name of the site.  
+    A good site name is typically the name of your club or league.</strong><br />
+    <?=TextField($this->site_name, 'value');?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>
+
+<?= FormTag(
+    "max_session", 
+    \simp\Request::PUT, 
+    path::admin_configuration_update($this->max_session->id)); 
+?>
+    <fieldset><legend>Maximum Session Lifetime</legend>
+    <strong>
+        Enter the maximum time, in minutes, for a user session to last.  After a user logs
+        in, he or she will automatically be logged out after a period of inactivity equal
+        to or greater than the Maximum Session Lifetime.
+    </strong><br />
+    <?=TextField($this->max_session, 'value');?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>
+
+<?= FormTag(
+    "site_email", 
+    \simp\Request::PUT, 
+    path::admin_configuration_update($this->site_email->id)); 
+?>
+    <fieldset><legend>Site Email</legend>
+    <strong>
+        This is the email address that the site will use when sending email to users.
+        It is also the address to which users can send email when they have questions
+        or issues with respect to the site.
+        Set this to a valid email address where site emails will be sent (typically the
+        super administrator).
+    </strong><br />
+    <?=TextField($this->site_email, 'value');?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>
+
+<?= FormTag(
+    "default_timezone", 
+    \simp\Request::PUT, 
+    path::admin_configuration_update($this->default_timezone->id)); 
+?>
+    <fieldset><legend>Default Timezone</legend>
+    <strong>
+        This is the default timezone for the site.  Users can override this for
+        their account.
+    </strong><br />
+    <?=SimpleSelect($this->default_timezone, 'value', SupportedTimeZones());?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>

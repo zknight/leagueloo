@@ -96,7 +96,7 @@ function check_current_session_timeout()
         if ($session)
         {
             // TODO: make this a configurable variable
-            $max_session_min = 60;
+            $max_session_min = GetCfgVar("max_session", 10);
             $max_session = $max_session_min * 60;
             $curtime = time();
             $log->logDebug("\$curtime = " . print_r($curtime, true));
