@@ -23,6 +23,12 @@ function SnakeCase($class)
     return $snake;
 }
 
+function Pluralize($string)
+{
+    require_once "inflect.php";
+    return Inflect::pluralize($string);
+}
+
 function RedirectURI($path)
 {
     header("Location: " . $path);

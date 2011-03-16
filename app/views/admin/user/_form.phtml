@@ -1,3 +1,4 @@
+<fieldset><legend>User Information</legend>
 <table>
     <tr>
         <th>Login:</th><td><?=TextField($this->user, 'login');?></td>
@@ -9,4 +10,27 @@
     <tr>
         <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
+</table><!-- TODO: add logic to prevent non-site admin to do this -->
+</fieldset>
+<fieldset><legend>User Rights</legend>
+<?= l("Add New Access Right", Path::admin_ability_add($this->user->id)); ?>
+<? if ($this->abilities): ?>
+<table>
+    <tr>
+        <th>Section of Website</th>
+        <th>Access Level</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    <? foreach ($this->abilities as $ability): ?>
+        <tr>
+            <td><?= $ability->entity_type; ?>:<?= $ability->entity_name;?></td>
+            <td><?= $ability->LevelString();?></td>
+            <td><?= l("Edit", Path::admin_ability_edit($entity_id)); ?></td>
+            <td><?= l("Delete", Path::admin_ability($entity_id)); ?></td>
+        </tr>
+    <? endforeach; ?>
 </table>
+<? endif;?>
+</fieldset>
+

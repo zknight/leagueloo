@@ -3,13 +3,13 @@ class Program extends \simp\Model
 {
     public function Setup()
     {
-        $this->AddComposite("Ability");
     }
 
     public function AfterSave()
     {
         global $log;
-        $log->logDebug("Program::OnSave()");
+        $log->logDebug("Program::AfterSave()");
+        /*
         if (!\simp\DB::Instance()->Find(
             'Ability', 
             'where type=? and entity=?',
@@ -36,5 +36,6 @@ class Program extends \simp\Model
             $ability->level = Ability::ADMIN;
             \simp\DB::Instance()->Save($ability);
         }
+         */
     }
 }

@@ -20,36 +20,47 @@ class Model extends \RedBean_SimpleModel
 
     // A composite is a 1-many association with models that are
     // created by the composing model
-    public function AddComposite($model)
+    public function AddComposite($model_name, $autoload = false)
     {
         if (!$this->_composites)
         {
             $this->_composites = array();
         }
-        $this->_composites[$model] = true;
+        $this->_composites[$model] = $autoload;
     }
 
     // An aggregate is a 1-many association with models created
     // by outside the aggregating model
-    public function AddAggregate($model)
+    public function AddAggregate($model, $autoload = false)
     {
         if (!$this->_aggregates)
         {
             $this->_aggregates = array();
         }
-        $this->_aggregates[$model] = true;
+        $this->_aggregates[$model] = $autoload;
     }
 
     public function UpdateFromArray($vars)
     {
         foreach ($vars as $name => $val)
         {
-            /*
             if ($this->IsChild($name) && is_array($val))
             {
-                $val->
-                */
-            $this->$name = $val;
+                $var_name = Pluralize(SnakeCase($name));
+                if (property_exists($this, $var_name))
+                {
+                    //$this->$var_name = \simp\DB::Instance()->Find($name, 'user_id = ?', array($this->id));
+                }
+                else
+                {
+                    // TODO: add exception or something to notify
+                    $log->logDebug("Property " . get_class($this) . "->{$var_name} does not exist.");
+                }       
+            }
+            else
+            {
+                $this->$name = $val;
+            }
         }
     }
 
@@ -80,7 +91,27 @@ class Model extends \RedBean_SimpleModel
     public function open()
     {
         global $log;
-        $log->logDebug("in " . get_class($this) . "::open()");
+        $log->logDebug("in " . get_class($this) . "::open() with id {$this->id}");
+
+        if ($this->_composites)
+        {
+            foreach ($this->_composites as $name => $autoload)
+            {
+                if ($autoload)
+                {
+                    $var_name = Pluralize(SnakeCase($name));
+                    if (property_exists($this, $var_name))
+                    {
+                        $this->$var_name = \simp\DB::Instance()->Find($name, 'user_id = ?', array($this->id));
+                    }
+                    else
+                    {
+                        // TODO: add exception or something to notify
+                        $log->logDebug("Property " . get_class($this) . "->{$var_name} does not exist.");
+                    }
+                }
+            }
+        }
     }
 
     // callback for when model is saved

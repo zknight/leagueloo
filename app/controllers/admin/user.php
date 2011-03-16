@@ -21,14 +21,13 @@ class UserController extends \simp\RESTController
     {
         $this->user = \simp\DB::Instance()->Create('User');
         $this->user->timezone = GetCfgVar("default_timezone");
-        $this->abilities = \simp\DB::Instance()->FindAll('Ability');
         return true;
     }
 
     function Edit()
     {
         $this->user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
-        $this->abilities = \simp\DB::Instance()->FindAll('Ability');
+        //$this->programs = \simp\DB::Instance()->FindAll('Program');
         if ($this->user->id > 0)
         {
             return true;

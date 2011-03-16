@@ -1,11 +1,14 @@
 <?
 class User extends \simp\Model
 {
+    public $abilities;
+
     public function Setup()
     {
         global $log;
         $log->logDebug("in User::__construct()");
-        $this->AddAggregate("Ability");
+        $this->AddComposite("Ability", true);
+        $this->abilities = array();
     }
 
     // login
