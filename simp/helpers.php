@@ -48,32 +48,66 @@ function EndForm()
     return "</form>";
 }
 
-function TextField($model, $field, $size = "20", $class = NULL, $id = NULL)
+/// Creates a text field for a model
+/// @param $model Model to use
+/// @param $field field in model
+/// @param $opts assoc array with options for the text field
+///     valid options:
+///         'id' => html id field of input
+///         'class' => html class field of input
+///         'parent' => parent model for $model
+///         'array' => true if field is to be treated as element of array
+///         'size' => size of text field
+function TextField($model, $field, $opts = array()) //$size = "20", $class = NULL, $id = NULL)
 {
-
-  $input_field = $field;
-  if (isset($model))
-  {
-    $mname = $model;
-    $input_field = $mname . "[$field]";
     /*
-    $err = $model->GetError($field);
-    if (isset($err))
+    $input_field = $field;
+    $size = isset($opts['size']) ? $opts['size'] : "20";
+    if (isset($model))
     {
-      $class = 'error';
+        if (isset($opts['parent']))
+        {
+            $mname = $opts['parent'] . "[{$model}]";
+        }
+        else
+        {
+            $mname = $model;
+        }
+    
+        $input_field = $mname;
+        if (isset($opts['array']) && $opts['array'])
+        {
+            $input_field .= "[]";
+        }
+        $input_field .= "[$field]";
+        /*
+        $err = $model->GetError($field);
+        if (isset($err))
+        {
+            $class = 'error';
+        }
     }
+    */
+    $attrs = GetInputAttributes($model, $field, $opts);
+
+    $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= $attrs['size'];
+    $html .= " value=\"{$attrs['value']}\"";
+    $html .= "/>";
+    /*
+    $html = "<input type='text' name='" . $input_field . "'";
+    $html .= " size='" . $size . "'";
+    if (isset($opts['class')) 
+        $html .= " class='" . $opts['class'] . "'";
+    if (isset($opts['id']))
+        $html .= " id='" . $opts['id'] . "'";
+    if (isset($model))
+        $html .= " value='" . $model->__get($field) . "'";
+    $html .= "/>";
      */
-  }
-  $html = "<input type='text' name='" . $input_field . "'";
-  $html .= " size='" . $size . "'";
-  if ($class != NULL) 
-    $html .= " class='" . $class . "'";
-  if ($id != NULL)
-      $html .= " id='" . $id . "'";
-  if (isset($model))
-    $html .= " value='" . $model->__get($field) . "'";
-  $html .= "/>";
-  return $html; 
+    return $html; 
 }
 
 function PasswordField($model, $field, $size = "20", $class = NULL)
@@ -250,6 +284,35 @@ function FormatDateTime($timestamp, $format = NULL)
     }
     return $dt->format($format);
 
+}
+
+function GetInputAttributes($model, $field, $opts)
+{
+    $newopts = array();
+    $newopts['size'] = " size=\"" . (isset($opts['size']) ? $opts['size'] : "20") . "\"";
+    $newopts['rows'] = " rows=\"" . (isset($opts['rows']) ? $opts['rows'] : 3) . "\"";
+    $newopts['cols'] = " cols=\"" . (isset($opts['cols']) ? $opts['cols'] : 80) . "\"";
+    $newopts['class'] = isset($opts['class']) ? " class=\"{$opts['class']}\"" : "";
+    $newopts['id'] = isset($opts['id']) ? " id=\"{$opts['id']}\"" : "";
+
+    if (isset($model)) 
+    {
+        //if (is_subclass_of($model, "\simp\Model"))
+        if (is_object($model))
+        {
+            $mname = isset($opts['parent']) ? $opts['parent'] . "[{$model}]" : $model;
+            $newopts['name'] = isset($opts['array']) && $opts['array'] ?
+                "{$mname}[][{$field}]" :
+                "{$mname}[{$field}]";
+            $newopts['value'] = $model->__get($field);
+        }
+        else
+        {
+            $newopts['name'] = $model;
+            $newopts['value'] = '';
+        }
+    }
+    return $newopts;
 }
 
 function GetURI()

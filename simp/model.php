@@ -71,12 +71,12 @@ class Model extends \RedBean_SimpleModel
 
     protected function IsAggregate($value)
     {
-        return array_key_exists($value, $this->_aggregates);
+        return $this->_aggregates && array_key_exists($value, $this->_aggregates);
     }
 
     protected function IsComposite($value)
     {
-        return array_key_exists($value, $this->_composites);
+        return $this->_composites && array_key_exists($value, $this->_composites);
     }
 
     //// Event CALLBACKS
