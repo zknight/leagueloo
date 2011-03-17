@@ -60,34 +60,6 @@ function EndForm()
 ///         'size' => size of text field
 function TextField($model, $field, $opts = array()) //$size = "20", $class = NULL, $id = NULL)
 {
-    /*
-    $input_field = $field;
-    $size = isset($opts['size']) ? $opts['size'] : "20";
-    if (isset($model))
-    {
-        if (isset($opts['parent']))
-        {
-            $mname = $opts['parent'] . "[{$model}]";
-        }
-        else
-        {
-            $mname = $model;
-        }
-    
-        $input_field = $mname;
-        if (isset($opts['array']) && $opts['array'])
-        {
-            $input_field .= "[]";
-        }
-        $input_field .= "[$field]";
-        /*
-        $err = $model->GetError($field);
-        if (isset($err))
-        {
-            $class = 'error';
-        }
-    }
-    */
     $attrs = GetInputAttributes($model, $field, $opts);
 
     $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
@@ -96,18 +68,21 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
     $html .= $attrs['size'];
     $html .= " value=\"{$attrs['value']}\"";
     $html .= "/>";
-    /*
-    $html = "<input type='text' name='" . $input_field . "'";
-    $html .= " size='" . $size . "'";
-    if (isset($opts['class')) 
-        $html .= " class='" . $opts['class'] . "'";
-    if (isset($opts['id']))
-        $html .= " id='" . $opts['id'] . "'";
-    if (isset($model))
-        $html .= " value='" . $model->__get($field) . "'";
-    $html .= "/>";
-     */
     return $html; 
+}
+
+function RadioGroup($model, $field, $options, $html_opts = array())
+{
+    $attrs = GetInputAttributes($model, $field, $html_opts);
+
+    // TODO: wrap each of these appropriately?
+    foreach ($options as $val)
+    {
+        $html = "<input type=\"radio\" name=\"{$attrs['name']}\"";
+        $html .= $attrs['id'];
+        $html .= $attrs['class'];
+        $html .= " value=\"{$val}\">";
+    }
 }
 
 function PasswordField($model, $field, $size = "20", $class = NULL)
@@ -297,18 +272,17 @@ function GetInputAttributes($model, $field, $opts)
 
     if (isset($model)) 
     {
+        $mname = isset($opts['parent']) ? $opts['parent'] . "[{$model}]" : $model;
+        $newopts['name'] = isset($opts['array']) && $opts['array'] ?
+            "{$mname}[][{$field}]" :
+            "{$mname}[{$field}]";
         //if (is_subclass_of($model, "\simp\Model"))
         if (is_object($model))
         {
-            $mname = isset($opts['parent']) ? $opts['parent'] . "[{$model}]" : $model;
-            $newopts['name'] = isset($opts['array']) && $opts['array'] ?
-                "{$mname}[][{$field}]" :
-                "{$mname}[{$field}]";
             $newopts['value'] = $model->__get($field);
         }
         else
         {
-            $newopts['name'] = $model;
             $newopts['value'] = '';
         }
     }
