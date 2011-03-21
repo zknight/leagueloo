@@ -20,6 +20,14 @@ class UserController extends \simp\RESTController
     function Add()
     {
         $this->user = \simp\DB::Instance()->Create('User');
+        $programs = \simp\DB::Instance()->FindAll('Program');
+        //$team_names = \R::getCol("select name from team");
+        //$app_names = \R::getCol("select name from app");
+        $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
+        foreach ($programs as $program)
+        {
+            $this->entities['program'][$program->name] = $program->id;
+        }
         $this->user->timezone = GetCfgVar("default_timezone");
         return true;
     }
@@ -27,7 +35,15 @@ class UserController extends \simp\RESTController
     function Edit()
     {
         $this->user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
-        //$this->programs = \simp\DB::Instance()->FindAll('Program');
+        //echo"<pre>" . print_r($this->user, true) . "</pre>";
+        $programs = \simp\DB::Instance()->FindAll('Program');
+        //$team_names = \R::getCol("select name from team");
+        //$app_names = \R::getCol("select name from app");
+        $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
+        foreach ($programs as $program)
+        {
+            $this->entities['program'][$program->name] = $program->id;
+        }
         if ($this->user->id > 0)
         {
             return true;
@@ -43,7 +59,7 @@ class UserController extends \simp\RESTController
         $vars = $this->GetFormVariable('User');
         $user = \simp\DB::Instance()->Create('User');
         $user->UpdateFromArray($vars);
-        $created_on = new DateTime("now");
+        $created_on = new \DateTime("now");
 
         $user->created_on = $created_on->format(\DateTimeDefaultFormat());
         \simp\DB::Instance()->Save($user);
@@ -54,10 +70,19 @@ class UserController extends \simp\RESTController
     function Update()
     {
         $user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
+        $vars = $this->GetFormVariable('User');
+        $user->UpdateFromArray($vars);
+        \simp\DB::Instance()->Save($user);
+        \Redirect(\Path::admin_user());
+    }
+
+    function Remove()
+    {
+        $user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
         if ($user->id > 0)
         {
             \simp\DB::Instance()->Delete($user);
         }
-        \Redirect(\Path::admin_program());
+        \Redirect(\Path::admin_user());
     }
 }           

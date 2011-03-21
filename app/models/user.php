@@ -1,4 +1,5 @@
 <?
+require_once "ability.php";
 class User extends \simp\Model
 {
     public $abilities;
@@ -9,6 +10,11 @@ class User extends \simp\Model
         $log->logDebug("in User::__construct()");
         $this->AddComposite("Ability", true);
         $this->abilities = array();
+    }
+
+    public function Abilities()
+    {
+        return $this->abilities;
     }
 
     // login

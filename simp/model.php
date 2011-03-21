@@ -22,40 +22,60 @@ class Model extends \RedBean_SimpleModel
     // created by the composing model
     public function AddComposite($model_name, $autoload = false)
     {
-        if (!$this->_composites)
+        if (!isset($this->_composites))
         {
             $this->_composites = array();
         }
-        $this->_composites[$model] = $autoload;
+        $this->_composites[$model_name] = $autoload;
     }
 
     // An aggregate is a 1-many association with models created
     // by outside the aggregating model
-    public function AddAggregate($model, $autoload = false)
+    public function AddAggregate($model_name, $autoload = false)
     {
-        if (!$this->_aggregates)
+        if (!isset($this->_aggregates))
         {
             $this->_aggregates = array();
         }
-        $this->_aggregates[$model] = $autoload;
+        $this->_aggregates[$model_name] = $autoload;
     }
 
     public function UpdateFromArray($vars)
     {
+        global $log;
         foreach ($vars as $name => $val)
         {
+            $log->logDebug("updating field: " . $name);
             if ($this->IsChild($name) && is_array($val))
             {
+                //$log->logDebug(print_r($_POST, true));
                 $var_name = Pluralize(SnakeCase($name));
+                $assoc_key = SnakeCase($this) . "_id";
                 if (property_exists($this, $var_name))
                 {
-                    //$this->$var_name = \simp\DB::Instance()->Find($name, 'user_id = ?', array($this->id));
+                    foreach ($val as $id => $fields)
+                    {
+                        $log->logDebug("updating $name:$id with " . print_r($fields, true));
+                        if ($id > 0)
+                        {
+                            $this->$var_name[$id]->UpdateFromArray($val[$id]);
+                        }
+                        else
+                        {
+                            $log->logDebug("creating new child of $name with assoc_key $assoc_key $this->id");
+                            $child = \simp\DB::Instance()->Create(ClassCase($name));
+                            $log->logDebug("adding index $id to $var_name");
+                            $child->UpdateFromArray($val[$id]);
+                            $children = &$this->$var_name;
+                            $children[] = $child;
+                        }
+                    }
                 }
                 else
                 {
-                    // TODO: add exception or something to notify
-                    $log->logDebug("Property " . get_class($this) . "->{$var_name} does not exist.");
-                }       
+                    // TODO: log this
+                    $log->logWarning("$var_name is not a property of " . get_class($this));
+                }
             }
             else
             {
@@ -93,22 +113,31 @@ class Model extends \RedBean_SimpleModel
         global $log;
         $log->logDebug("in " . get_class($this) . "::open() with id {$this->id}");
 
-        if ($this->_composites)
+        if (count($this->_composites) > 0) $this->load_children($this->_composites);
+        if (count($this->_aggregates) > 0) $this->load_children($this->_aggregates);
+    }
+    
+    protected function load_children(&$children)
+    {
+        global $log;
+        foreach ($children as $name => $autoload)
         {
-            foreach ($this->_composites as $name => $autoload)
+            if ($autoload)
             {
-                if ($autoload)
+                $var_name = Pluralize(SnakeCase($name));
+                $assoc_key = SnakeCase($this) . "_id";
+                $log->logDebug("should have $var_name as array");
+                if (property_exists($this, $var_name))
                 {
-                    $var_name = Pluralize(SnakeCase($name));
-                    if (property_exists($this, $var_name))
-                    {
-                        $this->$var_name = \simp\DB::Instance()->Find($name, 'user_id = ?', array($this->id));
-                    }
-                    else
-                    {
-                        // TODO: add exception or something to notify
-                        $log->logDebug("Property " . get_class($this) . "->{$var_name} does not exist.");
-                    }
+                    $log->logDebug(get_class($this) . "->" . $var_name . " exists.");
+                    $this->$var_name = \simp\DB::Instance()->Find($name, "$assoc_key = ?", array($this->id));
+                    if (!$this->$var_name) $this->$var_name = array();
+                    $log->logDebug("$var_name: " . print_r($this->$var_name, true));
+                }
+                else
+                {
+                    // TODO: add exception or something to notify
+                    $log->logDebug("Property " . get_class($this) . "->{$var_name} does not exist.");
                 }
             }
         }
@@ -119,9 +148,31 @@ class Model extends \RedBean_SimpleModel
     {
         global $log;
         $log->logDebug("in " . get_class($this) . "::update()");
+
+
         if (method_exists($this, "OnSave"))
         {
             $this->OnSave();
+        }
+    }
+
+    protected function save_children(&$children)
+    {
+        global $log;
+        foreach ($children as $name => $autoload)
+        {
+            if ($autoload)
+            {
+                $var_name = Pluralize(SnakeCase($name));
+                $assoc_key = SnakeCase($this) . "_id";
+                //$log->logDebug("$var_name: " . print_r($this->$var_name, true));
+                foreach ($this->$var_name as $child) 
+                {
+                    $child->$assoc_key = $this->id;
+                    $log->logDebug("saving child:" . print_r($child, true));
+                    \simp\DB::Instance()->Save($child);
+                }
+            }
         }
     }
 
@@ -129,6 +180,10 @@ class Model extends \RedBean_SimpleModel
     {
         global $log;
         $log->logDebug("in " . get_class($this) . "::after_update()");
+
+        if (count($this->_composites) > 0) {$log->logDebug("saving composites"); $this->save_children($this->_composites);}
+        if (count($this->_aggregates) > 0) {$log->logDebug("saving aggregates"); $this->save_children($this->_aggregates);}
+
         if (method_exists($this, "AfterSave"))
         {
             $this->AfterSave();
@@ -170,6 +225,20 @@ class Model extends \RedBean_SimpleModel
         if (method_exists($this, "AfterDelete"))
         {
             $this->AfterDelete();
+        }
+    }
+    
+    public function __get($name)
+    {
+        if (property_exists($this, $name))
+        {
+            global $log;
+            $log->logDebug("getting $name");
+            return $this->$name;
+        }
+        else
+        {
+            return parent::__get($name);
         }
     }
 }

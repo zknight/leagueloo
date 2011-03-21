@@ -13,24 +13,50 @@
 </table><!-- TODO: add logic to prevent non-site admin to do this -->
 </fieldset>
 <fieldset><legend>User Rights</legend>
-<?= l("Add New Access Right", Path::admin_ability_add($this->user->id)); ?>
-<? if ($this->abilities): ?>
+<? /*  if abilities exists and there are some, show them.
+    *  otherwise, use programs, teams, etc to 
+    */
+    $options = array(Ability::ADMIN, Ability::PUBLISH, Ability::EDIT, -1);
+    $i = 0;
+    $wrapper = function($html) { return "<td>{$html}</td>"; };
+?>
 <table>
     <tr>
         <th>Section of Website</th>
-        <th>Access Level</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th>Administer</th>
+        <th>Publish and Edit</th>
+        <th>Edit Only</th>
+        <th>Read Only</th>
     </tr>
-    <? foreach ($this->abilities as $ability): ?>
+    <? foreach ($this->user->Abilities()as $ability): ?>
         <tr>
             <td><?= $ability->entity_type; ?>:<?= $ability->entity_name;?></td>
-            <td><?= $ability->LevelString();?></td>
-            <td><?= l("Edit", Path::admin_ability_edit($entity_id)); ?></td>
-            <td><?= l("Delete", Path::admin_ability($entity_id)); ?></td>
+            <?= RadioGroup(
+                    $ability, 
+                    'level', 
+                    $options,
+                    array('parent' => $this->user, 'array' => $ability->id), 
+                    $wrapper); ?>
+            <? $this->entities[$ability->entity_type][$ability->entity_name] = false; ?>
         </tr>
     <? endforeach; ?>
+    <? foreach ($this->entities as $type => $name_arr): ?>
+        <? foreach ($name_arr as $name => $id): ?>
+            <? if ($id): ?>
+                <tr><td><?= $type ?>:<?= $name ?></td>
+                <?= RadioGroup(
+                    'Ability',
+                    'level',
+                    $options,
+                    array('parent' => $this->user, 'array' => $i, 'value' => -1),
+                    $wrapper); ?>
+                <input type="hidden" name="User[Ability][<?=$i;?>][entity_type]" value="<?=$type;?>" />
+                <input type="hidden" name="User[Ability][<?=$i;?>][entity_name]" value="<?=$name;?>" />
+                <? $i--; ?>
+                </tr>
+            <? endif; ?>
+        <? endforeach; ?>
+    <? endforeach; ?>
 </table>
-<? endif;?>
 </fieldset>
 

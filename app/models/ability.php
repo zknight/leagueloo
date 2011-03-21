@@ -13,10 +13,11 @@ class Ability extends \simp\Model
     function Setup()
     {
         $this->_ability_level_strings = array(
-            EDIT => 'edit',
-            PUBLISH => 'publish',
-            ADMIN => 'administer',
+            Ability::EDIT => 'edit',
+            Ability::PUBLISH => 'publish',
+            Ability::ADMIN => 'administer',
         );
+    }
 
     function LevelString()
     {

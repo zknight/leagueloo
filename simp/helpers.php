@@ -71,18 +71,40 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
     return $html; 
 }
 
-function RadioGroup($model, $field, $options, $html_opts = array())
+/// Creates a group of radio buttons for with options
+/// @param $model Model to use
+/// @param $field field in model
+/// @param $opts assoc array with options for the text field
+///     valid options:
+///         'id' => html id field of input
+///         'class' => html class field of input
+///         'parent' => parent model for $model
+///         'array' => true if field is to be treated as element of array
+/// @param $wrapper callback to wrap each option
+function RadioGroup($model, $field, $options, $html_opts = array(), $radio_wrapper = NULL)
 {
     $attrs = GetInputAttributes($model, $field, $html_opts);
+    $html = '';
 
     // TODO: wrap each of these appropriately?
     foreach ($options as $val)
     {
-        $html = "<input type=\"radio\" name=\"{$attrs['name']}\"";
-        $html .= $attrs['id'];
-        $html .= $attrs['class'];
-        $html .= " value=\"{$val}\">";
+        $input = "<input type=\"radio\" name=\"{$attrs['name']}\"";
+        $input .= $attrs['id'];
+        $input .= $attrs['class'];
+        if ($attrs['value'] == $val) $input .= " checked";
+        $input .= " value=\"{$val}\">";
+        if (isset($radio_wrapper))
+        {
+            $html .= $radio_wrapper($input);
+        }
+        else
+        {
+            $html .= $input;
+        }
     }
+
+    return $html;
 }
 
 function PasswordField($model, $field, $size = "20", $class = NULL)
@@ -273,8 +295,8 @@ function GetInputAttributes($model, $field, $opts)
     if (isset($model)) 
     {
         $mname = isset($opts['parent']) ? $opts['parent'] . "[{$model}]" : $model;
-        $newopts['name'] = isset($opts['array']) && $opts['array'] ?
-            "{$mname}[][{$field}]" :
+        $newopts['name'] = isset($opts['array']) ?
+            "{$mname}[{$opts['array']}][{$field}]" :
             "{$mname}[{$field}]";
         //if (is_subclass_of($model, "\simp\Model"))
         if (is_object($model))
@@ -283,7 +305,7 @@ function GetInputAttributes($model, $field, $opts)
         }
         else
         {
-            $newopts['value'] = '';
+            $newopts['value'] = isset($opts['value']) ? $opts['value'] : '';
         }
     }
     return $newopts;
