@@ -25,10 +25,9 @@ function sess_read($id)
 {
     global $log;
   //echo "sess_read($id);\n";
-    $db = \simp\DB::Instance();
   //$res = $db->Fetch("sessions", "data", array('sess_id' => $id));
 
-    $session = $db->FindOne("Session", "sess_id =?", array($id));
+    $session = Session::FindOne("Session", "sess_id =?", array($id));
     $new_session = true;
     if ($session)
     {
@@ -51,23 +50,22 @@ function sess_read($id)
     else
     {
         $log->logDebug("adding session $id");
-        $session = $db->Create("Session");
+        $session = Session::Create("Session");
         $session->sess_id = $id;
         $session->data = '';
         $session->touch = time();
-        $db->Save($session);
+        $session->Save();
     }
     return "";
 }
 
 function sess_write($id, $data)
 {
-    $db = \simp\DB::Instance();
-    $session = $db->FindOne("Session", "sess_id =?", array($id));
+    $session = Session::FindOne("Session", "sess_id =?", array($id));
     $session->touch = time();
     $session->data = $data;
     $session->sess_id = $id;
-    $db->Save($session);
+    $session->Save();
   
     return true;
 }
@@ -90,8 +88,7 @@ function check_current_session_timeout()
     {
         $id = $_COOKIE["PHPSESSID"];
 
-        $db = \simp\DB::Instance();
-        $session = $db->FindOne("Session", "sess_id =?", array($id));
+        $session = Session::FindOne("Session", "sess_id =?", array($id));
 
         if ($session)
         {
@@ -106,7 +103,7 @@ function check_current_session_timeout()
             {
                 $log->logDebug("session timeout.  deleting $id");
                 unset($_COOKIE["PHPSESSID"]);
-                $db->Delete($session);
+                $session->Delete();
             }
         }
     }

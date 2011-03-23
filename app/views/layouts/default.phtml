@@ -5,6 +5,14 @@
         </title>
     </head>
     <body>
+        <div id="user-menu">
+        <? if (IsLoggedIn()):?>
+            Logged in as: <?=CurrentUser()->login?>
+        <? else: ?>
+            <?= l("login", Path::user_login()); ?>
+            <?= l("create account", Path::user_signup()); ?>
+        <? endif; ?>
+        </div>
         <?= $this->content; ?>
     </body>
 </html>

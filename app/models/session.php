@@ -1,4 +1,4 @@
 <?
-class Session extends RedBean_SimpleModel
+class Session extends \simp\Model
 {
 }

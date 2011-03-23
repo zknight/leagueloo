@@ -9,7 +9,7 @@ class ProgramController extends \simp\RESTController
 
     function Index()
     {
-        $this->programs = \simp\DB::Instance()->FindAll('Program');
+        $this->programs = \simp\Model::FindAll('Program');
         return true;
     }
 
@@ -20,30 +20,34 @@ class ProgramController extends \simp\RESTController
 
     function Add()
     {
-        $this->program = \simp\DB::Instance()->Create('Program');
+        $this->program = \simp\Model::Create('Program');
         return true;
     }
 
     function Edit()
     {
-        $this->program = \simp\DB::Instance()->Load('Program', $this->GetParam(0));
+        global $log;
+        $this->program = \simp\Model::FindById('Program', $this->GetParam(0));
+        $log->logDebug("program \n " . print_r($this->program, true));
+        $program = $this->program;
+        $log->logDebug("program id: " . $program->id);
         if ($this->program->id > 0)
         {
             return true;
         }
         else
         {
-            \Redirect(\Path::admin_program());
+           \Redirect(\Path::admin_program());
         }
     }
     function Create()
     {
         // TODO: add validation and check to make sure it is saved, plus flash and redirect!
         $vars = $this->GetFormVariable('Program');
-        $program = \simp\DB::Instance()->Create('Program');
+        $program = \simp\Model::Create('Program');
         $program->name = $vars['name'];
         $program->description = $vars['description'];
-        \simp\DB::Instance()->Save($program);
+        $program->Save();
         \Redirect(\Path::admin_program());
         return false;
     }
@@ -51,18 +55,18 @@ class ProgramController extends \simp\RESTController
     function Update()
     {
         $vars = $this->GetFormVariable('Program');
-        $program = \simp\DB::Instance()->Load('Program', $this->GetParam(0));
+        $program = \simp\Model::FindById('Program', $this->GetParam(0));
         $program->UpdateFromArray($vars);
-        \simp\DB::Instance()->Save($program);
+        $program->Save();
         \Redirect(\Path::admin_program());
     }
 
     function Remove()
     {
-        $program = \simp\DB::Instance()->Load('Program', $this->GetParam(0));
+        $program = \simp\Model::FindById('Program', $this->GetParam(0));
         if ($program->id > 0)
         {
-            \simp\DB::Instance()->Delete($program);
+            $program->Delete();
         }
         \Redirect(\Path::admin_program());
     }

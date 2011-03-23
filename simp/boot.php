@@ -8,7 +8,7 @@ require_once "router.php";
 require_once "request.php";
 require_once "controller.php";
 require_once "rest_controller.php";
-//require_once "rest_controller.php";
+
 
 $req = new Request();
 
@@ -18,7 +18,9 @@ $REL_PATH = $req->GetRelativePath();
 $APP_PATH = $REL_PATH . "app";
 
 set_include_path(get_include_path() . PATH_SEPARATOR . "{$BASE_PATH}lib");
-require_once "db.php";
+require_once "model.php";
+spl_autoload_register("\simp\Model::LoadModel", false);
+\simp\Model::LoadDatabase("sqlite:db/development.db");
 require_once "session.php";
 
 // TODO: cache this!
@@ -28,10 +30,5 @@ $router->Route($req);
 $log->logDebug('/\\ /\\ /\\');
 date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
 
-function __autoload($classname)
-{
-    global $log;
-    $log->logDebug("want to load $classname");
-}
 ?>
 

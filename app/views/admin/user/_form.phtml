@@ -8,11 +8,17 @@
         <th>Last Name:</th><td><?=TextField($this->user, 'last_name');?></td>
     </tr>
     <tr>
+        <th>Password:</th><td><?=PasswordField(%this->user, 'password');?></td>
+    </tr>
+    <tr>
+        <th>Password Verification:</th><td><?=PasswordField(%this->user, 'password_verification');?></td>
+    <tr>
         <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
 </table><!-- TODO: add logic to prevent non-site admin to do this -->
 </fieldset>
 <fieldset><legend>User Rights</legend>
+<strong>Is Super User?</strong><?= CheckBoxField($this->user, 'super'); ?>
 <? /*  if abilities exists and there are some, show them.
     *  otherwise, use programs, teams, etc to 
     */

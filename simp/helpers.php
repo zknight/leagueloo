@@ -71,6 +71,20 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
     return $html; 
 }
 
+function PasswordField($model, $field, $opts = array())
+{
+    $attrs = GetInputAttributes($mode, $field, $opts);
+
+    $html = "<input type=\"password\" name=\"{$attrs['name']}\"";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= $attrs['size'];
+    $html .= " value=\"{$attrs['value']}\"";
+    $html .= "/>";
+    return $html; 
+}
+
+
 /// Creates a group of radio buttons for with options
 /// @param $model Model to use
 /// @param $field field in model
@@ -105,27 +119,6 @@ function RadioGroup($model, $field, $options, $html_opts = array(), $radio_wrapp
     }
 
     return $html;
-}
-
-function PasswordField($model, $field, $size = "20", $class = NULL)
-{
-  
-  if (isset($model))
-  {
-    $err = $model->GetError($field);
-    if (isset($err))
-    {
-      $class = 'error';
-    }
-  }
-  $html = "<input type='password' name='" . $field . "'";
-  $html .= " size='" . $size . "'";
-  if ($class != NULL) 
-    $html .= " class='" . $class . "'";
-  if (isset($model))
-    $html .= " value='" . $model->__get($field) . "'";
-  $html .= "/>";
-  return $html; 
 }
 
 function CheckBoxField($model, $field, $class = NULL)
@@ -368,20 +361,14 @@ function HasError($field)
   return (isset($_SESSION['error'][$field]));
 }
 
-function SetAuthorizedUser($id, $roles)
+function SetAuthorizedUser($id)
 {
   $_SESSION['user'] = $id;
-  $_SESSION['roles'] = array();
-  foreach ($roles as $role)
-  {
-    array_push($_SESSION['roles'], $role->type);
-  }
 }
 
 function ClearSession()
 {
   $_SESSION['user'] = null;
-  $_SESSION['roles'] = null;
 }
 
 function IsLoggedIn()
@@ -389,12 +376,7 @@ function IsLoggedIn()
   return ($_SESSION['user'] != NULL);
 }
 
-function CheckRole($role)
-{
-    return (in_array($role, $_SESSION["roles"]));
-}
-
-function GetCurrentUser()
+function CurrentUser()
 {
   return $_SESSION['user'];
 }
@@ -411,7 +393,7 @@ function GetCurrentName()
 
 function GetCfgVar($name, $default = NULL)
 {
-  $var = \simp\DB::Instance()->FindOne("CfgVar", "name=?", array($name));
+  $var = CfgVar::FindOne("CfgVar", "name=?", array($name));
 
   if (!$var)
   {
