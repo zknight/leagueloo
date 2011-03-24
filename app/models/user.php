@@ -24,11 +24,46 @@ class User extends \simp\Model
         return $this->_abilities;
     }
 
+    public function UpdateAbilities($ability_array)
+    {
+        foreach($ability_array as $vals)
+        {
+            if (isset($vals['id']))
+            {
+                $ability = User::FindById('Ability', $vals['id']);
+                global $log;
+                $log->logDebug("UpdateAbilities: ability[{$vals['id']}]: \n" . print_r($ability, true));
+                if ($vals['level'] > 0)
+                {
+                    $ability->UpdateFromArray($vals);
+                    $this->AddAbility($ability);
+                }
+                else
+                {
+                    $ability->Delete();
+                }
+            }
+            else
+            {
+                if ($vals['level'] > 0)
+                {
+                    $ability = User::Create('Ability');
+                    $ability->UpdateFromArray($vals);
+                    $this->AddAbility($ability);
+                }
+            }
+        }
+
+    }
+
     public function AddAbility($ability)
     {
         //$ability->user_id = $this->id;
         //$retval = $ability->Save();
-        $this->_abilities[] = $ability;
+        if (is_a($ability, 'Ability'))
+        {
+            $this->_abilities[] = $ability;
+        }
     }
 
     public function CanAccess($entity_type, $entity_id, $level)

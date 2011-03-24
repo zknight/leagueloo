@@ -19,21 +19,21 @@ class ConfigurationController extends \simp\Controller
     function Update()
     {
         $vars = $this->GetFormVariable('CfgVar');
-        $cfg_var = \simp\DB::Instance()->Load('CfgVar', $this->GetParam(0));
+        $cfg_var = \simp\Model::FindById('CfgVar', $this->GetParam(0));
         $cfg_var->UpdateFromArray($vars);
-        \simp\DB::Instance()->Save($cfg_var);
+        $cfg_var->Save();
         \Redirect(\Path::admin_configuration());
     }
 
     private function LoadVariable($name)
     {
-        $var = \simp\DB::Instance()->FindOne("CfgVar", "name = ?", array($name));
+        $var = \simp\Model::FindOne("CfgVar", "name = ?", array($name));
         if (!$var)
         {
-            $var = \simp\DB::Instance()->Create("CfgVar");
+            $var = \simp\Model::Create("CfgVar");
             $var->name = $name;
             $var->value = "[not set]";
-            \simp\DB::Instance()->Save($var);
+            $var->Save();
         }
         return $var;
     }

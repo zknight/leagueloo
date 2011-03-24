@@ -8,10 +8,10 @@
         <th>Last Name:</th><td><?=TextField($this->user, 'last_name');?></td>
     </tr>
     <tr>
-        <th>Password:</th><td><?=PasswordField(%this->user, 'password');?></td>
+        <th>Password:</th><td><?=PasswordField($this->user, 'password');?></td>
     </tr>
     <tr>
-        <th>Password Verification:</th><td><?=PasswordField(%this->user, 'password_verification');?></td>
+        <th>Password Verification:</th><td><?=PasswordField($this->user, 'password_verification');?></td>
     <tr>
         <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
@@ -41,9 +41,10 @@
                     $ability, 
                     'level', 
                     $options,
-                    array('parent' => $this->user, 'array' => $ability->id), 
+                    array('array' => $i), 
                     $wrapper); ?>
             <? $this->entities[$ability->entity_type][$ability->entity_name] = false; ?>
+            <input type="hidden" name="Ability[<?=$i++;?>][id]" value="<?=$ability->id;?>" />
         </tr>
     <? endforeach; ?>
     <? foreach ($this->entities as $type => $name_arr): ?>
@@ -54,11 +55,10 @@
                     'Ability',
                     'level',
                     $options,
-                    array('parent' => $this->user, 'array' => $i, 'value' => -1),
+                    array('array' => $i, 'value' => -1),
                     $wrapper); ?>
-                <input type="hidden" name="User[Ability][<?=$i;?>][entity_type]" value="<?=$type;?>" />
-                <input type="hidden" name="User[Ability][<?=$i;?>][entity_name]" value="<?=$name;?>" />
-                <? $i--; ?>
+                <input type="hidden" name="Ability[<?=$i;?>][entity_type]" value="<?=$type;?>" />
+                <input type="hidden" name="Ability[<?=$i++;?>][entity_name]" value="<?=$name;?>" />
                 </tr>
             <? endif; ?>
         <? endforeach; ?>

@@ -182,7 +182,7 @@ class Model
         global $log;
         foreach ($vars as $name => $val)
         {
-            $this->$name = $val;
+            if ($name != "id") $this->$name = $val;
         }
     }
 

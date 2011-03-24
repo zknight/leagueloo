@@ -10,6 +10,7 @@ require_once "controller.php";
 require_once "rest_controller.php";
 
 
+
 $req = new Request();
 
 $BASE_PATH = $req->GetBasePath();
@@ -22,13 +23,13 @@ require_once "model.php";
 spl_autoload_register("\simp\Model::LoadModel", false);
 \simp\Model::LoadDatabase("sqlite:db/development.db");
 require_once "session.php";
+date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
 
 // TODO: cache this!
 $router = new Router();
 $router->Route($req);
 
 $log->logDebug('/\\ /\\ /\\');
-date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
 
 ?>
 

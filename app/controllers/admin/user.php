@@ -8,7 +8,7 @@ class UserController extends \simp\RESTController
     
     function Index()
     {
-        $this->users = \simp\DB::Instance()->FindAll('User');
+        $this->users = \simp\Model::FindAll('User');
         return true;
     }
 
@@ -19,8 +19,8 @@ class UserController extends \simp\RESTController
 
     function Add()
     {
-        $this->user = \simp\DB::Instance()->Create('User');
-        $programs = \simp\DB::Instance()->FindAll('Program');
+        $this->user = \simp\Model::Create('User');
+        $programs = \simp\Model::FindAll('Program');
         //$team_names = \R::getCol("select name from team");
         //$app_names = \R::getCol("select name from app");
         $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
@@ -34,9 +34,9 @@ class UserController extends \simp\RESTController
 
     function Edit()
     {
-        $this->user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
+        $this->user = \simp\Model::FindById('User', $this->GetParam(0));
         //echo"<pre>" . print_r($this->user, true) . "</pre>";
-        $programs = \simp\DB::Instance()->FindAll('Program');
+        $programs = \simp\Model::FindAll('Program');
         //$team_names = \R::getCol("select name from team");
         //$app_names = \R::getCol("select name from app");
         $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
@@ -57,32 +57,39 @@ class UserController extends \simp\RESTController
     function Create()
     {
         $vars = $this->GetFormVariable('User');
-        $user = \simp\DB::Instance()->Create('User');
+        $user = \simp\Model::Create('User');
         $user->UpdateFromArray($vars);
         $created_on = new \DateTime("now");
-
         $user->created_on = $created_on->format(\DateTimeDefaultFormat());
-        \simp\DB::Instance()->Save($user);
+        $abilities = $this->GetFormVariable('Ability');
+        $user->UpdateAbilities($abilities);
+        $user->Save();
         \Redirect(\Path::admin_user());
         return false;
     }
 
     function Update()
     {
-        $user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
-        $vars = $this->GetFormVariable('User');
-        $user->UpdateFromArray($vars);
-        \simp\DB::Instance()->Save($user);
+        $user = \simp\Model::FindById('User', $this->GetParam(0));
+        $user_vars = $this->GetFormVariable('User');
+        global $log;
+        $log->logDebug("user_vars: \n" . print_r($user_vars, true));
+        $user->UpdateFromArray($user_vars);
+        $abilities = $this->GetFormVariable('Ability');
+        $log->logDebug("abilities: \n" . print_r($abilities, true));
+        $user->UpdateAbilities($abilities);
+        $user->Save();
         \Redirect(\Path::admin_user());
     }
 
     function Remove()
     {
-        $user = \simp\DB::Instance()->Load('User', $this->GetParam(0));
+        $user = \simp\Model::FindById('User', $this->GetParam(0));
         if ($user->id > 0)
         {
-            \simp\DB::Instance()->Delete($user);
+            $user->Delete();
         }
         \Redirect(\Path::admin_user());
     }
+
 }           

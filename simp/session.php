@@ -61,7 +61,7 @@ function sess_read($id)
 
 function sess_write($id, $data)
 {
-    $session = Session::FindOne("Session", "sess_id =?", array($id));
+    $session = \simp\Model::FindOne("Session", "sess_id =?", array($id));
     $session->touch = time();
     $session->data = $data;
     $session->sess_id = $id;
