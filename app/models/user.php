@@ -3,6 +3,8 @@ require_once "ability.php";
 class User extends \simp\Model
 {
     protected $_abilities;
+    protected $_password;
+    protected $_password_verify;
 
     public function Setup()
     {
@@ -100,10 +102,74 @@ class User extends \simp\Model
         }
         else return parent::__get($property);
     }
+    
+    public function __set($property, $value)
+    {
+        global $log;
+        $log->logDebug("User: setting $property to $value");
+        if ($property == "password")
+        {
+            $this->_password = $value;
+        }
+        else if ($property == "password_verification")
+        {
+            $this->_password_verify = $value;
+        }
+        else parent::__set($property, $value);
+    }
+
+    public function BeforeSave()
+    {
+
+        $errors = 0;
+        if ($this->id == 0 && $this->_password == "")
+        {
+            $this->_errors['password'] = "Password required.";
+            $errors++;
+        }
+        if ($this->_password == $this->_password_verify)
+        {
+            if ($this->_password != "")
+            {
+                $psalt = RandStr(40);
+                $phash = sha1($this->_password . $psalt);
+                $this->pass_hash = $phash;
+                $this->pass_salt = $psalt;
+            }
+            $pass = true;
+        }
+        else 
+        {
+            $this->_errors['password_verification'] = "Password and confirmation don't match.";
+            $errors++;
+        }
+
+        if (!filter_var($this->email, FILTER_VALIDATE_EMAIL))
+        {
+            $this->_errors['email'] = "Please enter a valid email address.";
+            $errors++;
+        }
+
+        if ($this->login == "")
+        {
+            $this->_errors['login'] = "'Login' is a required field.";
+            $errors++;
+        }
+        else if ($this->id == 0)
+        {
+            $user_with_matching_login = User::FindOne("User", "login=?", array($this->login));
+            if (isset($user_with_matching_login))
+            {
+                $this->_errors['login'] = "That login already exists.  Please try another.";
+                $errors++;
+            }
+        }
+
+        return $errors == 0;
+    }
 
     public function AfterSave()
     {
-        echo "User::AfterSave()\n";
         foreach ($this->_abilities as $ability)
         {
             $ability->user_id = $this->id;

@@ -13,6 +13,7 @@
             <?= l("create account", Path::user_signup()); ?>
         <? endif; ?>
         </div>
+        <?=GetFlash();?>
         <?= $this->content; ?>
     </body>
 </html>

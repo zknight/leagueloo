@@ -17,17 +17,25 @@ class UserController extends \simp\RESTController
         return true;
     }
 
-    function Add()
+    protected function LoadEntitiesForAbilities()
     {
-        $this->user = \simp\Model::Create('User');
+        $this->entities = array(
+            'program' => array(),
+            'team' => array(),
+            'app' => array()
+            );
         $programs = \simp\Model::FindAll('Program');
-        //$team_names = \R::getCol("select name from team");
-        //$app_names = \R::getCol("select name from app");
-        $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
         foreach ($programs as $program)
         {
             $this->entities['program'][$program->name] = $program->id;
         }
+    }
+
+    function Add()
+    {
+        $this->user = \simp\Model::Create('User');
+        $programs = \simp\Model::FindAll('Program');
+        $this->LoadEntitiesForAbilities();
         $this->user->timezone = GetCfgVar("default_timezone");
         return true;
     }
@@ -35,15 +43,7 @@ class UserController extends \simp\RESTController
     function Edit()
     {
         $this->user = \simp\Model::FindById('User', $this->GetParam(0));
-        //echo"<pre>" . print_r($this->user, true) . "</pre>";
-        $programs = \simp\Model::FindAll('Program');
-        //$team_names = \R::getCol("select name from team");
-        //$app_names = \R::getCol("select name from app");
-        $this->entities = array('program' => array() /* 'team' => array(), 'app' => array()*/);
-        foreach ($programs as $program)
-        {
-            $this->entities['program'][$program->name] = $program->id;
-        }
+        $this->LoadEntitiesForAbilities();
         if ($this->user->id > 0)
         {
             return true;
@@ -63,7 +63,14 @@ class UserController extends \simp\RESTController
         $user->created_on = $created_on->format(\DateTimeDefaultFormat());
         $abilities = $this->GetFormVariable('Ability');
         $user->UpdateAbilities($abilities);
-        $user->Save();
+        if (!$user->Save())
+        {
+            $this->user = $user;
+            $this->LoadEntitiesForAbilities();
+            $this->Render('Add');
+            return false;
+        }
+        AddFlash("User {$user->login} created.");
         \Redirect(\Path::admin_user());
         return false;
     }
@@ -78,7 +85,14 @@ class UserController extends \simp\RESTController
         $abilities = $this->GetFormVariable('Ability');
         $log->logDebug("abilities: \n" . print_r($abilities, true));
         $user->UpdateAbilities($abilities);
-        $user->Save();
+        if (!$user->Save())
+        {
+            $this->user = $user;
+            $this->LoadEntitiesForAbilities();
+            $this->Render('Edit');
+            return false;
+        }
+        AddFlash("User {$user->login} updated.");
         \Redirect(\Path::admin_user());
     }
 

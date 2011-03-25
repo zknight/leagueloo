@@ -24,28 +24,13 @@ function sess_close()
 function sess_read($id)
 {
     global $log;
-  //echo "sess_read($id);\n";
-  //$res = $db->Fetch("sessions", "data", array('sess_id' => $id));
 
     $session = Session::FindOne("Session", "sess_id =?", array($id));
     $new_session = true;
     if ($session)
     {
-        $log->logDebug("res is array\n");
-    //print_r($res);
-    //$sess_str = $session->sess_str;
-
-    /*
-     */
-    $new_session = false;
-  }
-  //echo "sess_str:";
-  //print_r($sess_str);
-
-    if (!$new_session)
-    {
-    //echo "$id:sess_str = $sess_str\n";
-        return $session->sess_str;
+        $log->logDebug("session exists");
+        return $session->data;
     }
     else
     {
@@ -61,6 +46,8 @@ function sess_read($id)
 
 function sess_write($id, $data)
 {
+    global $log;
+    $log->logDebug("Attempthing to write $data to $id");
     $session = \simp\Model::FindOne("Session", "sess_id =?", array($id));
     $session->touch = time();
     $session->data = $data;

@@ -73,7 +73,7 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
 
 function PasswordField($model, $field, $opts = array())
 {
-    $attrs = GetInputAttributes($mode, $field, $opts);
+    $attrs = GetInputAttributes($model, $field, $opts);
 
     $html = "<input type=\"password\" name=\"{$attrs['name']}\"";
     $html .= $attrs['id'];
@@ -282,8 +282,8 @@ function GetInputAttributes($model, $field, $opts)
     $newopts['size'] = " size=\"" . (isset($opts['size']) ? $opts['size'] : "20") . "\"";
     $newopts['rows'] = " rows=\"" . (isset($opts['rows']) ? $opts['rows'] : 3) . "\"";
     $newopts['cols'] = " cols=\"" . (isset($opts['cols']) ? $opts['cols'] : 80) . "\"";
-    $newopts['class'] = isset($opts['class']) ? " class=\"{$opts['class']}\"" : "";
     $newopts['id'] = isset($opts['id']) ? " id=\"{$opts['id']}\"" : "";
+    $error_class = "";
 
     if (isset($model)) 
     {
@@ -295,11 +295,21 @@ function GetInputAttributes($model, $field, $opts)
         if (is_object($model))
         {
             $newopts['value'] = $model->__get($field);
+            $errors = $model->GetErrors();
+            if (array_key_exists($field, $errors))
+            {
+                $error_class = " error";
+            }
         }
         else
         {
             $newopts['value'] = isset($opts['value']) ? $opts['value'] : '';
         }
+    }
+    $input_class = isset($opts['class']) ? $opts['class'] : "";
+    if ($input_class != "" || $error_class != "")
+    {
+        $newopts['class'] = " class=\"{$input_class}{$error_class}\"";
     }
     return $newopts;
 }
@@ -326,18 +336,22 @@ function AddError($field, $error)
 
 function GetFlash()
 {
-  $flashar = $_SESSION['flash'];
-  unset($_SESSION['flash']);
-  if (is_array($flashar))
-  {
-    $flashstr = "<div class='flash'><ul class='flash'>\n";
-    foreach($flashar as $flash)
+    $flashstr = "";
+    if (isset($_SESSION['flash']))
     {
-      $flashstr .= "  <li>$flash</li>\n";
+        $flashar = $_SESSION['flash'];
+        unset($_SESSION['flash']);
+        if (is_array($flashar))
+        {
+            $flashstr = "<div class='flash'><ul class='flash'>\n";
+            foreach($flashar as $flash)
+            {
+                $flashstr .= "  <li>$flash</li>\n";
+            }
+            $flashstr .= "</ul></div>";
+        }
     }
-    $flashstr .= "</ul></div>";
-  }
-  return $flashstr;
+    return $flashstr;
 }
 
 function GetErrors()

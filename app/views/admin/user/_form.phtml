@@ -8,6 +8,9 @@
         <th>Last Name:</th><td><?=TextField($this->user, 'last_name');?></td>
     </tr>
     <tr>
+        <th>email:</th><td><?=TextField($this->user, 'email', array('size' => 40));?></td>
+    </tr>
+    <tr>
         <th>Password:</th><td><?=PasswordField($this->user, 'password');?></td>
     </tr>
     <tr>

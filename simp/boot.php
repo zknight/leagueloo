@@ -29,6 +29,7 @@ date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
 $router = new Router();
 $router->Route($req);
 
+session_commit();
 $log->logDebug('/\\ /\\ /\\');
 
 ?>

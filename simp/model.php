@@ -8,6 +8,7 @@ class Model
 {
     protected $_bean;
     protected $_table_name;
+    protected $_errors;
 
     public static function LoadModel($classname)
     {
@@ -38,6 +39,7 @@ class Model
         }
         $this->_table_name = Model::TableName($this->__toString());
         $this->_bean = $bean;
+        $this->_errors = array();
     }
 
     public function __toString()
@@ -186,13 +188,15 @@ class Model
         }
     }
 
+    public function GetErrors()
+    {
+        return $this->_errors;
+    }
+
     //// Event CALLBACKS
     // callback for when model is opened (find, load)
     public function OnLoad()
     {
-        global $log;
-        if (isset($log))
-            $log->logDebug("in " . get_class($this) . "::OnLoad() with id {$this->id}");
     }
 
     public function BeforeSave()

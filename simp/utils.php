@@ -31,6 +31,7 @@ function Pluralize($string)
 
 function RedirectURI($path)
 {
+    session_commit();
     header("Location: " . $path);
     exit();
 }
@@ -39,6 +40,7 @@ function Redirect($path)
 {
     //global $REL_PATH;
     //header("Location: /" . $REL_PATH . $path);
+    session_commit();
     header("Location: " . $path);
     exit();
 }
