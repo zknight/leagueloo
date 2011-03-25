@@ -1,0 +1,36 @@
+<h2><?= $this->user->first_name; ?>'s Profile</h2>
+<?= GetErrorsFor($this->user); ?>
+<?= FormTag("edit", \simp\Request::PUT); ?>
+<table>
+    <tr>
+        <th>login:</th>
+        <td><?= $this->user->login; ?></td>
+    </tr>
+    <tr>
+        <th>First Name</th>
+        <td><?= TextField($this->user, "first_name"); ?></td>
+    </tr>
+    <tr>
+        <th>Last Name</th>
+        <td><?= TextField($this->user, "last_name"); ?></td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td><?= TextField($this->user, "email"); ?></td>
+    </tr>
+    <tr>
+        <th>Change Password</th>
+        <td><?= PasswordField($this->user, "password"); ?></td>
+    </tr>
+    <tr>
+        <th>Verify Password</th>
+        <td><?= PasswordField($this->user, "password_verification"); ?></td>
+    </tr>
+    <tr>
+        <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
+    </tr>
+</table>
+<input type="submit" value="Update Profile"\>
+<?= EndForm(); ?>
+    
+        

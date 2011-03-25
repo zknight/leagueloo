@@ -6,8 +6,13 @@
     </head>
     <body>
         <div id="user-menu">
-        <? if (IsLoggedIn()):?>
-            Logged in as: <?=CurrentUser()->login?>
+        <? if ($this->UserLoggedIn()):?>
+            Logged in as: <?= $this->GetUser()->login?>
+            <?= l("logout", Path::user_logout()); ?>
+            <?= l("my profile", Path::user_edit()); ?>
+            <? if ($this->GetUser()->super): ?>
+                <?= l("administration", Path::administrator()); ?>
+            <? endif; ?>
         <? else: ?>
             <?= l("login", Path::user_login()); ?>
             <?= l("create account", Path::user_signup()); ?>

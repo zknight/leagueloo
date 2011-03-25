@@ -16,6 +16,7 @@ class Controller
     protected $_default_action;
     protected $_action;
     protected $_form_vars;
+    protected $_current_user;
 
     function __construct()
     {
@@ -39,6 +40,7 @@ class Controller
         $this->_layout_name = "default";
         $this->_method = Request::GET;
         $this->_action_map = array();
+        $this->_current_user = NULL;
         $this->Setup();
         // can override this
         $this->_default_action = "Index";
@@ -123,7 +125,12 @@ class Controller
         global $log;
         $path = '';
         $controller_name = '';
-        $log->logDebug("Dispatching with request:\n " . print_r($request->GetRequest(), true));
+        if (IsLoggedIn())
+        {
+            $this->_current_user = CurrentUser();
+        }
+
+        $log->logDebug("Dispatching {$this->_action} with request:\n " . print_r($request->GetRequest(), true));
 
         //$this->_method =  $request->GetMethod();
         $this->_form_vars = $request->GetVariables();
@@ -140,6 +147,17 @@ class Controller
         require_once $this->_layout_path . $this->_layout_name . ".phtml";
     }
 
+    function UserLoggedIn()
+    {
+        return $this->_current_user != NULL;
+    }
+
+    function GetUser()
+    {
+        return $this->_current_user;
+    }
+
+    // TODO: change this!
     function Authorized($action)
     {
         $role = '';
@@ -182,6 +200,19 @@ class Controller
             }
         }
         return $authorized;
+    }
+
+    protected function LoadVariable($name)
+    {
+        $var = \simp\Model::FindOne("CfgVar", "name = ?", array($name));
+        if (!$var)
+        {
+            $var = \simp\Model::Create("CfgVar");
+            $var->name = $name;
+            $var->value = "[not set]";
+            $var->Save();
+        }
+        return $var;
     }
 }
 ?>

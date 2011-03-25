@@ -1,8 +1,9 @@
 <h2>Login</h2>
+<?= GetErrorsFor($this->user); ?>
 <?= FormTag("authorize", \simp\Request::POST); ?>
 <strong>Login</strong>
 <?= TextField($this->user, "login"); ?><br />
 <strong>Password</strong>
-<?= PasswordField($this->password, "password"); ?><br />
+<?= PasswordField($this->user, "password"); ?><br />
 <input type="submit" value="Login"/>
 <?= EndForm(); ?>

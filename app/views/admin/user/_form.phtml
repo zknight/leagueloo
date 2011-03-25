@@ -18,6 +18,9 @@
     <tr>
         <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
+    <tr>
+        <th>Send Verification Email:</th><td><?= CheckBoxField($this->user, 'unverified'); ?></td>
+    </tr>
 </table><!-- TODO: add logic to prevent non-site admin to do this -->
 </fieldset>
 <fieldset><legend>User Rights</legend>

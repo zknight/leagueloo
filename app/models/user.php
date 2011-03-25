@@ -68,6 +68,20 @@ class User extends \simp\Model
         }
     }
 
+    public function Authenticate($password)
+    {
+        $ok = true;
+        $phash = sha1($password . $this->pass_salt);
+        global $log;
+        $log->logDebug("phash: {$phash} pass_hash: {$this->pass_hash}");
+        if ($this->pass_hash != $phash)
+        {
+            $this->_errors['password'] = "Invalid password";
+            $ok = false;
+        }
+        return $ok;
+    }
+
     public function CanAccess($entity_type, $entity_id, $level)
     {
         if ($this->super) return true;
@@ -114,6 +128,10 @@ class User extends \simp\Model
         else if ($property == "password_verification")
         {
             $this->_password_verify = $value;
+        }
+        else if ($property == "unverified")
+        {
+            parent::__set("verified", !$value);
         }
         else parent::__set($property, $value);
     }
@@ -165,6 +183,11 @@ class User extends \simp\Model
             }
         }
 
+        if (!$this->verified)
+        {
+            $this->verification_string = sha1($this->login . RandStr(40));
+        }
+
         return $errors == 0;
     }
 
@@ -174,6 +197,23 @@ class User extends \simp\Model
         {
             $ability->user_id = $this->id;
             $ability->Save();
+        }
+
+        if (!$this->verified)
+        {
+            // send email with verification string
+            $from = GetCfgVar('site_email');
+            $to = $this->email;
+            $subject = "Please confirm your account.";
+            $message = "You have recently signed up for an account at the ";
+            $message .= GetCfgVar("site_name", "Leagueloo");
+            $message .= "website.  Please confirm this by following this link:\n";
+            $message .= "(TODO change) http://localhost/web/leagueloo/user/confirm/";
+            $message .= $this->verification_string;
+            $headers = "From: " . $from . "\r\n" .
+                "Reply-To: " . $from . "\r\n" .
+                'X-Mailer: PHP/' . phpversion();
+            mail($to, $subject, $message, $headers);
         }
         return true;
     }

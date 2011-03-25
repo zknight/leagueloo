@@ -25,16 +25,4 @@ class ConfigurationController extends \simp\Controller
         \Redirect(\Path::admin_configuration());
     }
 
-    private function LoadVariable($name)
-    {
-        $var = \simp\Model::FindOne("CfgVar", "name = ?", array($name));
-        if (!$var)
-        {
-            $var = \simp\Model::Create("CfgVar");
-            $var->name = $name;
-            $var->value = "[not set]";
-            $var->Save();
-        }
-        return $var;
-    }
 }

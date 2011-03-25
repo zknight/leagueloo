@@ -193,6 +193,11 @@ class Model
         return $this->_errors;
     }
 
+    public function SetError($field, $error)
+    {
+        $this->_errors[$field] = $error;
+    }
+
     //// Event CALLBACKS
     // callback for when model is opened (find, load)
     public function OnLoad()

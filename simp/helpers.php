@@ -276,6 +276,24 @@ function FormatDateTime($timestamp, $format = NULL)
 
 }
 
+function GetErrorsFor($model)
+{
+    $html = "";
+    $errors = $model->GetErrors();
+    if (count($errors) > 0)
+    {
+        $html = "\t<div class=\"errors\">\n";
+        $html .= "\t\t<ul>\n";
+        foreach ($errors as $error)
+        {
+            $html .= "\t\t\t<li>{$error}</li>\n";
+        }
+        $html .= "\t\t</ul>\n";
+        $html .= "\t</div>\n";
+    }
+    return $html;
+}
+
 function GetInputAttributes($model, $field, $opts)
 {
     $newopts = array();
@@ -392,7 +410,7 @@ function IsLoggedIn()
 
 function CurrentUser()
 {
-  return $_SESSION['user'];
+    return \simp\Model::FindById("User", $_SESSION['user']);
 }
 
 function GetCurrentName()
