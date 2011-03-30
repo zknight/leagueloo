@@ -9,10 +9,14 @@ class ConfigurationController extends \simp\Controller
 
     function Index()
     {
+        global $_SERVER;
         $this->site_name = $this->LoadVariable('site_name');
         $this->max_session = $this->LoadVariable('max_session');
         $this->site_email = $this->LoadVariable('site_email');
         $this->default_timezone = $this->LoadVariable('default_timezone');
+        $this->site_address = $this->LoadVariable('site_address', $_SERVER['SERVER_NAME']);
+        global $log;
+        $log->logDebug("site_address from global: {$_SERVER['SERVER_NAME']}");
         return true;
     }
 

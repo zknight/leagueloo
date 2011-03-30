@@ -5,12 +5,16 @@ class Path
     public static function __callStatic($name, $arguments)
     {
         global $REL_PATH;
-        global $log;
-        $log->logDebug("Path::{$name}({$arguments[0]})");
+        //global $log;
+        //$log->logDebug("Path::{$name}({$arguments[0]})");
         $name_arr = explode('_', $name);
-        if (isset($arguments[0]))
+        if (count($arguments) > 0)
         {
             $name_arr[] = $arguments[0];
+            foreach ($name_arr as $i => $name)
+            {
+                $name_arr[$i] = SnakeCase($name);
+            }
         }
         $path = $REL_PATH . implode('/', $name_arr);
         return $path;
@@ -332,19 +336,27 @@ function GetInputAttributes($model, $field, $opts)
     return $newopts;
 }
 
-function GetURI()
+function GetURL()
 {
-  return $_SESSION['uri'];
+    return $_SESSION['url'];
 }
 
-function GetReturnURI()
+function SetReturnURL($url)
 {
-  return $_SESSION['return_to'];
+    $_SESSION['return_to'] = $url;
+}
+
+function GetReturnURL()
+{
+    return isset($_SESSION['return_to']) ? 
+      $_SESSION['return_to'] :
+      '';
+    //return $_SESSION['return_to'];
 }
 
 function AddFlash($flash)
 {
-  $_SESSION['flash'][] = $flash;
+    $_SESSION['flash'][] = $flash;
 }
 
 function AddError($field, $error)
@@ -405,7 +417,7 @@ function ClearSession()
 
 function IsLoggedIn()
 {
-  return ($_SESSION['user'] != NULL);
+  return (array_key_exists('user', $_SESSION) && $_SESSION['user'] != NULL);
 }
 
 function CurrentUser()

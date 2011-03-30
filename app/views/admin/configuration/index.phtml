@@ -13,6 +13,19 @@
 <?= EndForm(); ?>
 
 <?= FormTag(
+    "site_address", 
+    \simp\Request::PUT, 
+    path::admin_configuration_update($this->site_address->id)); 
+?>
+    <fieldset><legend>Site Address/Domain</legend>
+    <strong>The site address is where your website is located.
+    </strong><br />
+    <?=TextField($this->site_address, 'value');?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>
+
+<?= FormTag(
     "max_session", 
     \simp\Request::PUT, 
     path::admin_configuration_update($this->max_session->id)); 

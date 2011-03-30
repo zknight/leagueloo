@@ -20,6 +20,7 @@ $APP_PATH = $REL_PATH . "app";
 
 set_include_path(get_include_path() . PATH_SEPARATOR . "{$BASE_PATH}lib");
 require_once "model.php";
+require_once "email.php";
 spl_autoload_register("\simp\Model::LoadModel", false);
 \simp\Model::LoadDatabase("sqlite:db/development.db");
 require_once "session.php";

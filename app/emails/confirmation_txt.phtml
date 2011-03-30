@@ -1,0 +1,26 @@
+<html>
+<head></head>
+<body>
+<?
+global $REL_PATH;
+$user = $data['user'];
+$site_name = $data['site_name'];
+$host = $data['host'];
+?>
+Hi, <?= $user->first_name; ?>.
+
+You have recently requested an account at the <?= $site_name; ?> website.
+You now need to confirm this using your extra special confirmation token, which is:
+
+<?= $user->verification_string; ?>
+In fact, you can just go here: 
+    http://<?= $host . $REL_PATH; ?>user/confirm/<?= $user->id; ?>/<?= $user->verification_string; ?>
+to confirm <em>automagically!</em>
+
+Thanks!
+<?=$site_name;?> Robot Webmaster
+
+***Please Note: this account is NOT the account you use to register your player
+to play on a team.
+</body>
+</html>

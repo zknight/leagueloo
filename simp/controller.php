@@ -51,11 +51,11 @@ class Controller
     {
     }
 
-    function AddAction($key, $method, $action)
+    function AddAction($key, $method, $action, $can_return = false)
     {
         if (!method_exists($this, $action)) die("$action doesn't exist for :" . get_class($this));
-        if (!$this->_action_map[$key]) $this->_action_map[$key] = array();
-        $this->_action_map[$key][$method] = $action;
+        if (!array_key_exists($key, $this->_action_map)) $this->_action_map[$key] = array();
+        $this->_action_map[$key][$method] = array('name' => $action, 'save' => $can_return);
     }
 
     function GetFormVariable($name)
@@ -66,6 +66,11 @@ class Controller
     function GetParam($index)
     {
         return $this->_params[$index];
+    }
+
+    function SetParam($index, $value)
+    {
+        $this->_params[$index] = $value;
     }
 
     /// override this to have your controller Delegate to another
@@ -106,7 +111,11 @@ class Controller
         $request_params = &$request->GetRequest();
         if ($action = $this->_action_map[$request_params[0]][$request->GetMethod()])
         {
-            $this->_action = $action;
+            $this->_action = $action['name'];
+            if ($this->_action['save'])
+            {
+                SetReturnURL(GetURL());
+            }
             array_shift($request->GetRequest());
             $handled = true;
         }
@@ -202,14 +211,14 @@ class Controller
         return $authorized;
     }
 
-    protected function LoadVariable($name)
+    protected function LoadVariable($name, $default = NULL)
     {
         $var = \simp\Model::FindOne("CfgVar", "name = ?", array($name));
         if (!$var)
         {
             $var = \simp\Model::Create("CfgVar");
             $var->name = $name;
-            $var->value = "[not set]";
+            $var->value = $default == NULL ? "[not sret]" : $default;
             $var->Save();
         }
         return $var;

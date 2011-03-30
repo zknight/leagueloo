@@ -1,0 +1,14 @@
+<h2>Account Not Yet Confirmed</h2>
+<?= FormTag("confirm", \simp\Request::POST); ?>
+<p>To help prevent malicious use of this website, we must confirm that the email address you provided when you signed up is valid.  To do this, we send an email to you after you submit your sign-up request that contains a token.</p>
+<p>If you have received the aforementioned email, you can either follow the link given to you in the email, or you can enter the token here:
+<?= TextField($this->user, "confirm_check"); ?>
+<input type="hidden" name="User[id]" value="<?= $this->user->id;?>" />
+<input type="submit" value="and then click this button." />
+</p>
+<?= EndForm(); ?>
+<p>If you haven't received your confirmation email (or you have, but have since deleted it), <?= l("click me to request another", 
+            Path::User_RequestConfirmation($this->user->id),
+            array('method' => 'post')); ?>
+, and we'll send one to the account you provided straight-away!
+</p>

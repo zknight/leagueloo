@@ -3,7 +3,7 @@ namespace simp;
 /// Request encapsulates the parameters determined from the request received.
 ///
 /// Parameters are: 
-///     request_array - an array of made from the request uri relative to the application location
+///     request_array - an array of made from the request URL relative to the application location
 ///     post_variables - an associative array of post variables (name/value)
 ///     method - the request method
 ///     base_path - the base path of the application with respect to server root
@@ -37,12 +37,12 @@ class Request
         $this->_relative_path = preg_replace("/index.php/", "", $_SERVER["SCRIPT_NAME"]);
         $rel_path = preg_replace("/\//", "\/", trim($this->_relative_path, "/"));
         $log->logDebug("rel_path: $rel_path");
-        $uri = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
-        $log->logDebug("uri: $uri");
-        $uri = trim($uri, "/");
-        $log->logDebug("uri: $uri");
-        $_SESSION["uri"] = $uri;
-        if ($uri != '') $this->_request_array = explode ("/", $uri);
+        $url = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
+        $log->logDebug("url: $url");
+        $url = trim($url, "/");
+        $log->logDebug("url: $url");
+        $_SESSION["url"] = $url;
+        if ($url != '') $this->_request_array = explode ("/", $url);
         else $this->_request_array = array();
         $text = print_r($this->_request_array, true);
         $log->logDebug("request_array = $text"); 
@@ -93,7 +93,6 @@ class Request
 
         if ($this->_method != "")
         {
-            $log->logDebug("is post, checking method $method");
             if (isset($method))
             {
                 $this->_method = $this->_method_map[$method];
