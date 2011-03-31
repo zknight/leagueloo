@@ -55,7 +55,6 @@ class User extends \simp\Model
                 }
             }
         }
-
     }
 
     public function AddAbility($ability)

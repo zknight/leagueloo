@@ -4,6 +4,18 @@ class UserController extends \simp\RESTController
     function Setup()
     {
         $this->Model('User');
+        $this->RequireAuthorization(
+            array( 
+                'Index',
+                'Show',
+                'Add',
+                'Create',
+                'Edit',
+                'Update',
+                'Remove'
+            )
+        );
+
     }
     
     function Index()

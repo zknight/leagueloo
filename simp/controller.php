@@ -17,6 +17,7 @@ class Controller
     protected $_action;
     protected $_form_vars;
     protected $_current_user;
+    protected $_authorization_params;
 
     function __construct()
     {
@@ -41,34 +42,63 @@ class Controller
         $this->_method = Request::GET;
         $this->_action_map = array();
         $this->_current_user = NULL;
+        $this->_authorization_params = array();
         $this->Setup();
         // can override this
         $this->_default_action = "Index";
         $this->_content = "";
     }
 
-    function Setup()
+    protected function Setup()
     {
     }
 
-    function AddAction($key, $method, $action, $can_return = false)
+    protected function AddAction(
+        $key, 
+        $method, 
+        $action, 
+        $can_return = false)
     {
         if (!method_exists($this, $action)) die("$action doesn't exist for :" . get_class($this));
         if (!array_key_exists($key, $this->_action_map)) $this->_action_map[$key] = array();
         $this->_action_map[$key][$method] = array('name' => $action, 'save' => $can_return);
     }
 
-    function GetFormVariable($name)
+    protected function RequireAuthorization(
+        $actions, 
+        $entity_type = "", 
+        $entity_id = 0, 
+        $level = -1)
+    {
+        $ability = array(
+            'entity_type' => $entity_type,
+            'entity_id' => $entity_id,
+            'level' => $level);
+
+        if (is_array($actions))
+        {
+            foreach ($actions as $action)
+            {
+                $this->_authorization_params[$action] = $ability;
+            }
+        }
+        else
+        {
+            $this->_authorization_params[$action] = $ability;
+        }
+    }
+
+    protected function GetFormVariable($name)
     {
         return $this->_form_vars[$name];
     }
 
-    function GetParam($index)
+    protected function GetParam($index)
     {
         return $this->_params[$index];
     }
 
-    function SetParam($index, $value)
+    protected function SetParam($index, $value)
     {
         $this->_params[$index] = $value;
     }
@@ -139,11 +169,25 @@ class Controller
             $this->_current_user = CurrentUser();
         }
 
-        $log->logDebug("Dispatching {$this->_action} with request:\n " . print_r($request->GetRequest(), true));
+        if ($this->Authorized($this->_action))
+        {
+            $log->logDebug("Dispatching {$this->_action} with request:\n " . print_r($request->GetRequest(), true));
 
-        //$this->_method =  $request->GetMethod();
-        $this->_form_vars = $request->GetVariables();
-        $this->CallAction($this->_action, $request->GetRequest());
+            //$this->_method =  $request->GetMethod();
+            $this->_form_vars = $request->GetVariables();
+            $this->CallAction($this->_action, $request->GetRequest());
+        }
+        else if (IsLoggedIn())
+        {
+            AddFlash("You are not authorized to access this resource.");
+            \Redirect(GetReturnURL());
+        }
+        else
+        {
+            AddFlash("You must be logged in to access this resource.");
+            \Redirect(\Path::user_login());
+        }
+
     }
 
     function Render($view)
@@ -156,57 +200,37 @@ class Controller
         require_once $this->_layout_path . $this->_layout_name . ".phtml";
     }
 
-    function UserLoggedIn()
+    protected function UserLoggedIn()
     {
         return $this->_current_user != NULL;
     }
 
-    function GetUser()
+    protected function GetUser()
     {
         return $this->_current_user;
     }
 
-    // TODO: change this!
     function Authorized($action)
     {
-        $role = '';
-        $require_auth = false;
-        $authorized = true;
-        if (isset($this->auth_roles[$action]))
+        $authorized = false;
+        if (array_key_exists($action, $this->_authorization_params))
         {
-            $roles = explode(",", $this->auth_roles[$action]);
-            $require_auth = true;
-        }
-        else if (isset($this->auth_roles["all"]))
-        {
-            $roles = explode(",", $this->auth_roles["all"]);
-            $require_auth = true;
-        }
-        if ($require_auth)
-        {
-            Puts("requires auth role $role");
-            $user_id = $_SESSION["user"];
-        
-            if (!isset($user_id)) //|| ($role != $_SESSION["role"]))
+            if ($this->UserLoggedIn)
             {
-                AddFlash("You must log in to access this page.");
-                Redirect("login");
-            }
-            else //if (!in_array($role, $_SESSION["roles"]))
-            {
-                foreach($roles as $role)
+                if ($this->_current_user->super ||
+                    $this->_current_user->CanAccess(
+                        $this->_authorization_params['entity_type'],
+                        $this->_authorization_params['entity_id'],
+                        $this->_authorization_params['level'])
+                    )
                 {
-                    if (in_array($role, $_SESSION["roles"]))
-                    {
-                        $authorized = true;
-                        break;
-                    }
-                    else
-                    {
-                        $authorized = false;
-                    }
+                    $authorized = true;
                 }
             }
+        }
+        else
+        {
+            $authorized = true;
         }
         return $authorized;
     }

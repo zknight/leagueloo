@@ -9,6 +9,11 @@ class ProgramController extends \simp\Controller
         $this->AddAction('id', \simp\Request::GET, 'Index');
     }
     
+    function Delegate($param)
+    {
+        return null;
+    }
+
     // Actions
     function Index()
     {
@@ -17,14 +22,14 @@ class ProgramController extends \simp\Controller
         $name_or_id = $this->GetParam(0);
         if (preg_match("/^\d/", $name_or_id))
         {
-            $this->program = \simp\DB::Instance()->Load('Program', $name_or_id);
+            $this->program = \simp\Model::FindById('Program', $name_or_id);
         }
         else 
         {
             $name = ucfirst($name_or_id);
             //$log->logDebug("trying to find model by name: 
-            $this->program = \simp\DB::Instance()
-                ->FindOne('Program', 'name = ?', array($name));
+            $this->program = \simp\Model::
+                FindOne('Program', 'name = ?', array($name));
         }
         return true;
     }
