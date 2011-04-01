@@ -1,6 +1,6 @@
 <h2><?= $this->user->first_name; ?>'s Profile</h2>
 <?= GetErrorsFor($this->user); ?>
-<?= FormTag("edit", \simp\Request::PUT); ?>
+<?= FormTag("edit", \simp\Request::PUT, Path::user_edit($this->user->id)); ?>
 <table>
     <tr>
         <th>login:</th>

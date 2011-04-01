@@ -1,9 +1,21 @@
 <h2>Login</h2>
 <?= GetErrorsFor($this->user); ?>
 <?= FormTag("authorize", \simp\Request::POST); ?>
-<strong>Login</strong>
-<?= TextField($this->user, "login"); ?><br />
-<strong>Password</strong>
-<?= PasswordField($this->user, "password"); ?><br />
-<input type="submit" value="Login"/>
+<table>
+    <tr>
+        <td><strong>Login</strong></td>
+        <td><?= TextField($this->user, "login"); ?></td>
+    </tr>
+    <tr>
+        <td><strong>Password</strong></td>
+        <td><?= PasswordField($this->user, "password"); ?></td>
+    </tr>
+    <tr>
+        <td colspan='2'>
+            <?= CheckBoxField($this->user, "request_password"); ?>
+            <em>I forgot my password and I want you to send me a new one via email</em>
+        </td>
+    </tr>
+</table>
+<input type="submit" value="Submit"/>
 <?= EndForm(); ?>

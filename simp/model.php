@@ -97,6 +97,7 @@ class Model
         }
         return $model;
     }
+
     
     /// Load model by id
     /// @return true

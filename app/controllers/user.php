@@ -11,7 +11,7 @@ class UserController extends \simp\Controller
         $this->AddAction('confirm', \simp\Request::GET, 'Confirm');
         $this->AddAction('confirm', \simp\Request::POST, 'ConfirmPost');
         $this->AddAction('request_confirmation', \simp\Request::POST, 'RequestConfirm');
-        $this->AddAction('request_password', \simp\Request::POST, 'RequestPassword');
+        //$this->AddAction('request_password', \simp\Request::POST, 'RequestPassword');
         $this->AddAction('edit', \simp\Request::GET, 'Edit');
         $this->AddAction('edit', \simp\Request::PUT, 'Update');
         $this->AddAction('logout', \simp\Request::GET, 'Logout');
@@ -20,6 +20,11 @@ class UserController extends \simp\Controller
     function Login()
     {
         //$this->user = \simp\Model::FindById($this->GetParam(0));
+        if (IsLoggedIn())
+        {
+            AddFlash("You are already logged in.");
+            Redirect(GetReturnURL());
+        }
         $this->user = \simp\Model::Create("User");
         return true;
     }
@@ -51,6 +56,10 @@ class UserController extends \simp\Controller
         }
         else
         {
+            if ($user_vars['request_password'])
+            {
+                $this->RequestPassword($user);
+            }
             $this->user = $user;
             $this->Render('Login');
             return false;
@@ -105,7 +114,7 @@ class UserController extends \simp\Controller
         if ($user->Verify($token))
         {
             $user->Save();
-            return true;
+            Redirect(\Path::user_login());
         }
         else
         {
@@ -132,11 +141,6 @@ class UserController extends \simp\Controller
         Redirect(GetReturnURL());
     }
 
-    function RequestPassword()
-    {
-        AddFlash("Your request has been sent.");
-    }
-
     function Edit()
     {
         $this->user = $this->GetUser();
@@ -145,6 +149,17 @@ class UserController extends \simp\Controller
 
     function Update()
     {
+        $id = $this->GetParam(0);
+        $vars = $this->GetFormVariable('User');
+        $user = \simp\Model::FindById('User', $id);
+        $user->UpdateFromArray($vars);
+        if (!$user->Save())
+        {
+            $this->Render('edit');
+            return false;
+        }
+        AddFlash("Account updated.");
+        Redirect(GetReturnURL());
     }
 
     function Logout()
@@ -154,8 +169,17 @@ class UserController extends \simp\Controller
         \Redirect(\Path::main());
     }
 
-    protected function SendConfirmation($user)
+    protected function RequestPassword(&$user)
     {
+        $subject = "A message from {$site_name}: password reset";
+        $user->password = RandStr(10);
+        $user->password_verification = $user->password;
+        $user->Save();
+        $this->SendSiteEmail($user, $subject, "new_password");
+        global $log;
+        $log->logDebug("random password: {$user->password}");
+        AddFlash("Your request has been sent.");
+        \Redirect(\Path::user_login());
     }
 
     protected function SendSiteEmail($user, $subject, $message)

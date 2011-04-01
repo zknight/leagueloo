@@ -1,0 +1,7 @@
+<h1>You have been confirmed.  Account enabled</h1>
+<p>
+    You can 
+    <?= l("edit your profile", Path::user_edit($this->user->id)); ?> 
+    or go to the <?= GetCfgVar("site_name"); ?>
+    <?= l("website", Path::home()); ?>
+</p>

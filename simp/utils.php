@@ -40,6 +40,8 @@ function Redirect($path)
 {
     //global $REL_PATH;
     //header("Location: /" . $REL_PATH . $path);
+    global $log;
+    $log->logDebug("Redirecting to $path");
     session_commit();
     header("Location: " . $path);
     exit();

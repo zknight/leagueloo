@@ -69,6 +69,8 @@ class User extends \simp\Model
 
     public function Verify($token)
     {
+        global $log;
+        $log->logDebug("comparing $token to {$this->verification_string}");
         if ($token == $this->verification_string)
         {
             $this->verified = true;
@@ -121,6 +123,10 @@ class User extends \simp\Model
         if ($property == 'abilities')
         {
             return $this->Abilities();
+        }
+        else if ($property == "password")
+        {
+            return $this->_password;
         }
         else return parent::__get($property);
     }
@@ -248,6 +254,90 @@ class User extends \simp\Model
             $ability->Delete();
         }
         return true;
+    }
+
+    // News stuff
+
+    public function GetUnpublishedNews()
+    {
+        $news = array();
+        if ($this->super)
+        {
+            $news = News::FindUnpublished();
+        }
+        else
+        {
+            $abilities = User::Find(
+                "Ability",
+                "user_id = ? and level >= ?",
+                array($this->id, Ability::EDIT));
+
+            foreach ($abilities as $ability)
+            {
+                $news = array_merge(
+                    $news,
+                    News::FindUnpublished($ability->entity_type, $ability->entity_id));
+            }
+        }
+        return $news;
+    }
+
+    public function GetPublishedNews()
+    {
+        $news = array();
+        if ($this->super)
+        {
+            $news = News::FindPublished();
+        }
+        else
+        {
+            $abilities = User::Find(
+                "Ability",
+                "user_id = ? and level > ?",
+                array($this->id, Ability::EDIT));
+
+            foreach ($abilities as $ability)
+            {
+                $news = array_merge(
+                    $news,
+                    News::FindPublished($ability->entity_type, $ability->entity_id));
+            }
+        }
+        return $news;
+    }
+
+    // return the name and id for programs that user can modify news for
+    public function ProgramsWithPrivilege($level = Ability::ADMIN)
+    {
+        $program_arr = array();
+        if ($this->super)
+        {
+            $programs = User::FindAll('Program');
+            foreach ($programs as $program)
+            {
+                $program_arr[$program->id] = $program->name;
+            }
+        }
+        else
+        {
+            $abilities = User::Find(
+                "Ability",
+                "user_id = ? and level = ? and entity_type = ?",
+                array($this->id, $level, "Program"));
+            foreach ($abilities as $ability)
+            {
+                $program_arr[$ability->entity_id] = $ability->entity_name;
+            }
+        }
+        return $program_arr;
+    }
+
+    public function TeamsWithPrivilege($level = Ability::ADMIN)
+    {
+    }
+
+    public function AppsWithPrivlege($level = Ability::ADMIN)
+    {
     }
 
     // login

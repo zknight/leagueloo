@@ -1,0 +1,48 @@
+<? 
+namespace app\content;
+//require_once "ability.php";
+
+class NewsController extends \simp\RESTController
+{
+    function Setup()
+    {
+        $this->Model('News');
+        $this->RequireAuthorization(
+            array(
+                'Index',
+                'show',
+                'Add',
+                'Create',
+                'Edit',
+                'Update',
+                'Remove'
+            )
+        );
+    }
+
+    function Index()
+    {
+        // load all articles that this user is editor of
+        $this->user = CurrentUser();
+        $this->published_articles = $this->user->GetPublishedNews();
+        $this->unpublished_articles = $this->user->GetUnpublishedNews();
+        return true;
+    }
+
+    function Show()
+    {
+        $id = GetParam(0);
+        $this->user = CurrentUser();
+        $this->article = \simp\Model::FindById("News", $id);
+        return true;
+    }
+
+    function Add()
+    {
+        $this->user = CurrentUser();
+        $this->article = \simp\Model::Create('News');
+        $abilities = $this->user->abilities;
+        $this->programs = $this->user->ProgramsWithPrivilege(\Ability::EDIT);
+        return true;
+    }
+}

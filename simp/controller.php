@@ -84,7 +84,9 @@ class Controller
         }
         else
         {
-            $this->_authorization_params[$action] = $ability;
+            global $log;
+            $log->logDebug("adding authorization requirement for $actions");
+            $this->_authorization_params[$actions] = $ability;
         }
     }
 
@@ -213,9 +215,11 @@ class Controller
     function Authorized($action)
     {
         $authorized = false;
+        global $log;
+        $log->logDebug("Checking authrorization for $action");
         if (array_key_exists($action, $this->_authorization_params))
         {
-            if ($this->UserLoggedIn)
+            if ($this->UserLoggedIn())
             {
                 if ($this->_current_user->super ||
                     $this->_current_user->CanAccess(
@@ -230,6 +234,7 @@ class Controller
         }
         else
         {
+            $log->logDebug("no protection on this action.");
             $authorized = true;
         }
         return $authorized;

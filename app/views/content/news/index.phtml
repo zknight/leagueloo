@@ -1,0 +1,34 @@
+<h1>Content Manager</h1>
+<?= l("Create an article", Path::content_news_add()); ?>
+<h2>Published Articles</h2>
+<? if (count($this->published_articles) < 1): ?>
+    <p>None</p>
+<? else: ?>
+<table>
+    <tr>
+        <th>Section</th><th>Article Title</th>
+    </tr>
+    <? foreach ($this->published_articles as $article): ?>
+    <tr>
+        <td><?= $article->entity_type; ?>:<strong><?= $article->entity_name; ?></td>
+        <td><?= $artcile->title; ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<h2>Unpublished Articles</h2>
+<? if (count($this->unpublished_articles) < 1): ?>
+    <p>None</p>
+<? else: ?>
+<table>
+    <tr>
+        <th>Section</th><th>Article Title</th>
+    </tr>
+    <? foreach ($this->unpublished_articles as $article): ?>
+    <tr>
+        <td><?= $article->entity_type; ?>:<strong><?= $article->entity_name; ?></td>
+        <td><?= $artcile->title; ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

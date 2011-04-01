@@ -1,6 +1,3 @@
-<html>
-<head></head>
-<body>
 <?
 global $REL_PATH;
 $user = $data['user'];
@@ -15,12 +12,10 @@ You now need to confirm this using your extra special confirmation token, which 
 <?= $user->verification_string; ?>
 In fact, you can just go here: 
     http://<?= $host . $REL_PATH; ?>user/confirm/<?= $user->id; ?>/<?= $user->verification_string; ?>
-to confirm <em>automagically!</em>
+ to confirm automagically!
 
 Thanks!
 <?=$site_name;?> Robot Webmaster
 
 ***Please Note: this account is NOT the account you use to register your player
 to play on a team.
-</body>
-</html>

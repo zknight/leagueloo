@@ -19,6 +19,12 @@ class Path
         $path = $REL_PATH . implode('/', $name_arr);
         return $path;
     }
+
+    public static function home()
+    {
+        global $REL_PATH;
+        return $REL_PATH;
+    }
 }
 
 function h($str)
@@ -350,7 +356,7 @@ function GetReturnURL()
 {
     return isset($_SESSION['return_to']) ? 
       $_SESSION['return_to'] :
-      '';
+      Path::home();
     //return $_SESSION['return_to'];
 }
 
