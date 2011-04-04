@@ -6,12 +6,18 @@
 <? else: ?>
 <table>
     <tr>
-        <th>Section</th><th>Article Title</th>
+        <th>Section</th><th>Article Title</th><th>Expiration</th>
     </tr>
     <? foreach ($this->published_articles as $article): ?>
     <tr>
-        <td><?= $article->entity_type; ?>:<strong><?= $article->entity_name; ?></td>
-        <td><?= $artcile->title; ?></td>
+        <td>
+            <?= $article->entity_type; ?>:
+            <strong>
+            <?=$article->entity_name; ?>
+            </strong>
+        </td>
+        <td><?= $article->title; ?></td>
+        <td><?= FormatDateTime($article->expiration); ?>
     </tr>
     <? endforeach; ?>
 </table>

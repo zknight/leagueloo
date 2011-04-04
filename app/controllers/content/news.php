@@ -45,4 +45,27 @@ class NewsController extends \simp\RESTController
         $this->programs = $this->user->ProgramsWithPrivilege(\Ability::EDIT);
         return true;
     }
+
+    function Create()
+    {
+        $this->article = \simp\Model::Create('News');
+        $vars = $this->GetFormVariable('News');
+        $this->article->UpdateFromArray($vars);
+        $this->article->entity_type = "Program";
+        //$log->logDebug("NewsController::Create() program id = {$this->article->entity_id}");
+        if ($this->article->Save())
+        {
+            AddFlash("Article {$this->article->short_name} Created.");
+            \Redirect(\Path::content_news());
+        }
+        else
+        {
+            $this->user = CurrentUser();
+            $abilities = $this->user->abilities;
+            $this->programs = $this->user->ProgramsWithPrivilege(\Ability::EDIT);
+            $this->Render("Add");
+            return false;
+        }
+    }
+
 }

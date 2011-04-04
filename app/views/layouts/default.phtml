@@ -1,24 +1,58 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
     <head>
         <title>
             <?= SiteName(); ?>
         </title>
+        <?= IncludeCSS("layout.css"); ?>
+        <?= IncludeCSS("style.css"); ?>
     </head>
     <body>
-        <div id="user-menu">
-        <? if ($this->UserLoggedIn()):?>
-            Logged in as: <?= $this->GetUser()->login?>
-            <?= l("logout", Path::user_logout()); ?>
-            <?= l("my profile", Path::user_edit()); ?>
-            <? if ($this->GetUser()->super): ?>
-                <?= l("administration", Path::administrator()); ?>
+        <div id="header">
+            <div id="user-menu">
+                <ul class = "menu">
+            <? if ($this->UserLoggedIn()):?>
+                Logged in as: <?= $this->GetUser()->login?>
+                    <li><?= l("logout", Path::user_logout()); ?> </li>
+                    <li><?= l("my profile", Path::user_edit()); ?> </li>
+                <? if ($this->GetUser()->super): ?>
+                    <li><?= l("administration", Path::administrator()); ?> </li>
+                <? endif; ?>
+            <? else: ?>
+                    <li><?= l("login", Path::user_login()); ?></li>
+                    <li><?= l("create account", Path::user_signup()); ?></li>
             <? endif; ?>
-        <? else: ?>
-            <?= l("login", Path::user_login()); ?>
-            <?= l("create account", Path::user_signup()); ?>
-        <? endif; ?>
+                </ul>
+            </div>
+            <div id="main-menu">
+                <div id="min"</div></div>
+                <ul class="menu">
+                </ul>
+            </div>
+            <div id="notice">
+            </div>
         </div>
         <?=GetFlash();?>
-        <?= $this->content; ?>
+        <div class="colmask">
+            <div class="middle">
+                <div class="left">
+                    <div class="col1">
+                        <?= $this->content; ?>
+                        <div style="height:400px;"></div>
+                    </div>
+                    <div class="col2">
+                        <p>col2 lorum ipsum and some other shit</p>
+                    </div>
+                    <div class="col3">
+                        <p>col3 lorum ipsum and some other shit</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <p>footer</p>
+            <p>seriously!</p>
+            <p>really seriously!</p>
+        </div>
     </body>
 </html>

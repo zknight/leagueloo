@@ -1,7 +1,62 @@
-<strong>Add article to section: </strong>
-<?= SimpleSelect($this->article, 'entity_id', $this->programs); ?><br />
-<strong>Enter a short title: </strong><?= TextField($this->article, 'short_title'); ?><br />
-<strong>Enter title: </strong><?= TextField($this->article, 'title');?> <br/>
-<strong>Intro: </strong><?= TextArea($this->article, 'intro'); ?><br />
-<strong>Body: </strong><?= TextArea($this->article, 'body'); ?><br />
-
+<fieldset>
+    <legend>Article Content</legend>
+    <table class="form">
+        <tr>
+            <td><strong>Select category to which article belongs:</strong></td>
+            <td><?= SimpleSelect($this->article, 'entity_id', $this->programs); ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><strong>Enter a short title:</strong></td>
+            <td><?= TextField($this->article, 'short_title', array('size' => 32)); ?></td>
+            <td>Max characters: 32</td>
+        </tr>
+        <tr>
+            <td><strong>Enter title:</strong></td>
+            <td colspan="2"><?= TextField($this->article, 'title', array('size' => 80));?></td>
+        </tr>
+        <tr>
+            <td><strong>Introduction:</strong></td>
+            <td colspan="2"><?= TextArea($this->article, 'intro', 3, 70); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Body:</strong></td>
+            <td colspan="2"><?= TextArea($this->article, 'body', 10, 70); ?></td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Article Parameters</legend>
+    <table class="form">
+        <tr>
+            <td><strong>Show Intro on Front Page:</strong></td>
+            <td><?= CheckBoxField($this->article, 'front_page'); ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><strong>Publish Now:</strong></td>
+            <td><?= CheckBoxField($this->article, 'publish_now'); ?></td>
+            <td>Checking this ignores Publish Date/Time</td>
+        </tr>
+        <tr>
+            <td><strong>Publish Date:</strong></td>
+            <td><?= TextField($this->article, 'publish_date'); ?></td>
+            <td>Format: mm/yy/dddd</td>
+        </tr>
+        <tr>
+            <td><strong>Publish Time:</strong></td>
+            <td><?= TextField($this->article, 'publish_time'); ?></td>
+            <td>(Optional) Format: hh:mm [am/pm]</td>
+        </tr>
+        <tr>
+            <td><strong>Expiration Date:<strong></td>
+            <td><?= TextField($this->article, 'expire_date'); ?></td>
+            <td>Format: mm/yy/dddd (leave blank to never expire)</td>
+        </tr>
+        <tr>
+            <td><strong>Expiration Time:</strong></td>
+            <td><?= TextField($this->article, 'expire_time'); ?></td>
+            <td>(Optional) Format: hh:mm [am/pm]</td>
+        </tr>
+    </table>
+</fieldset>

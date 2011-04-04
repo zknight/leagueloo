@@ -463,19 +463,33 @@ function GetBasePath()
   return $REL_PATH;
 }
 
+function GetResourcePath()
+{
+    global $REL_PATH;
+    return $REL_PATH . "resources/";
+}
+
 function GetCSSPath($filename)
 {
-  return (GetBasePath() . "css/" . $filename);
+  return (GetResourcePath() . "css/" . $filename);
 }
 
 function GetImagePath($filename)
 {
-  return (GetBasePath() . "images/" . $filename);
+  return (GetResourcePath() . "img/" . $filename);
 }
 
 function GetJSPath($filename)
 {
-    return (GetBasePath() . "js/" . $filename);
+    return (GetResourcePath() . "js/" . $filename);
+}
+
+function IncludeCSS($filename, $media = "screen")
+{
+    $css = "<link rel=\"stylesheet\" type=\"text/css\" href=\"";
+    $css .= GetCSSPath($filename);
+    $css .= "\" media=\"$media\" />";
+    return $css;
 }
 
 function IncludeJS($filename)

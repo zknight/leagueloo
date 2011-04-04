@@ -2,4 +2,6 @@ Options +FollowSymLinks
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.js$
+RewriteCond %{REQUEST_FILENAME} !^(.+)\.css$
+RewriteCond %{REQUEST_FILENAME} !^(.+)\.png$
 RewriteRule .* index.php [L]

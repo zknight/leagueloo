@@ -16,7 +16,7 @@ body {
     min-width:1000px;
 }
 
-ul.menu, ul.submenu {
+ul.menu {
     list-style-type:none;
     padding:0;
     margin:0;
@@ -27,7 +27,7 @@ ul.menu, ul.submenu {
     float:left;
     margin:0;
     padding:0;
-    background:#0f334d url(../img/logo.png) no-repeat; 
+    background:#0f334d url(logo.png) no-repeat; 
     background-position:20px 20px;
     height:160px;
     width:100%;
@@ -58,7 +58,7 @@ ul.menu, ul.submenu {
         top:55px;
         margin-left:355px;
         margin-right:20px;
-        background:url(../img/menu.png) repeat-x;
+        background:url(menu.png) repeat-x;
         height:30px;
         /*width:66%;*/
         border-left:1px solid #2566b1;
@@ -86,30 +86,12 @@ ul.menu, ul.submenu {
                 color:#2566b1;
             }
             #main-menu li a.current {
-                /*background:url(../img/ball.png) no-repeat center; */
+                /*background:url(ball.png) no-repeat center; */
                 color:#2566b1;
             }
             #main-menu .submenu {
-                text-align:left;
                 position:absolute;
-                display:block;
-                background:#569fd3;
-                z-index:10;
-                width:100%;
-                left:0px;
-                top:30px;
             }
-                #main-menu .submenu li {
-                    position:relative;
-                    display:block;
-                    border-bottom:solid 1px #0f334d;
-                }
-                    #main-menu .submenu li a {
-                        font-size:10pt; 
-                        display:block;
-                        color:#2566b1;
-                        font-weight:normal;
-                    }
     #notice {
         padding:4px 0 0 0;
         /*overflow:none;*/
@@ -117,7 +99,7 @@ ul.menu, ul.submenu {
         top:70px;
         margin-left:355px;
         margin-right:20px;
-        background:url(../img/notice.png) repeat-x;
+        background:url(notice.png) repeat-x;
         height:30px;
         text-align:center;
         color:#be8234;
@@ -129,7 +111,7 @@ ul.menu, ul.submenu {
     float:left;
     width:100%;
     overflow:hidden;
-    background:#569fd3 url(../img/column.png) repeat-x;
+    background:#569fd3 url(column.png) repeat-x;
 }
 .middle, .left {
     float:left;
@@ -142,7 +124,7 @@ ul.menu, ul.submenu {
 }
 .left {
     right:50%;
-    background:#569fd3 url(../img/column.png) repeat-x;
+    background:#569fd3 url(column.png) repeat-x;
 }
 .col1, 
 .col2, 
@@ -180,11 +162,6 @@ ul.menu, ul.submenu {
     clear:both;
     float:left;
     width:100%;
-    background:#569fd3 url(../img/footer.png) bottom repeat-x;
+    background:#569fd3 url(footer.png) bottom repeat-x;
     color:#00243e;
-}
-
-input.error {
-    background-color:#ffaaaa;
-    border-color:#ff2222;
 }
