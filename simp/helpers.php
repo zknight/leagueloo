@@ -25,6 +25,12 @@ class Path
         global $REL_PATH;
         return $REL_PATH;
     }
+
+    public static function Relative($path)
+    {
+        global $REL_PATH;
+        return "{$REL_PATH}{$path}";
+    }
 }
 
 function h($str)

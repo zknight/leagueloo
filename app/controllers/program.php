@@ -31,6 +31,21 @@ class ProgramController extends \simp\Controller
             $this->program = \simp\Model::
                 FindOne('Program', 'name = ?', array($name));
         }
-        return true;
+
+        if ($this->program->id > 0)
+        {
+            // load news for this program
+            $this->news = \simp\Model::Find(
+                "News", 
+                "entity_type = 'Program' and entity_id = ?",
+                array($this->program->id));
+            return true;
+        }
+        else
+        {
+            $this->NotFound();
+            return false;
+        }
+
     }
 }

@@ -23,7 +23,7 @@ class Controller
     {
         global $APP_BASE_PATH;
         global $log;
-        $log->logDebug("class: " . get_class($this));
+        $log->logDebug("controller: " . get_class($this));
         $class = explode("\\", 
             preg_replace("/app/", "", get_class($this))
         );
@@ -51,6 +51,11 @@ class Controller
 
     protected function Setup()
     {
+    }
+
+    protected function SetLayout($layout)
+    {
+        $this->_layout_name = $layout;
     }
 
     protected function AddAction(
@@ -126,7 +131,8 @@ class Controller
     {
         global $log;
         $handled = false;
-        if ((count($request->GetRequest()) < 1) && method_exists($this, $this->_default_action))
+        //if ((count($request->GetRequest()) < 1) && method_exists($this, $this->_default_action))
+        if (method_exists($this, $this->_default_action))
         {
             $handled = true;
             //$this->CallAction($this->_default_action);
@@ -194,12 +200,17 @@ class Controller
 
     function Render($view)
     {
-        global $REL_PATH;
         ob_start();
         require_once $this->_view_path . SnakeCase($view) . ".phtml";
         $this->content .= ob_get_contents();
         ob_end_clean();
         require_once $this->_layout_path . $this->_layout_name . ".phtml";
+    }
+
+    function NotFound($msg = "")
+    {
+        global $BASE_PATH;
+        require_once $BASE_PATH . "/public/error404.phtml";
     }
 
     protected function UserLoggedIn()

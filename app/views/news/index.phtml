@@ -1,8 +1,7 @@
-<h1><?= $this->program->name; ?></h1>
-<p><?= $this->program->description; ?></p>
+<h2><?= SiteName();?> News</h2>
 <? foreach ($this->news as $article): ?>
 <div class="article">
-    <h2><?= l($article->title, Path::Relative($article->GetPath())/*Path::news($article->id)*/); ?></h2>
+    <h2><?= l($article->title, Path::news($article->id)); ?></h2>
         <span class="date">
             <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
         </span>

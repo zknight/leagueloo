@@ -1,0 +1,7 @@
+<h1>Edit an Article</h1>
+Article Status: <strong><?= $this->article->published ? "Published" : "Unpublished"; ?></strong>
+<?= GetErrorsFor($this->article); ?>
+<?= FormTag("article", \simp\Request::PUT, path::content_news($this->article->id)) ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

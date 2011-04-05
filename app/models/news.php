@@ -34,6 +34,46 @@ class News extends \simp\Model
         $this->_exp_time = "00:00:00";
     }    
 
+    public function OnLoad()
+    {
+        $this->_pub_date = FormatDateTime($this->publish_on, "m/d/Y");
+        $this->_pub_time = FormatDateTime($this->publish_on, "H:i:s");
+        $this->_exp_date = FormatDateTime($this->expiration, "m/d/Y");
+        $this->_exp_time = FormatDateTime($this->expiration, "H:i:s");
+    }
+
+    public function GetPath()
+    {
+        return "{$this->entity_name}/{$this->short_title}";
+    }
+
+    public static function FindWithShortTitleByEntityName(
+        $short_title,
+        $entity_type,
+        $entity_name)
+    {
+        $q = "select news.* from news, {$entity_type} ";
+        $q .= "where ${entity_type}.name = ? ";
+        $q .= "and news.entity_type = ? ";
+        $q .= "and news.entity_id = {$entity_type}.id ";
+        $q .= "and news.short_title = ? ";
+        $q .= "limit 1";
+        //\R::debug(true);
+        $result = \R::getRow(
+            $q,
+            array($entity_name, $entity_type, $short_title)
+        );
+        //print_r($result);
+        //$beans = \R::$redbean->convertToBeans("news", $result);
+        if (isset($result))
+        {
+            $bean = \R::dispense("news");
+            $bean->import($result);
+            return new News($bean);
+        }
+        return null;
+    }
+
     public static function FindPublished($owner_type = NULL, $owner_id = NULL)
     {
         $dt = new DateTime("now");

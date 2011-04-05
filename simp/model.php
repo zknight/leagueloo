@@ -64,7 +64,10 @@ class Model
     {
         $model = new $model_name;
         if ($model->Load($id))
+        {
+            $model->OnLoad();
             return $model;
+        }
         return NULL;
     }
 

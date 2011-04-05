@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+    <head>
+        <title>
+            <?= SiteName(); ?>
+        </title>
+        <?= IncludeCSS("ce_layout.css"); ?>
+        <?= IncludeCSS("style.css"); ?>
+    </head>
+    <body>
+        <div id="header">
+            <div id="user-menu">
+                <ul class = "menu">
+                    <li>Logged in as: <?= $this->GetUser()->login?></li>
+                    <li><?= l("logout", Path::user_logout()); ?> </li>
+                    <li><?= l("my profile", Path::user_edit()); ?> </li>
+                <? if ($this->GetUser()->super): ?>
+                    <li><?= l("administration", Path::administrator()); ?> </li>
+                <? endif; ?>
+                </ul>
+            </div>
+            <div id="main-menu">
+                <!--div id="min"</div></div-->
+                <ul class="menu">
+                </ul>
+            </div>
+            <?= \simp\Module::Load("notice"); ?>
+        </div>
+        <?=GetFlash();?>
+        <div class="content">
+            <?= $this->content ?>
+        </div>
+    </body>
+</html>
+        

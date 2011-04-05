@@ -20,6 +20,7 @@ class Router
         $this->_log = &$log;
         $this->_default_controller = array("main");
         $this->_GenerateMap($this->_route_map, $APP_BASE_PATH . "/controllers");
+        $log->logDebug("route map:\n" . print_r($this->_route_map, true));
     }
 
     function Route($request)
@@ -42,6 +43,43 @@ class Router
                 $controller = new $controller_name();
                 //array_shift($request->GetRequest());
                 $this->_log->logDebug("checking to see if $controller_name can handle \n" . print_r($request->GetRequest(), true));
+
+                $delegate = $controller->Delegate($request);
+
+                if ($delegate)
+                {
+                    /*
+                    if (array_key_exists('action', $delegate)) 
+                        array_unshift($request->GetRequest(), $delegate['action']);
+                    if (array_key_exists('controller', $delegate)) 
+                        array_unshift($request->GetRequest(), $delegate['controller']);
+                     */
+                    foreach (array_reverse($delegate) as $param)
+                    {
+                        array_unshift($request->GetRequest(), $param);
+                    }
+                    $this->_log->logDebug("delegated request: " . print_r($request->GetRequest(), true));
+                    if (!$this->GetController(
+                        $request->GetRequest(),
+                        $controller_name,
+                        $path))
+                    {
+                        $done = true;
+                    }
+                }
+                else if ($controller->CanHandle($request))
+                {
+                    $this->_log->logDebug("dispatching $controller_name");
+                    $controller->Dispatch($request);
+                    $done = true;
+                    $routed = true;
+                }
+                else
+                {
+                    $done = true;
+                }
+                // check delegate first
+                /*
                 if ($controller->CanHandle($request))
                 {
                     $this->_log->logDebug("dispatching $controller_name");
@@ -71,6 +109,7 @@ class Router
                         $done = true;
                     }
                 }
+                 */
             }
         }
 

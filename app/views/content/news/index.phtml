@@ -6,7 +6,7 @@
 <? else: ?>
 <table>
     <tr>
-        <th>Section</th><th>Article Title</th><th>Expiration</th>
+        <th>Section</th><th>Article Title</th><th>Expiration</th><th colspan="2">&nbsp;</th>
     </tr>
     <? foreach ($this->published_articles as $article): ?>
     <tr>
@@ -18,6 +18,8 @@
         </td>
         <td><?= $article->title; ?></td>
         <td><?= FormatDateTime($article->expiration); ?>
+        <td><?= l("Edit", Path::content_news_edit($article->id)); ?></td>
+        <td><?= l("Remove", Path::content_news($article->id), array("method" => "delete")); ?></td>
     </tr>
     <? endforeach; ?>
 </table>
@@ -28,12 +30,19 @@
 <? else: ?>
 <table>
     <tr>
-        <th>Section</th><th>Article Title</th>
+        <th>Section</th><th>Article Title</th><th>Publish On</th><th>Expires</th><th colspan="2">&nbsp;</th>
     </tr>
     <? foreach ($this->unpublished_articles as $article): ?>
     <tr>
         <td><?= $article->entity_type; ?>:<strong><?= $article->entity_name; ?></td>
-        <td><?= $artcile->title; ?></td>
+        <td><?= $article->title; ?></td>
+        <td><?= FormatDateTime($article->publish_on); ?>
+        <td><?= FormatDateTime($article->expiration); ?>
+        <? if ($this->GetUser()->CanPublish($this->article->entity_type, $this->article->entity_id)): ?>
+        <td><?= l("Publish Now", Path::content_news_publish($article->id)); ?></td>
+        <? endif; ?>
+        <td><?= l("Edit", Path::content_news_edit($article->id)); ?></td>
+        <td><?= l("Remove", Path::content_news($article->id), array("method" => "delete")); ?></td>
     </tr>
     <? endforeach; ?>
 </table>

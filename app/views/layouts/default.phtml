@@ -12,7 +12,7 @@
             <div id="user-menu">
                 <ul class = "menu">
             <? if ($this->UserLoggedIn()):?>
-                Logged in as: <?= $this->GetUser()->login?>
+                    <li>Logged in as: <?= $this->GetUser()->login?></li>
                     <li><?= l("logout", Path::user_logout()); ?> </li>
                     <li><?= l("my profile", Path::user_edit()); ?> </li>
                 <? if ($this->GetUser()->super): ?>
@@ -25,12 +25,16 @@
                 </ul>
             </div>
             <div id="main-menu">
+                <!--
                 <div id="min"</div></div>
                 <ul class="menu">
                 </ul>
+                -->
+                <? \simp\Module::Load("MainMenu"); ?>
             </div>
-            <div id="notice">
-            </div>
+            <!--div id="notice">
+            </div-->
+            <? \simp\Module::Load("Notice"); ?>
         </div>
         <?=GetFlash();?>
         <div class="colmask">
@@ -41,18 +45,16 @@
                         <div style="height:400px;"></div>
                     </div>
                     <div class="col2">
-                        <p>col2 lorum ipsum and some other shit</p>
+                        <p>col2</p>
                     </div>
                     <div class="col3">
-                        <p>col3 lorum ipsum and some other shit</p>
+                        <? \simp\Module::Load("FieldConditions"); ?>
                     </div>
                 </div>
             </div>
         </div>
         <div id="footer">
-            <p>footer</p>
-            <p>seriously!</p>
-            <p>really seriously!</p>
+            &copy; 2011 South Lakes Soccer Club
         </div>
     </body>
 </html>

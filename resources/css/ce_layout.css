@@ -16,7 +16,7 @@ body {
     min-width:1000px;
 }
 
-ul.menu, ul.submenu {
+ul.menu {
     list-style-type:none;
     padding:0;
     margin:0;
@@ -27,7 +27,7 @@ ul.menu, ul.submenu {
     float:left;
     margin:0;
     padding:0;
-    background:#0f334d url(../img/logo.png) no-repeat; 
+    background:#0f334d url(logo.png) no-repeat; 
     background-position:20px 20px;
     height:160px;
     width:100%;
@@ -42,7 +42,6 @@ ul.menu, ul.submenu {
             padding:0 4px;
             display:inline;
             position:relative;
-            color:#569fd3;
         }
         #user-menu a {
             color:#ffd195;
@@ -59,7 +58,7 @@ ul.menu, ul.submenu {
         top:55px;
         margin-left:355px;
         margin-right:20px;
-        background:url(../img/menu.png) repeat-x;
+        background:url(menu.png) repeat-x;
         height:30px;
         /*width:66%;*/
         border-left:1px solid #2566b1;
@@ -87,30 +86,12 @@ ul.menu, ul.submenu {
                 color:#2566b1;
             }
             #main-menu li a.current {
-                /*background:url(../img/ball.png) no-repeat center; */
+                /*background:url(ball.png) no-repeat center; */
                 color:#2566b1;
             }
             #main-menu .submenu {
-                text-align:left;
                 position:absolute;
-                display:block;
-                background:#569fd3;
-                z-index:10;
-                width:100%;
-                left:0px;
-                top:30px;
             }
-                #main-menu .submenu li {
-                    position:relative;
-                    display:block;
-                    border-bottom:solid 1px #0f334d;
-                }
-                    #main-menu .submenu li a {
-                        font-size:10pt; 
-                        display:block;
-                        color:#2566b1;
-                        font-weight:normal;
-                    }
     #notice {
         padding:4px 0 0 0;
         /*overflow:none;*/
@@ -118,78 +99,8 @@ ul.menu, ul.submenu {
         top:70px;
         margin-left:355px;
         margin-right:20px;
-        background:url(../img/notice.png) repeat-x;
+        background:url(notice.png) repeat-x;
         height:30px;
         text-align:center;
         color:#be8234;
     }
-.colmask {
-    /*margin-top:10px;*/
-    position:relative;
-    clear:both;
-    float:left;
-    width:100%;
-    overflow:hidden;
-    background:#569fd3 url(../img/column.png) repeat-x;
-}
-.middle, .left {
-    float:left;
-    width:100%;
-    position:relative;
-}
-.middle {
-    right:25%;
-    background:#00243e;
-}
-.left {
-    right:50%;
-    background:#569fd3 url(../img/column.png) repeat-x;
-}
-.col1, 
-.col2, 
-.col3 {
-    float:left;
-    position:relative;
-    padding:0 0 1em 0;
-    overflow:hidden;
-    font-size:10pt;
-}
-.col1 {
-    width:46%;
-    left:102%;
-    color:#b9daf1;
-}
-.col2 {
-    width:21%;
-    left:31%;
-    color:#0f334d;
-}
-.col3 {
-    width:21%;
-    left:85%;
-    color:#0f334d;
-}
-.col2 p,
-.col3 p {
-    padding:4px 0;
-    border-bottom:1px solid #0f334d;
-}
-
-#footer {
-    text-align:center;
-    border-top:solid 1px #0f334d;
-    clear:both;
-    float:left;
-    width:100%;
-    background:#569fd3 url(../img/footer.png) bottom repeat-x;
-    color:#00243e;
-}
-
-.content {
-    padding:12px 16px;
-    color:#b9daf1;
-}
-input.error {
-    background-color:#ffaaaa;
-    border-color:#ff2222;
-}

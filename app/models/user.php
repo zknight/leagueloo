@@ -213,31 +213,6 @@ class User extends \simp\Model
             $ability->Save();
         }
 
-        /*
-        if (!$this->verified)
-        {
-            global $REL_PATH;
-            global $_SERVER;
-            // send email with verification string
-            $host = GetCfgVar('site_address');
-            if ($host == "") $host = $_SERVER['SERVER_NAME'];
-            $from = GetCfgVar('site_email');
-            $to = $this->email;
-            $site_name = GetCfgVar("site_name", "Leagueloo");
-            $subject = "[{$site_name}] Please confirm your account.";
-            $message = "You have recently signed up for an account at the ";
-            $message .= $site_name;
-            $message .= " website.  Please confirm this by following this link:\n";
-            $message .= "http://{$host}{$REL_PATH}user/confirm/";
-            $message .= $this->id . "/";
-            $message .= $this->verification_string;
-            $message .= "\n\n***Please Note: this is NOT the account you use to register" . " your player to play on a team.";
-            $headers = "From: " . $from . "\r\n" .
-                "Reply-To: " . $from . "\r\n" .
-                'X-Mailer: PHP/' . phpversion();
-            mail($to, $subject, $message, $headers);
-        }
-         */
         return true;
     }
 
