@@ -1,6 +1,7 @@
 <?
 namespace simp;
 require_once "utils.php";
+require_once "breadcrumb.php";
 /// Router takes a request object and routes it appropriately.
 ///
 /// Routing involves:
@@ -26,6 +27,9 @@ class Router
     function Route($request)
     {
         $this->_log->logDebug("Routing request: \n" . print_r($request->GetRequest(), true));
+
+        // set breadcrumb
+        Breadcrumb::Instance()->SetFromRequest($request);
 
         $done = false;
         $routed = false;

@@ -1,0 +1,5 @@
+<ul class="menu">
+    <? foreach ($this->GetPrograms() as $program): ?>
+    <li><?= l($program->name, \Path::Relative($program->name)); ?></li>
+    <? endforeach; ?>
+</ul>
