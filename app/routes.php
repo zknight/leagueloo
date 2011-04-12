@@ -1,4 +1,42 @@
 <?
+
+/*
+ * /news/show/[i:id]
+ * /news/show/[a:short_title]
+ * /news/
+ * /[a:program]
+ * /recreational
+ * /recreational/news/short_title -> news controller with entity type program
+ * /competitive/team/boys/cosmos99blue
+ *
+ * /[a:program]/news index of news for program
+ * /[a:program]/news/[a:short_title] show only
+ * /[a:program]/news/show/[i:id] 
+ * /[a:program]/news/[a:action]/[i:id] show/create/edit/update/remove, depending upon method
+ *                                       |     |     |     |      |
+ *                      show       get  -+     |     |     |      |
+ *                      add        post -------+     |     |      |
+ *                      edit       get  -------------+     |      |
+ *                      edit       put  -------------------+      |
+ *                      delete     delete ------------------------+
+ *
+ * /[a:program]/team/[a:name]
+ * /[a:program]/team/show/[i:id]
+ * /[a:program]/[a:controller] -> controller index
+ * /[a:program]/[a:controller]/[a:name] -> show by name
+ * /[a:program]/[a:controller]/[a:action]/[i:id] cruddy stuff
+ *
+ * /user/login
+ * /user/signup
+ * need to specify controller with these
+ * /user/[a:action]
+ * /user/[a:action]/[i:id]
+ * /administrator/[a:action]
+ *
+ * /admin/[a:controller]/[a:action]
+ * /admin/[a:controller]/[a:action]/[i:id]
+ *
+ * need to specify: route, [controller], [action], [params?]
 function RouteSetup($router)
 {
     // shortcuts

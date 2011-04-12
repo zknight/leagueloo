@@ -1,11 +1,10 @@
 <?
 namespace app;
 
-class NewsController extends \simp\RestController
+class NewsController extends \simp\Controller
 {
     function Setup()
     {
-        $this->Model("News");
     }
 
     function Index()
@@ -16,18 +15,24 @@ class NewsController extends \simp\RestController
 
     function Show()
     {
-        if ($this->GetParam(0) == "short_title")
+        global $log;
+        $log->logDebug("in NewsController::Show()");
+        if ($this->GetParam("short_title"))
         {
-            $entity_type = $this->GetParam(1);
-            $entity_name = $this->GetParam(2);
-            $short_title = $this->GetParam(3);
+            $entity_type = $this->GetParam('type');
+            $entity_name = $this->GetParam('entity');
+            $short_title = $this->GetParam('short_title');
             $this->article = \News::FindWithShortTitleByEntityName(
                 $short_title, $entity_type, $entity_name);
         }
         else
         {
-            $id = $this->GetParam(0);
+            $id = $this->GetParam('id');
             $this->article = \News::FindById("News", $id);
+        }
+        if ($this->article->id < 1)
+        {
+            AddFlash("article not found.");
         }
         return true;
     }

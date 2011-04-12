@@ -27,8 +27,11 @@ spl_autoload_register("\simp\Module::LoadModule", false);
 \simp\Model::LoadDatabase("sqlite:db/development.db");
 require_once "session.php";
 date_default_timezone_set(GetCfgVar("default_timezone", "America/Chicago"));
+
 // TODO: cache this!
 $router = new Router();
+require_once "app/routes.php";
+RouteSetup($router);
 $router->Route($req);
 
 session_commit();

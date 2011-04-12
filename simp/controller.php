@@ -116,10 +116,9 @@ class Controller
         return null;
     }
 
-    function CallAction($action, $params = NULL)
+    function CallAction($action)
     {
         global $log;
-        $this->_params = $params;
         $render = call_user_func(array($this, $action));
         if ($render)
         {
@@ -172,18 +171,21 @@ class Controller
         global $log;
         $path = '';
         $controller_name = '';
+        $this->_params = $request->GetParams();
+        $action = ClassCase($request->GetAction());
+
         if (IsLoggedIn())
         {
             $this->_current_user = CurrentUser();
         }
 
-        if ($this->Authorized($this->_action))
+        if ($this->Authorized($action))
         {
-            $log->logDebug("Dispatching {$this->_action} with request:\n " . print_r($request->GetRequest(), true));
+            $log->logDebug("Dispatching {$action} with request:\n " . print_r($request->GetRequest(), true));
 
             //$this->_method =  $request->GetMethod();
             $this->_form_vars = $request->GetVariables();
-            $this->CallAction($this->_action, $request->GetRequest());
+            $this->CallAction($action);
         }
         else if (IsLoggedIn())
         {

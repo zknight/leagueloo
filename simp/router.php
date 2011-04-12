@@ -10,118 +10,183 @@ require_once "breadcrumb.php";
 class Router
 {
     private $_default_controller;
-    private $_route_map;
+    private $_routes;
     private $_log;
+    private $_params;
 
     function __construct()
     {
-        global $APP_BASE_PATH;
+        //global $APP_BASE_PATH;
         global $log;
 
         $this->_log = &$log;
+
+        /*
         $this->_default_controller = array("main");
         $this->_GenerateMap($this->_route_map, $APP_BASE_PATH . "/controllers");
         $log->logDebug("route map:\n" . print_r($this->_route_map, true));
+         */
+    }
+    
+    function AddRoute($method, $route, $controller, $action = "index", $params = array())
+    {
+        $this->_routes[] = array($method, $route, $controller, $action, $params);
+    }
+
+    function Put($uh)
+    {
+        //echo $uh;
     }
 
     function Route($request)
     {
-        $this->_log->logDebug("Routing request: \n" . print_r($request->GetRequest(), true));
+        $this->Put( "<pre>");
+        $this->_log->logDebug("Routing request: {$request->GetRequestURL()}");
+        $uri = $request->GetRequestURL();
+        $this->Put( "Request URL: $uri\n");
+        $this->_params = $request->GetParams();
+
+        foreach ($this->_routes as $handler)
+        {
+            list($method, $route_exp, $controller, $action, $route_params) = $handler;
+            $this->_log->logDebug("checking $route_exp");
+
+            // check method
+            if ($request->GetMethod() !== $method)
+            {
+                // method doesn't match, look at next
+                // route
+                $this->Put( "method doesn't match\n");
+                continue;
+            } 
+
+            // check for exact or global match
+            if ($route_exp === $uri || $route_exp === '*')
+            {
+                $this->_log->logDebug("got exact or global");
+                $match = true;
+            }
+            else  
+            {
+                $route = $substr = null;
+                $i = 0;
+                while (true) 
+                {
+                    //$this->Put( "route_exp[$i] = {$route_exp[$i]}\n";
+                    if ($route_exp[$i] === '')
+                    {
+                        break;
+                    }
+                    elseif (null === $substr)
+                    {
+                        $c = $route_exp[$i];
+                        $n = $route_exp[$i + 1];
+                        if ($c === '[' || $c === '(' || $c === '.' ||
+                            $n === '?' || $n === '+' || $n === '*' || $n === '{')
+                        {
+                            $substr = $route;
+                        }
+                    }
+                    $route .= $route_exp[$i++];
+                }
+                if (null === $substr || strpos($uri, $substr) !== 0)
+                {
+                    $this->Put( "substr = $substr\n");
+                    $this->Put( "uri = $uri\n");
+                    continue;
+                }
+                
+                $this->Put( "would compile: $route\n");
+                $regex = $this->CompileRoute($route);
+
+                $this->Put( "regex: $regex\n");
+                $match = preg_match($regex, $uri, $params);
+                $this->Put( "match: $match\n");
+            }
+
+            // here's where I'd check for negation if I wanted to include that functionality
+            if ($null !== $params)
+            {
+                $this->_params = array_merge($this->_params, $params, $route_params);
+            }
+
+            if (true == $match)
+            {
+                if (!array_key_exists('action', $this->_params))
+                {
+                    $this->_params['action'] = $action;
+                }
+                $request->SetParams($this->_params);
+                $this->Put( "would dispatch controller: $controller with params:\n");
+                $this->Put(print_r($this->_params, true));
+                // found a match, route it
+                break;
+            }
+            // load controller and dispatch this request
+        }
+
+        if (false == $match)
+        {
+            // render 404
+        }
 
         // set breadcrumb
         Breadcrumb::Instance()->SetFromRequest($request);
 
-        $done = false;
-        $routed = false;
+        $this->Put( "</pre>");
 
-        // The controller is going to do one of two things:
-        // - Dispatch the request to an action
-        // - Return a delegated controller
-        
-        if ($this->GetController($request->GetRequest(), $controller_name, $path) || 
-            $this->GetController($this->_default_controller, $controller_name, $path))
-        {
-            while (!$done)
-            {
-                require_once $path;
-                $controller = new $controller_name();
-                //array_shift($request->GetRequest());
-                $this->_log->logDebug("checking to see if $controller_name can handle \n" . print_r($request->GetRequest(), true));
+        // load controller and dispatch it
 
-                $delegate = $controller->Delegate($request);
+        global $APP_BASE_PATH;
+        $path = $APP_BASE_PATH . "/controllers/{$controller}.php";
+        require_once $path;
+        $controller_name = "\\app\\" . $this->NamespacedName($controller) . "Controller";
+        $controller = new $controller_name;
+        $controller->Dispatch($request);
+    }
 
-                if ($delegate)
-                {
-                    /*
-                    if (array_key_exists('action', $delegate)) 
-                        array_unshift($request->GetRequest(), $delegate['action']);
-                    if (array_key_exists('controller', $delegate)) 
-                        array_unshift($request->GetRequest(), $delegate['controller']);
-                     */
-                    foreach (array_reverse($delegate) as $param)
-                    {
-                        array_unshift($request->GetRequest(), $param);
-                    }
-                    $this->_log->logDebug("delegated request: " . print_r($request->GetRequest(), true));
-                    if (!$this->GetController(
-                        $request->GetRequest(),
-                        $controller_name,
-                        $path))
-                    {
-                        $done = true;
-                    }
+    private function CompileRoute($route)
+    {
+        if (preg_match_all('`(/?\.?)\[([^:]*+)(?::([^:\]]++))?\](\?)?`', $route, $matches, PREG_SET_ORDER)) {
+            $this->Put("CompileRoute matches:\n");
+            $this->Put(print_r($matches, true));
+            $this->Put( "\n");
+            $match_types = array(
+                'i'  => '[0-9]++',
+                'a'  => '[0-9A-Za-z_]++',
+                'h'  => '[0-9A-Fa-f]++',
+                '*'  => '.+?',
+                '**' => '.++',
+                ''   => '[^/]++'
+            );
+            foreach ($matches as $match) {
+                $this->Put("match: \n"); 
+                $this->Put(print_r($match, true));
+                list($block, $pre, $type, $param, $optional) = $match;
+
+                if (isset($match_types[$type])) {
+                    $type = $match_types[$type];
                 }
-                else if ($controller->CanHandle($request))
-                {
-                    $this->_log->logDebug("dispatching $controller_name");
-                    $controller->Dispatch($request);
-                    $done = true;
-                    $routed = true;
-                }
-                else
-                {
-                    $done = true;
-                }
-                // check delegate first
-                /*
-                if ($controller->CanHandle($request))
-                {
-                    $this->_log->logDebug("dispatching $controller_name");
-                    $controller->Dispatch($request);
-                    $done = true;
-                    $routed = true;
-                }
-                else
-                {
-                    $delegate = $controller->Delegate($request);
-                    if ($delegate)
-                    {
-                        if (array_key_exists('action', $delegate)) 
-                            array_unshift($request->GetRequest(), $delegate['action']);
-                        if (array_key_exists('controller', $delegate)) 
-                            array_unshift($request->GetRequest(), $delegate['controller']);
-                        if (!$this->GetController(
-                            $request->GetRequest(),
-                            $controller_name,
-                            $path))
-                        {
-                            $done = true;
-                        }
-                    }
-                    else
-                    {
-                        $done = true;
-                    }
-                }
-                 */
+                $pattern = '(?:' . ($pre !== '' && strpos($route, $block) !== 0 ? $pre : null)
+                         . '(' . ($param !== '' ? "?<$param>" : null) . $type . '))'
+                         . ($optional !== null ? '?' : null);
+                $this->Put( "pattern: $pattern\n");
+
+                $route = str_replace($block, $pattern, $route);
             }
+            $route = ltrim($route, "/"); 
+            $route = "/$route/?";
         }
+        return "`^$route$`";
+    }
 
-        if ($routed == false)
-        {
-            $this->_log->logDebug("Unable to route request.");
-            require_once $request->GetBasePath() . "public/error404.phtml";
-        }
+    private function NamespacedName($name)
+    {
+        $name_elements = explode('/', $name);
+        $name_elements = array_reverse($name_elements);
+        $name_elements[0] = ClassCase($name_elements[0]);
+        $name_elements = array_reverse($name_elements);
+        return implode('\\', $name_elements);
     }
 
     private function GetController(&$request, &$controller, &$path)

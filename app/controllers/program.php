@@ -19,14 +19,13 @@ class ProgramController extends \simp\Controller
     {
         //echo "<strong>program Index with {$this->_params[0]}.</strong>\n";
         global $log;
-        $name_or_id = $this->GetParam(0);
-        if (preg_match("/^\d/", $name_or_id))
+        if ($id = $this->GetParam('id'))
         {
-            $this->program = \simp\Model::FindById('Program', $name_or_id);
+            $this->program = \simp\Model::FindById('Program', $id);
         }
-        else 
+        else if ($name = $this->GetParam('name'))
         {
-            $name = ucfirst($name_or_id);
+            $name = ucfirst($name);
             //$log->logDebug("trying to find model by name: 
             $this->program = \simp\Model::
                 FindOne('Program', 'name = ?', array($name));

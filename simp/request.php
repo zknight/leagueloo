@@ -12,16 +12,19 @@ class Request
 {
 
     private $_request_array;
+    private $_request_url;
     private $_post_variables;
     private $_method;
     private $_base_path;
     private $_relative_path;
     private $_method_map;
+    private $_params;
 
     const GET = 0;
     const POST = 1;
     const DELETE = 2;
     const PUT = 3;
+    const ANY = 4;
 
     function __construct() 
     {
@@ -40,6 +43,8 @@ class Request
         $url = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
         $log->logDebug("url: $url");
         $url = trim($url, "/");
+        //$this->_request_url = $url;
+        $this->_request_url = "/" . $url;
         $log->logDebug("url: $url");
         $_SESSION["url"] = $url;
         if ($url != '') $this->_request_array = explode ("/", $url);
@@ -49,6 +54,7 @@ class Request
         $this->_base_path = preg_replace("/index.php/", "", $_SERVER["SCRIPT_FILENAME"]);
         $this->_DetermineMethod();
         $this->_post_variables = $_POST;
+        $this->_params = $_GET;
 
     }
 
@@ -67,9 +73,29 @@ class Request
         return $this->_relative_path;
     }
 
+    function GetParams()
+    {
+        return $this->_params;
+    }
+
+    function GetAction()
+    {
+        return $this->_params['action'];
+    }
+
+    function SetParams($params)
+    {
+        $this->_params = $params;
+    }
+
     function &GetRequest()
     {
         return $this->_request_array;
+    }
+
+    function GetRequestURL()
+    {
+        return $this->_request_url;
     }
 
     function GetVariables()

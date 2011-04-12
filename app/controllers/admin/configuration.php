@@ -23,7 +23,7 @@ class ConfigurationController extends \simp\Controller
     function Update()
     {
         $vars = $this->GetFormVariable('CfgVar');
-        $cfg_var = \simp\Model::FindById('CfgVar', $this->GetParam(0));
+        $cfg_var = \simp\Model::FindById('CfgVar', $this->GetParam('id'));
         $cfg_var->UpdateFromArray($vars);
         $cfg_var->Save();
         \Redirect(\Path::admin_configuration());
