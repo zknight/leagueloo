@@ -2,6 +2,51 @@
 namespace simp;
 require_once "utils.php";
 require_once "breadcrumb.php";
+
+// $route = new Route();
+// $route->Pattern("/admin/[a:controller]/[a:action]")
+//       ->Module("admin");
+// $route->Pattern("/administrator/[a:action]")
+//       ->Controller("administrator");
+class Route
+{
+    public $pattern;
+    public $module
+    public $controller;
+    public $action;
+
+    public function __construct()
+    {
+        $this->pattern = "";
+        $this->controller = "";
+        $this->action = "";
+        $this->module = array();
+    }
+
+    public function Pattern($pattern)
+    {
+        $this->pattern = $pattern;
+        return $this;
+    }
+
+    public function Controller($controller)
+    {
+        $this->controller = $controller;
+        return $this;
+    }
+
+    public function Action($action)
+    {
+        $this->action = $action);
+        return $this;
+    }
+
+    public function Module($module)
+    {
+        $this->module[] = $module;
+    }
+}
+
 /// Router takes a request object and routes it appropriately.
 ///
 /// Routing involves:
@@ -28,14 +73,23 @@ class Router
          */
     }
     
+    /*
     function AddRoute($method, $route, $controller, $action = "index", $params = array())
     {
         $this->_routes[] = array($method, $route, $controller, $action, $params);
     }
+    */
+
+    public function AddRoute()
+    {
+        $route = new Route;
+        $this->_routes[] = $route;
+        return $route;
+    }
 
     function Put($uh)
     {
-        //echo $uh;
+        echo $uh;
     }
 
     function Route($request)
@@ -46,11 +100,19 @@ class Router
         $this->Put( "Request URL: $uri\n");
         $this->_params = $request->GetParams();
 
-        foreach ($this->_routes as $handler)
+        foreach ($this->_routes as $route)
         {
-            list($method, $route_exp, $controller, $action, $route_params) = $handler;
-            $this->_log->logDebug("checking $route_exp");
+            //list($method, $route_exp, $controller, $action, $route_params) = $handler;
+            //list($route_exp, $controller, $action) = $handler;
 
+            // set action/controller to that mapped, if it is mapped
+            $this->_params['controller'] = $route->controller;
+            $this->_params['action'] = $route->action;
+
+            $this->_log->logDebug("checking {$route->pattern}");
+
+            // method will be handled by controller dispatcher
+            /*
             // check method
             if ($request->GetMethod() !== $method)
             {
@@ -59,16 +121,18 @@ class Router
                 $this->Put( "method doesn't match\n");
                 continue;
             } 
+            */
 
             // check for exact or global match
-            if ($route_exp === $uri || $route_exp === '*')
+            if ($route->pattern === $uri || $route->pattern === '*')
             {
                 $this->_log->logDebug("got exact or global");
                 $match = true;
             }
             else  
             {
-                $route = $substr = null;
+                $route_str = $substr = null;
+                $route_exp = $route->pattern;
                 $i = 0;
                 while (true) 
                 {
@@ -87,7 +151,7 @@ class Router
                             $substr = $route;
                         }
                     }
-                    $route .= $route_exp[$i++];
+                    $route_str .= $route_exp[$i++];
                 }
                 if (null === $substr || strpos($uri, $substr) !== 0)
                 {
@@ -96,8 +160,8 @@ class Router
                     continue;
                 }
                 
-                $this->Put( "would compile: $route\n");
-                $regex = $this->CompileRoute($route);
+                $this->Put( "would compile: $route_str\n");
+                $regex = $this->CompileRoute($route_str);
 
                 $this->Put( "regex: $regex\n");
                 $match = preg_match($regex, $uri, $params);
@@ -112,14 +176,18 @@ class Router
 
             if (true == $match)
             {
+                /*
                 if (!array_key_exists('action', $this->_params))
                 {
                     $this->_params['action'] = $action;
                 }
+                */
                 $request->SetParams($this->_params);
+                $controller = $this->_params['controller'];
                 $this->Put( "would dispatch controller: $controller with params:\n");
                 $this->Put(print_r($this->_params, true));
                 // found a match, route it
+                exit();
                 break;
             }
             // load controller and dispatch this request

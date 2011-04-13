@@ -4,6 +4,10 @@
  * /news/show/[i:id]
  * /news/show/[a:short_title]
  * /news/
+ * 
+ * /team/show/[i:id]
+ * /team/news/show/[i:id]
+ *
  * /[a:program]
  * /recreational
  * /recreational/news/short_title -> news controller with entity type program
@@ -20,8 +24,10 @@
  *                      edit       put  -------------------+      |
  *                      delete     delete ------------------------+
  *
- * /[a:program]/team/[a:name]
+ * /[a:program]/team/[a:name]   team->show(name)
  * /[a:program]/team/show/[i:id]
+ * /[a:program]/team/news/show/[i:id]
+ * /[a:program]/team/news/
  * /[a:program]/[a:controller] -> controller index
  * /[a:program]/[a:controller]/[a:name] -> show by name
  * /[a:program]/[a:controller]/[a:action]/[i:id] cruddy stuff
@@ -37,14 +43,14 @@
  * /admin/[a:controller]/[a:action]/[i:id]
  *
  * need to specify: route, [controller], [action], [params?]
+ *
+ * each route has expression, controller, and action
+ *
+ * AddRoute() returns Route object
+ */
+
 function RouteSetup($router)
 {
-    // shortcuts
-    $get = \simp\Request::GET;
-    $post = \simp\Request::POST;
-    $put = \simp\Request::PUT;
-    $delete = \simp\Request::DELETE;
-    $any = \simp\Request::ANY;
     $program_type = array('type' => 'Program');
 
 
