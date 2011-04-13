@@ -8,10 +8,13 @@ require_once "breadcrumb.php";
 //       ->Module("admin");
 // $route->Pattern("/administrator/[a:action]")
 //       ->Controller("administrator");
+// $route->Pattern("/[a:program]/news/[a:short_title]")
+//       ->Controller("news")
+//       ->Action("show");
 class Route
 {
     public $pattern;
-    public $module
+    public $module;
     public $controller;
     public $action;
 
@@ -19,7 +22,7 @@ class Route
     {
         $this->pattern = "";
         $this->controller = "";
-        $this->action = "";
+        $this->action = "index";
         $this->module = array();
     }
 
@@ -37,7 +40,7 @@ class Route
 
     public function Action($action)
     {
-        $this->action = $action);
+        $this->action = $action;
         return $this;
     }
 
@@ -80,9 +83,10 @@ class Router
     }
     */
 
-    public function AddRoute()
+    public function AddRoute($pattern)
     {
         $route = new Route;
+        $route->Pattern($pattern);
         $this->_routes[] = $route;
         return $route;
     }
@@ -148,7 +152,7 @@ class Router
                         if ($c === '[' || $c === '(' || $c === '.' ||
                             $n === '?' || $n === '+' || $n === '*' || $n === '{')
                         {
-                            $substr = $route;
+                            $substr = $route_str;
                         }
                     }
                     $route_str .= $route_exp[$i++];
@@ -160,18 +164,19 @@ class Router
                     continue;
                 }
                 
-                $this->Put( "would compile: $route_str\n");
+                $this->Put( "compiling: $route_str\n");
                 $regex = $this->CompileRoute($route_str);
 
                 $this->Put( "regex: $regex\n");
                 $match = preg_match($regex, $uri, $params);
                 $this->Put( "match: $match\n");
+                $this->Put("<hr>");
             }
 
             // here's where I'd check for negation if I wanted to include that functionality
             if ($null !== $params)
             {
-                $this->_params = array_merge($this->_params, $params, $route_params);
+                $this->_params = array_merge($this->_params, $params/*, $route_params*/);
             }
 
             if (true == $match)
@@ -183,11 +188,20 @@ class Router
                 }
                 */
                 $request->SetParams($this->_params);
-                $controller = $this->_params['controller'];
-                $this->Put( "would dispatch controller: $controller with params:\n");
-                $this->Put(print_r($this->_params, true));
+                $module = implode('\\', $route->module);
+                if ($module === "")
+                {
+                    $controller_class = ClassCase($this->_params['controller']);
+                    $controller_path = $this->_params['controller'];
+                }
+                else
+                {
+                    $controller_class = $module . "\\" . ClassCase($this->_params['controller']);
+                    $controller_path = implode("/", explode('\\', $module)) . "/" . $this->_params['controller'];
+                }
+                //$this->Put( "would dispatch controller: $controller with params:\n");
+                //$this->Put(print_r($this->_params, true));
                 // found a match, route it
-                exit();
                 break;
             }
             // load controller and dispatch this request
@@ -201,16 +215,29 @@ class Router
         // set breadcrumb
         Breadcrumb::Instance()->SetFromRequest($request);
 
-        $this->Put( "</pre>");
 
         // load controller and dispatch it
 
         global $APP_BASE_PATH;
-        $path = $APP_BASE_PATH . "/controllers/{$controller}.php";
-        require_once $path;
-        $controller_name = "\\app\\" . $this->NamespacedName($controller) . "Controller";
-        $controller = new $controller_name;
-        $controller->Dispatch($request);
+        //$controller_path = implode("/", explode('\\', $controller));
+        $path = $APP_BASE_PATH . "/controllers/{$controller_path}.php";
+        //$controller_name = "\\app\\" . $this->NamespacedName($controller) . "Controller";
+        $controller_name = "\\app\\" . $controller_class . "Controller";
+        global $TEST;
+        if (!$TEST)
+        {
+            $this->Put( "</pre>");
+            require_once $path;
+            $controller = new $controller_name;
+            $controller->Dispatch($request);
+        }
+        else
+        {
+            $this->Put("require \"$path\"\n");
+            $this->Put("would dispatch $controller_name with params\n" . print_r($this->_params, true));
+            $this->Put( "</pre>");
+        }
+
     }
 
     private function CompileRoute($route)

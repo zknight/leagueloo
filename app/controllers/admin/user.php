@@ -1,9 +1,8 @@
 <? namespace app\admin;
-class UserController extends \simp\RESTController
+class UserController extends \simp\Controller
 {
     function Setup()
     {
-        $this->Model('User');
         $this->RequireAuthorization(
             array( 
                 'Index',

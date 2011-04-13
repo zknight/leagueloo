@@ -12,6 +12,8 @@
  * /recreational
  * /recreational/news/short_title -> news controller with entity type program
  * /competitive/team/boys/cosmos99blue
+ * /[a:program]/team/[a:gender]/[a:name] -> team->show(gender, name)
+ * /[a:program]/team/[a:gender]/[a:name]/news/[i:id] -> show_team_news
  *
  * /[a:program]/news index of news for program
  * /[a:program]/news/[a:short_title] show only
@@ -24,7 +26,6 @@
  *                      edit       put  -------------------+      |
  *                      delete     delete ------------------------+
  *
- * /[a:program]/team/[a:name]   team->show(name)
  * /[a:program]/team/show/[i:id]
  * /[a:program]/team/news/show/[i:id]
  * /[a:program]/team/news/
@@ -51,28 +52,20 @@
 
 function RouteSetup($router)
 {
-    $program_type = array('type' => 'Program');
+    $router->AddRoute('/')->Controller('main');
+    $router->AddRoute('/administrator/[a:action]')->Controller('administrator');
+    $router->AddRoute('/administrator/')->Controller('administrator');
 
+    $router->AddRoute('/admin/[a:controller]')->Module('admin');
+    $router->AddRoute('/admin/[a:controller]/[a:action]')->Module('admin');
+    $router->AddRoute('/admin/[a:controller]/[a:action]/[i:id]')->Module('admin');
 
-    // hard-coded routes first!
-    $router->AddRoute($get, '/administrator', 'administrator');
-    $router->AddRoute($get, '/main', 'main');
+    $router->AddRoute('/user/[a:action]')->Controller('user');
+    $router->AddRoute('/user/[a:action]/[i:id]')->Controller('user');
 
-    // user
-    $router->AddRoute($post, '/user/login', 'user', 'authorize');
-    $router->AddRoute($post, '/user/signup', 'user', 'create');
-    $router->AddRoute($post, '/user/confirm', 'user', 'confirm_post');
-    $router->AddRoute($post, '/user/request_confirmation', 'user', 'request_confirm');
-    $router->AddRoute($put, '/user/edit', 'user', 'update');
-    $router->AddRoute($get, '/user/[a:action]', 'user');
-
-    // admin
-    $router->AddRoute($get, '/admin/configuration', 'admin/configuration');
-    $router->AddRoute($put, '/admin/configuration/update/[:id]', 'admin/configuration', 'update');
-
-    $router->AddRoute($get, '/[a:name]', 'program');
-    $router->AddRoute($get, '/program/[i:id]', 'program');
-    $router->AddRoute($get, '/[a:entity]/[a:short_title]', 'news', 'show', $program_type);
-    $router->AddRoute($get, '/[a:entity]/news/[i:id]', 'news', 'show', $program_type);
-    $router->AddRoute($get, '/program/[i:program_id]/news/[i:id]', 'news', 'show');
+    $router->AddRoute('/[a:program]')->Controller('program');
+    $router->AddRoute('/[a:program]/[a:controller]')->Action('index');
+    $router->AddRoute('/[a:program]/[a:controller]/[a:name]')->Action('show_by_name');
+    $router->AddRoute('/[a:program]/[a:controller]/[a:action]');
+    $router->AddRoute('/[a:program]/[a:controller]/[a:action]/[i:id]');
 }

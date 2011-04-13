@@ -29,5 +29,6 @@ class AbilityController extends \simp\Controller
         $ability = \simp\DB::Instance()->Create('Ability');
         $user->UpdateFromArray($vars);
         \simp\DB::Instance()->Save($ability);
-        /Redirect(\Path::admin_user_add($ability->user_id));
+        Redirect(\Path::admin_user_add($ability->user_id));
     }
+}
