@@ -5,8 +5,6 @@ class ProgramController extends \simp\Controller
 
     function Setup()
     {
-        $this->AddAction('name', \simp\Request::GET, 'Index');
-        $this->AddAction('id', \simp\Request::GET, 'Index');
     }
     
     function Delegate($param)
@@ -23,7 +21,7 @@ class ProgramController extends \simp\Controller
         {
             $this->program = \simp\Model::FindById('Program', $id);
         }
-        else if ($name = $this->GetParam('name'))
+        else if ($name = $this->GetParam('program'))
         {
             $name = ucfirst($name);
             //$log->logDebug("trying to find model by name: 

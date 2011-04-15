@@ -29,7 +29,7 @@ class Request
     function __construct() 
     {
         global $_SERVER;
-        global $_SESSION;
+        //global $_SESSION;
         global $_POST;
         global $log;
 
@@ -46,7 +46,8 @@ class Request
         //$this->_request_url = $url;
         $this->_request_url = "/" . $url;
         $log->logDebug("url: $url");
-        $_SESSION["url"] = $url;
+        //$_SESSION["url"] = $url;
+        //print_r($_SESSION);
         if ($url != '') $this->_request_array = explode ("/", $url);
         else $this->_request_array = array();
         $text = print_r($this->_request_array, true);
@@ -58,31 +59,38 @@ class Request
 
     }
 
+    /// Get the HTTP request method (GET, POST, PUT, DELETE) associated with this request
+    /// @return HTTP method 
     function GetMethod()
     {
         return $this->_method;
     }
 
+    /// Get the base path for the application relative to filesystem
     function GetBasePath()
     {
         return $this->_base_path;
     }
 
+    /// Get the path relative to the application doc root
     function GetRelativePath()
     {
         return $this->_relative_path;
     }
 
+    /// Get the GET parameters associated with request
     function GetParams()
     {
         return $this->_params;
     }
 
+    /// Get the action associated with this request
     function GetAction()
     {
         return $this->_params['action'];
     }
 
+    /// Set parameters associated with request
     function SetParams($params)
     {
         $this->_params = $params;
@@ -98,6 +106,7 @@ class Request
         return $this->_request_url;
     }
 
+    /// Get variables associated with post
     function GetVariables()
     {
         return $this->_post_variables;

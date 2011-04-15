@@ -68,20 +68,7 @@ class Router
         global $log;
 
         $this->_log = &$log;
-
-        /*
-        $this->_default_controller = array("main");
-        $this->_GenerateMap($this->_route_map, $APP_BASE_PATH . "/controllers");
-        $log->logDebug("route map:\n" . print_r($this->_route_map, true));
-         */
     }
-    
-    /*
-    function AddRoute($method, $route, $controller, $action = "index", $params = array())
-    {
-        $this->_routes[] = array($method, $route, $controller, $action, $params);
-    }
-    */
 
     public function AddRoute($pattern)
     {
@@ -93,7 +80,7 @@ class Router
 
     function Put($uh)
     {
-        echo $uh;
+        //echo $uh;
     }
 
     function Route($request)
@@ -106,26 +93,11 @@ class Router
 
         foreach ($this->_routes as $route)
         {
-            //list($method, $route_exp, $controller, $action, $route_params) = $handler;
-            //list($route_exp, $controller, $action) = $handler;
-
             // set action/controller to that mapped, if it is mapped
             $this->_params['controller'] = $route->controller;
             $this->_params['action'] = $route->action;
 
             $this->_log->logDebug("checking {$route->pattern}");
-
-            // method will be handled by controller dispatcher
-            /*
-            // check method
-            if ($request->GetMethod() !== $method)
-            {
-                // method doesn't match, look at next
-                // route
-                $this->Put( "method doesn't match\n");
-                continue;
-            } 
-            */
 
             // check for exact or global match
             if ($route->pattern === $uri || $route->pattern === '*')
@@ -140,7 +112,6 @@ class Router
                 $i = 0;
                 while (true) 
                 {
-                    //$this->Put( "route_exp[$i] = {$route_exp[$i]}\n";
                     if ($route_exp[$i] === '')
                     {
                         break;
@@ -181,12 +152,6 @@ class Router
 
             if (true == $match)
             {
-                /*
-                if (!array_key_exists('action', $this->_params))
-                {
-                    $this->_params['action'] = $action;
-                }
-                */
                 $request->SetParams($this->_params);
                 $module = implode('\\', $route->module);
                 if ($module === "")
@@ -199,12 +164,8 @@ class Router
                     $controller_class = $module . "\\" . ClassCase($this->_params['controller']);
                     $controller_path = implode("/", explode('\\', $module)) . "/" . $this->_params['controller'];
                 }
-                //$this->Put( "would dispatch controller: $controller with params:\n");
-                //$this->Put(print_r($this->_params, true));
-                // found a match, route it
                 break;
             }
-            // load controller and dispatch this request
         }
 
         if (false == $match)
@@ -213,15 +174,14 @@ class Router
         }
 
         // set breadcrumb
-        Breadcrumb::Instance()->SetFromRequest($request);
+        //Breadcrumb::Instance()->SetFromRequest($request);
+        //Breadcrumb::Instance()->SetFromParams($request);
 
 
         // load controller and dispatch it
 
         global $APP_BASE_PATH;
-        //$controller_path = implode("/", explode('\\', $controller));
         $path = $APP_BASE_PATH . "/controllers/{$controller_path}.php";
-        //$controller_name = "\\app\\" . $this->NamespacedName($controller) . "Controller";
         $controller_name = "\\app\\" . $controller_class . "Controller";
         global $TEST;
         if (!$TEST)
@@ -248,6 +208,7 @@ class Router
             $this->Put( "\n");
             $match_types = array(
                 'i'  => '[0-9]++',
+                'A'  => '[A-Za-z_]++',
                 'a'  => '[0-9A-Za-z_]++',
                 'h'  => '[0-9A-Fa-f]++',
                 '*'  => '.+?',
@@ -275,86 +236,4 @@ class Router
         return "`^$route$`";
     }
 
-    private function NamespacedName($name)
-    {
-        $name_elements = explode('/', $name);
-        $name_elements = array_reverse($name_elements);
-        $name_elements[0] = ClassCase($name_elements[0]);
-        $name_elements = array_reverse($name_elements);
-        return implode('\\', $name_elements);
-    }
-
-    private function GetController(&$request, &$controller, &$path)
-    {
-        $is_controller = false;
-        $namespace = "\\app\\";
-
-        // save request in case no controller matches
-        $original_request = $request;
-
-        // initialize map reference to top of tree
-        $map =& $this->_route_map;
-
-        $done = false;
-
-        while (!$done)
-        {
-            // get next element of request to test
-            $test = array_shift($request);
-            $match = $map[$test];
-
-            if ($match)
-            {
-                // check to see if this match is module
-                // containing controller and, if so,
-                // go to next level of tree to test next request element
-                if ($match['type'] == 'module')
-                {
-                    $map =& $map[$test]['module'];
-                    $namespace .= "$test\\";
-                }
-                else if ($match['type'] == 'file')
-                {
-                    $path = $match['file'];
-                    $done = true;
-                    $is_controller = true;
-                    $controller = "$namespace" . ClassCase($test) . "Controller";
-                }
-            }
-            else $done = true;
-        }
-
-        // if a controller wasn't found, reset request
-        // so that caller can determine what to do with it
-        if (!$is_controller) $request = $original_request;
-
-        return $is_controller;
-    }
-
-    // TODO: make this cache (APC?) so that it only runs when the 
-    // first request comes in after launching the application
-    private function _GenerateMap(&$map, $dir)
-    {
-        $entries = scandir($dir);
-        foreach ($entries as $entry)
-        {
-            $curpath = "{$dir}/{$entry}";
-            if (!preg_match("/(\.\.)|(\.)$/", $entry))
-            {
-            
-                if (is_dir($curpath))
-                {
-                    $map[$entry] = array("type" => "module");
-                    $this->_GenerateMap($map[$entry]['module'], $curpath);
-                }
-                else if (is_file($curpath) && preg_match("/\.php$/", $entry))
-                {
-                    $name = preg_replace("/\.php/", "", $entry);
-                    $map[$name] = array("type" => "file", "file" => $curpath);
-                }
-            }
-        }
-    }
-
 }
-

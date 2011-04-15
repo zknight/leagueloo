@@ -3,6 +3,12 @@ namespace simp;
 require_once "request.php";
 require_once "helpers.php";
 
+/// Controller is responsible for launching a view
+/// A controller has actions, which are methods.  Each action has an 
+/// associated view.
+///
+/// The request Method is checked for each action and the appropriate
+/// class method is called
 class Controller
 {
 
@@ -58,15 +64,17 @@ class Controller
         $this->_layout_name = $layout;
     }
 
-    protected function AddAction(
-        $key, 
-        $method, 
+    protected function MapAction(
         $action, 
-        $can_return = false)
+        $funcname,
+        $method)
     {
-        if (!method_exists($this, $action)) die("$action doesn't exist for :" . get_class($this));
-        if (!array_key_exists($key, $this->_action_map)) $this->_action_map[$key] = array();
-        $this->_action_map[$key][$method] = array('name' => $action, 'save' => $can_return);
+        if (!method_exists($this, $funcname)) die("Action function $funcname doesn't exist for :" . get_class($this));
+        if (array_key_exists($action, $this->_action_map))
+        {
+            $this->_action_map[$action] = array();
+        }
+        $this->_action_map[$action][$method] = $funcname;
     }
 
     protected function RequireAuthorization(
@@ -110,69 +118,39 @@ class Controller
         $this->_params[$index] = $value;
     }
 
-    /// override this to have your controller Delegate to another
-    function Delegate($request)
-    {
-        return null;
-    }
-
     function CallAction($action)
     {
         global $log;
-        $render = call_user_func(array($this, $action));
+        $func = ClassCase($action);
+        $save = true;
+        $log->logDebug("CallAction: looking up $action in map: \n" . print_r($this->_action_map, true));
+        if (array_key_exists($action, $this->_action_map))
+        {
+            $log->logDebug("CallAction: looking up method {$this->_method}");
+            if (array_key_exists($this->_method, $this->_action_map[$action]))
+            {
+                $func = $this->_action_map[$action][$this->_method];
+            }
+        }
+
+            
+        $log->logDebug("CallAction: calling $func");
+        $render = call_user_func(array($this, $func));
         if ($render)
         {
             $this->Render($action);
         }
     }
 
-    function CheckDefault($request)
-    {
-        global $log;
-        $handled = false;
-        //if ((count($request->GetRequest()) < 1) && method_exists($this, $this->_default_action))
-        if (method_exists($this, $this->_default_action))
-        {
-            $handled = true;
-            //$this->CallAction($this->_default_action);
-            //$log->logDebug("calling default action");
-            $this->_action = $this->_default_action;
-        }
-        return $handled;
-    }
-
-    function CheckAction(&$request)
-    {
-        global $log;
-        $handled = false;
-        $request_params = &$request->GetRequest();
-        if ($action = $this->_action_map[$request_params[0]][$request->GetMethod()])
-        {
-            $this->_action = $action['name'];
-            if ($this->_action['save'])
-            {
-                SetReturnURL(GetURL());
-            }
-            array_shift($request->GetRequest());
-            $handled = true;
-        }
-        return $handled;
-    }
-
-    function CanHandle($request)
-    {
-        $can_handle = $this->CheckAction($request);
-        if (!$can_handle) $can_handle = $this->CheckDefault($request);
-        return $can_handle;
-    }
-
     function Dispatch($request)
     {
         global $log;
-        $path = '';
-        $controller_name = '';
         $this->_params = $request->GetParams();
-        $action = ClassCase($request->GetAction());
+        $this->_method = $request->GetMethod();
+
+        if ($this->_method == Request::GET) SetReturnURL($request->GetRequestURL());
+
+        $action = $request->GetAction();//ClassCase($request->GetAction());
 
         if (IsLoggedIn())
         {
@@ -182,8 +160,6 @@ class Controller
         if ($this->Authorized($action))
         {
             $log->logDebug("Dispatching {$action} with request:\n " . print_r($request->GetRequest(), true));
-
-            //$this->_method =  $request->GetMethod();
             $this->_form_vars = $request->GetVariables();
             $this->CallAction($action);
         }
@@ -197,7 +173,6 @@ class Controller
             AddFlash("You must be logged in to access this resource.");
             \Redirect(\Path::user_login());
         }
-
     }
 
     function Render($view)
@@ -212,7 +187,12 @@ class Controller
     function NotFound($msg = "")
     {
         global $BASE_PATH;
+        $this->message_404 = $msg;
+        ob_start();
         require_once $BASE_PATH . "/public/error404.phtml";
+        $this->content .= ob_get_contents();
+        ob_end_clean();
+        require_once $this->_layout_path . $this->_layout_name . ".phtml";
     }
 
     protected function UserLoggedIn()

@@ -20,6 +20,39 @@ class Breadcrumb
         return self::$_instance;
     }
 
+
+    public function SetFromParams($request)
+    {
+        global $log;
+        if ($request->GetMethod() == Request::GET)
+        {
+            $params = $request->GetParams();
+            $link = $request->GetRelativePath();
+            $this->_trail = array("Main" => $link);
+            if (array_key_exists('program', $params))
+            {
+                $link .= $params['program'] . "/";
+                $this->_trail[$params['program']] = $link;
+            }
+            $key = "";
+            if (array_key_exists('module', $params))
+            {
+                $link .= $params['module'] . "/";
+                $key .= "{$params['module']} "; 
+            }
+            $link .= "{$params['controller']}/{$params['action']}";
+            $key .= "{$params['controller']} {$params['action']}";
+            if (array_key_exists('id', $params))
+            {
+                $link .= "/{$params['id']}";
+                $key .= " {$params['id']}";
+            }
+            $this->_trail[$key] = $link;
+
+            $log->logDebug("Breadcrumb: request trail =\n" . print_r($this->_trail, true));
+        }
+    }
+
     public function SetFromRequest($request)
     {
         // only set trail when method is a get

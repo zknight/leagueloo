@@ -4,6 +4,8 @@ class UserController extends \simp\Controller
 {
     function Setup()
     {
+        $this->MapAction('login', 'Authorize', \simp\Request::POST);
+        /*
         $this->AddAction('login', \simp\Request::GET, 'Login');
         $this->AddAction('login', \simp\Request::POST, 'Authorize');
         $this->AddAction('signup', \simp\Request::GET, 'Signup');
@@ -15,6 +17,7 @@ class UserController extends \simp\Controller
         $this->AddAction('edit', \simp\Request::GET, 'Edit');
         $this->AddAction('edit', \simp\Request::PUT, 'Update');
         $this->AddAction('logout', \simp\Request::GET, 'Logout');
+        */
     }
 
     function Login()
@@ -52,7 +55,7 @@ class UserController extends \simp\Controller
         {
             AddFlash("You are now logged in, {$user->first_name}.");
             SetAuthorizedUser($user->id);
-            \Redirect(\Path::main());
+            \Redirect(GetReturnURL());
         }
         else
         {

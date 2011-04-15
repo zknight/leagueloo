@@ -5,13 +5,11 @@ class UserController extends \simp\Controller
     {
         $this->RequireAuthorization(
             array( 
-                'Index',
-                'Show',
-                'Add',
-                'Create',
-                'Edit',
-                'Update',
-                'Remove'
+                'index',
+                'show',
+                'add',
+                'edit',
+                'delete'
             )
         );
 

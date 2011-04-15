@@ -12,7 +12,7 @@
         <td><?= $program->name; ?></td>
         <td><?= $program->description; ?></td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
-        <td><?= l("Delete", Path::admin_program($program->id), array("method" => "delete")); ?></td>
+        <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>
     </tr>
 <? endforeach; ?>
 </table>

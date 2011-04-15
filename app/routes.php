@@ -53,19 +53,25 @@
 function RouteSetup($router)
 {
     $router->AddRoute('/')->Controller('main');
-    $router->AddRoute('/administrator/[a:action]')->Controller('administrator');
-    $router->AddRoute('/administrator/')->Controller('administrator');
+    $router->AddRoute('/main')->Controller('main');
+    $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
+    $router->AddRoute('/administrator')->Controller('administrator');
 
-    $router->AddRoute('/admin/[a:controller]')->Module('admin');
-    $router->AddRoute('/admin/[a:controller]/[a:action]')->Module('admin');
-    $router->AddRoute('/admin/[a:controller]/[a:action]/[i:id]')->Module('admin');
+    $router->AddRoute('/admin/[A:controller]')->Module('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]')->Module('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Module('admin');
 
-    $router->AddRoute('/user/[a:action]')->Controller('user');
-    $router->AddRoute('/user/[a:action]/[i:id]')->Controller('user');
+    $router->AddRoute('/user/[A:action]')->Controller('user');
+    $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
+
+    $router->AddRoute('/program/[i:id]')->Controller('program');
+    //$router->AddRoute('/program/[A:action]')->Controller('program');
+    //$router->AddRoute('/program/[A:action]/[i:id]')->Controller('program');
 
     $router->AddRoute('/[a:program]')->Controller('program');
-    $router->AddRoute('/[a:program]/[a:controller]')->Action('index');
-    $router->AddRoute('/[a:program]/[a:controller]/[a:name]')->Action('show_by_name');
-    $router->AddRoute('/[a:program]/[a:controller]/[a:action]');
-    $router->AddRoute('/[a:program]/[a:controller]/[a:action]/[i:id]');
+    $router->AddRoute('/[a:program]/[A:controller]')->Action('index');
+    $router->AddRoute('/[a:program]/[A:controller]/[a:name]')->Action('show_by_name');
+    // this ain't gonna never get cawled
+    $router->AddRoute('/[a:program]/[A:controller]/[A:action]');
+    $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]');
 }

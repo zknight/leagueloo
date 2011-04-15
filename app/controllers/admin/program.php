@@ -1,10 +1,20 @@
 <?
 namespace app\admin;
-class ProgramController extends \simp\RESTController
+class ProgramController extends \simp\Controller
 {
     function Setup()
     {
-        $this->Model('Program');
+        $this->RequireAuthorization(
+            'index',
+            'show',
+            'add',
+            'edit',
+            'delete'
+        );
+
+        $this->MapAction("add", "Create", \simp\Request::POST);
+        $this->MapAction("edit", "Update", \simp\Request::PUT);
+        $this->MapAction("delete", "Remove", \simp\Request::DELETE);
     }
 
     function Index()
@@ -27,7 +37,7 @@ class ProgramController extends \simp\RESTController
     function Edit()
     {
         global $log;
-        $this->program = \simp\Model::FindById('Program', $this->GetParam(0));
+        $this->program = \simp\Model::FindById('Program', $this->GetParam('id'));
         $log->logDebug("program \n " . print_r($this->program, true));
         $program = $this->program;
         $log->logDebug("program id: " . $program->id);
@@ -55,7 +65,7 @@ class ProgramController extends \simp\RESTController
     function Update()
     {
         $vars = $this->GetFormVariable('Program');
-        $program = \simp\Model::FindById('Program', $this->GetParam(0));
+        $program = \simp\Model::FindById('Program', $this->GetParam('id'));
         $program->UpdateFromArray($vars);
         $program->Save();
         \Redirect(\Path::admin_program());
@@ -63,7 +73,7 @@ class ProgramController extends \simp\RESTController
 
     function Remove()
     {
-        $program = \simp\Model::FindById('Program', $this->GetParam(0));
+        $program = \simp\Model::FindById('Program', $this->GetParam('id'));
         if ($program->id > 0)
         {
             $program->Delete();

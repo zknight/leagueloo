@@ -355,6 +355,8 @@ function GetURL()
 
 function SetReturnURL($url)
 {
+    global $log;
+    $log->logDebug("helper: setting return_to: $url");
     $_SESSION['return_to'] = $url;
 }
 
