@@ -13,6 +13,10 @@ class UserController extends \simp\Controller
             )
         );
 
+        $this->MapAction("add", "Create", \simp\Request::POST);
+        $this->MapAction("edit", "Update", \simp\Request::PUT);
+        $this->MapAction("delete", "Remove", \simp\Request::DELETE);
+
     }
     
     function Index()
@@ -23,6 +27,8 @@ class UserController extends \simp\Controller
 
     function Show()
     {
+        $this->user = \simp\Model::FindById('User', $this->GetParam('id'));
+        //$this->LoadEntitiesForAbilities();
         return true;
     }
 
@@ -51,7 +57,7 @@ class UserController extends \simp\Controller
 
     function Edit()
     {
-        $this->user = \simp\Model::FindById('User', $this->GetParam(0));
+        $this->user = \simp\Model::FindById('User', $this->GetParam('id'));
         $this->LoadEntitiesForAbilities();
         if ($this->user->id > 0)
         {
@@ -59,7 +65,8 @@ class UserController extends \simp\Controller
         }
         else
         {
-            \Redirect(\Path::admin_program());
+            AddFlash("Unable to find that user.");
+            \Redirect(\Path::admin_user());
         }
     }
 
@@ -86,7 +93,7 @@ class UserController extends \simp\Controller
 
     function Update()
     {
-        $user = \simp\Model::FindById('User', $this->GetParam(0));
+        $user = \simp\Model::FindById('User', $this->GetParam('id'));
         $user_vars = $this->GetFormVariable('User');
         global $log;
         $log->logDebug("user_vars: \n" . print_r($user_vars, true));
@@ -107,7 +114,7 @@ class UserController extends \simp\Controller
 
     function Remove()
     {
-        $user = \simp\Model::FindById('User', $this->GetParam(0));
+        $user = \simp\Model::FindById('User', $this->GetParam('id'));
         if ($user->id > 0)
         {
             $user->Delete();

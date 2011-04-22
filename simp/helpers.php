@@ -356,6 +356,7 @@ function GetURL()
 function SetReturnURL($url)
 {
     global $log;
+    $url = Path::home() . $url;
     $log->logDebug("helper: setting return_to: $url");
     $_SESSION['return_to'] = $url;
 }

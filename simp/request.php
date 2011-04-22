@@ -43,8 +43,8 @@ class Request
         $url = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
         $log->logDebug("url: $url");
         $url = trim($url, "/");
-        //$this->_request_url = $url;
-        $this->_request_url = "/" . $url;
+        $this->_request_url = $url;
+        //$this->_request_url = "/" . $url;
         $log->logDebug("url: $url");
         //$_SESSION["url"] = $url;
         //print_r($_SESSION);

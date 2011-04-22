@@ -2,22 +2,22 @@
 namespace app\content;
 //require_once "ability.php";
 
-class NewsController extends \simp\RESTController
+class NewsController extends \simp\Controller
 {
     function Setup()
     {
         $this->SetLayout('content');
-        $this->Model('News');
-        $this->AddAction('publish', \simp\Request::GET, 'Publish');
+        $this->MapAction("add", "Create", \simp\Request::POST);
+        $this->MapAction("edit", "Update", \simp\Request::PUT);
+        $this->MapAction("delete", "Remove", \simp\Request::DELETE);
+
         $this->RequireAuthorization(
             array(
-                'Index',
+                'index',
                 'show',
-                'Add',
-                'Create',
-                'Edit',
-                'Update',
-                'Remove'
+                'add',
+                'edit',
+                'delete'
             )
         );
     }
@@ -33,7 +33,7 @@ class NewsController extends \simp\RESTController
 
     public function Show()
     {
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $this->user = CurrentUser();
         $this->article = \simp\Model::FindById("News", $id);
         return true;
@@ -75,7 +75,7 @@ class NewsController extends \simp\RESTController
     public function Edit()
     {
         $this->user = CurrentUser();
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $this->article = \simp\Model::FindById("News", $id);
         $this->programs = $this->user->ProgramsWithPrivilege(\Ability::EDIT);
         return true;
@@ -83,7 +83,7 @@ class NewsController extends \simp\RESTController
 
     public function Update()
     {
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $vars = $this->GetFormVariable('News');
         $this->article = \simp\Model::FindById("News", $id);
         $this->article->UpdateFromArray($vars);
@@ -104,7 +104,7 @@ class NewsController extends \simp\RESTController
 
     public function Remove()
     {
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $article = \simp\Model::FindById("News", $id);
         $name = $article->short_title;
         if ($article->id > 0)
@@ -121,7 +121,7 @@ class NewsController extends \simp\RESTController
 
     public function Publish()
     {
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $article = \simp\Model::FindById("News", $id);
         $article->publish_now = true;
         if ($article->Save())

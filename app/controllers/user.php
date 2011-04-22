@@ -5,6 +5,10 @@ class UserController extends \simp\Controller
     function Setup()
     {
         $this->MapAction('login', 'Authorize', \simp\Request::POST);
+        $this->MapAction('signup', 'Create', \simp\Request::POST);
+        $this->MapAction('confirm', 'ConfirmPost', \simp\Request::POST);
+        $this->MapAction('request_confirmation', 'RequestConfirm', \simp\Request::POST);
+        $this->MapAction('edit', 'Update', \simp\Request::PUT);
         /*
         $this->AddAction('login', \simp\Request::GET, 'Login');
         $this->AddAction('login', \simp\Request::POST, 'Authorize');

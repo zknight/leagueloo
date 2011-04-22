@@ -87,7 +87,7 @@ class Router
     {
         $this->Put( "<pre>");
         $this->_log->logDebug("Routing request: {$request->GetRequestURL()}");
-        $uri = $request->GetRequestURL();
+        $uri = "/" . $request->GetRequestURL();
         $this->Put( "Request URL: $uri\n");
         $this->_params = $request->GetParams();
 

@@ -61,6 +61,10 @@ function RouteSetup($router)
     $router->AddRoute('/admin/[A:controller]/[A:action]')->Module('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Module('admin');
 
+    $router->AddRoute('/content/[A:controller]')->Module('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]')->Module('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Module('content');
+
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
 
@@ -70,7 +74,7 @@ function RouteSetup($router)
 
     $router->AddRoute('/[a:program]')->Controller('program');
     $router->AddRoute('/[a:program]/[A:controller]')->Action('index');
-    $router->AddRoute('/[a:program]/[A:controller]/[a:name]')->Action('show_by_name');
+    $router->AddRoute('/[a:program]/[A:controller]/[A:name]')->Action('show_by_name');
     // this ain't gonna never get cawled
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]');
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]');

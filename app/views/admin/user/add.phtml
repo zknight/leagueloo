@@ -10,7 +10,7 @@
     </ul>
 </div>
 <? endif; ?>
-<?= FormTag("user", \simp\Request::POST, path::admin_user()) ?>
+<?= FormTag("user", \simp\Request::POST) ?>
     <? require("_form.phtml"); ?>
     <input type="submit" value="Add"/>
 <?= EndForm(); ?>

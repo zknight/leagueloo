@@ -4,7 +4,7 @@ class AdministratorController extends \simp\Controller
 {
     function Setup()
     {
-        $this->RequireAuthorization('Index');
+        $this->RequireAuthorization('index');
     }
 
     function Index()

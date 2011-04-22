@@ -11,12 +11,12 @@
     </tr>
 <? foreach ($this->users as $user): ?>
     <tr>
-        <td><? if ($user->super) echo "*"?> <?= $user->login; ?></td>
+        <td><?= l($user->login, Path::admin_user_show($user->id)); ?><? if ($user->super) echo "*"?></td>
         <td><?= $user->last_name; ?>, <?= $user->first_name; ?></td>
         <td><?= FormatDateTime($user->last_login); ?></td>
         <td><?= FormatDateTime($user->created_on); ?></td>
         <td><?= l("Edit", Path::admin_user_edit($user->id)); ?></td> 
-        <td><?= l("Delete", Path::admin_user($user->id), array("method" => "delete")); ?></td>
+        <td><?= l("Delete", Path::admin_user_delete($user->id), array("method" => "delete")); ?></td>
     </tr>
 <? endforeach; ?>
 </table>

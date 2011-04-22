@@ -1,0 +1,2 @@
+* Need to fix rendering to render based on function name rather than 'action' since some actions are mapped.
+* check which articles are listed under content/index depending upon user abilities

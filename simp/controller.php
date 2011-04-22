@@ -24,6 +24,7 @@ class Controller
     protected $_form_vars;
     protected $_current_user;
     protected $_authorization_params;
+    protected $_current_url;
 
     function __construct()
     {
@@ -53,6 +54,7 @@ class Controller
         // can override this
         $this->_default_action = "Index";
         $this->_content = "";
+        $this->_current_url = "";
     }
 
     protected function Setup()
@@ -147,8 +149,7 @@ class Controller
         global $log;
         $this->_params = $request->GetParams();
         $this->_method = $request->GetMethod();
-
-        if ($this->_method == Request::GET) SetReturnURL($request->GetRequestURL());
+        $this->_current_url = $request->GetRequestURL();
 
         $action = $request->GetAction();//ClassCase($request->GetAction());
 
@@ -166,11 +167,13 @@ class Controller
         else if (IsLoggedIn())
         {
             AddFlash("You are not authorized to access this resource.");
+            $this->StoreLocation();
             \Redirect(GetReturnURL());
         }
         else
         {
             AddFlash("You must be logged in to access this resource.");
+            $this->StoreLocation();
             \Redirect(\Path::user_login());
         }
     }
@@ -193,6 +196,11 @@ class Controller
         $this->content .= ob_get_contents();
         ob_end_clean();
         require_once $this->_layout_path . $this->_layout_name . ".phtml";
+    }
+
+    protected function StoreLocation()
+    {
+        if ($this->_method == Request::GET) SetReturnURL($this->_current_url);
     }
 
     protected function UserLoggedIn()

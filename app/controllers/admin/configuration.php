@@ -4,7 +4,12 @@ class ConfigurationController extends \simp\Controller
 {
     function Setup()
     {
-        $this->AddAction('update', \simp\Request::PUT, 'Update');
+        $this->RequireAuthorization(
+            'index',
+            'update'
+        );
+
+        $this->MapAction("update", "Update", \simp\Request::PUT);
     }
 
     function Index()

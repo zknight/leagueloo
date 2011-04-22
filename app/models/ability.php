@@ -21,6 +21,6 @@ class Ability extends \simp\Model
 
     function LevelString()
     {
-        return $this->_ability_level_string[$this->level];
+        return $this->_ability_level_strings[$this->level];
     }
 }

@@ -7,11 +7,6 @@ class ProgramController extends \simp\Controller
     {
     }
     
-    function Delegate($param)
-    {
-        return null;
-    }
-
     // Actions
     function Index()
     {

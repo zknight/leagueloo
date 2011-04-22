@@ -1,0 +1,35 @@
+<h2>User Information</h2>
+<table>
+    <tr>
+        <td><strong>Login:</strong></td>
+        <td>
+            <?= $this->user->login; ?>
+            <? if ($this->user->super): ?>
+            &nbsp;&nbsp;
+            <em>(super user)</em>
+            <? endif; ?>
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Name:</strong></td><td><?= $this->user->first_name; ?> <?= $this->user->last_name; ?></td>
+    </tr>
+    <tr>
+        <td><strong>Email:</strong></td><td><?= $this->user->email; ?></td>
+    </tr>
+    <tr>
+        <td><strong>Timezone:</strong></td><td><?= $this->user->timezone; ?></td>
+    </tr>
+    <tr>
+        <td><strong>Verified?:</strong></td><td><?= $this->user->verified ? "yes" : "no"; ?></td>
+    </tr>
+</table>
+<h2>User Rights</h2>
+<table>
+    <? foreach ($this->user->Abilities() as $ability): ?>
+    <tr>
+        <td><?= $ability->entity_type; ?>:<?= $ability->entity_name;?></td>
+        <td>&rArr;</td>
+        <td><?= $ability->LevelString(); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
