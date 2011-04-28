@@ -110,6 +110,11 @@ class Controller
         return $this->_form_vars[$name];
     }
 
+    protected function CheckParam($key)
+    {
+        return array_key_exists($key, $this->_params);
+    }
+
     protected function GetParam($index)
     {
         return $this->_params[$index];

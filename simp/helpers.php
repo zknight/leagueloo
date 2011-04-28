@@ -1,4 +1,10 @@
 <?
+global $BASE_PATH;
+if (file_exists($BASE_PATH . "app/helpers.php"))
+{
+    require_once $BASE_PATH . "app/helpers.php";
+}
+
 // leaving these in the global namespace.
 class Path
 {

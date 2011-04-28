@@ -47,6 +47,15 @@ function Redirect($path)
     exit();
 }
 
+function Error404($path)
+{
+    global $REL_PATH;
+    session_commit();
+    header($_SERVER["SERVER_PROTOCOL"]." 404 Not Found");
+    Redirect($REL_PATH . "public/error404.html");
+    exit();
+}
+
 function RandStr($len = 8)
 {
     $let =  'abcdefghijklmnopqrstuvwxyz';

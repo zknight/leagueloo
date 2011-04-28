@@ -55,7 +55,7 @@ class News extends \simp\Model
         $entity_table = SnakeCase($entity_type);
         $q = "select news.* from news, {$entity_table} ";
         $q .= "where ${entity_type}.name like ? ";
-        $q .= "and news.entity_type = ? ";
+        $q .= "and news.entity_type like ? ";
         $q .= "and news.entity_id = {$entity_type}.id ";
         $q .= "and news.short_title = ? ";
         $q .= "limit 1";

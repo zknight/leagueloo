@@ -68,14 +68,19 @@ function RouteSetup($router)
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
 
+    $router->AddRoute('/[a:program]/teams')->Controller('team');
+    $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('team');
+    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:age]')->Controller('team');
+    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:age]/[a:name]')->Controller('team');
+
     $router->AddRoute('/program/[i:id]')->Controller('program');
     //$router->AddRoute('/program/[A:action]')->Controller('program');
     //$router->AddRoute('/program/[A:action]/[i:id]')->Controller('program');
 
     $router->AddRoute('/[a:program]')->Controller('program');
-    $router->AddRoute('/[a:program]/[A:controller]')->Action('index');
-    $router->AddRoute('/[a:program]/[A:controller]/[A:name]')->Action('show_by_name');
-    // this ain't gonna never get cawled
-    $router->AddRoute('/[a:program]/[A:controller]/[A:action]');
-    $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]');
+    $router->AddRoute('/[a:program]/[A:controller]')->Action('index')->Param('type', 'program');
+    $router->AddRoute('/[a:program]/[A:controller]/[A:action]')->Param('type', 'program');
+    $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]')->Param('type', 'program');
+    $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[a:name]')->Param('type', 'program');
+
 }

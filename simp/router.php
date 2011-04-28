@@ -17,6 +17,7 @@ class Route
     public $module;
     public $controller;
     public $action;
+    public $params;
 
     public function __construct()
     {
@@ -24,6 +25,7 @@ class Route
         $this->controller = "";
         $this->action = "index";
         $this->module = array();
+        $this->params = array();
     }
 
     public function Pattern($pattern)
@@ -47,6 +49,11 @@ class Route
     public function Module($module)
     {
         $this->module[] = $module;
+    }
+
+    public function Param($param, $value)
+    {
+        $this->params[$param] = $value;
     }
 }
 
@@ -147,7 +154,7 @@ class Router
             // here's where I'd check for negation if I wanted to include that functionality
             if ($null !== $params)
             {
-                $this->_params = array_merge($this->_params, $params/*, $route_params*/);
+                $this->_params = array_merge($this->_params, $params, $route->params);
             }
 
             if (true == $match)
@@ -170,7 +177,7 @@ class Router
 
         if (false == $match)
         {
-            // render 404
+            Error404();
         }
 
         // set breadcrumb
@@ -187,9 +194,16 @@ class Router
         if (!$TEST)
         {
             $this->Put( "</pre>");
-            require_once $path;
-            $controller = new $controller_name;
-            $controller->Dispatch($request);
+            if (file_exists($path))
+            {
+                require_once $path;
+                $controller = new $controller_name;
+                $controller->Dispatch($request);
+            }
+            else
+            {
+                Error404();
+            }
         }
         else
         {
