@@ -16,7 +16,7 @@ class Path
         $name_arr = explode('_', $name);
         if (count($arguments) > 0)
         {
-            $name_arr[] = $arguments[0];
+            $name_arr = array_merge($name_arr, $arguments);
             foreach ($name_arr as $i => $name)
             {
                 $name_arr[$i] = SnakeCase($name);

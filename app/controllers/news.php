@@ -18,6 +18,7 @@ class NewsController extends \simp\Controller
         global $log;
         $log->logDebug("in NewsController::Show()");
         $log->logDebug("params: " . print_r($this->_params, true));
+        $this->StoreLocation();
         if ($this->GetParam("name"))
         {
             $entity_type = $this->GetParam('type');

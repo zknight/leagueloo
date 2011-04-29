@@ -1,1 +1,15 @@
-Hello from app/views/main/index.phtml!
+<h2>Welcome to the web home of South Lakes Soccer Club.</h2>
+<? foreach ($this->articles as $article): ?>
+<div class="article">
+    <h3><?= l($article->title, GetArticlePath('show', $article)); ?></h3>
+    <? if ($editor): ?>
+    <?= l("edit this article", Path::content_news_edit_program($this->program->id, $article->id)); ?><br />
+    <? endif; ?>
+        <span class="date">
+            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
+        </span>
+    <p><?= $article->intro; ?></p>
+    <p><?= l("Read more...", GetArticlePath('show', $article)); ?></p>
+</div>
+<? endforeach; ?>
+

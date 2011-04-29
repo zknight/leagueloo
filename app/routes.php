@@ -64,6 +64,8 @@ function RouteSetup($router)
     $router->AddRoute('/content/[A:controller]')->Module('content');
     $router->AddRoute('/content/[A:controller]/[A:action]')->Module('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Module('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Module('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[i:id]')->Module('content');
 
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');

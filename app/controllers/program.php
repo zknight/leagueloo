@@ -5,12 +5,14 @@ class ProgramController extends \simp\Controller
 
     function Setup()
     {
+
     }
     
     // Actions
     function Index()
     {
         //echo "<strong>program Index with {$this->_params[0]}.</strong>\n";
+        $this->StoreLocation();
         global $log;
         if ($id = $this->GetParam('id'))
         {

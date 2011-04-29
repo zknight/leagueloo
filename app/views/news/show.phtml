@@ -1,3 +1,17 @@
+<?
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit($this->article->entity_type, $this->article->entity_name);
+    $entity_type = SnakeCase($this->article->entity_type);
+    //$publisher = $user->CanPublish("Program", $this->program->id);
+    //$admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<? if ($editor): ?>
+<?= l("edit this article", Path::content_news_edit(
+        $entity_type, $this->article->entity_id, $this->article->id)); ?><br />
+<? endif; ?>
 <h2><?= $this->article->title; ?></h2>
 <p><?= $this->article->intro; ?></p>
 <p><?= $this->article->body; ?></p>
