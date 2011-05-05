@@ -19,7 +19,7 @@ class ProgramController extends \simp\Controller
 
     function Index()
     {
-        $this->programs = \simp\Model::FindAll('Program');
+        $this->programs = \simp\Model::FindAll('Program', 'order by weight asc');
         return true;
     }
 

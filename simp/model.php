@@ -84,9 +84,9 @@ class Model
         return $models;
     }
 
-    static public function FindAll($model_name)
+    static public function FindAll($model_name, $order = "")
     {
-        return Model::Find($model_name, 1, array());
+        return Model::Find($model_name, "1 " . $order, array());
     }
 
     static public function FindOne($model_name, $conditions, $values)

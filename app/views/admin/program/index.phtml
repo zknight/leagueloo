@@ -3,6 +3,7 @@
 <table>
     <tr>
         <th>Program</th>
+        <th>Weight</th>
         <th>Description</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
@@ -10,6 +11,7 @@
 <? foreach ($this->programs as $program): ?>
     <tr>
         <td><?= $program->name; ?></td>
+        <td><?= $program->weight; ?></td>
         <td><?= $program->description; ?></td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
         <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>

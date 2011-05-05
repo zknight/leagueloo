@@ -10,7 +10,7 @@ class MainMenu extends \simp\Module
 
     protected function Setup()
     {
-        $this->_programs = \simp\Model::FindAll("Program");
+        $this->_programs = \simp\Model::FindAll("Program", "order by weight asc");
     }
 
     public function GetPrograms()
