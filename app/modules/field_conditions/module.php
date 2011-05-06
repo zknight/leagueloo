@@ -5,6 +5,7 @@ class FieldConditions extends \simp\Module
 
     public function Setup()
     {
+        require_once "models/field.php";
         $this->fields = \simp\Model::FindAll("Field");
     }
 

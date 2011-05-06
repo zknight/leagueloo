@@ -304,13 +304,13 @@ function GetErrorsFor($model)
     $errors = $model->GetErrors();
     if (count($errors) > 0)
     {
-        $html = "\t<div class=\"errors\">\n";
-        $html .= "\t\t<ul>\n";
+        $html = "\t<div class=\"errors\">\nPlease correct the following:";
+        $html .= "\t\t<ol>\n";
         foreach ($errors as $error)
         {
             $html .= "\t\t\t<li>{$error}</li>\n";
         }
-        $html .= "\t\t</ul>\n";
+        $html .= "\t\t</ol>\n";
         $html .= "\t</div>\n";
     }
     return $html;
@@ -411,12 +411,12 @@ function GetErrors()
   unset($_SESSION['error']);
   if (is_array($errorar))
   {
-    $errorstr = "<div id='error'><ul class='error'>\n";
+    $errorstr = "<div id='error'><ol class='error'>\n";
     foreach($errorar as $field => $error)
     {
       $errorstr .= "  <li>$field: $error</li>\n";
     }
-    $errorstr .= "</ul></div>";
+    $errorstr .= "</ol></div>";
   }
   return $errorstr;
 }

@@ -21,21 +21,27 @@ class Module
     public function __construct()
     {
         global $APP_BASE_PATH;
-        $this->_template_path = $APP_BASE_PATH . "/views/modules/";
+        $this->_template_path = $APP_BASE_PATH . "/modules/";
         $this->_template_path .= SnakeCase(get_class($this));
+        $this->_template_path .= "/views/";
     }
 
     /// Autoload function for loading modules
     public static function LoadModule($classname)
     {
-        global $APP_BASE_PATH;
-        $filename = SnakeCase($classname) . ".php";
-        $path = $APP_BASE_PATH . "/modules/" . $filename;
-        //$log->logDebug("attempting to find $classname @ $path");
-        if (file_exists($path))
+        $module = \simp\Model::Find("Module", "where name like ?", array($classname));
+        if ($module->id > 0 and $module->enabled == true)
         {
-            //echo("attempting to find $classname @ $path");
-            require_once $path;
+            global $APP_BASE_PATH;
+            $module_path = $APP_BASE_PATH . "/modules/" . SnakeCase($classname);
+            $filename = $module_path . "/module.php";
+            global $log; 
+            $log->logDebug("attempting to find $classname @ $filename");
+            if (file_exists($filename))
+            {
+                //echo("attempting to find $classname @ $path");
+                require_once $filename;
+            }
         }
     }
 
@@ -54,7 +60,7 @@ class Module
     protected function Render()
     {
         //ob_start();
-        require_once $this->_template_path . ".phtml";
+        require_once $this->_template_path . "template.phtml";
         //$content = ob_get_contents();
         //ob_end_clean();
         //return $content;

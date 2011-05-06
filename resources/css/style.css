@@ -16,7 +16,7 @@ body {
     min-width:1000px;
 }
 
-ul.menu, ul.submenu {
+ul.menu, ul.submenu, .flash ul  {
     list-style-type:none;
     padding:0;
     margin:0;
@@ -190,16 +190,34 @@ ul.menu, ul.submenu {
     color:#b9daf1;
 }
 input.error {
-    background-color:#ffaaaa;
-    border-color:#ff2222;
+    background-color:#faa;
+    border-color:#f22;
 }
 
+div.flash {
+    margin-top:16px;
+    border:1px solid #dfa964;
+    background:#ffe4c0;
+    text-align:center;
+    color:#00243e;
+}
+
+div.errors {
+    margin:16px 0 8px 0;
+    padding:4px 0 0 4px;
+    border:2px solid #f22;
+    background:#faa;
+    color:#600;
+}
+    div.errors ol { margin:4px; }
+
 .program_news {
-    border:1px solid #569fd3;
-    margin-bottom:12px;
+    border:1px solid #b9daf1;
+    background:#0f334d;
+    margin:16px 0;
 }
     .program_news .program_name {
-        background: #569fd3;
+        background: #b9daf1;
         padding:4px 0;
         text-align:center;
     }

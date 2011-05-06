@@ -10,6 +10,11 @@
         <tr>
             <td colspan='2'><?= $field->comment; ?></td>
         </tr>
+    <? if (IsLoggedIn())
+       {
+           $user = CurrentUser();
+       }
+    ?>
     </table>
 <? endforeach; ?>
 </div>
