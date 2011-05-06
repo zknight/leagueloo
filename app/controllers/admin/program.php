@@ -5,11 +5,14 @@ class ProgramController extends \simp\Controller
     function Setup()
     {
         $this->RequireAuthorization(
-            'index',
-            'show',
-            'add',
-            'edit',
-            'delete'
+            array(
+                'index',
+                'show',
+                'add',
+                'edit',
+                'delete'
+                )
+            );
         );
 
         $this->MapAction("add", "Create", \simp\Request::POST);

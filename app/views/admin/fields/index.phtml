@@ -1,0 +1,29 @@
+<p><strong>Fields</strong></p>
+<?= l("Add New Field", path::admin_fields_add());?>
+<? if (count($this->fields) > 0): ?>
+<table>
+    <tr>
+        <th>Field</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Status Date</th>
+        <th>Map Link</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    <? foreach ($this->fields as $field): ?>
+    <tr>
+        <td><?= $field->name; ?></td>
+        <td><?= $field->address; ?></td>
+        <td><?= $field->status_text; ?></td>
+        <td><?= FormatDateTime($field->updated_on); ?></td>
+        <td><?= l("map", $field->map_link, array("target" => 'blank')); ?></td>
+        <td><?= l("Edit", Path::admin_fields_edit($field->id)); ?></td>
+        <td>
+            <?= l("Delete", Path::admin_fields_delete($field->id), array("method" => "delete"));?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+

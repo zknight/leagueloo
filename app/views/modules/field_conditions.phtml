@@ -1,1 +1,15 @@
 <p>Field Conditions</p>
+<div class="module">
+<? foreach ($this->fields as $field): ?>
+    <strong><?= $field->name; ?></strong><br />
+    <table>
+        <tr>
+            <td><?= $this->Status($field); ?> as of </td>
+            <td><?= $this->Time($field); ?></td>
+        </tr>
+        <tr>
+            <td colspan='2'><?= $field->comment; ?></td>
+        </tr>
+    </table>
+<? endforeach; ?>
+</div>

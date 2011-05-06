@@ -192,7 +192,7 @@ class News extends \simp\Model
         if (strlen($this->short_title) > 30) 
         {
             $errors++;
-            $this->_errors('short_title', "Short title must be less than 30 characters");
+            $this->SetError('short_title', "Short title must be less than 30 characters");
         }
         // TODO add functions to validate/sanitize strings
 
@@ -236,7 +236,7 @@ class News extends \simp\Model
         }
         else if (strtotime($date) == FALSE)
         {
-            $this->_errors[$field] = "Date must be in format: mm/dd/yyyy or mm-dd-yyyy";
+            $this->SetError($field, "Date must be in format: mm/dd/yyyy or mm-dd-yyyy");
             $retval = false;
         }
         return $retval;
@@ -251,7 +251,7 @@ class News extends \simp\Model
         }
         else if (strtotime($time) == FALSE)
         {
-            $this->_errors[$field] = "Time must be in format: (24 hour) hh:mm:ss or (12 hour) hh:mm:ss [am/pm]";
+            $this->SetError($field, "Time must be in format: (24 hour) hh:mm:ss or (12 hour) hh:mm:ss [am/pm]");
             $retval = false;
         }
         return $retval;

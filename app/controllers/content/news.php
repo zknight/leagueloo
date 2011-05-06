@@ -18,7 +18,7 @@ class NewsController extends \simp\Controller
                 'add',
                 'edit',
                 'delete'
-            )
+            ),
         );
     }
 
