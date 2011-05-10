@@ -37,19 +37,29 @@ class UserController extends \simp\Controller
         $this->entities = array(
             'program' => array(),
             'team' => array(),
-            'app' => array()
+            'plug_in' => array()
             );
         $programs = \simp\Model::FindAll('Program');
         foreach ($programs as $program)
         {
             $this->entities['program'][$program->name] = $program->id;
         }
+        $plug_ins = \simp\Model::Find('PlugIn', 'enabled = ?', array(true));
+        foreach ($plug_ins as $plug_in)
+        {
+            $this->entities['plug_in'][$plug_in->name] = $plug_in->id;
+        }
+        $teams = \simp\Model::FindAll('Team');
+        foreach ($plug_ins as $plug_in)
+        {
+            $this->entities['team'][$team->name] = $team->id;
+        }
     }
 
     function Add()
     {
         $this->user = \simp\Model::Create('User');
-        $programs = \simp\Model::FindAll('Program');
+        //$programs = \simp\Model::FindAll('Program');
         $this->LoadEntitiesForAbilities();
         $this->user->timezone = GetCfgVar("default_timezone");
         return true;

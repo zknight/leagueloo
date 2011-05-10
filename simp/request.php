@@ -15,6 +15,7 @@ class Request
     private $_request_url;
     private $_post_variables;
     private $_method;
+    private $_method_str;
     private $_base_path;
     private $_relative_path;
     private $_method_map;
@@ -64,6 +65,11 @@ class Request
     function GetMethod()
     {
         return $this->_method;
+    }
+
+    function GetMethodStr()
+    {
+        return $this->_method_str;
     }
 
     /// Get the base path for the application relative to filesystem
@@ -124,6 +130,10 @@ class Request
             unset($_POST['method']);
         }
 
+        $this->_method_str = isset($method) ? $method : $_SERVER['REQUEST_METHOD'];
+        $this->_method = $this->_method_map[$this->_method_str];
+
+        /*
         $this->_method = $this->_method_map[$_SERVER['REQUEST_METHOD']];
 
         if ($this->_method != "")
@@ -133,6 +143,7 @@ class Request
                 $this->_method = $this->_method_map[$method];
             }
         }
+         */
     }
 }
 ?>

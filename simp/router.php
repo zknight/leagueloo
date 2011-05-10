@@ -5,7 +5,7 @@ require_once "breadcrumb.php";
 
 // $route = new Route();
 // $route->Pattern("/admin/[a:controller]/[a:action]")
-//       ->Module("admin");
+//       ->Group("admin");
 // $route->Pattern("/administrator/[a:action]")
 //       ->Controller("administrator");
 // $route->Pattern("/[a:program]/news/[a:short_title]")
@@ -14,7 +14,7 @@ require_once "breadcrumb.php";
 class Route
 {
     public $pattern;
-    public $module;
+    public $group;
     public $controller;
     public $action;
     public $params;
@@ -24,7 +24,7 @@ class Route
         $this->pattern = "";
         $this->controller = "";
         $this->action = "index";
-        $this->module = array();
+        $this->group = array();
         $this->params = array();
     }
 
@@ -46,14 +46,16 @@ class Route
         return $this;
     }
 
-    public function Module($module)
+    public function Group($group)
     {
-        $this->module[] = $module;
+        $this->group[] = $group;
+        return $this;
     }
 
     public function Param($param, $value)
     {
         $this->params[$param] = $value;
+        return $this;
     }
 }
 
@@ -75,6 +77,9 @@ class Router
         global $log;
 
         $this->_log = &$log;
+        $this->AddRoute('/module/[A:module]/admin')->Group('simp')->Controller('module');
+        $this->AddRoute('/module/[A:module]/admin/[A:action]')->Group('simp')->Controller('module');
+        $this->AddRoute('/module/[A:module]/admin/[A:action]/[i:id]')->Group('simp')->Controller('module');
     }
 
     public function AddRoute($pattern)
@@ -160,16 +165,23 @@ class Router
             if (true == $match)
             {
                 $request->SetParams($this->_params);
-                $module = implode('\\', $route->module);
-                if ($module === "")
+                $group = implode('\\', $route->group);
+                if ($group === "")
                 {
                     $controller_class = ClassCase($this->_params['controller']);
                     $controller_path = $this->_params['controller'];
                 }
                 else
                 {
-                    $controller_class = $module . "\\" . ClassCase($this->_params['controller']);
-                    $controller_path = implode("/", explode('\\', $module)) . "/" . $this->_params['controller'];
+                    $controller_class = $group . "\\" . ClassCase($this->_params['controller']);
+                    if ($group === "simp")
+                    {
+                        $controller_path = $this->_params['controller'];
+                    }
+                    else
+                    {
+                        $controller_path = implode("/", explode('\\', $group)) . "/" . $this->_params['controller'];
+                    }
                 }
                 break;
             }
@@ -186,10 +198,20 @@ class Router
 
 
         // load controller and dispatch it
-
-        global $APP_BASE_PATH;
-        $path = $APP_BASE_PATH . "/controllers/{$controller_path}.php";
-        $controller_name = "\\app\\" . $controller_class . "Controller";
+        $path = "";
+        if ($group === 'simp')
+        {
+            global $SIMP_BASE_PATH;
+            $path = $SIMP_BASE_PATH . "/controllers/${controller_path}.php";
+            $controller_name = $controller_class . "Controller";
+            $this->_log->logDebug("would like to load $controller_name from $path");
+        }
+        else
+        {
+            global $APP_BASE_PATH;
+            $path = $APP_BASE_PATH . "/controllers/{$controller_path}.php";
+            $controller_name = "\\app\\" . $controller_class . "Controller";
+        }
         global $TEST;
         if (!$TEST)
         {

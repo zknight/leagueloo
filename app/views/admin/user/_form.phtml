@@ -64,7 +64,8 @@
                     array('array' => $i, 'value' => -1),
                     $wrapper); ?>
                 <input type="hidden" name="Ability[<?=$i;?>][entity_type]" value="<?=$type;?>" />
-                <input type="hidden" name="Ability[<?=$i++;?>][entity_name]" value="<?=$name;?>" />
+                <input type="hidden" name="Ability[<?=$i;?>][entity_name]" value="<?=$name;?>" />
+                <input type="hidden" name="Ability[<?=$i++;?>][entity_id]" value="<?=$id;?>" />
                 </tr>
             <? endif; ?>
         <? endforeach; ?>

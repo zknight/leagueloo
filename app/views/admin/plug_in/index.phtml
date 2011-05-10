@@ -1,0 +1,25 @@
+<p><strong>Plug-In Administration</strong></p>
+<? if (count($this->uninstalled_plug_ins) > 0): ?>
+<p><strong>Uninstalled Plug-ins</strong></p>
+<table>
+    <? foreach($this->uninstalled_plug_ins as $plug_in): ?>
+    <tr>
+        <td><?= HumanCase($plug_in); ?></td>
+        <td><?= l("install", \Path::admin("plug_in", "install", $plug_in)); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<? if (count($this->plug_ins) > 0): ?>
+<p><strong>Installed Plug-ins</strong></p>
+<table>
+    <? foreach($this->plug_ins as $plug_in): ?>
+        <? $enabled = $plug_in->enabled == true ? array("enabled", "disable") : array("disabled", "enable"); ?>
+    <tr>
+        <td><?= HumanCase($plug_in->name); ?></td>
+        <td><em><?= $enabled[0]; ?></em></td>
+        <td><?= l($enabled[1], \Path::admin("plug_in", $enabled[1], $plug_in->id)); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

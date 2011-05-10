@@ -19,6 +19,7 @@ class Controller
     protected $_layout_path;
     protected $_content;
     protected $_method;
+    protected $_method_str;
     protected $_default_action;
     protected $_action;
     protected $_form_vars;
@@ -47,6 +48,7 @@ class Controller
         $this->_layout_path = $APP_BASE_PATH . "/views/layouts/";
         $this->_layout_name = "default";
         $this->_method = Request::GET;
+        $this->_method_str = "GET";
         $this->_action_map = array();
         $this->_current_user = NULL;
         $this->_authorization_params = array();
@@ -154,6 +156,7 @@ class Controller
         global $log;
         $this->_params = $request->GetParams();
         $this->_method = $request->GetMethod();
+        $this->_method_str = $request->GetMethodStr();
         $this->_current_url = $request->GetRequestURL();
 
         $action = $request->GetAction();//ClassCase($request->GetAction());

@@ -2,10 +2,10 @@
 <div class="module">
 <? foreach ($this->fields as $field): ?>
     <strong><?= $field->name; ?></strong><br />
-    <table>
+    <table style="width:100%;">
         <tr>
-            <td><?= $this->Status($field); ?> as of </td>
             <td><?= $this->Time($field); ?></td>
+            <td><?= $this->Status($field); ?></td>
         </tr>
         <tr>
             <td colspan='2'><?= $field->comment; ?></td>
@@ -15,6 +15,11 @@
            $user = CurrentUser();
        }
     ?>
+    <? if ($this->HasAccess($user, "update_status")): ?>
+        <tr>
+            <td colspan='2'><?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $field->id)); ?></td>
+        </tr>
+    <? endif; ?>
     </table>
 <? endforeach; ?>
 </div>

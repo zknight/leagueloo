@@ -10,6 +10,19 @@ function ClassCase($snake)
     return $class;
 }
 
+function HumanCase($text)
+{
+    $snake = SnakeCase($text);
+    $words = explode("_", $snake);
+    foreach ($words as &$word)
+    {
+        $word = ucfirst($word);
+    }
+    $text = implode($words, " ");
+    return $text;
+}
+
+
 function SnakeCase($class)
 {
     $snake = preg_replace("/([A-Z])/", "_$0", $class);

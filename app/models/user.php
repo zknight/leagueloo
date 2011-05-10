@@ -94,12 +94,15 @@ class User extends \simp\Model
 
     public function CanAccess($entity_type, $entity_id, $level)
     {
+        global $log;
+        $log->logDebug("CanAccess: checking $entity_type, $entity_id, $level");
         if ($this->super) return true;
         $ability = User::FindOne(
             "Ability", 
             "user_id = ? and entity_type = ? and entity_id = ?",
             array($this->id, $entity_type, $entity_id));
         //echo "ability: " . print_r($ability, true);
+        $log->logDebug("CanAccess: found {$ability->level}");
         return $ability->level >= $level;
     }
 

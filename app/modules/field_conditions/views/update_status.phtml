@@ -1,0 +1,9 @@
+<h1>Update Status for "<?= $this->field->name; ?>"</h1>
+<?= GetErrorsFor($this->field); ?>
+<?= FormTag("field", \simp\Request::PUT); ?>
+    <p><strong>Status</strong><p>
+    <?= SimpleSelect($this->field, 'status', $this->field->status_options); ?>
+    <p><strong>Comment</strong></p>
+    <?= TextArea($this->field, 'comment', 3, 40); ?><br />
+    <input type="submit" value="Update" />
+<?= EndForm(); ?>

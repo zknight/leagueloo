@@ -57,15 +57,16 @@ function RouteSetup($router)
     $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
     $router->AddRoute('/administrator')->Controller('administrator');
 
-    $router->AddRoute('/admin/[A:controller]')->Module('admin');
-    $router->AddRoute('/admin/[A:controller]/[A:action]')->Module('admin');
-    $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Module('admin');
+    $router->AddRoute('/admin/[A:controller]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]/[a:name]')->Group('admin');
 
-    $router->AddRoute('/content/[A:controller]')->Module('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]')->Module('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Module('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Module('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[i:id]')->Module('content');
+    $router->AddRoute('/content/[A:controller]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[i:id]')->Group('content');
 
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');

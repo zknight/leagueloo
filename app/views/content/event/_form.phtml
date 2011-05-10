@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>Event Information</legend>
+    <table class="form">
+        <tr>
+            <td><strong>Select category to which event belongs:</strong></td>
+            <td><?= SimpleSelect($this->event, 'entity_id', $this->programs); ?></td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td><strong>Enter a short title:</strong></td>
+            <td><?= TextField($this->event, 'short_title', array('size' => 32)); ?></td>
+            <td>Max characters: 32</td>
+        </tr>
+        <tr>
+            <td><strong>Enter title:</strong></td>
+            <td colspan="2"><?= TextField($this->event, 'title', array('size' => 80));?></td>
+        </tr>
+        <tr>
+            <td><strong>Description:</strong></td>
+            <td colspan="2"><?= TextArea($this->event, 'description', 3, 70); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Location:</strong></td>
+            <td colspan="2"><?= TextField($this->event, 'location', array('size' => 80));?></td>
+        </tr>
