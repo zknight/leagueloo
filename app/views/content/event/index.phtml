@@ -1,0 +1,64 @@
+<h1>Content Mananger</h1>
+<?= l("Create an event", Path::content_event_add()); ?>
+<h2>Upcoming Events</h2>
+<? if (count($this->upcoming_events) < 1): ?>
+    <p>None</p>
+<? else: ?>
+<table>
+    <tr>
+        <th>Section</th>
+        <th>Event Title</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Time Span</th>
+        <th colspan="2">&nbsp;</th>
+    </tr>
+    <? foreach ($this->upcoming_events as $event): ?>
+    <tr>
+        <td><?= $event->entity_type; ?>:
+            <strong><?= $event->entity_name; ?></strong>
+        </td>
+        <td><?= $event->title; ?></td>
+        <td><?= FormatDateTime($event->start_date, "Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->end_date, "Y/m/d"); ?></td>
+        <td>
+            From <?= FormatDateTime($event->start_time, "H:i"); ?>
+            to <?= FormatDateTime($event->end_time, "H:i"); ?>
+        </td>
+        <td><?= l("Edit", Path::content_event_edit($event->id)); ?></td>
+        <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
+    </tr>
+    <? endforeach; ?>
+<table>
+<? endif; ?>
+<h2>Expired Events</h2>
+<? if (count($this->expired_events) < 1): ?>
+    <p>None</p>
+<? else: ?>
+<table>
+    <tr>
+        <th>Section</th>
+        <th>Event Title</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Time Span</th>
+        <th colspan="2">&nbsp;</th>
+    </tr>
+    <? foreach ($this->expired_events as $event): ?>
+    <tr>
+        <td><?= $event->entity_type; ?>:
+            <strong><?= $event->entity_name; ?></strong>
+        </td>
+        <td><?= $event->title; ?></td>
+        <td><?= FormatDateTime($event->start_date, "Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->end_date, "Y/m/d"); ?></td>
+        <td>
+            From <?= FormatDateTime($event->start_time, "H:i"); ?>
+            to <?= FormatDateTime($event->end_time, "H:i"); ?>
+        </td>
+        <td><?= l("Edit", Path::content_event_edit($event->id)); ?></td>
+        <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
+    </tr>
+    <? endforeach; ?>
+<table>
+<? endif; ?>

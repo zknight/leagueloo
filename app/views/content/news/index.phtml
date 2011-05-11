@@ -19,7 +19,7 @@
         <td><?= $article->title; ?></td>
         <td><?= FormatDateTime($article->expiration); ?>
         <td><?= l("Edit", Path::content_news_edit($article->id)); ?></td>
-        <td><?= l("Remove", Path::content_news($article->id), array("method" => "delete")); ?></td>
+        <td><?= l("Remove", Path::content_news_delete($article->id), array("method" => "delete")); ?></td>
     </tr>
     <? endforeach; ?>
 </table>

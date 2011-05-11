@@ -284,6 +284,60 @@ class User extends \simp\Model
         return $news;
     }
 
+    public function GetUpcomingEvents()
+    {
+        $events = array();
+        $dt = new DateTime("now");
+        $curdate = $dt->getTimestamp();
+
+        if ($this->super)
+        {
+            $events = Event::FindUpcoming($curdate);
+        }
+        else
+        {
+            $abilities = User::Find(
+                "ability",
+                "user_id = ? and level > ?",
+                array($this->id, Ability::EDIT));
+
+            foreach ($abilities as $ability)
+            {
+                $events = array_merge(
+                    $events,
+                    Event::FindUpcoming($curdate, $ability->entity_type, $ability->entity_id));
+            }
+        }
+        return events;
+    }
+
+    public function GetExpiredEvents()
+    {
+        $events = array();
+        $dt = new DateTime("now");
+        $curdate = $dt->getTimestamp();
+
+        if ($this->super)
+        {
+            $events = Event::FindExpired($curdate);
+        }
+        else
+        {
+            $abilities = User::Find(
+                "ability",
+                "user_id = ? and level > ?",
+                array($this->id, Ability::EDIT));
+
+            foreach ($abilities as $ability)
+            {
+                $events = array_merge(
+                    $events,
+                    Event::FindExpired($curdate, $ability->entity_type, $ability->entity_id));
+            }
+        }
+        return events;
+    }
+
     // return the name and id for programs that user can modify news for
     public function ProgramsWithPrivilege($level = Ability::ADMIN)
     {
