@@ -1,5 +1,5 @@
 <fieldset>
-    <legend>Event Information</legend>
+    <legend>What</legend>
     <table class="form">
         <tr>
             <td><strong>Select category to which event belongs:</strong></td>
@@ -17,9 +17,39 @@
         </tr>
         <tr>
             <td><strong>Description:</strong></td>
-            <td colspan="2"><?= TextArea($this->event, 'description', 3, 70); ?></td>
+            <td colspan="2"><?= TextArea($this->event, 'description', 4, 70); ?></td>
         </tr>
         <tr>
             <td><strong>Location:</strong></td>
             <td colspan="2"><?= TextField($this->event, 'location', array('size' => 80));?></td>
         </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>When</legend>
+        from
+        <?= TextField($this->event, 'start_date', array("id" => "start_date")); ?>
+        at
+        <?= TextField($this->event, 'start_time', array("id" => "start_date")); ?>
+        - to -
+        <?= TextField($this->event, 'end_date', array("id" => "start_date")); ?>
+        at
+        <?= TextField($this->event, 'end_time', array("id" => "start_date")); ?><br />
+        All Day? <?= CheckBoxField($this->event, 'all_day'); ?><br />
+    <fieldset>
+        <legend>This event repeats <?= CheckBoxField($this->event, 'repeats'); ?></legend>
+        <table>
+            <tr> 
+                <? $days = array("Su", "M", "Tu", "W", "Th", "F", "Sa"); ?>
+                <td>Repeat Every:</td>
+                <td>
+                <? for ($d = 0; $d < 7; $d++): ?>
+                    <input type='hidden' name='Event[day_mask][]' value='0' />
+                    <input type='checkbox' name='Event[day_mask][]' value='1' />
+                    <?= $days[$d]; ?>
+                <? endfor; ?>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</fieldset>

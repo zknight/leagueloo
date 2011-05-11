@@ -143,35 +143,23 @@ function RadioGroup($model, $field, $options, $html_opts = array(), $radio_wrapp
     return $html;
 }
 
-function CheckBoxField($model, $field, $class = NULL)
+function CheckBoxField($model, $field, $opts = array())
 {
-    $input_field = $field;
-    if (isset($model))
-    {
-        $mname = $model;
-        $input_field = $mname . "[$field]";
-        /*
-        $err = $model->GetError($field);
-        if (isset($err))
-        {
-          $class = 'error';
-        }
-         */
-    }
-    // The hidden field must come first
-    $html = "<input type='hidden' name='$input_field' value='0'/>";
-    $html .= "<input type='checkbox' name='$input_field'";
+    $attrs = GetInputAttributes($model, $field, $opts);
 
-    if (isset($class))
-    {
-        $html .= " class='$class'";
-    }
+    $html = "<input type='hidden' name='{$attrs['name']}' value='0'/>";
+    $html .= "<input type='checkbox' name='{$attrs['name']}'";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= $attrs['size'];
     $html .= " value='1'";
+
     if (isset($model))
     {
         if ($model->__get($field)) $html .= " checked='true'";
     }
     $html .= "/>";
+
     return $html;
 }
 

@@ -6,6 +6,16 @@ class EventController extends \simp\Controller
     function Setup()
     {
         $this->SetLayout('content');
+
+        $this->RequireAuthorization(
+            array(
+                'index',
+                'show',
+                'add',
+                'edit',
+                'delete'
+            )
+        );
     }
 
     public function Index()
