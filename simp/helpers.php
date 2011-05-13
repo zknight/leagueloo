@@ -143,6 +143,21 @@ function RadioGroup($model, $field, $options, $html_opts = array(), $radio_wrapp
     return $html;
 }
 
+function CheckBoxButton($model, $field, $opts = array())
+{
+    $attrs = GetInputAttributes($model, $field, $opts);
+    $value = $attrs['value'] ? "&#x2713" : "  ";
+    $html = "<input type='submit' name='{$field}' value='{$value}'";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= $attrs['size'];
+
+    $html .= " />";
+    $html .= "<input type='hidden' name='{$attrs['name']}' value='{$attrs['value']}' />";
+    return $html;
+    
+}
+
 function CheckBoxField($model, $field, $opts = array())
 {
     $attrs = GetInputAttributes($model, $field, $opts);

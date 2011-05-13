@@ -308,7 +308,7 @@ class User extends \simp\Model
                     Event::FindUpcoming($curdate, $ability->entity_type, $ability->entity_id));
             }
         }
-        return events;
+        return $events;
     }
 
     public function GetExpiredEvents()
@@ -335,7 +335,7 @@ class User extends \simp\Model
                     Event::FindExpired($curdate, $ability->entity_type, $ability->entity_id));
             }
         }
-        return events;
+        return $events;
     }
 
     // return the name and id for programs that user can modify news for

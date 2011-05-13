@@ -9,6 +9,7 @@ class Model
     protected $_bean;
     protected $_table_name;
     protected $_errors;
+    protected $_associations;
 
     public static function LoadModel($classname)
     {
@@ -41,6 +42,7 @@ class Model
         $this->_table_name = Model::TableName($this->__toString());
         $this->_bean = $bean;
         $this->_errors = array();
+        $this->_associations = array();
     }
 
     public function __toString()
@@ -51,6 +53,11 @@ class Model
     static public function TableName($model_name)
     {
         return SnakeCase($model_name);
+    }
+
+    public function ManyToMany($assoc)
+    {
+        $this->_associations[Pluralize($assoc)] = array();
     }
 
     //**** Bean wrapping stuff
@@ -103,6 +110,11 @@ class Model
     }
 
     
+    public function Bean()
+    {
+        return $this->_bean;
+    }
+
     /// Load model by id
     /// @return true
     public function Load($id)
@@ -160,6 +172,21 @@ class Model
         return false;
     }
 
+    protected function FindAssociated($child, $args = NULL, $vals = NULL)
+    {
+        $models = array();
+        $model_name = Singularize($child);
+        $table_name = SnakeCase($model_name);
+        $class_name = ClassCase($model_name);
+        $beans = \R::related($this->_bean, $table_name, $args, $vals);
+        // load model for each
+        foreach ($beans as $id => $bean)
+        {
+            $models[$id] = new $class_name($bean);
+        }
+        return $models;
+    }
+
     //**** magic!
     public function __get($property)
     {
@@ -168,6 +195,15 @@ class Model
         if (property_exists($this, $property))
         {
             return $this->$property;
+        }
+        else if (array_key_exists($property, $this->_associations))
+        {
+            if (count($this->_associations[$property]) < 1)
+            {
+                // find associated
+                $this->_associations[$property] = $this->FindAssociated($property);
+            }
+            return $this->_associations[$property];
         }
         else
             return $this->_bean->$property;
@@ -180,8 +216,48 @@ class Model
         {
             $this->$property = $value;
         }
+        /*
+        else if (array_key_exists($property, $this->_associations))
+        {
+            $this->_associations[$property] = $value;
+        }
+        */
         else
             $this->_bean->$property = $value;
+    }
+
+    public function __call($name, $args)
+    {
+        list($action, $assoc) = explode("_", SnakeCase($name));
+        // get all of the associated models, possible constraing by args
+        if (array_key_exists($assoc, $this->_associations))
+        {
+            switch($action)
+            {
+            case "Get":
+                return $this->$assoc;
+                break;
+            case "Find":
+                return $this->FindAssociated($assoc, $args[0], $args[1]);
+                break;
+            }
+        }
+        // one of the associated models
+        else if (array_key_exists(Singularize($assoc), $this->_associations))
+        {
+            switch($action)
+            {
+            case "Add":
+                $model = $args[0];
+                if (!array_key_exists($model->id))
+                {
+                    \R::associate($this->Bean(), $model->Bean());
+                    \RedBean_Plugin_Constraint::addConstraint($this->Bean(), $model->Bean());
+                }
+                $this->_associations[$assoc][$model->id] = $model; 
+                break;
+            }
+        }
     }
 
     public function UpdateFromArray($vars)
@@ -190,6 +266,11 @@ class Model
         foreach ($vars as $name => $val)
         {
             if ($name != "id") $this->$name = $val;
+        }
+        // update associations
+        foreach ($this->_associations as $assoc)
+        {
+            $assoc->Save();
         }
     }
 

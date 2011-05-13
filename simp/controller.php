@@ -109,7 +109,11 @@ class Controller
 
     protected function GetFormVariable($name)
     {
-        return $this->_form_vars[$name];
+        if (array_key_exists($name, $this->_form_vars))
+        {
+            return $this->_form_vars[$name];
+        }
+        return null;
     }
 
     protected function CheckParam($key)

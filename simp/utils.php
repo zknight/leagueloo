@@ -42,6 +42,12 @@ function Pluralize($string)
     return Inflect::pluralize($string);
 }
 
+function Singularize($string)
+{
+    require_once "inflect.php";
+    return Inflect::singularize($string);
+}
+
 function RedirectURI($path)
 {
     session_commit();

@@ -29,15 +29,31 @@
     <legend>When</legend>
         from
         <?= TextField($this->event, 'start_date', array("id" => "start_date")); ?>
+        <? if ($this->event->all_day == false): ?>
         at
         <?= TextField($this->event, 'start_time', array("id" => "start_date")); ?>
+        <? endif; ?>
         - to -
         <?= TextField($this->event, 'end_date', array("id" => "start_date")); ?>
+        <? if ($this->event->all_day == false): ?>
         at
         <?= TextField($this->event, 'end_time', array("id" => "start_date")); ?><br />
-        All Day? <?= CheckBoxField($this->event, 'all_day'); ?><br />
+        <? endif; ?>
+        <!--input type="hidden" name="Event[all_day]" value="<?= $this->event->all_day; ?>" /-->
+        All Day? <!--?= CheckBoxField($this->event, 'all_day'); ?><br /-->
+        <!--
+        <? $all_day = $this->event->all_day ? "&#x2713" : " "; ?>
+        <input type="submit" name="all_day" value="<?= $all_day; ?>" /><br />
+        -->
+        <?= CheckBoxButton($this->event, "all_day"); ?><br />
+        <br />
+        This event repeats: 
+        daily <?= CheckBoxButton($this->event, 'repeat_daily'); ?>
+        weekly <?= CheckBoxButton($this->event, 'repeat_weekly'); ?>
+        monthly <?= CheckBoxButton($this->event, 'repeat_monthly'); ?>
+        annually <?= CheckBoxButton($this->event, 'repeat_annually'); ?>
     <fieldset>
-        <legend>This event repeats <?= CheckBoxField($this->event, 'repeats'); ?></legend>
+        <legend>Event Repetition Information</legend>
         <table>
             <tr> 
                 <? $days = array("Su", "M", "Tu", "W", "Th", "F", "Sa"); ?>
