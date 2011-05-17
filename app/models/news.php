@@ -189,7 +189,7 @@ class News extends \simp\Model
         if (!$this->VerifyTimeFormat('publish_time', $this->_pub_time)) $errors++;
         if (!$this->VerifyDateFormat('expire_date', $this->_exp_date)) $errors++;
         if (!$this->VerifyTimeFormat('expire_time', $this->_exp_time)) $errors++;
-        if (strlen($this->short_title) > 30) 
+        if (strlen($this->short_title) > 32) 
         {
             $errors++;
             $this->SetError('short_title', "Short title must be less than 30 characters");
@@ -217,7 +217,7 @@ class News extends \simp\Model
             else
             {
                 $dt = new \DateTime("12/31/2037 00:00:00");
-                $this->expiration = $dt->getTimetstamp();
+                $this->expiration = $dt->getTimestamp();
             }
 
             $arr = explode(" ", strtolower($this->short_title));

@@ -27,6 +27,7 @@
 </fieldset>
 <fieldset>
     <legend>When</legend>
+        All Day? <?= CheckBoxButton($this->event, "all_day"); ?><br />
         from
         <?= TextField($this->event, 'start_date', array("id" => "start_date")); ?>
         <? if ($this->event->all_day == false): ?>
@@ -37,35 +38,22 @@
         <?= TextField($this->event, 'end_date', array("id" => "start_date")); ?>
         <? if ($this->event->all_day == false): ?>
         at
-        <?= TextField($this->event, 'end_time', array("id" => "start_date")); ?><br />
+        <?= TextField($this->event, 'end_time', array("id" => "start_date")); ?>
         <? endif; ?>
-        <!--input type="hidden" name="Event[all_day]" value="<?= $this->event->all_day; ?>" /-->
-        All Day? <!--?= CheckBoxField($this->event, 'all_day'); ?><br /-->
-        <!--
-        <? $all_day = $this->event->all_day ? "&#x2713" : " "; ?>
-        <input type="submit" name="all_day" value="<?= $all_day; ?>" /><br />
-        -->
-        <?= CheckBoxButton($this->event, "all_day"); ?><br />
         <br />
-        This event repeats: 
-        daily <?= CheckBoxButton($this->event, 'repeat_daily'); ?>
-        weekly <?= CheckBoxButton($this->event, 'repeat_weekly'); ?>
-        monthly <?= CheckBoxButton($this->event, 'repeat_monthly'); ?>
+        <br />
+        This event repeats: &nbsp;
+        daily <?= CheckBoxButton($this->event, 'repeat_daily'); ?>&nbsp;&nbsp;
+        weekly <?= CheckBoxButton($this->event, 'repeat_weekly'); ?>&nbsp;&nbsp;
+        monthly <?= CheckBoxButton($this->event, 'repeat_monthly'); ?>&nbsp;&nbsp;
         annually <?= CheckBoxButton($this->event, 'repeat_annually'); ?>
     <fieldset>
         <legend>Event Repetition Information</legend>
-        <table>
-            <tr> 
-                <? $days = array("Su", "M", "Tu", "W", "Th", "F", "Sa"); ?>
-                <td>Repeat Every:</td>
-                <td>
-                <? for ($d = 0; $d < 7; $d++): ?>
-                    <input type='hidden' name='Event[day_mask][]' value='0' />
-                    <input type='checkbox' name='Event[day_mask][]' value='1' />
-                    <?= $days[$d]; ?>
-                <? endfor; ?>
-                </td>
-            </tr>
-        </table>
+        <? 
+        if ($this->event->repeat_daily) include "_daily.phtml";
+        else if ($this->event->repeat_weekly) include "_weekly.phtml";
+        else if ($this->event->repeat_monthly) include "_monthly.phtml";
+        else if ($this->event->repeat_annually) include "_annually.phtml";
+        ?>
     </fieldset>
 </fieldset>

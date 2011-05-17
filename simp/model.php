@@ -68,6 +68,17 @@ class Model
         return new $model_name(\R::dispense(Model::TableName($model_name)));
     }
 
+    static public function FindOrCreate($model_name, $conditions, $values)
+    {
+        $model = NULL;
+        if ($model = Model::FindOne($model_name, $conditions, $values) == NULL)
+        {
+            $model = Create($model_name);
+        }
+        return $model;
+    }
+
+
     static public function FindById($model_name, $id)
     {
         $model = new $model_name;
@@ -308,5 +319,55 @@ class Model
     public function AfterDelete()
     {
         return true;
+    }
+
+    // verification methods
+    protected function HasErrors()
+    {
+        return count($this->_errors > 0);
+    }
+
+    protected function VerifyMaxLength($field, $length, $errmsg = NULL)
+    {
+        $ok = true;
+        if (strlen($this->$field) > $length)
+        {
+            $msg = $errmsg == NULL ? "{$field} must be no longer than {$length} characters." : $msg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
+
+    protected function VerifyMinLength($field, $length, $errmsg = NULL)
+    {
+        $ok = true;
+        if (strlen($this->$field) < $length)
+        {
+            $msg = $errmsg == NULL ? "{$field} must be at least {$length} characters." : $msg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
+
+    protected function VerifyValidDate($field)
+    {
+        // valid dates are mm/dd/yyyy or mm-dd-yyyy
+        $ok = true;
+        if (preg_match('~(\d{1,2})[/:.,_\-\' ](\d{1,2})[/:.,_\-\' ](\d{4})~', $this->$field, $match))
+        {
+            if (checkdate($match[1], $match[2], $match[3]) == false)
+            {
+                $ok = false;
+            }
+        }
+        else $ok = false;
+
+        if ($ok == false)
+        {
+            $msg = "{$field} must be a valid date (mm/dd/yyyy)";
+            $this->setError($field, $msg);
+        }
     }
 }

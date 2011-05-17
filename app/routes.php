@@ -67,7 +67,10 @@ function RouteSetup($router)
     $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[i:id]')->Group('content');
-    $router->AddRoute('/content/event/calendar/[a:month]')
+    $router->AddRoute('/content/event/[A:action]/[i:year]/[i:month]/[i:day]')
+        ->Group('content')
+        ->Controller('event');
+    $router->AddRoute('/content/event/calendar/[i:year]/[i:month]')
         ->Group('content')
         ->Controller('event')
         ->Action('calendar');

@@ -106,6 +106,16 @@ function PasswordField($model, $field, $opts = array())
     return $html; 
 }
 
+function RadioButton($model, $field, $value, $html_opts = array())
+{
+    $attrs = GetInputAttributes($model, $field, $html_opts);
+    $html = "<input type=\"radio\" name=\"{$attrs['name']}\"";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    if ($attrs['value'] == $value) $html .= " checked";
+    $html .= " value=\"{$value}\">";
+    return $html;
+}
 
 /// Creates a group of radio buttons for with options
 /// @param $model Model to use
