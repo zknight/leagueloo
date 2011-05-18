@@ -35,6 +35,7 @@ class Model
 
     public function __construct($bean = NULL)
     {
+        $this->_associations = array();
         if (method_exists($this, "Setup"))
         {
             $this->Setup();
@@ -42,7 +43,6 @@ class Model
         $this->_table_name = Model::TableName($this->__toString());
         $this->_bean = $bean;
         $this->_errors = array();
-        $this->_associations = array();
     }
 
     public function __toString()
@@ -58,6 +58,7 @@ class Model
     public function ManyToMany($assoc)
     {
         $this->_associations[Pluralize($assoc)] = array();
+        global $log; $log->logDebug("ManyToMany assocs: $this " . print_r($this->_associations, true));
     }
 
     //**** Bean wrapping stuff
@@ -140,6 +141,14 @@ class Model
     {
         if ($this->BeforeSave())
         {
+            // save associations
+            foreach ($this->_associations as $name => $assocs)
+            {
+                foreach ($assocs as $assoc)
+                {
+                    $assoc->Save();
+                }
+            }
             if ($this->_bean)
             {
                 try
@@ -203,21 +212,31 @@ class Model
     {
         global $log;
         $log->logDebug("Getting $this $property\n");
+        if ($property == "Days")
+        {
+            $log->logDebug(print_r($this->_associations, true));
+        }
         if (property_exists($this, $property))
         {
+            $log->logDebug("__get: is property.");
             return $this->$property;
         }
         else if (array_key_exists($property, $this->_associations))
         {
+            $log->logDebug("$property is associated model.");
             if (count($this->_associations[$property]) < 1)
             {
                 // find associated
                 $this->_associations[$property] = $this->FindAssociated($property);
             }
+            $log->logDebug("$property: " . print_r($this->_associations[$property], true));
             return $this->_associations[$property];
         }
         else
+        {
+            $log->logDebug("Getting $property as bean");
             return $this->_bean->$property;
+        }
     }
 
     public function __set($property, $value)
@@ -239,16 +258,19 @@ class Model
 
     public function __call($name, $args)
     {
-        list($action, $assoc) = explode("_", SnakeCase($name));
+        global $log; $log->logDebug("__call: $name");
+        $parts = explode("_", SnakeCase($name));
+        $action = array_shift($parts);
+        $assoc = ClassCase(implode("_", $parts));
         // get all of the associated models, possible constraing by args
         if (array_key_exists($assoc, $this->_associations))
         {
             switch($action)
             {
-            case "Get":
+            case "get":
                 return $this->$assoc;
                 break;
-            case "Find":
+            case "find":
                 return $this->FindAssociated($assoc, $args[0], $args[1]);
                 break;
             }
@@ -258,8 +280,9 @@ class Model
         {
             switch($action)
             {
-            case "Add":
+            case "add":
                 $model = $args[0];
+                $log->logDebug("Adding $assoc");
                 if (!array_key_exists($model->id))
                 {
                     \R::associate($this->Bean(), $model->Bean());
@@ -279,10 +302,12 @@ class Model
             if ($name != "id") $this->$name = $val;
         }
         // update associations
+        /*
         foreach ($this->_associations as $assoc)
         {
-            $assoc->Save();
+            $assoc->UpdateFromArray($vars);
         }
+     */
     }
 
     public function GetErrors()
@@ -324,7 +349,7 @@ class Model
     // verification methods
     protected function HasErrors()
     {
-        return count($this->_errors > 0);
+        return (count($this->_errors) > 0);
     }
 
     protected function VerifyMaxLength($field, $length, $errmsg = NULL)
@@ -369,5 +394,6 @@ class Model
             $msg = "{$field} must be a valid date (mm/dd/yyyy)";
             $this->setError($field, $msg);
         }
+        return $ok;
     }
 }

@@ -113,6 +113,14 @@ class Event extends \simp\Model
             $this->GetEndDate();
             return $this->end_date;
             break;
+        case 'repeat_type':
+            $repeat_type = 0;
+            if ($this->repeat_daily) $repeat_type = 1;
+            else if ($this->repeat_weekly) $repeat_type = 2;
+            else if ($this->repeat_monthly) $repeat_type = 3;
+            else if ($this->repeat_annually) $repeat_type = 4;
+            return $repeat_type;
+            break;
         default:
             return parent::__get($property);
         }
@@ -127,28 +135,24 @@ class Event extends \simp\Model
             $this->repeat_weekly = false;
             $this->repeat_monthly = false;
             $this->repeat_annually = false;
-            $this->repeat_type = '1';
             break;
         case 'repeat_weekly':
             $this->repeat_daily = false;
             $this->repeat_weekly = $value;
             $this->repeat_monthly = false;
             $this->repeat_annually = false;
-            $this->repeat_type = '2';
             break;
         case 'repeat_monthly':
             $this->repeat_daily = false;
             $this->repeat_weekly = false;
             $this->repeat_monthly = $value;
             $this->repeat_annually = false;
-            $this->repeat_type = '3';
             break;
         case 'repeat_annually':
             $this->repeat_daily = false;
             $this->repeat_weekly = false;
             $this->repeat_monthly = false;
             $this->repeat_annually = $value;
-            $this->repeat_type = '4';
             break;
         case 'day_mask':
             $this->days_of_week = implode(",", $value);
@@ -168,19 +172,20 @@ class Event extends \simp\Model
         $this->VerifyMinLength('short_title', 3);
         $this->VerifyMinLength('title', 3);
         $this->VerifyMinLength('location', 3);
-        if ($this->VerifyValidDate('start_date') && $this->VerifyValidDate('end_date'))
+        if ($this->VerifyValidDate('start_date'))
         {
             $this->UpdateEventDates();
         }
 
+        global $log; $log->logDebug("HasErrors: " . $this->HasErrors());
         return ($this->HasErrors() == false);
     }
 
     protected function GetStartDate()
     {
-        $dt = \DateTime("12/31/2036");
+        $dt = new \DateTime("12/31/2036");
         $date = $dt->getTimestamp();
-        foreach ($this->days as $day)
+        foreach ($this->Days as $day)
         {
             if ($day->date <= $date)
             {
@@ -192,9 +197,9 @@ class Event extends \simp\Model
 
     protected function GetEndDate()
     {
-        $dt = \DateTime("1/1/1970");
+        $dt = new \DateTime("1/1/1970");
         $date = $dt->getTimestamp();
-        foreach ($this->days as $day)
+        foreach ($this->Days as $day)
         {
             if ($day->date > $date)
             {
@@ -208,18 +213,16 @@ class Event extends \simp\Model
     {
         // here's where it gets fun.
         // figure out if there is a repeat and what type it is
-        $sdt = \DateTime($this->start_date);
-        $edt = \DateTime($this->end_date);
+        $sdt = new \DateTime($this->start_date);
+        $edt = new \DateTime($this->end_date);
 
+        global $log; $log->logDebug("Repeat type is: {$this->repeat_type}");
         switch ($this->repeat_type)
         {
         case 1: // daily repeat, look at occurrences and repeat_interval
-            if ($this->repeat_end == "occurrences")
-            {
-                $period = new \DatePeriod
-
             break;
         case 2: // weekly repeat, look at occurrences, repeat_interval and mask
+            $period = $this->WeeklyRepeat($sdt, $edt);
             break;
         case 3: // monthly repeat, look at occurrences, repeat_interval and repeat_by
             break;
@@ -228,6 +231,46 @@ class Event extends \simp\Model
         default: // no repeat
             $period = new \DatePeriod($sdt, new \DateInterval("P1D"), $edt);
             break;
+        }
     }
+
+    protected function AttachDay($date)
+    {
+        global $log;
+        $log->logDebug("Attaching day: " . $date->format("m/d/Y"));
+        $date = $date->getTimestamp();
+        $day = Event::FindOrCreate("Day", "date = ?", array($date));
+        if ($day->id == 0) $day->Save();
+        $this->AddDay($day);
+    }
+
+    protected function WeeklyRepeat($start_date, $end_date)
+    {
+        $end = $end_date;
+        $interval = "P{$this->repeat_interval}W";
+        switch ($this->repeat_end)
+        {
+        case "occurrences":
+            $end = $this->occurrences;
+            break;
+        case "last_repeat_date":
+            $end = new \DateTime($this->last_repeat_date);
+            break;
+        }
+
+        // TODO: change this to do periods within a period
+        $period = new \DatePeriod($start_date, new \DateInterval($interval), $end);
+        $mask = $this->day_mask;
+        foreach ($period as $dt)
+        {
+            global $log; $log->logDebug("checking date " . $dt->format("m/d/Y w") . " in mask");
+            if ($mask[$dt->format('w')] == 1)
+            {
+                // add or create new day and attach it
+                $this->AttachDay($dt);
+            }
+        }
+    }
+
 
 }

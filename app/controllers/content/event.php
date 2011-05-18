@@ -72,7 +72,9 @@ class EventController extends \simp\Controller
     public function Add()
     {
         $this->user = CurrentUser();
+        global $log; $log->logDebug("Event::Add() creating event");
         $this->event = \simp\Model::Create('Event');
+        $foo = $this->event->Days;
 
         if ($this->CheckParam('year') && $this->CheckParam('month') && $this->CheckParam('day'))
         {
@@ -125,6 +127,14 @@ class EventController extends \simp\Controller
             return false;
         }
 
+        if (!$this->event->Save())
+        {
+            $this->user = CurrentUser();
+            $this->programs = $this->GetPrograms();
+            $this->Render("add");
+            return false;
+        }
+            
 
         echo "<pre>" . print_r($this->_form_vars, true) . "</pre>";
         return false;
