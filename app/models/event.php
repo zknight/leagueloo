@@ -26,6 +26,7 @@ class Event extends \simp\Model
     protected $repeat_annually;
     protected $start_date;
     protected $end_date;
+    protected $day_mask;
     //protected $repeat_interval;
     //protected $repeat_end;
     //protected $repeat_by;
@@ -34,6 +35,7 @@ class Event extends \simp\Model
     public function Setup()
     {
         $this->ManyToMany("Day");
+        $this->day_mask = explode(",", $this->days_of_week);
     }
     // lookups
     //
@@ -85,7 +87,7 @@ class Event extends \simp\Model
         return Event::Find("event", $expr, $values);
     }
 
-    public function __get($property)
+    public function &__get($property)
     {
         switch($property)
         {
@@ -103,7 +105,7 @@ class Event extends \simp\Model
             break;
         case 'day_mask':
             global $log; $log->logDebug("getting day mask: " . print_r($this->days_of_week, true));
-            return explode(",", $this->days_of_week);
+            return $this->day_mask;
             break;
         case 'start_date':
             $this->GetStartDate();
@@ -155,8 +157,11 @@ class Event extends \simp\Model
             $this->repeat_annually = $value;
             break;
         case 'day_mask':
+            /*
             $this->days_of_week = implode(",", $value);
             global $log; $log->logDebug("setting day mask: " . print_r($this->days_of_week, true));
+             */
+            $this->day_mask = $value;
             break;
         case 'start_date':
             $this->start_date = $value;
@@ -168,6 +173,7 @@ class Event extends \simp\Model
 
     public function BeforeSave()
     {
+        $this->days_of_week = implode(",", $this->day_mask);
         $this->VerifyMaxLength('short_title', 32); 
         $this->VerifyMinLength('short_title', 3);
         $this->VerifyMinLength('title', 3);
@@ -237,10 +243,19 @@ class Event extends \simp\Model
     protected function AttachDay($date)
     {
         global $log;
-        $log->logDebug("Attaching day: " . $date->format("m/d/Y"));
-        $date = $date->getTimestamp();
-        $day = Event::FindOrCreate("Day", "date = ?", array($date));
-        if ($day->id == 0) $day->Save();
+        $log->logDebug("Attaching day with date " . print_r($date, true));
+        $ts = $date->getTimestamp();
+        $log->logDebug("  timestamp before find: $ts");
+        $day = Event::FindOrCreate("Day", "date = ?", array($ts));
+        $log->logDebug("  timestamp after find: $ts");
+        //$log->logDebug(print_r($day, true));
+        if ($day->id == 0)
+        {
+            $day->date = $ts;
+            $log->logDebug("  new day, setting date to: $ts");
+            $day->Save();
+            $log->logDebug("  id: {$day->id}");
+        }
         $this->AddDay($day);
     }
 
@@ -248,10 +263,11 @@ class Event extends \simp\Model
     {
         $end = $end_date;
         $interval = "P{$this->repeat_interval}W";
+        global $log; 
         switch ($this->repeat_end)
         {
         case "occurrences":
-            $end = $this->occurrences;
+            $end = $this->occurrences - 1;
             break;
         case "last_repeat_date":
             $end = new \DateTime($this->last_repeat_date);
@@ -259,15 +275,21 @@ class Event extends \simp\Model
         }
 
         // TODO: change this to do periods within a period
+        // Get weekly interval
         $period = new \DatePeriod($start_date, new \DateInterval($interval), $end);
         $mask = $this->day_mask;
         foreach ($period as $dt)
         {
-            global $log; $log->logDebug("checking date " . $dt->format("m/d/Y w") . " in mask");
-            if ($mask[$dt->format('w')] == 1)
+            $log->logDebug("week start date: " . $dt->format("m/d/Y"));
+            $week = new \DatePeriod($dt, new \DateInterval("P1D"), 6);
+            foreach ($week as $day)
             {
-                // add or create new day and attach it
-                $this->AttachDay($dt);
+                $log->logDebug("checking date " . $day->format("m/d/Y w") . " in mask");
+                if ($mask[$day->format('w')] == 1)
+                {
+                    // add or create new day and attach it
+                    $this->AttachDay($day);
+                }
             }
         }
     }

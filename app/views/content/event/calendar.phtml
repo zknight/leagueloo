@@ -34,7 +34,10 @@ case 12:
 <?      endif; ?>
         <td class="<?= $date['class']; ?>">
             <?= $date['d']; ?>
-            <?= l("add event", Path::content_event_add($date['y'], $date['m'], $date['d'])); ?>
+            <?= l("add event", Path::content_event_add($date['y'], $date['m'], $date['d'])); ?><br />
+            <? foreach ($date['events'] as $event): ?>
+            <?= $event->title; ?> <br />
+            <? endforeach; ?>
         </td>
 <?      $d++; ?>
 <? endforeach; ?>

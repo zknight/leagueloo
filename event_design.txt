@@ -1,0 +1,42 @@
+event fields
+------------
+start_date
+end_date
+number_of_recurrences -> used to determine end_date?
+repeat_type -> none, day, week, month, year
+days_of_week -> array of bits (used for weekly repeat)
+day_of_month -> numeric for monthly repeat 
+day_of_week -> two numbers: week num, day num
+repeat_by -> dom or dow
+repeat_interval -> numeric 
+
+1. query "beg >= start_date and beg <= end_date"
+2. look at repeat_type
+    if none: 
+        create event from result
+    if day:
+        day_date = ev.start_date
+        while (day_date <= ev.end_date and day_date <= end)
+            create event for day
+            day += ev.repeat_interval
+    if week:
+        day_date = ev.start_date
+        while (week_date <= ev.end_date and week_date <= end)
+            for i=0..6
+                dow = (i + week_date.dow) mod 7
+                if ev.days_of_week[i] == 1
+                    create event for day
+            week_date += ev.repeat_interval
+    if month:
+        month_date = ev.start_date
+        while (month_date <= ev.end_date and day_date <= end)
+            days_in_month = month_date + 1_month
+            if ev.repeat_by == 'dom'
+                for i=0..days_in_month
+                    dom = (i + month_date.dom) mod month_date.days_in_month
+                    if dom = ev.day_of_month
+                        create event for day
+            else if ev.repeat_by == 'dow'
+                for i=0..days_in_month
+                    dow = (i + 
+

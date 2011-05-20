@@ -90,6 +90,7 @@ class EventController extends \simp\Controller
 
     public function Create()
     {
+        global $log;
         $this->event = \simp\Model::Create('Event');
         $this->event->UpdateFromArray($this->GetFormVariable("Event"));
         $rerender = false;
@@ -106,7 +107,13 @@ class EventController extends \simp\Controller
         }
         else if ($this->GetFormVariable("repeat_weekly"))
         {
+            $log->logDebug("repeat weekly!");
             $this->event->repeat_weekly = !$this->event->repeat_weekly;
+            $dt = new \DateTime($this->event->start_date);
+            $log->logDebug("start_date: {$this->event->start_date}");
+            $log->logDebug("is on the " . $dt->format("w") . " day of the week.");
+            $this->event->day_mask[$dt->format("w")] = 1;
+            $log->logDebug("day_mask: " . print_r($this->event->day_mask, true));
             $rerender = true;
         }
         else if ($this->GetFormVariable("repeat_monthly"))
@@ -121,6 +128,7 @@ class EventController extends \simp\Controller
         }
         if ($rerender == true)
         {
+            $log->logDebug("re-rendering add");
             $this->user = CurrentUser();
             $this->programs = $this->GetPrograms();
             $this->Render("add");
@@ -196,11 +204,23 @@ class EventController extends \simp\Controller
         foreach ($period as $dt)
         {
             $date = $this->DayFromDate($dt);
+            $date['events'] = array();
             if ($date['y'] == $fdom['y'] && $date['m'] == $fdom['m'])
             {
                 $date['class'] = 'current';
             }
             $dates["{$date['y']}_{$date['m']}_{$date['d']}"] = $date;
+        }
+        \R::debug(true);
+        $days = \simp\Model::Find("Day", "date >= ? and date < ?", array($fdom_dt->getTimestamp(), $ldom_dt->getTimestamp()));
+        \R::debug(false);
+        $this->days = array();
+        foreach ($days as $day)
+        {
+            $dt = new \DateTime(); $dt->setTimestamp($day->date);
+            $key = $dt->format("Y_m_d");
+            global $log;$log->logDebug("Adding events for $key");
+            $dates[$key]['events'] = $day->Events;
         }
         return $dates; 
     }

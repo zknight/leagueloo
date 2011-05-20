@@ -71,11 +71,12 @@ class Model
 
     static public function FindOrCreate($model_name, $conditions, $values)
     {
-        $model = NULL;
-        if ($model = Model::FindOne($model_name, $conditions, $values) == NULL)
+        $model = Model::FindOne($model_name, $conditions, $values);
+        if ($model == NULL)
         {
-            $model = Create($model_name);
+            $model = Model::Create($model_name);
         }
+
         return $model;
     }
 
@@ -262,6 +263,7 @@ class Model
         $parts = explode("_", SnakeCase($name));
         $action = array_shift($parts);
         $assoc = ClassCase(implode("_", $parts));
+        $log->logDebug("__call: action = $action, assoc = $assoc");
         // get all of the associated models, possible constraing by args
         if (array_key_exists($assoc, $this->_associations))
         {
@@ -276,14 +278,16 @@ class Model
             }
         }
         // one of the associated models
-        else if (array_key_exists(Singularize($assoc), $this->_associations))
+        $assoc = Pluralize($assoc);
+
+        if (array_key_exists($assoc, $this->_associations))
         {
             switch($action)
             {
             case "add":
                 $model = $args[0];
                 $log->logDebug("Adding $assoc");
-                if (!array_key_exists($model->id))
+                if (!array_key_exists(($model->id), $this->_associations[$assoc]))
                 {
                     \R::associate($this->Bean(), $model->Bean());
                     \RedBean_Plugin_Constraint::addConstraint($this->Bean(), $model->Bean());

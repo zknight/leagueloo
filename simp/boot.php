@@ -3,7 +3,7 @@ namespace simp;
 //$TEST = true;
 require_once "KLogger.php";
 $log = \KLogger::instance('log', \KLogger::DEBUG);
-$log->logDebug('\\/ \\/ \\/');
+$log->logDebug('---------START---------');
 
 require_once "router.php";
 require_once "request.php";
@@ -37,7 +37,7 @@ RouteSetup($router);
 $router->Route($req);
 
 session_commit();
-$log->logDebug('/\\ /\\ /\\');
+$log->logDebug('---------STOP---------\n\n');
 
 ?>
 
