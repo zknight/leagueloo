@@ -1,6 +1,6 @@
 <h1>Create an Event</h1>
-<?= GetErrorsFor($this->event); ?>
-<?= FormTag("event", \simp\Request::POST); ?>
+<?= GetErrorsFor($this->event_info); ?>
+<?= FormTag("event_info", \simp\Request::POST); ?>
     <? require "_form.phtml"; ?>
     <input type="submit" value="Create" />
 <?= EndForm(); ?>

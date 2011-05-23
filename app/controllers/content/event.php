@@ -73,15 +73,14 @@ class EventController extends \simp\Controller
     {
         $this->user = CurrentUser();
         global $log; $log->logDebug("Event::Add() creating event");
-        $this->event = \simp\Model::Create('Event');
-        $foo = $this->event->Days;
+        $this->event_info = \simp\Model::Create('EventInfo');
 
         if ($this->CheckParam('year') && $this->CheckParam('month') && $this->CheckParam('day'))
         {
             $year = $this->GetParam('year');
             $month = $this->GetParam('month');
             $day = $this->GetParam('day');
-            $this->event->start_date = "{$month}/{$day}/{$year}";
+            $this->event_info->start_date_str = "{$month}/{$day}/{$year}";
         }
 
         $this->programs = $this->GetPrograms();
@@ -91,39 +90,35 @@ class EventController extends \simp\Controller
     public function Create()
     {
         global $log;
-        $this->event = \simp\Model::Create('Event');
-        $this->event->UpdateFromArray($this->GetFormVariable("Event"));
+        $this->event_info = \simp\Model::Create('EventInfo');
+        $this->event_info->UpdateFromArray($this->GetFormVariable("EventInfo"));
         $rerender = false;
         if ($all_day = $this->GetFormVariable("all_day"))
         {
             //$this->event->all_day = $all_day === " " ? true : false;
-            $this->event->all_day = !$this->event->all_day;
+            $this->event_info->all_day = !$this->event_info->all_day;
             $rerender = true;
         }
         else if ($this->GetFormVariable("repeat_daily"))
         {
-            $this->event->repeat_daily = !$this->event->repeat_daily;
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 1 ? 1 : 0;
             $rerender = true;
         }
         else if ($this->GetFormVariable("repeat_weekly"))
         {
-            $log->logDebug("repeat weekly!");
-            $this->event->repeat_weekly = !$this->event->repeat_weekly;
-            $dt = new \DateTime($this->event->start_date);
-            $log->logDebug("start_date: {$this->event->start_date}");
-            $log->logDebug("is on the " . $dt->format("w") . " day of the week.");
-            $this->event->day_mask[$dt->format("w")] = 1;
-            $log->logDebug("day_mask: " . print_r($this->event->day_mask, true));
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 2 ? 2 : 0;
+            $dt = new \DateTime($this->event_info->start_date_str);
+            $this->event_info->day_mask[$dt->format("w")] = 1;
             $rerender = true;
         }
         else if ($this->GetFormVariable("repeat_monthly"))
         {
-            $this->event->repeat_monthly = !$this->event->repeat_monthly;
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 3 ? 3 : 0;
             $rerender = true;
         }
         else if ($this->GetFormVariable("repeat_annually"))
         {
-            $this->event->repeat_annually = !$this->event->repeat_annually;
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 4 ? 4 : 0;
             $rerender = true;
         }
         if ($rerender == true)
@@ -135,7 +130,7 @@ class EventController extends \simp\Controller
             return false;
         }
 
-        if (!$this->event->Save())
+        if (!$this->event_info->Save())
         {
             $this->user = CurrentUser();
             $this->programs = $this->GetPrograms();
@@ -189,46 +184,42 @@ class EventController extends \simp\Controller
         $ldom_dt = new \DateTime("{$start['m']}/1/{$start['y']}");
         $ldom_dt->add(new \DateInterval("P1M"));
         $ldom_dt->sub(new \DateInterval("P1D"));
-        print_r($di);
         $ldom = $this->DayFromDate($ldom_dt);
         $span = $ldom['d'] - $fdom['d'] + $fdom['w'];
         $w = 7 - $ldom['w'];
         $span = $span + $w;
-        echo "fdom={$fdom['m']}/{$fdom['d']} ldom={$ldom['m']}/{$ldom['d']}span=$span";
+        //echo "fdom={$fdom['m']}/{$fdom['d']} ldom={$ldom['m']}/{$ldom['d']}span=$span";
         $fdom_dt->sub(new \DateInterval("P{$fdom['w']}D"));
         $first_day = $this->DayFromDate($fdom_dt);
         $ldom_dt->add(new \DateInterval("P{$w}D"));
         $last_day = $this->DayFromDate($ldom_dt);
         $period = new \DatePeriod($fdom_dt, new \DateInterval("P1D"), $ldom_dt);
         $dates = array();
+        $events = \EventInfo::GetEvents($fdom_dt, $ldom_dt);
+        global $log; $log->logDebug("GetCalendarPeriod: events " . print_r($events, true));
+        $i = 1;
         foreach ($period as $dt)
         {
-            $date = $this->DayFromDate($dt);
-            $date['events'] = array();
+            $date = $this->DayFromDate($dt, $i);
+            $ev_key = $dt->getTimestamp();
+            $log->logDebug("$i Date: " . $dt->format("m/d/Y") . " => ev_key: $ev_key");
+            $i++;
+            // make it array so a foreach won't barf later
+            $date['events'] = array_key_exists($ev_key, $events) ? $events[$ev_key] : array();
             if ($date['y'] == $fdom['y'] && $date['m'] == $fdom['m'])
             {
                 $date['class'] = 'current';
             }
             $dates["{$date['y']}_{$date['m']}_{$date['d']}"] = $date;
         }
-        \R::debug(true);
-        $days = \simp\Model::Find("Day", "date >= ? and date < ?", array($fdom_dt->getTimestamp(), $ldom_dt->getTimestamp()));
-        \R::debug(false);
-        $this->days = array();
-        foreach ($days as $day)
-        {
-            $dt = new \DateTime(); $dt->setTimestamp($day->date);
-            $key = $dt->format("Y_m_d");
-            global $log;$log->logDebug("Adding events for $key");
-            $dates[$key]['events'] = $day->Events;
-        }
         return $dates; 
     }
 
-    protected function DayFromDate($date)
+    protected function DayFromDate(&$date, $i = 0)
     {
         list($y, $m, $d, $w) = explode(",", $date->format("Y,m,d,w"));
-        return array("y" => $y, "m" => $m, "d" => $d, "w" => $w);
+        global $log; $log->logDebug("$i DayFromDate: $m/$d/$y");
+        return array("y" => $y, "m" => $m, "d" => $d, "w" => $w, "events" => NULL);
     }
 
 

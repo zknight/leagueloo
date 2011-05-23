@@ -3,57 +3,76 @@
     <table class="form">
         <tr>
             <td><strong>Select category to which event belongs:</strong></td>
-            <td><?= SimpleSelect($this->event, 'entity_id', $this->programs); ?></td>
+            <td><?= SimpleSelect($this->event_info, 'entity_id', $this->programs); ?></td>
             <td>&nbsp;</td>
         </tr>
         <tr>
             <td><strong>Enter a short title:</strong></td>
-            <td><?= TextField($this->event, 'short_title', array('size' => 32)); ?></td>
+            <td><?= TextField($this->event_info, 'short_title', array('size' => 32)); ?></td>
             <td>Max characters: 32</td>
         </tr>
         <tr>
             <td><strong>Enter title:</strong></td>
-            <td colspan="2"><?= TextField($this->event, 'title', array('size' => 80));?></td>
+            <td colspan="2"><?= TextField($this->event_info, 'title', array('size' => 80));?></td>
         </tr>
         <tr>
             <td><strong>Description:</strong></td>
-            <td colspan="2"><?= TextArea($this->event, 'description', 4, 70); ?></td>
+            <td colspan="2"><?= TextArea($this->event_info, 'description', 4, 70); ?></td>
         </tr>
         <tr>
             <td><strong>Location:</strong></td>
-            <td colspan="2"><?= TextField($this->event, 'location', array('size' => 80));?></td>
+            <td colspan="2"><?= TextField($this->event_info, 'location', array('size' => 80));?></td>
         </tr>
     </table>
 </fieldset>
 <fieldset>
     <legend>When</legend>
-        All Day? <?= CheckBoxButton($this->event, "all_day"); ?><br />
-        from
-        <?= TextField($this->event, 'start_date', array("id" => "start_date")); ?>
-        <? if ($this->event->all_day == false): ?>
-        at
-        <?= TextField($this->event, 'start_time', array("id" => "start_date")); ?>
+        All Day? <?= CheckBoxButton($this->event_info, "all_day"); ?><br />
+        starting on
+        <?= TextField($this->event_info, 'start_date_str', array("id" => "start_date")); ?>
+        <? if ($this->event_info->all_day == false): ?>
+            at
+            <?= TextField($this->event_info, 'start_time_str', array("id" => "start_date")); ?>
         <? endif; ?>
-        - to -
-        <?= TextField($this->event, 'end_date', array("id" => "start_date")); ?>
-        <? if ($this->event->all_day == false): ?>
-        at
-        <?= TextField($this->event, 'end_time', array("id" => "start_date")); ?>
+        <? if ($this->event_info->repeat_type == 0): ?>
+            ending on
+            <?= TextField($this->event_info, 'end_date_str', array("id" => "start_date")); ?>
+            <? if ($this->event_info->all_day == false): ?>
+                at
+                <?= TextField($this->event_info, 'end_time_str', array("id" => "start_date")); ?>
+            <? endif; ?>
+        <? else: ?>
+            <? if ($this->event_info->all_day == false): ?>
+                ending at
+                <?= TextField($this->event_info, 'end_time_str', array("id" => "start_date")); ?>
+            <? endif; ?>
         <? endif; ?>
         <br />
         <br />
         This event repeats: &nbsp;
-        daily <?= CheckBoxButton($this->event, 'repeat_daily'); ?>&nbsp;&nbsp;
-        weekly <?= CheckBoxButton($this->event, 'repeat_weekly'); ?>&nbsp;&nbsp;
-        monthly <?= CheckBoxButton($this->event, 'repeat_monthly'); ?>&nbsp;&nbsp;
-        annually <?= CheckBoxButton($this->event, 'repeat_annually'); ?>
+        daily <input type='submit' name='repeat_daily', value='<?= $this->event_info->repeat_type == 1 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
+        weekly <input type='submit' name='repeat_weekly', value='<?= $this->event_info->repeat_type == 2 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
+        monthly <input type='submit' name='repeat_monthly', value='<?= $this->event_info->repeat_type == 3 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
+        annually <input type='submit' name='repeat_annually', value='<?= $this->event_info->repeat_type == 4 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
+        <input type='hidden' name='EventInfo[repeat_type]' value='<?= $this->event_info->repeat_type; ?>' />
     <fieldset>
         <legend>Event Repetition Information</legend>
         <? 
-        if ($this->event->repeat_daily) include "_daily.phtml";
-        else if ($this->event->repeat_weekly) include "_weekly.phtml";
-        else if ($this->event->repeat_monthly) include "_monthly.phtml";
-        else if ($this->event->repeat_annually) include "_annually.phtml";
+        switch ($this->event_info->repeat_type)
+        {
+            case 1:
+                include "_daily.phtml";
+                break;
+            case 2:
+                include "_weekly.phtml";
+                break;
+            case 3:
+                include "_monthly.phtml";
+                break;
+            case 4:
+                include "_annually.phtml";
+                break;
+        }
         ?>
     </fieldset>
 </fieldset>

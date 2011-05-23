@@ -9,17 +9,17 @@ $days = array("Su", "M", "Tu", "W", "Th", "F", "Sa");
 <table>
     <tr>
         <td style="text-align: right">Repeat every:</td>
-        <td><?= SimpleSelect($this->event, 'repeat_interval', $opts); ?> week(s)</td>
+        <td><?= SimpleSelect($this->event_info, 'repeat_interval', $opts); ?> week(s)</td>
     </tr>
     <tr>
         <td style="text-align: right">Repeat On:</td>
         <td>
-            <? $mask = $this->event->day_mask; ?>
+            <? $mask = $this->event_info->day_mask; ?>
             <? foreach($days as $i=>$day): ?>
                 <?= $day; ?>
                 <? $checked = $mask[$i] == 1 ? "checked=\"true\" " : " "; ?>
-            <input type='hidden' name='Event[day_mask][<?=$i;?>]' value='0' />
-            <input type='checkbox' name='Event[day_mask][<?=$i;?>]' value='1' <?= $checked ?>/>
+            <input type='hidden' name='EventInfo[day_mask][<?=$i;?>]' value='0' />
+            <input type='checkbox' name='EventInfo[day_mask][<?=$i;?>]' value='1' <?= $checked ?>/>
             &nbsp;
             <? endforeach; ?>
         </td>
@@ -27,15 +27,15 @@ $days = array("Su", "M", "Tu", "W", "Th", "F", "Sa");
     <tr>
         <td style="text-align: right">Ending: </td>
         <td>
-            <?= RadioButton($this->event, "repeat_end", "occurrences"); ?> after
-            <?= TextField($this->event, "occurrences", array('size' => 4)); ?> occurrences
+            <?= RadioButton($this->event_info, "repeat_end", "occurrences"); ?> after
+            <?= TextField($this->event_info, "recur_count", array('size' => 4)); ?> occurrences
         </td>
     </tr>
     <tr>
         <td>&nbsp;</td>
         <td>
-            <?= RadioButton($this->event, "repeat_end", "last_repeat_date"); ?> on
-            <?= TextField($this->event, "last_repeat_date", array('size' => 10)); ?>
+            <?= RadioButton($this->event_info, "repeat_end", "last_repeat_date"); ?> on
+            <?= TextField($this->event_info, "end_date_str", array('size' => 10)); ?>
         </td>
     </tr>
 </table>

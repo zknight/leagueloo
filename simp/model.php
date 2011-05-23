@@ -3,7 +3,6 @@ namespace simp;
 require_once "rb.php";
 
 //load_database("sqlite:db/development.db");
-
 class Model 
 {
     protected $_bean;
@@ -36,13 +35,13 @@ class Model
     public function __construct($bean = NULL)
     {
         $this->_associations = array();
+        $this->_table_name = Model::TableName($this->__toString());
+        $this->_bean = $bean;
+        $this->_errors = array();
         if (method_exists($this, "Setup"))
         {
             $this->Setup();
         }
-        $this->_table_name = Model::TableName($this->__toString());
-        $this->_bean = $bean;
-        $this->_errors = array();
     }
 
     public function __toString()
@@ -305,6 +304,7 @@ class Model
         {
             if ($name != "id") $this->$name = $val;
         }
+        $this->AfterUpdate();
         // update associations
         /*
         foreach ($this->_associations as $assoc)
@@ -327,6 +327,11 @@ class Model
     //// Event CALLBACKS
     // callback for when model is opened (find, load)
     public function OnLoad()
+    {
+    }
+
+    // called after fields are updated from an array
+    public function AfterUpdate()
     {
     }
 
@@ -356,12 +361,24 @@ class Model
         return (count($this->_errors) > 0);
     }
 
+    protected function VerifyArraySize($field, $size, $errmsg = NULL)
+    {
+        $ok = true;
+        if (count($this->$field) !== $size)
+        {
+            $msg = $errmsg == NULL ? "{$field} must be an array of $size." : $errmsg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
+
     protected function VerifyMaxLength($field, $length, $errmsg = NULL)
     {
         $ok = true;
         if (strlen($this->$field) > $length)
         {
-            $msg = $errmsg == NULL ? "{$field} must be no longer than {$length} characters." : $msg;
+            $msg = $errmsg == NULL ? "{$field} must be no longer than {$length} characters." : $errmsg;
             $this->SetError($field, $msg);
             $ok = false;
         }
@@ -373,7 +390,7 @@ class Model
         $ok = true;
         if (strlen($this->$field) < $length)
         {
-            $msg = $errmsg == NULL ? "{$field} must be at least {$length} characters." : $msg;
+            $msg = $errmsg == NULL ? "{$field} must be at least {$length} characters." : $errmsg;
             $this->SetError($field, $msg);
             $ok = false;
         }
@@ -400,4 +417,5 @@ class Model
         }
         return $ok;
     }
+
 }
