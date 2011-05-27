@@ -16,6 +16,7 @@ namespace simp;
 ///
 class Module
 {
+    static protected $_has_admin = false;
     protected $_template_path;
     protected $_abilities;
     public $id;
@@ -45,21 +46,21 @@ class Module
 
     public static function Show($name, $args=array())
     {
-        $module = Module::Load($name);
+        $module = Module::Load($name, $args);
         if ($module != null)
         {
             $module->Render();
         }
     }
 
-    public static function Load($name)
+    public static function Load($name, $args=array())
     {
         $plug_in = \simp\Model::FindOne("PlugIn", "name = ?", array(SnakeCase($name)));
         if ($plug_in->id > 0 && $plug_in->enabled == true)
         {
             $module = new $name;
             $module->id = $plug_in->id;
-            $module->Setup();
+            $module->Setup($args);
             return $module;
         }
         return null;
@@ -67,7 +68,7 @@ class Module
 
 
     /// Override this function to provide logic for your Module
-    protected function Setup()
+    protected function Setup($args)
     {
     }
 
@@ -94,6 +95,16 @@ class Module
         $this->abilities = $ability_array;
     }
 
+    protected static function SetAdminInterface($has_admin)
+    {
+        static::$_has_admin = $has_admin;
+    }
+
+    public static function HasAdmin()
+    {
+        return static::$_has_admin;
+    }
+
     public function HasAccess($user, $view)
     {
         global $log;
@@ -107,4 +118,20 @@ class Module
         }
         return false;
     }
+
+    public static function Install()
+    {
+        static::OnInstall();
+        $plug_in = \simp\Model::Create('PlugIn');
+        $plug_in->name = SnakeCase(get_called_class());
+        $plug_in->enabled = false;
+        $plug_in->has_admin = static::HasAdmin();
+        return $plug_in->Save();
+    }
+
+    // override to have installation specific stuff
+    protected static function OnInstall()
+    {
+    }
+
 }

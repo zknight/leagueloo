@@ -1,15 +1,5 @@
 <h1>Create New User</h1>
-<? $errors = $this->user->GetErrors();
-   if (count($errors) > 0):
-?>
-<div class='errors'>
-    <ul>
-    <? foreach ($errors as $error): ?>
-        <li><?= $error; ?></li>
-    <? endforeach; ?>
-    </ul>
-</div>
-<? endif; ?>
+<?= GetErrorsFor($this->user); ?>
 <?= FormTag("user", \simp\Request::POST) ?>
     <? require("_form.phtml"); ?>
     <input type="submit" value="Add"/>

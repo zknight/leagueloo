@@ -7,7 +7,7 @@ class EventController extends \simp\Controller
     {
         $this->SetLayout('content');
 
-        $this->MapAction("index", "Calendar", \simp\Request::GET);
+        //$this->MapAction("index", "Calendar", \simp\Request::GET);
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
@@ -31,8 +31,17 @@ class EventController extends \simp\Controller
         // TODO: figure out how to 'paginate' a calendar...
         //$this->upcoming_events = $this->user->GetUpcomingEvents();
         //$this->expired_events = $this->user->GetExpiredEvents();
-        $this->Calendar();
-        return false;
+        $dt_now = new \DateTime("now");
+        $dt_end = clone $dt_now;
+        $dt_end->add(new \DateInterval("P2M"));
+
+        $this->expired_events = \EventInfo::FindEventInfoByDate(
+            new \DateTime("1/1/1970"),
+            $dt_now);
+        $this->upcoming_events = \EventInfo::FindEventInfoByDate(
+            $dt_now,
+            $dt_end);
+        return true;
     }
 
     public function Calendar()
@@ -54,11 +63,9 @@ class EventController extends \simp\Controller
             }
             $month = $m; $year = $y;
         }
-        // TODO: look up dates between first and last day of given month, inclusive
-        $this->month = $month;
-        $this->year = $year;
-        $dt = new \DateTime("$month/1/$year");
-        $this->dates = $this->GetCalendarPeriod($dt);
+
+        $this->cur_date = new \DateTime("$month/1/$year");
+        $this->dates = \EventInfo::GetCalendarPeriod($this->cur_date);
         
         return true;
     }
@@ -83,7 +90,7 @@ class EventController extends \simp\Controller
             $this->event_info->start_date_str = "{$month}/{$day}/{$year}";
         }
 
-        $this->programs = $this->GetPrograms();
+        $this->entities = $this->GetEntities();
         return true;
     }
 
@@ -92,6 +99,7 @@ class EventController extends \simp\Controller
         global $log;
         $this->event_info = \simp\Model::Create('EventInfo');
         $this->event_info->UpdateFromArray($this->GetFormVariable("EventInfo"));
+        //$this->event_info->entity_type = "Program";
         $rerender = false;
         if ($all_day = $this->GetFormVariable("all_day"))
         {
@@ -125,7 +133,7 @@ class EventController extends \simp\Controller
         {
             $log->logDebug("re-rendering add");
             $this->user = CurrentUser();
-            $this->programs = $this->GetPrograms();
+            $this->entities = $this->GetEntities();
             $this->Render("add");
             return false;
         }
@@ -133,27 +141,96 @@ class EventController extends \simp\Controller
         if (!$this->event_info->Save())
         {
             $this->user = CurrentUser();
-            $this->programs = $this->GetPrograms();
+            $this->entities = $this->GetEntities();
             $this->Render("add");
             return false;
         }
-            
 
-        echo "<pre>" . print_r($this->_form_vars, true) . "</pre>";
-        return false;
+        \Redirect(GetReturnURL());
+
+    }
+
+    public function Edit()
+    {
+        $this->user = CurrentUser();
+        $this->event_info = \simp\Model::FindById('EventInfo', $this->GetParam('id'));
+
+        $this->entities = $this->GetEntities();
+        return true;
     }
 
     public function Update()
     {
-        return false;
+        $this->event_info = \simp\Model::FindById('EventInfo', $this->GetParam('id'));
+        $this->event_info->UpdateFromArray($this->GetFormVariable("EventInfo"));
+        //$this->event_info->entity_type = "Program";
+        $rerender = false;
+
+        if ($all_day = $this->GetFormVariable("all_day"))
+        {
+            //$this->event->all_day = $all_day === " " ? true : false;
+            $this->event_info->all_day = !$this->event_info->all_day;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_daily"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 1 ? 1 : 0;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_weekly"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 2 ? 2 : 0;
+            $dt = new \DateTime($this->event_info->start_date_str);
+            $this->event_info->day_mask[$dt->format("w")] = 1;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_monthly"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 3 ? 3 : 0;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_annually"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 4 ? 4 : 0;
+            $rerender = true;
+        }
+        if ($rerender == true)
+        {
+            $this->user = CurrentUser();
+            $this->entities = $this->GetEntities();
+            $this->Render("edit");
+            return false;
+        }
+
+        if (!$this->event_info->Save())
+        {
+            $this->user = CurrentUser();
+            $this->entities = $this->GetEntities();
+            $this->Render("edit");
+            return false;
+        }
+
+        \Redirect(GetReturnURL());
     }
 
     public function Remove()
     {
-        return false;
+        $id = $this->GetParam('id');
+        $event_info = \simp\Model::FindById("EventInfo", $id);
+        $title = $event_info->short_title;
+        if ($event_info->id > 0)
+        {
+            $event_info->Delete();
+            AddFlash("Event Information $title removed.");
+        }
+        else
+        {
+            AddFlash("Invalid Event Information.  Please contact the system administrator.");
+        }
+        return \Redirect(GetReturnURL());
     }
 
-    protected function GetPrograms()
+    protected function GetEntities()
     {
         if ($this->CheckParam('entity') && $this->CheckParam('entity_id'))
         {
@@ -161,7 +238,8 @@ class EventController extends \simp\Controller
             $id = $this->GetParam('entity_id');
             if ($this->user->CanEdit($entity, $id))
             {
-                return array($id => \simp\Model::FindById($entity, $id)->name);
+                $entity = \simp\Model::FindById($entity, $id);
+                return array("{$entity}:$id" => "{$entity}-{$entity->name}");
             }
             else
             {
@@ -172,12 +250,13 @@ class EventController extends \simp\Controller
         else
         {
             //$abilities = $this->user->abilities;
-            return $this->user->ProgramsWithPrivilege(\Ability::EDIT);
+            return $this->user->OptionsForEntitiesWithPrivilege("Program,Team", \Ability::EDIT);
         }
     }
 
     protected function GetCalendarPeriod($date)
     {
+        $today = $this->DayFromDate(new \DateTime("now"));
         $start = $this->DayFromDate($date);
         $fdom_dt = new \DateTime("{$start['m']}/1/{$start['y']}");
         $fdom = $this->DayFromDate($fdom_dt);
@@ -208,7 +287,13 @@ class EventController extends \simp\Controller
             $date['events'] = array_key_exists($ev_key, $events) ? $events[$ev_key] : array();
             if ($date['y'] == $fdom['y'] && $date['m'] == $fdom['m'])
             {
-                $date['class'] = 'current';
+                $date['class'] = 'current-month';
+            }
+            if ($date['y'] == $today['y'] && 
+                $date['m'] == $today['m'] &&
+                $date['d'] == $today['d'])
+            {
+                $date['class'] = 'current-day';
             }
             $dates["{$date['y']}_{$date['m']}_{$date['d']}"] = $date;
         }

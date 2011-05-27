@@ -13,7 +13,6 @@ class ProgramController extends \simp\Controller
                 'delete'
                 )
             );
-        );
 
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);

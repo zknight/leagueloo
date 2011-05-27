@@ -1,0 +1,19 @@
+teams belong to a program?/divsion/gender
+
+division - age (u11/u12 etc)
+    gender - m/f
+        team name
+
+eg competitive/teams/u11/boys/cosmos_00 (convert spaces to _)
+
+need to enable teams for a program
+
+team has abilities associated with it like programs and plug-ins
+
+parameters for form:
+    name
+    year (i.e. 2000, 1999, 1998)
+    gender (boys/girls/men/women/etc)
+    program (that have teams enabled) (competitive, academy, etc)
+
+

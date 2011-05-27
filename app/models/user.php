@@ -123,34 +123,39 @@ class User extends \simp\Model
 
     public function __get($property)
     {
-        if ($property == 'abilities')
+        switch ($property)
         {
+        case "abilities":
             return $this->Abilities();
-        }
-        else if ($property == "password")
-        {
+            break;
+        case "password":
             return $this->_password;
+            break;
+        default: 
+            return parent::__get($property);
+            break;
         }
-        else return parent::__get($property);
     }
     
     public function __set($property, $value)
     {
         global $log;
         $log->logDebug("User: setting $property to $value");
-        if ($property == "password")
+        switch ($property)
         {
+        case "password":
             $this->_password = $value;
-        }
-        else if ($property == "password_verification")
-        {
+            break;
+        case "password_verification":
             $this->_password_verify = $value;
-        }
-        else if ($property == "unverified")
-        {
+            break;
+        case "unverified":
             parent::__set("verified", !$value);
+            break;
+        default:
+            parent::__set($property, $value);
+            break;
         }
-        else parent::__set($property, $value);
     }
 
     public function BeforeSave()
@@ -339,37 +344,47 @@ class User extends \simp\Model
     }
 
     // return the name and id for programs that user can modify news for
-    public function ProgramsWithPrivilege($level = Ability::ADMIN)
+    public function OptionsForEntitiesWithPrivilege($entity_types, $level = Ability::ADMIN, $conditions = 1, $values = array())
     {
-        $program_arr = array();
+        if (!is_array($entity_types))
+        {
+            if ($entity_types == 'all')
+            {
+                $entity_types = array("Program", "Team", "PlugIn");
+            }
+            else
+            {
+                $entity_types = explode(",", preg_replace("/\s/", '', $entity_types));
+            }
+        }
+        $entity_arr = array();
+        $entities = array();
         if ($this->super)
         {
-            $programs = User::FindAll('Program');
-            foreach ($programs as $program)
+            foreach ($entity_types as $type)
             {
-                $program_arr[$program->id] = $program->name;
+                $types = Pluralize(SnakeCase($type));
+                $$types = User::Find($type, $conditions, $values);
+                $entities = array_merge($entities, $$types);
+            }
+            foreach ($entities as $entity)
+            {
+                $entity_arr["{$entity}:{$entity->id}"] = "{$entity}-{$entity->name}";
             }
         }
         else
         {
             $abilities = User::Find(
                 "Ability",
-                "user_id = ? and level = ? and entity_type = ?",
-                array($this->id, $level, "Program"));
+                "user_id = ? and level = ?",
+                array($this->id, $level));
             foreach ($abilities as $ability)
             {
-                $program_arr[$ability->entity_id] = $ability->entity_name;
+                if (in_array($ability->entity_type, $entity_types))
+                    $entity_arr["{$ability->entity_type}:{$ability->entity_id}"] = "{$ability->entity_type}-{$ability->entity_name}";
             }
         }
-        return $program_arr;
-    }
-
-    public function TeamsWithPrivilege($level = Ability::ADMIN)
-    {
-    }
-
-    public function AppsWithPrivlege($level = Ability::ADMIN)
-    {
+        return $entity_arr;
     }
 
     // login

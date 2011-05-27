@@ -5,7 +5,6 @@ class ProgramController extends \simp\Controller
 
     function Setup()
     {
-
     }
     
     // Actions
@@ -33,6 +32,7 @@ class ProgramController extends \simp\Controller
                 "News", 
                 "entity_type = 'Program' and entity_id = ?",
                 array($this->program->id));
+            $this->event_data = array('entity_type' => "Program", 'entity_id' => $this->program->id);
             return true;
         }
         else

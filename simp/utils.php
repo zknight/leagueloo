@@ -36,10 +36,14 @@ function SnakeCase($class)
     return $snake;
 }
 
-function Pluralize($string)
+function Pluralize($string, $count = 1)
 {
-    require_once "inflect.php";
-    return Inflect::pluralize($string);
+    if ($count > 1)
+    {
+        require_once "inflect.php";
+        return Inflect::pluralize($string);
+    }
+    return $string;
 }
 
 function Singularize($string)

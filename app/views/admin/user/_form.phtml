@@ -1,25 +1,25 @@
 <fieldset><legend>User Information</legend>
 <table>
     <tr>
-        <th>Login:</th><td><?=TextField($this->user, 'login');?></td>
+        <th>Login:</th><td colspan='3'><?=TextField($this->user, 'login');?></td>
     </tr>
     <tr>
         <th>First Name:</th><td><?=TextField($this->user, 'first_name');?></td>
         <th>Last Name:</th><td><?=TextField($this->user, 'last_name');?></td>
     </tr>
     <tr>
-        <th>email:</th><td><?=TextField($this->user, 'email', array('size' => 40));?></td>
+        <th>email:</th><td colspan='3'><?=TextField($this->user, 'email', array('size' => 40));?></td>
     </tr>
     <tr>
-        <th>Password:</th><td><?=PasswordField($this->user, 'password');?></td>
+        <th>Password:</th><td colspan='3'><?=PasswordField($this->user, 'password');?></td>
     </tr>
     <tr>
-        <th>Password Verification:</th><td><?=PasswordField($this->user, 'password_verification');?></td>
+        <th>Password Verification:</th><td colspan='3'><?=PasswordField($this->user, 'password_verification');?></td>
     <tr>
-        <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
+        <th>Timezone:</th><td colspan='3'><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
     <tr>
-        <th>Send Verification Email:</th><td><?= CheckBoxField($this->user, 'unverified'); ?></td>
+        <th>Send Verification Email:</th><td colspan='3'><?= CheckBoxField($this->user, 'unverified'); ?></td>
     </tr>
 </table><!-- TODO: add logic to prevent non-site admin to do this -->
 </fieldset>
@@ -31,7 +31,62 @@
     $options = array(Ability::ADMIN, Ability::PUBLISH, Ability::EDIT, -1);
     $i = 0;
     $wrapper = function($html) { return "<td>{$html}</td>"; };
+     
+    $abilities_by_type = array();
+    foreach($this->user->Abilities() as $ability)
+    {
+        if (!array_key_exists($ability->entity_type, $abilities_by_type))
+        {
+            $abilities_by_type[$ability->entity_type] = array();
+        }
+        $abilities_by_type[$ability->entity_type][] = $ability;
+    }
 ?>
+
+<? foreach ($this->entities as $type => $name_arr): ?>
+<fieldset><legend><?= HumanCase($type); ?></legend>
+    <table>
+        <tr>
+            <th><?= HumanCase($type); ?> Name</th>
+            <th>Administer</th>
+            <th>Publish and Edit</th>
+            <th>Edit Only</th>
+            <th>Read Only</th>
+        </tr>
+    <? if (array_key_exists($type, $abilities_by_type)): ?>
+        <? foreach ($abilities_by_type[$type] as $ability): ?>
+        <tr>
+            <td><?= $ability->entity_name;?></td>
+            <?= RadioGroup(
+                    $ability, 
+                    'level', 
+                    $options,
+                    array('array' => $i), 
+                    $wrapper); ?>
+            <? $name_arr[$ability->entity_name] = false; ?>
+            <input type="hidden" name="Ability[<?=$i++;?>][id]" value="<?=$ability->id;?>" />
+        </tr>
+        <? endforeach; ?>
+    <? endif; ?>
+    <? foreach ($name_arr as $name => $id): ?>
+        <? if ($id): ?>
+            <tr><td><?= HumanCase($name) ?></td>
+            <?= RadioGroup(
+                'Ability',
+                'level',
+                $options,
+                array('array' => $i, 'value' => -1),
+                $wrapper); ?>
+            <input type="hidden" name="Ability[<?=$i;?>][entity_type]" value="<?=$type;?>" />
+            <input type="hidden" name="Ability[<?=$i;?>][entity_name]" value="<?=$name;?>" />
+            <input type="hidden" name="Ability[<?=$i++;?>][entity_id]" value="<?=$id;?>" />
+            </tr>
+        <? endif; ?>
+    <? endforeach; ?>
+    </table>
+</fieldset>
+<? endforeach; ?>
+<? /*
 <table>
     <tr>
         <th>Section of Website</th>
@@ -72,4 +127,5 @@
     <? endforeach; ?>
 </table>
 </fieldset>
-
+ */
+?>

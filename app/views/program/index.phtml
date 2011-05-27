@@ -7,8 +7,14 @@ if ($this->UserLoggedIn()) {
     $admin = $user->CanAdmin("Program", $this->program->id);
 }
 ?>
-<h1><?= $this->program->name; ?></h1>
-<p><?= $this->program->description; ?></p>
+<h1 class="title"><?= $this->program->name; ?></h1>
+<h3 class="sub-title"><?= $this->program->description; ?></h3>
+<ul class="section-menu">
+    <li><?= l("Events", Path::event_calendar("program", $this->program->id)); ?></li>
+    <? if ($this->program->has_teams): ?>
+    <li><?= l("Teams", Path::Relative("{$this->program->name}/teams")); ?></li>
+    <? endif; ?>
+</ul>
 <? if ($editor): ?>
 <ul class="menu">
     <li><?= l("create new article", Path::content_news_add_program($this->program->id)); ?></li>

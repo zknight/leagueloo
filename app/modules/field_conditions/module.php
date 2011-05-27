@@ -3,7 +3,14 @@ class FieldConditions extends \simp\Module
 {
     public $fields;
 
-    public function Setup()
+    protected static function OnInstall()
+    {
+        global $log; $log->logDebug("FieldConditions::OnInstall()");
+        self::SetAdminInterface(true);
+        $log->logDebug("self::HasAdmin() returned: " . self::HasAdmin());
+    }
+
+    public function Setup($args)
     {
         require_once "models/field.php";
         $this->fields = \simp\Model::FindAll("Field");

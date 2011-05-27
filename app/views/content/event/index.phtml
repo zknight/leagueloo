@@ -1,5 +1,6 @@
 <h1>Content Mananger</h1>
-<?= l("Create an event", Path::content_event_add()); ?>
+<?= l("Create a new event", Path::content_event_add()); ?> |
+<?= l("Show Calendar View", Path::content_event_calendar()); ?>
 <h2>Upcoming Events</h2>
 <? if (count($this->upcoming_events) < 1): ?>
     <p>None</p>
@@ -8,23 +9,27 @@
     <tr>
         <th>Section</th>
         <th>Event Title</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Starts On</th>
+        <th>Ends On</th>
         <th>Time Span</th>
+        <th>Repeat</th>
         <th colspan="2">&nbsp;</th>
     </tr>
     <? foreach ($this->upcoming_events as $event): ?>
     <tr>
-        <td><?= $event->entity_type; ?>:
-            <strong><?= $event->entity_name; ?></strong>
-        </td>
+        <td><?= $event->entity_name; ?> </td>
         <td><?= $event->title; ?></td>
-        <td><?= FormatDateTime($event->start_date, "Y/m/d"); ?></td>
-        <td><?= FormatDateTime($event->end_date, "Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->start_date, "D Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->end_date, "D Y/m/d"); ?></td>
+            <? if ($event->all_day): ?>
+        <td>all day</td>
+            <? else: ?>
         <td>
             From <?= FormatDateTime($event->start_time, "H:i"); ?>
             to <?= FormatDateTime($event->end_time, "H:i"); ?>
         </td>
+            <? endif; ?>
+        <td><?= $event->GetRepeatInfo(); ?></td>
         <td><?= l("Edit", Path::content_event_edit($event->id)); ?></td>
         <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
     </tr>
@@ -39,23 +44,27 @@
     <tr>
         <th>Section</th>
         <th>Event Title</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Starts On</th>
+        <th>Ends On</th>
         <th>Time Span</th>
+        <th>Repeat</th>
         <th colspan="2">&nbsp;</th>
     </tr>
     <? foreach ($this->expired_events as $event): ?>
     <tr>
-        <td><?= $event->entity_type; ?>:
-            <strong><?= $event->entity_name; ?></strong>
-        </td>
+        <td><?= $event->entity_name; ?></td>
         <td><?= $event->title; ?></td>
-        <td><?= FormatDateTime($event->start_date, "Y/m/d"); ?></td>
-        <td><?= FormatDateTime($event->end_date, "Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->start_date, "D Y/m/d"); ?></td>
+        <td><?= FormatDateTime($event->end_date, "D Y/m/d"); ?></td>
+            <? if ($event->all_day): ?>
+        <td>all day</td>
+            <? else: ?>
         <td>
             From <?= FormatDateTime($event->start_time, "H:i"); ?>
             to <?= FormatDateTime($event->end_time, "H:i"); ?>
         </td>
+            <? endif; ?>
+        <td><?= $event->GetRepeatInfo(); ?></td>
         <td><?= l("Edit", Path::content_event_edit($event->id)); ?></td>
         <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
     </tr>

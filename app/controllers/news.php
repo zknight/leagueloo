@@ -36,6 +36,14 @@ class NewsController extends \simp\Controller
         {
             AddFlash("article not found.");
         }
+        else
+        {
+            $this->event_data = array(
+                'entity_type' => $this->article->entity_type,
+                'entity_id' => $this->article->entity_id
+            );
+        }
+
         return true;
     }
 }

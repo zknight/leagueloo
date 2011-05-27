@@ -220,6 +220,7 @@ function SimpleSelect($model, $field, $options, $class = NULL, $id = NULL)
     $html .= ">\n";
     foreach($options as $val => $text)
     {
+        $text = HumanCase($text);
         $html .= "\t<option value=\"{$val}\"";
         if ($val == $value) $html .= " selected=\"selected\"";
         $html .= ">{$text}</option>\n";
@@ -386,6 +387,60 @@ function GetReturnURL()
       $_SESSION['return_to'] :
       Path::home();
     //return $_SESSION['return_to'];
+}
+
+function CheckHistory($url)
+{
+    $url = Path::Relative($url);
+    $prev = $cur = NULL;
+    if (array_key_exists('history', $_SESSION))
+    {
+        $cur = end($_SESSION['history']);
+        $prev = prev($_SESSION['history']);
+        global $log;
+        $log->logDebug("url: $url cur: $cur prev:$prev");
+        reset($_SESSION['history']);
+    }
+    if ($cur != $url)
+    {
+        if ($prev == $url) {PopHistory(); PopHistory();}
+        else PushHistory($url);
+    }
+}
+
+function PushHistory($url)
+{
+    global $log; $log->logDebug("PushHistory($url)");
+    if (!array_key_exists('history', $_SESSION)) $_SESSION['history'] =  array();
+    $_SESSION['history'][] = $url;
+}
+
+function GetBackURL()
+{
+    $back = Path::home();
+    if (array_key_exists('history', $_SESSION)) 
+    {
+        $back = end($_SESSION['history']);
+    }
+    return $back;
+}
+
+function GetHistory()
+{
+    if (array_key_exists('history', $_SESSION)) 
+    {
+        return $_SESSION['history'];
+    }
+    return array();
+}
+
+function PopHistory()
+{
+    if (array_key_exists('history', $_SESSION)) 
+    {
+        return array_pop($_SESSION['history']);
+    }
+    return false;
 }
 
 function AddFlash($flash)

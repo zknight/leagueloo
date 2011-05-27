@@ -1,2 +1,9 @@
-* Need to fix rendering to render based on function name rather than 'action' since some actions are mapped.
-* check which articles are listed under content/index depending upon user abilities
+x Need to fix rendering to render based on function name rather than 'action' since some actions are mapped.
+x check which articles are listed under content/index depending upon user abilities
+* add possiblity of creating event associated with article 1:1 and making publication end date
+  conincident with event expiration?
+* team finance manager
+* article submission queue
+* recently updated pages app
+* event display
+* inquiry form (routed to commissioner by age/division/gender)

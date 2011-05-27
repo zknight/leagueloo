@@ -19,6 +19,9 @@
         <td><?= HumanCase($plug_in->name); ?></td>
         <td><em><?= $enabled[0]; ?></em></td>
         <td><?= l($enabled[1], \Path::admin("plug_in", $enabled[1], $plug_in->id)); ?></td>
+        <? if ($plug_in->has_admin && $plug_in->enabled): ?>
+        <td><?= l("manage", \Path::module($plug_in->name, "admin")); ?></td>
+        <? endif; ?>
     </tr>
     <? endforeach; ?>
 </table>

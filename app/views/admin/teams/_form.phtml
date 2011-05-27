@@ -1,0 +1,32 @@
+<?
+$ys = \Team::GetCurrentYearStart();
+$ye = \Team::GetCurrentYearEnd();
+?>
+<fieldset>
+    <legend>Team Information</legend>
+    <table class="form">
+        <tr>
+            <td><strong>Select the program to which team page belongs:</strong></td>
+            <td><?= SimpleSelect($this->team, 'program_id', $this->programs); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Enter name of team:</strong></td>
+            <td><?= TextField($this->team, 'name', array('size' => 32)); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Select the division this team *CURRENTLY belongs to:</strong><br \>
+                *
+                <em>between
+                    <?= FormatDateTime($ys, "F jS, Y"); ?>
+                    and 
+                    <?= FormatDateTime($ye, "F jS, Y"); ?>
+                </em>
+            </td>
+            <td><?= SimpleSelect($this->team, 'year', $this->team->GetDivisions()); ?></td>
+        </tr>
+        <tr>
+            <td><strong>Select team gender:</strong></td>
+            <td><?= SimpleSelect($this->team, 'gender', $this->team->GetGenders()); ?></td>
+        </tr>
+    </table>
+</fieldset>

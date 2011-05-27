@@ -1,0 +1,23 @@
+<p><strong>Team Page Administration</strong></p>
+<?= l("Create New Team", Path::admin_teams_add()); ?>
+<? foreach($this->teams_by_program as $program_name => $teams): ?>
+<h2><?= $program_name; ?> Teams</h2>
+    <? if (count($teams) < 1): ?>
+    No team pages have been created.
+    <? else: ?>
+<table>
+    <tr>
+        <th>Gender</th><th>Division</th><th>Name</th><th>&nbsp;</th><th>&nbsp;</th>
+    </tr>
+    <? foreach($teams as $team): ?>
+    <tr>
+        <td><?= $team->gender_str; ?></td>
+        <td><?= $team->division; ?></td>
+        <td><?= $team->name; ?></td>
+        <td><?= l("edit", Path::admin_teams_edit($team->id)); ?></td>
+        <td><?= l("Delete", Path::admin_teams_delete($team->id), array("method" => "delete")); ?></td>
+
+    <? endforeach; ?>
+</table>
+    <? endif; ?>
+<? endforeach; ?>

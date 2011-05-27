@@ -65,6 +65,7 @@ class News extends \simp\Model
             $q,
             array($entity_name, $entity_type, $short_title)
         );
+        //\R::debug(true);
         //print_r($result);
         //$beans = \R::$redbean->convertToBeans("news", $result);
         if (isset($result))
@@ -151,6 +152,11 @@ class News extends \simp\Model
                     "select name from " . SnakeCase($this->entity_type) . " where id = ?", 
                     array($this->entity_id));
                 break;
+            case "entity_designator":
+                $entity_designator = "{$this->entity_type}:{$this->entity_id}";
+                global $log; $log->logDebug("returning entity_designator: $entity_designator");
+                return $entity_designator;
+                break;
             default:
                 return parent::__get($property);
         }
@@ -174,6 +180,13 @@ class News extends \simp\Model
                 break;
             case 'expire_time':
                 $this->_exp_time = $value;
+                break;
+            case "entity_designator":
+                global $log;
+                $log->logDebug("setting entity_designator from: $value");
+                list($this->entity_type, $this->entity_id) = explode(":", $value);
+                $log->logDebug("entity_type: {$this->entity_type}");
+                $log->logDebug("entity_id: {$this->entity_id}");
                 break;
             default:
                 return parent::__set($property, $value);

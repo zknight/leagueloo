@@ -52,10 +52,9 @@ class PlugInController extends \simp\Controller
     function Install()
     {
         $name = $this->GetParam('name');
-        $plug_in = \simp\Model::Create('PlugIn');
-        $plug_in->name = $name;
-        $plug_in->enabled = false;
-        if ($plug_in->Save())
+        // check to see if plug-in has module admin interface
+        $model_name = ClassCase($name);
+        if ($model_name::Install())
         {
             AddFlash("Plug-in {$plug_in->name} installed.");
         }

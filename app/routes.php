@@ -78,10 +78,13 @@ function RouteSetup($router)
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
 
-    $router->AddRoute('/[a:program]/teams')->Controller('team');
-    $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('team');
-    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:age]')->Controller('team');
-    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:age]/[a:name]')->Controller('team');
+    $router->AddRoute('/news/[A:action]/[i:id]')->Controller('news');
+    $router->AddRoute('/event/[A:action]/[a:entity_type]/[i:id]')->Controller('event');
+
+    $router->AddRoute('/[a:program]/teams')->Controller('teams');
+    $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('teams')->Action('by_gender');
+    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:division]')->Controller('teams')->Action('by_division');
+    $router->AddRoute('/[a:program]/teams/[A:gender]/[a:division]/[a:name]')->Controller('teams')->Action('team');
 
     $router->AddRoute('/program/[i:id]')->Controller('program');
     //$router->AddRoute('/program/[A:action]')->Controller('program');

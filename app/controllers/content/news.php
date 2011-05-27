@@ -18,7 +18,7 @@ class NewsController extends \simp\Controller
                 'add',
                 'edit',
                 'delete'
-            ),
+            )
         );
     }
 
@@ -41,7 +41,7 @@ class NewsController extends \simp\Controller
         return true;
     }
 
-    protected function GetPrograms()
+    protected function GetEntities()
     {
         if ($this->CheckParam('entity') && $this->CheckParam('entity_id'))
         {
@@ -49,7 +49,8 @@ class NewsController extends \simp\Controller
             $id = $this->GetParam('entity_id');
             if ($this->user->CanEdit($entity, $id))
             {
-                return array($id => \simp\Model::FindById($entity, $id)->name);
+                $entity = \simp\Model::FindById($entity, $id);
+                return array("{$entity}:$id" => "{$entity}-{$entity->name}");
             }
             else
             {
@@ -60,7 +61,7 @@ class NewsController extends \simp\Controller
         else
         {
             //$abilities = $this->user->abilities;
-            return $this->user->ProgramsWithPrivilege(\Ability::EDIT);
+            return $this->user->OptionsForEntitiesWithPrivilege("Program,Team", \Ability::EDIT);
         }
     }
 
@@ -68,7 +69,7 @@ class NewsController extends \simp\Controller
     {
         $this->user = CurrentUser();
         $this->article = \simp\Model::Create('News');
-        $this->programs = $this->GetPrograms();
+        $this->entities = $this->GetEntities();
         return true;
     }
 
@@ -77,7 +78,6 @@ class NewsController extends \simp\Controller
         $this->article = \simp\Model::Create('News');
         $vars = $this->GetFormVariable('News');
         $this->article->UpdateFromArray($vars);
-        $this->article->entity_type = "Program";
         $this->article->created_on = time();
         $this->article->updated_on = $this->article->created_on;
         global $log;
@@ -91,7 +91,7 @@ class NewsController extends \simp\Controller
         {
             $this->user = CurrentUser();
             //$abilities = $this->user->abilities;
-            $this->programs = $this->GetPrograms();
+            $this->entities = $this->GetEntities();
             $this->Render("Add");
             return false;
         }
@@ -102,12 +102,13 @@ class NewsController extends \simp\Controller
         $this->user = CurrentUser();
         $id = $this->GetParam('id');
         $this->article = \simp\Model::FindById("News", $id);
-        $this->programs = $this->GetPrograms();
+        $this->entities = $this->GetEntities();
         return true;
     }
 
     public function Update()
     {
+
         $id = $this->GetParam('id');
         $vars = $this->GetFormVariable('News');
         $this->article = \simp\Model::FindById("News", $id);
@@ -122,7 +123,7 @@ class NewsController extends \simp\Controller
         else
         {
             $this->user = CurrentUser();
-            $this->programs = $this->GetPrograms();
+            $this->entities = $this->GetEntities();
             $this->Render("Edit");
             return false;
         }

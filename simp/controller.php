@@ -152,6 +152,12 @@ class Controller
         if ($render)
         {
             $this->Render($action);
+            /* this ain't working
+            if ($this->_method == Request::GET)
+            {
+                CheckHistory($this->_current_url);
+            }
+             */
         }
     }
 

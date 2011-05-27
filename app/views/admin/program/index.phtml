@@ -5,6 +5,7 @@
         <th>Program</th>
         <th>Weight</th>
         <th>Description</th>
+        <th>Can Have Team Pages</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
     </tr>
@@ -13,6 +14,7 @@
         <td><?= $program->name; ?></td>
         <td><?= $program->weight; ?></td>
         <td><?= $program->description; ?></td>
+        <td><?= $program->has_teams ? 'yes': 'no'; ?></td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
         <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>
     </tr>

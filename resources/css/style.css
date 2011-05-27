@@ -211,6 +211,17 @@ div.errors {
 }
     div.errors ol { margin:4px; }
 
+.title {
+    padding:0;
+    margin:0;
+    text-align:center;
+}
+.sub-title {
+    padding:0;
+    margin:0;
+    text-align:center;
+}
+
 .program_news {
     border:1px solid #b9daf1;
     background:#0f334d;
@@ -228,5 +239,89 @@ div.errors {
         }
     .program_news .article {
         padding:4px 12px;
+    }
+
+.calendar/*,
+.day*/
+{
+    width:100%;
+    border-collapse:collapse;
+}
+.calendar { background:#0f334d; }
+
+    .calendar th
+    {
+        font-size:16pt;
+    }
+    .calendar td
+    {
+        border:1px solid #d2903a;
+        width:100px;
+        height:100px;
+        padding:0;
+        margin:0;
+        font-size:10pt;
+        vertical-align:top;
+    }
+
+    .calendar .row-1 td
+    {
+        border:none;
+        height:16px;
+        text-align:left;
+    }
+    .calendar .row-1 td.rt
+    {
+        text-align:right;
+    }
+    
+    .calendar .day td
+    {
+        height:20px;
+        font-size:9pt;
+        border:none;
+        text-align:right;
+    }
+    .calendar .day td.date
+    {
+        font-size:12pt;
+        vertical-align:middle;
+        text-align:left;
+        padding:0;
+        margin:0;
+        width:14px;
+    }
+    .calendar .event td
+    {
+        border:none;
+        font-size:8pt;
+    }
+    .calendar .event td.time
+    {
+        width:25%;
+    }
+    .calendar .event td.title
+    {
+        width:75%;
+    }
+    .calendar td.current-month
+    {
+        background:#ffd195;
+        color:#00243e;
+    }
+    .calendar td.current-month td.date
+    {
+        background:#ffb95e;
+        color:#ffe4c0;
+    }
+    .calendar td.current-day
+    {
+        background:#dfa964;
+        color:#2566b1;
+    }
+    .calendar td.current-day td.date
+    {
+        background:#ffe4c0;
+        color:#d2903a;
     }
 

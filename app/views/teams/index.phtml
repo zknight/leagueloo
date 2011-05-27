@@ -1,0 +1,14 @@
+<p><strong><?= HumanCase($this->program_name); ?> Teams</strong></p>
+<? if (count($this->teams) < 1): ?>
+<p>There are no <?= $this->program_name; ?> team pages.</p>
+<? else: ?>
+<table>
+    <? foreach ($this->teams as $team): ?>
+        <tr>
+            <td>
+                <?= l($team->name, Path::Relative(GetTeamPath("", $team))) ?>
+            </td>
+        </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

@@ -50,7 +50,7 @@ class UserController extends \simp\Controller
             $this->entities['plug_in'][$plug_in->name] = $plug_in->id;
         }
         $teams = \simp\Model::FindAll('Team');
-        foreach ($plug_ins as $plug_in)
+        foreach ($teams as $team)
         {
             $this->entities['team'][$team->name] = $team->id;
         }

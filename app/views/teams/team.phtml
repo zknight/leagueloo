@@ -1,0 +1,40 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Team", $this->program->id);
+    $publisher = $user->CanPublish("Team", $this->program->id);
+    $admin = $user->CanAdmin("Team", $this->program->id);
+}
+?>
+<h1 class="title"><?= $this->team->name; ?></h1>
+<ul class="section-menu">
+    <li><?= l("Event_calendar", Path::event_calendar("team", $this->team->id)); ?></li>
+</ul>
+<? if ($editor): ?>
+<ul class="menu">
+    <li><?= l("create new article", Path::content_news_add_team($this->team->id)); ?></li>
+    <? if ($publisher): ?>
+    <li><?= l("manage articles", Path::content_news()); ?></li>
+    <li><?= l("manage events", Path::content_event()); ?></li>
+    <? endif; ?>
+    <? if ($admin): ?>
+    <li><?= l("administer team page", Path::admin_team_show($this->team->id)); ?></li>
+    <? endif; ?>
+</ul>
+<? endif; ?>
+<? foreach ($this->news as $article): ?>
+<h3>Latest News</h3>
+<hr />
+<div class="article">
+    <h2><?= l($article->title, GetArticlePath('show', $article)); ?></h2>
+        <span class="date">
+            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
+        </span>
+        <? if ($editor): ?>
+        <?= l("edit this article", Path::content_news_edit_team($this->team->id, $article->id)); ?><br />
+        <? endif; ?>
+    <p><?= $article->intro; ?></p>
+    <p><?= l("Read more...", Path::news_show($article->id)); ?></p>
+</div>
+<? endforeach; ?>

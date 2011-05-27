@@ -46,10 +46,15 @@
                         <!--div style="height:400px;"></div-->
                     </div>
                     <div class="col2">
-                        <p>col2</p>
+                        <? \simp\Module::Show("Events", $this->event_data); ?>
                     </div>
                     <div class="col3">
                         <? \simp\Module::Show("FieldConditions"); ?>
+                        <? 
+                        $history = GetHistory();
+                        foreach ($history as $url): ?>
+                            <?= l($url, $url); ?>
+                        <? endforeach; ?>
                     </div>
                 </div>
             </div>
