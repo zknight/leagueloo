@@ -62,6 +62,7 @@ function RouteSetup($router)
     $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[a:name]')->Group('admin');
 
+    $router->AddRoute('/content')->Controller('content');
     $router->AddRoute('/content/[A:controller]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Group('content');

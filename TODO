@@ -7,3 +7,5 @@ x check which articles are listed under content/index depending upon user abilit
 * recently updated pages app
 * event display
 * inquiry form (routed to commissioner by age/division/gender)
+* photo gallery
+* article queue

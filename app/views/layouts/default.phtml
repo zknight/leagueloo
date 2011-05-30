@@ -17,6 +17,7 @@
                     <li><?= l("my profile", Path::user_edit()); ?> </li>
                 <? if ($this->GetUser()->super): ?>
                     <li><?= l("administration", Path::administrator()); ?> </li>
+                    <li><?= l("manage events", Path::
                 <? endif; ?>
             <? else: ?>
                     <li><?= l("login", Path::user_login()); ?></li>
