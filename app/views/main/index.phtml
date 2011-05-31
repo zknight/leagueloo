@@ -1,20 +1,22 @@
 <!--h2>Latest Info from South Lakes Soccer Club</h2-->
 <? foreach ($this->articles as $program => $articles): ?>
+    <? if (count($articles) > 0): ?>
 <div class="program_news">
     <div class="program_name"><?= l($program, Path::Relative($program)); ?></div>
-    <? foreach ($articles as $article): ?>
+        <? foreach ($articles as $article): ?>
     <div class="article">
         <h3><?= l($article->title, GetArticlePath('show', $article)); ?></h3>
-        <? if ($editor): ?>
-        <?= l("edit this article", Path::content_news_edit_program($this->program->id, $article->id)); ?><br />
-        <? endif; ?>
             <span class="date">
                 <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
             </span>
-        <p><?= $article->intro; ?></p>
-        <p><?= l("Read more...", GetArticlePath('show', $article)); ?></p>
+                <? if ($this->is_editor[$program]): ?>
+            <?= l("edit this article", Path::content_news_edit_program($article->entity_id, $article->id)); ?><br />
+                <? endif; ?>
+        <div class="intro"><?= $article->intro; ?></div>
+        <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
     </div>
-    <? endforeach; ?>
+        <? endforeach; ?>
 </div>
+    <? endif; ?>
 <? endforeach; ?>
 

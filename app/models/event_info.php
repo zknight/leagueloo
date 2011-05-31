@@ -53,7 +53,6 @@ class EventInfo extends \simp\Model
 
     public function Setup()
     {
-        $this->Configure();
     }
 
     public function OnLoad()
@@ -61,10 +60,10 @@ class EventInfo extends \simp\Model
         $this->Configure();
     }
 
-    public static function FindEventInfoByDate($start_date, $end_date, $conditions=NULL, $values=array())
+    public static function FindExpired($end_date, $conditions=NULL, $values=array())
     {
-        $cond = "start_date <= ? and end_date >= ?"; 
-        $val = array($end_date->getTimestamp(), $start_date->getTimestamp());
+        $cond = "end_date < ?";
+        $val = array($end_date->getTimestamp());
         if (isset($conditions))
         {
             $cond .= " and ($conditions)";
@@ -78,12 +77,34 @@ class EventInfo extends \simp\Model
 
     }
 
-    public static function GetEvents($start_date, $end_date, $conditions=NULL, $values=array())
+    public static function FindEventInfoByDate($start_date, $end_date, $conditions=NULL, $values=array(), $limit=NULL)
+    {
+        $cond = "start_date <= ? and end_date >= ?"; 
+        $val = array($end_date->getTimestamp(), $start_date->getTimestamp());
+        if (isset($conditions))
+        {
+            $cond .= " and ($conditions)";
+            $val = array_merge($val, $values);
+        }
+
+        if (isset($limit))
+        {
+            $cond .= " limit {$limit}";
+        }
+
+        return self::Find(
+            "EventInfo", 
+            $cond,
+            $val);
+
+    }
+
+    public static function GetEvents($start_date, $end_date, $conditions=NULL, $values=array(), $limit=NULL)
     {
         // query that stuff
         $events = array();
         //\R::debug(true);
-        $event_array = self::FindEventInfoByDate($start_date, $end_date, $conditions, $values);
+        $event_array = self::FindEventInfoByDate($start_date, $end_date, $conditions, $values, $limit);
         //\R::debug(false);
 
         foreach ($event_array as $ev_info)
@@ -131,7 +152,7 @@ class EventInfo extends \simp\Model
         $period = new \DatePeriod($fdom_dt, new \DateInterval("P1D"), $ldom_dt);
         $dates = array();
         $events = self::GetEvents($fdom_dt, $ldom_dt, $conditions, $values);
-        global $log; $log->logDebug("GetCalendarPeriod: events " . print_r($events, true));
+        //global $log; $log->logDebug("GetCalendarPeriod: events " . print_r($events, true));
         $i = 1;
         foreach ($period as $dt)
         {
@@ -141,6 +162,7 @@ class EventInfo extends \simp\Model
             $i++;
             // make it array so a foreach won't barf later
             $date['events'] = array_key_exists($ev_key, $events) ? $events[$ev_key] : array();
+            $date['class'] = 'out';
             if ($date['y'] == $fdom['y'] && $date['m'] == $fdom['m'])
             {
                 $date['class'] = 'current-month';
@@ -230,30 +252,30 @@ class EventInfo extends \simp\Model
     protected function Configure()
     {
         global $log; 
-        $log->logDebug("EventInfo::Setup() this " . print_r($this, true));
+        //$log->logDebug("EventInfo::Setup() this " . print_r($this, true));
         $this->day_mask = explode(",", $this->days_of_week);
         if ($this->id > 0)
         {
-            $log->logDebug("EventInfo::Setup() day_mask = " . print_r($this->day_mask, true));
-            $log->logDebug("EventInfo::Setup() days_of_week = " . $this->days_of_week);
+            //$log->logDebug("EventInfo::Setup() day_mask = " . print_r($this->day_mask, true));
+            //$log->logDebug("EventInfo::Setup() days_of_week = " . $this->days_of_week);
             $this->start_time_str = strftime("%I:%M %p", $this->start_time);
             $this->end_time_str = strftime("%I:%M %p", $this->end_time);
             $this->start_date_str = strftime("%m/%d/%Y", $this->start_date);
-            $log->logDebug("EventInfo::Setup() start_date_str = " . $this->start_date_str);
+            //$log->logDebug("EventInfo::Setup() start_date_str = " . $this->start_date_str);
             $this->end_date_str = strftime("%m/%d/%Y", $this->end_date);
         }
     }
 
     protected function ComputeEndDate()
     {
-        global $log; $log->logDebug("ComputeEndDate: repeat_end = {$this->repeat_end}");
+        //global $log; $log->logDebug("ComputeEndDate: repeat_end = {$this->repeat_end}");
         if ($this->repeat_end == "occurrences")
         {
             $type = EventInfo::$repeat_type_tok[$this->repeat_type];
             $end_date = new \DateTime();
             $end_date->setTimestamp($this->start_date);
             $count = ($this->recur_count - 1) * $this->repeat_interval;
-            $log->logDebug("type = $type");
+            //$log->logDebug("type = $type");
             $end_date->add(new \DateInterval("P{$count}{$type}"));
             $this->end_date = $end_date->getTimestamp();
             $this->end_date_str = strftime("%m/%d/%Y", $this->end_date);
@@ -298,10 +320,10 @@ class EventInfo extends \simp\Model
             for ($i = 0; $i < 7; $i++)
             {
                 $dow = $day_date->format("w");
-                global $log; $log->logDebug("GetWeeklyEvents:checking date :" . $day_date->format("w m/d/Y"));
+                //global $log; $log->logDebug("GetWeeklyEvents:checking date :" . $day_date->format("w m/d/Y"));
                 if ($this->day_mask[$dow] == 1)
                 {
-                    $log->logDebug("    IS IN!");
+                    //$log->logDebug("    IS IN!");
                     $key = $day_date->getTimestamp();
                     if (!array_key_exists($key, $events)) $events[$key] = array();
                     $events[$key][] = new Event($this, $key);
@@ -338,7 +360,7 @@ class EventInfo extends \simp\Model
                 list($m, $y) = explode("/", $day_date->format("m/Y"));
                 $dt = new \DateTime("{$m}/{$this->dom}/{$y}");
                 $key = $dt->getTimestamp();
-                global $log; $log->logDebug("GetMonthlyEvents(): timestamp $key on $m/{$this->dom}/$y");
+                //global $log; $log->logDebug("GetMonthlyEvents(): timestamp $key on $m/{$this->dom}/$y");
                 if (!array_key_exists($key, $events)) $events[$key] = array();
                 $events[$key][] = new Event($this, $key);
             }

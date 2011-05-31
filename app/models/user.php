@@ -95,6 +95,7 @@ class User extends \simp\Model
     public function CanAccess($entity_type, $entity_id, $level)
     {
         global $log;
+        $entity_type = SnakeCase($entity_type);
         $log->logDebug("CanAccess: checking $entity_type, $entity_id, $level");
         if ($this->super) return true;
         $ability = User::FindOne(
@@ -102,8 +103,12 @@ class User extends \simp\Model
             "user_id = ? and entity_type = ? and entity_id = ?",
             array($this->id, $entity_type, $entity_id));
         //echo "ability: " . print_r($ability, true);
-        $log->logDebug("CanAccess: found {$ability->level}");
-        return $ability->level >= $level;
+        if ($ability)
+        {
+            $log->logDebug("CanAccess: found {$ability->level}");
+            return $ability->level >= $level;
+        }
+        return false;
     }
 
     public function CanEdit($entity_type, $entity_id)
@@ -119,6 +124,43 @@ class User extends \simp\Model
     public function CanAdmin($entity_type, $entity_id)
     {
         return $this->CanAccess($entity_type, $entity_id, Ability::ADMIN);
+    }
+
+    public function FindPublishers($entity_type, $entity_id)
+    {
+        $publishers = array();
+        $q  = "select user.* from user, ability ";
+        $q .= "where user.id = ability.user_id and ability.entity_type = ? and ability.entity_id = ?";
+        $q .= " and ability.level >= ?";
+        
+        $result = \R::getAll(
+            $q,
+            array(SnakeCase($entity_type), $entity_id, Ability::PUBLISH)
+        );
+
+        if (isset($result))
+        {
+            foreach($result as $row)
+            {
+                $bean = \R::dispense('user');
+                $bean->import($row);
+                $publishers[] = new User($bean);
+            }
+        }
+
+        /*
+        $publishers = User::Find(
+            "Ability",
+            "entity_type = ? and entity_id = ? and level >= ?",
+            array($entity_type, $entity_id, Ability::PUBLISH));
+         */
+        $super_users = User::Find(
+            "User",
+            "super = ?",
+            array(true));
+
+        return array_merge($publishers, $super_users);
+
     }
 
     public function __get($property)

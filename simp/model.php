@@ -139,6 +139,11 @@ class Model
 
     public function Save()
     {
+        $first_save = false;
+        if ($this->id == 0)
+        {
+            $first_save = true;
+        }
         if ($this->BeforeSave())
         {
             // save associations
@@ -154,7 +159,14 @@ class Model
                 try
                 {
                     $id = \R::store($this->_bean);
-                    $this->AfterSave();
+                    if ($first_save)
+                    {
+                        $this->AfterFirstSave();
+                    }
+                    else
+                    {
+                        $this->AfterSave();
+                    }
                     return $id;
                 }
                 catch (RedBean_Exception_Security $e)
@@ -234,7 +246,8 @@ class Model
         }
         else
         {
-            $log->logDebug("Getting $property as bean");
+            if (!isset($this->_bean)) $log->logDebug("Wholly crap!");
+            $log->logDebug("Getting $this -> $property as bean");
             return $this->_bean->$property;
         }
     }
@@ -341,6 +354,11 @@ class Model
     }
 
     public function AfterSave()
+    {
+        return true;
+    }
+
+    public function AfterFirstSave()
     {
         return true;
     }

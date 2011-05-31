@@ -1,5 +1,6 @@
-<p>Field Conditions</p>
 <div class="module">
+    <div class="title">Field Conditions</div>
+    <div class="content">
 <? foreach ($this->fields as $field): ?>
     <strong><?= $field->name; ?></strong><br />
     <table style="width:100%;">
@@ -10,16 +11,12 @@
         <tr>
             <td colspan='2'><?= $field->comment; ?></td>
         </tr>
-    <? if (IsLoggedIn())
-       {
-           $user = CurrentUser();
-       }
-    ?>
-    <? if ($this->HasAccess($user, "update_status")): ?>
+    <? if (IsLoggedIn() && $this->HasAccess(CurrentUser(), "update_status")): ?>
         <tr>
             <td colspan='2'><?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $field->id)); ?></td>
         </tr>
     <? endif; ?>
     </table>
 <? endforeach; ?>
+    </div>
 </div>

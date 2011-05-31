@@ -1,0 +1,21 @@
+<?= l("back", GetReturnURL()); ?><br />
+<span class="sub-title"><?= $this->event_info->entity_name; ?></span>
+<h1><?= $this->event_info->title; ?></h1>
+<p><?= $this->event_info->description; ?></p>
+<table class="info-table">
+    <tr>
+        <td><strong>Where:</strong></td>
+        <td><?= $this->event_info->location; ?></td>
+    </tr>
+    <tr>
+        <td><strong>When:</strong></td>
+<? if ($this->event_info->all_day): ?>
+        <td>All Day</td>
+<? else: ?>
+        <td>
+            From <?= FormatDateTime($this->event_info->start_time, "g:i a"); ?>
+            until <?= FormatDateTime($this->event_info->end_time, "g:i a"); ?>
+        </td>
+<? endif; ?>
+    </tr>
+</table>

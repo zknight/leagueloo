@@ -4,7 +4,6 @@
         <title>
             <?= SiteName(); ?>
         </title>
-        <?= IncludeCSS("layout.css"); ?>
         <?= IncludeCSS("style.css"); ?>
     </head>
     <body>
@@ -17,7 +16,7 @@
                     <li><?= l("my profile", Path::user_edit()); ?> </li>
                 <? if ($this->GetUser()->super): ?>
                     <li><?= l("administration", Path::administrator()); ?> </li>
-                    <li><?= l("manage events", Path::
+                    <li><?= l("manage content", Path::content()); ?></li>
                 <? endif; ?>
             <? else: ?>
                     <li><?= l("login", Path::user_login()); ?></li>
@@ -47,6 +46,7 @@
                         <!--div style="height:400px;"></div-->
                     </div>
                     <div class="col2">
+                        <? if (!isset($this->event_data)) $this->event_data = array('entity_type' => 'Program'); ?>
                         <? \simp\Module::Show("Events", $this->event_data); ?>
                     </div>
                     <div class="col3">

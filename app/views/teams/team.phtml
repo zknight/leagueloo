@@ -2,9 +2,9 @@
 $editor = false;
 if ($this->UserLoggedIn()) {
     $user = $this->GetUser();
-    $editor = $user->CanEdit("Team", $this->program->id);
-    $publisher = $user->CanPublish("Team", $this->program->id);
-    $admin = $user->CanAdmin("Team", $this->program->id);
+    $editor = $user->CanEdit("Team", $this->team->id);
+    $publisher = $user->CanPublish("Team", $this->team->id);
+    $admin = $user->CanAdmin("Team", $this->team->id);
 }
 ?>
 <h1 class="title"><?= $this->team->name; ?></h1>
@@ -14,6 +14,7 @@ if ($this->UserLoggedIn()) {
 <? if ($editor): ?>
 <ul class="menu">
     <li><?= l("create new article", Path::content_news_add_team($this->team->id)); ?></li>
+    <li><?= l("create new event", Path::content_event_add_team($this->team->id)); ?></li>
     <? if ($publisher): ?>
     <li><?= l("manage articles", Path::content_news()); ?></li>
     <li><?= l("manage events", Path::content_event()); ?></li>

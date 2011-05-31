@@ -122,16 +122,19 @@ class Router
                 $route_str = $substr = null;
                 $route_exp = $route->pattern;
                 $i = 0;
+                $len = strlen($route_exp);
+
                 while (true) 
                 {
-                    if ($route_exp[$i] === '')
+                    //if ($route_exp[$i] === '')
+                    if ($i >= $len)
                     {
                         break;
                     }
                     elseif (null === $substr)
                     {
                         $c = $route_exp[$i];
-                        $n = $route_exp[$i + 1];
+                        if ($len > $i+1) $n = $route_exp[$i + 1];
                         if ($c === '[' || $c === '(' || $c === '.' ||
                             $n === '?' || $n === '+' || $n === '*' || $n === '{')
                         {
@@ -157,7 +160,7 @@ class Router
             }
 
             // here's where I'd check for negation if I wanted to include that functionality
-            if ($null !== $params)
+            if (isset($params))
             {
                 $this->_params = array_merge($this->_params, $params, $route->params);
             }
@@ -254,7 +257,7 @@ class Router
             foreach ($matches as $match) {
                 $this->Put("match: \n"); 
                 $this->Put(print_r($match, true));
-                list($block, $pre, $type, $param, $optional) = $match;
+                list($block, $pre, $type, $param, $optional) = $match + Array(4=>null);
 
                 if (isset($match_types[$type])) {
                     $type = $match_types[$type];

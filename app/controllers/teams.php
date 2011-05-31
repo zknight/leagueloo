@@ -58,10 +58,10 @@ class TeamsController extends \simp\Controller
         if ($this->team->id > 0)
         {
             //\R::debug(true);
-            $this->news = \simp\Model::Find(
-                "News",
-                "entity_type = 'Team' and entity_id = ?",
-                array($this->team->id)
+            $this->news = \News::FindPublished(
+                //"entity_type = 'Team' and entity_id = ?",
+                'Team',
+                $this->team->id
             );
             //\R::debug(false);
 

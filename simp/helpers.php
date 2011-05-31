@@ -86,7 +86,7 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
 
     $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
     $html .= $attrs['id'];
-    $html .= $attrs['class'];
+    if (array_key_exists('class', $attrs)) $html .= $attrs['class'];
     $html .= $attrs['size'];
     $html .= " value=\"{$attrs['value']}\"";
     $html .= "/>";
@@ -231,11 +231,11 @@ function SimpleSelect($model, $field, $options, $class = NULL, $id = NULL)
 
 function rand_str($length = 10)
 {
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXyZ";
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
     $str = "";
     for ($i = 0; $i<$length; $i++)
     {
-        $str .= $chars{mt_rand(0, strlen($chars))};
+        $str .= $chars{mt_rand(0, strlen($chars)-1)};
     }
     return $str;
 }
@@ -333,6 +333,7 @@ function GetErrorsFor($model)
 function GetInputAttributes($model, $field, $opts)
 {
     $newopts = array();
+    $newopts['class'] = "";
     $newopts['size'] = " size=\"" . (isset($opts['size']) ? $opts['size'] : "20") . "\"";
     $newopts['rows'] = " rows=\"" . (isset($opts['rows']) ? $opts['rows'] : 3) . "\"";
     $newopts['cols'] = " cols=\"" . (isset($opts['cols']) ? $opts['cols'] : 80) . "\"";
@@ -359,6 +360,12 @@ function GetInputAttributes($model, $field, $opts)
         {
             $newopts['value'] = isset($opts['value']) ? $opts['value'] : '';
         }
+    }
+    else
+    {
+        $newopts['name'] = isset($opts['array']) ?
+            "{$opts['array']}[$field]" :
+            "$field";
     }
     $input_class = isset($opts['class']) ? $opts['class'] : "";
     if ($input_class != "" || $error_class != "")

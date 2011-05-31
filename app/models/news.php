@@ -54,7 +54,7 @@ class News extends \simp\Model
     {
         $entity_table = SnakeCase($entity_type);
         $q = "select news.* from news, {$entity_table} ";
-        $q .= "where ${entity_type}.name like ? ";
+        $q .= "where {$entity_type}.name like ? ";
         $q .= "and news.entity_type like ? ";
         $q .= "and news.entity_id = {$entity_type}.id ";
         $q .= "and news.short_title = ? ";
@@ -77,7 +77,7 @@ class News extends \simp\Model
         return null;
     }
 
-    public static function FindPublished($owner_type = NULL, $owner_id = NULL)
+    public static function FindPublished($owner_type = NULL, $owner_id = NULL, $conditions = NULL, $vals = array())
     {
         $dt = new DateTime("now");
         $curdate = $dt->getTimestamp();
@@ -92,6 +92,11 @@ class News extends \simp\Model
         {
             $params .= " and entity_id = ?";
             $values[] = $owner_id;
+        }
+        if (isset($conditions))
+        {
+            $params .= " and $conditions";
+            $values = array_merge($values, $vals);
         }
 
         return News::Find("news", $params, $values);
@@ -238,6 +243,34 @@ class News extends \simp\Model
         }
         
         return $errors == 0;
+    }
+
+    public function AfterFirstSave()
+    {
+        // find all users with access to this bad boy
+        global $log;
+        $log->logDebug("News::AfterFirstSave()");
+        ob_start();
+        \R::debug(true);
+        $users = \User::FindPublishers($this->entity_type, $this->entity_id);
+        \R::debug(false);
+        $log->logDebug(ob_get_contents());
+        ob_end_clean();
+        $site_name = GetCfgVar('site_name');
+        $subject = "[{$site_name}] Article Creation Notification";
+        foreach ($users as $user)
+        {
+            $log->logDebug("attempting to send email to {$user->login}");
+            $ok = SendSiteEmail($user, $subject, 'new_article', array('article' => $this));
+            $log->logDebug("SendSiteEmail returned: $ok");
+        }
+
+        return true;
+    }
+
+    public function AfterSave()
+    {
+        return true;
     }
 
     protected function VerifyDateFormat($field, &$date)

@@ -1,0 +1,16 @@
+<h1>"Events" Configuration</h1>
+<?= FormTag("max_events", \simp\Request::POST); ?>
+    <fieldset><legend>Maximum Number of Events</legend>
+        <p>This setting determines the number of events to show in the "Upcoming Events" sidebar.</p>
+        <?= TextField($this->max_events, 'value', array('array' => 'max_events', 'size' => 3)); ?>
+    </fieldset>
+
+    <fieldset><legend>Number of Days</legend>
+        <p>This setting determines the number of days to include from the current date when showing
+           events in the "Upcoming Events" sidebar.  Note that if there are more than the
+           <em>Maximum Number of Events</em> above in this timeframe, the number of upcoming events
+           shown will be limited to that amount.</p>
+        <?= TextField($this->num_days, 'value', array('array' => 'num_days', 'size' => 3)); ?>
+    </fieldset>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>

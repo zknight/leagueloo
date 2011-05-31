@@ -1,0 +1,21 @@
+<?
+global $REL_PATH;
+$user = $data['user'];
+$article = $data['article'];
+$site_name = $data['site_name'];
+$host = $data['host'];
+?>
+Hi, <?= $user->first_name; ?>.
+
+An article has been created for the <?= $article->entity_name; ?> <?= $article->entity_type; ?>.
+<? if ($article->published == false): ?>
+The article is sitting in the unpublished state.  Please review the article for publishing.  
+You can take action by visiting http://<?= $host . $REL_PATH; ?>content/news/edit/<?= $article->id;?>
+at your earliest convenience.
+<? else: ?>
+This is a courtesy notification.  No action is required.
+<? endif; ?>
+
+Thanks!
+
+<?= $site_name; ?> Robot Webmaster

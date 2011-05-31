@@ -23,6 +23,10 @@
             <td><strong>Location:</strong></td>
             <td colspan="2"><?= TextField($this->event_info, 'location', array('size' => 80));?></td>
         </tr>
+        <tr>
+            <td><strong>Create Related Article:</strong></td>
+            <td><?= CheckBoxField(NULL, 'create_article');?></td>
+        </tr>
     </table>
 </fieldset>
 <fieldset>
@@ -55,6 +59,7 @@
         monthly <input type='submit' name='repeat_monthly', value='<?= $this->event_info->repeat_type == 3 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
         annually <input type='submit' name='repeat_annually', value='<?= $this->event_info->repeat_type == 4 ? "&#x2713" : "  "; ?>' />;&nbsp;&nbsp;
         <input type='hidden' name='EventInfo[repeat_type]' value='<?= $this->event_info->repeat_type; ?>' />
+    <? if ($this->event_info->repeat_type > 0): ?>
     <fieldset>
         <legend>Event Repetition Information</legend>
         <? 
@@ -75,4 +80,5 @@
         }
         ?>
     </fieldset>
+    <? endif; ?>
 </fieldset>

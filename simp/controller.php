@@ -240,6 +240,7 @@ class Controller
         {
             if ($this->UserLoggedIn())
             {
+                /*
                 if ($this->_current_user->super ||
                     $this->_current_user->CanAccess(
                         $this->_authorization_params['entity_type'],
@@ -249,6 +250,8 @@ class Controller
                 {
                     $authorized = true;
                 }
+                 */
+                $authorized = true;
             }
         }
         else
@@ -266,7 +269,7 @@ class Controller
         {
             $var = \simp\Model::Create("CfgVar");
             $var->name = $name;
-            $var->value = $default == NULL ? "[not sret]" : $default;
+            $var->value = $default == NULL ? "[not set]" : $default;
             $var->Save();
         }
         return $var;

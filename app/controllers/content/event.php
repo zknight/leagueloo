@@ -35,8 +35,7 @@ class EventController extends \simp\Controller
         $dt_end = clone $dt_now;
         $dt_end->add(new \DateInterval("P2M"));
 
-        $this->expired_events = \EventInfo::FindEventInfoByDate(
-            new \DateTime("1/1/1970"),
+        $this->expired_events = \EventInfo::FindExpired(
             $dt_now);
         $this->upcoming_events = \EventInfo::FindEventInfoByDate(
             $dt_now,
@@ -96,42 +95,12 @@ class EventController extends \simp\Controller
 
     public function Create()
     {
-        global $log;
         $this->event_info = \simp\Model::Create('EventInfo');
         $this->event_info->UpdateFromArray($this->GetFormVariable("EventInfo"));
-        //$this->event_info->entity_type = "Program";
-        $rerender = false;
-        if ($all_day = $this->GetFormVariable("all_day"))
-        {
-            //$this->event->all_day = $all_day === " " ? true : false;
-            $this->event_info->all_day = !$this->event_info->all_day;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_daily"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 1 ? 1 : 0;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_weekly"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 2 ? 2 : 0;
-            $dt = new \DateTime($this->event_info->start_date_str);
-            $this->event_info->day_mask[$dt->format("w")] = 1;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_monthly"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 3 ? 3 : 0;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_annually"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 4 ? 4 : 0;
-            $rerender = true;
-        }
+        $rerender = $this->CheckSubmitType();
+
         if ($rerender == true)
         {
-            $log->logDebug("re-rendering add");
             $this->user = CurrentUser();
             $this->entities = $this->GetEntities();
             $this->Render("add");
@@ -146,6 +115,14 @@ class EventController extends \simp\Controller
             return false;
         }
 
+        if ($this->GetFormVariable("create_article"))
+        {
+            \Redirect(\Path::content_news_add(
+                SnakeCase($this->event_info->entity_type),
+                $this->event_info->entity_id,
+                "event",
+                $this->event_info->id));
+        }
         \Redirect(GetReturnURL());
 
     }
@@ -163,37 +140,8 @@ class EventController extends \simp\Controller
     {
         $this->event_info = \simp\Model::FindById('EventInfo', $this->GetParam('id'));
         $this->event_info->UpdateFromArray($this->GetFormVariable("EventInfo"));
-        //$this->event_info->entity_type = "Program";
-        $rerender = false;
+        $rerender = $this->CheckSubmitType();
 
-        if ($all_day = $this->GetFormVariable("all_day"))
-        {
-            //$this->event->all_day = $all_day === " " ? true : false;
-            $this->event_info->all_day = !$this->event_info->all_day;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_daily"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 1 ? 1 : 0;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_weekly"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 2 ? 2 : 0;
-            $dt = new \DateTime($this->event_info->start_date_str);
-            $this->event_info->day_mask[$dt->format("w")] = 1;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_monthly"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 3 ? 3 : 0;
-            $rerender = true;
-        }
-        else if ($this->GetFormVariable("repeat_annually"))
-        {
-            $this->event_info->repeat_type = $this->event_info->repeat_type != 4 ? 4 : 0;
-            $rerender = true;
-        }
         if ($rerender == true)
         {
             $this->user = CurrentUser();
@@ -208,6 +156,15 @@ class EventController extends \simp\Controller
             $this->entities = $this->GetEntities();
             $this->Render("edit");
             return false;
+        }
+
+        if ($this->GetFormVariable("create_article"))
+        {
+            \Redirect(\Path::content_news_add(
+                SnakeCase($this->event_info->entity_type),
+                $this->event_info->entity_id,
+                "event",
+                $this->event_info->id));
         }
 
         \Redirect(GetReturnURL());
@@ -228,6 +185,41 @@ class EventController extends \simp\Controller
             AddFlash("Invalid Event Information.  Please contact the system administrator.");
         }
         return \Redirect(GetReturnURL());
+    }
+
+    // returns true if need to re-render
+    protected function CheckSubmitType()
+    {
+        $rerender = false;
+        if ($all_day = $this->GetFormVariable("all_day"))
+        {
+            $this->event_info->all_day = !$this->event_info->all_day;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_daily"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 1 ? 1 : 0;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_weekly"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 2 ? 2 : 0;
+            $dt = new \DateTime($this->event_info->start_date_str);
+            // TODO: figure out how to set day mask for day automatically when a new event is created
+            //$this->event_info->day_mask[$dt->format("w")] = 1;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_monthly"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 3 ? 3 : 0;
+            $rerender = true;
+        }
+        else if ($this->GetFormVariable("repeat_annually"))
+        {
+            $this->event_info->repeat_type = $this->event_info->repeat_type != 4 ? 4 : 0;
+            $rerender = true;
+        }
+        return $rerender;
     }
 
     protected function GetEntities()

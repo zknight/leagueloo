@@ -178,6 +178,7 @@ class UserController extends \simp\Controller
 
     protected function RequestPassword(&$user)
     {
+        $site_name = GetCfgVar('site_name');
         $subject = "A message from {$site_name}: password reset";
         $user->password = RandStr(10);
         $user->password_verification = $user->password;
@@ -202,7 +203,7 @@ class UserController extends \simp\Controller
             'subject' => $subject,
             'type' => $user->email_html ? "html" : "plain",
             'data' => array(
-                'site_name' => $site_name,
+                'site_name' => GetCfgVar('site_name'),
                 'host' => $host,
                 'user' => $user,
             ),

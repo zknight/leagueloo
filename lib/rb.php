@@ -3437,7 +3437,7 @@ class RedBean_OODB extends RedBean_Observable implements RedBean_ObjectDatabase 
 					  strlen($prop)<1 ||
 					  preg_match($pattern,$prop)
 			) {
-				throw new RedBean_Exception_Security("Invalid Bean: property $prop  ");
+				throw new RedBean_Exception_Security("Invalid Bean: property '$prop' value '$value'  ");
 			}
 		}
 	}

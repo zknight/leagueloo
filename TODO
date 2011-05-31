@@ -1,11 +1,17 @@
 x Need to fix rendering to render based on function name rather than 'action' since some actions are mapped.
 x check which articles are listed under content/index depending upon user abilities
-* add possiblity of creating event associated with article 1:1 and making publication end date
+x add possiblity of creating event associated with article 1:1 and making publication end date
   conincident with event expiration?
+  # just defer to article creation after event is successfully created...
+  ? need to associate article to event?
 * team finance manager
-* article submission queue
+* article submission queue (send emails to publishers?)
+* event submission queue
 * recently updated pages app
-* event display
+x event display
 * inquiry form (routed to commissioner by age/division/gender)
 * photo gallery
-* article queue
+x event module admin
+* send emails
+* check for duplicate email on user sign-up
+* check for duplicate login on user sign-up

@@ -35,7 +35,7 @@ if ($this->UserLoggedIn()) {
         <span class="date">
             <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
         </span>
-    <p><?= $article->intro; ?></p>
-    <p><?= l("Read more...", GetArticlePath('show', $article)); ?></p>
+    <div class="intro"><?= $article->intro; ?></div>
+    <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
 </div>
 <? endforeach; ?>

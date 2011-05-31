@@ -1,3 +1,11 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn() && array_key_exists('entity_id', $this->event_data))
+{
+    $user = $this->GetUser();
+    $editor = $user->CanEdit($this->event_data['entity_type'], $this->event_data['entity_id']);
+}
+?>
 <div style="text-align:center;">
-<?= ShowCalendar($this->start_date, $this->dates); ?>
+<?= ShowCalendar(Path::event(), $this->start_date, $this->dates, $editor); ?>
 </div>

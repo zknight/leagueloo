@@ -65,11 +65,38 @@ class NewsController extends \simp\Controller
         }
     }
 
+    protected function CheckForEvent()
+    {
+        global $log;
+        $log->logDebug("NewsController::CheckForEvent()");
+        $log->logDebug("\t" . print_r($this->_params, true));
+        if ($this->CheckParam('extra'))
+        {
+            list($type, $id) = explode("/", $this->GetParam('extra'));
+            $log->logDebug("\ttype:$type id:$id");
+            if ($type == 'event')
+            {
+                // load event and get it's infos!
+                $event = \simp\Model::FindById('EventInfo', $id);
+                $log->logDebug("\tfound event: {$event->id}");
+                if ($event->id > 0)
+                {
+                    $this->article->short_title = $event->short_title;
+                    $this->article->title = $event->title;
+                    $this->article->intro = $event->description;
+                }
+            }
+        }
+
+    }
+
     public function Add()
     {
+        //print_r($this->_params);
         $this->user = CurrentUser();
         $this->article = \simp\Model::Create('News');
         $this->entities = $this->GetEntities();
+        $this->CheckForEvent();
         return true;
     }
 
@@ -85,7 +112,7 @@ class NewsController extends \simp\Controller
         if ($this->article->Save())
         {
             AddFlash("Article {$this->article->short_title} Created.");
-            \Redirect(\Path::content_news());
+            \Redirect(GetReturnURL());
         }
         else
         {

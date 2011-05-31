@@ -27,7 +27,7 @@ ul.menu {
     float:left;
     margin:0;
     padding:0;
-    background:#0f334d url(logo.png) no-repeat; 
+    background:#0f334d url(../img/logo.png) no-repeat; 
     background-position:20px 20px;
     height:160px;
     width:100%;
@@ -58,7 +58,7 @@ ul.menu {
         top:55px;
         margin-left:355px;
         margin-right:20px;
-        background:url(menu.png) repeat-x;
+        background:url(../img/menu.png) repeat-x;
         height:30px;
         /*width:66%;*/
         border-left:1px solid #2566b1;
@@ -99,7 +99,7 @@ ul.menu {
         top:70px;
         margin-left:355px;
         margin-right:20px;
-        background:url(notice.png) repeat-x;
+        background:url(../img/notice.png) repeat-x;
         height:30px;
         text-align:center;
         color:#be8234;
@@ -111,7 +111,7 @@ ul.menu {
     float:left;
     width:100%;
     overflow:hidden;
-    background:#569fd3 url(column.png) repeat-x;
+    background:#569fd3 url(../img/column.png) repeat-x;
 }
 .middle, .left {
     float:left;
@@ -124,7 +124,7 @@ ul.menu {
 }
 .left {
     right:50%;
-    background:#569fd3 url(column.png) repeat-x;
+    background:#569fd3 url(../img/column.png) repeat-x;
 }
 .col1, 
 .col2, 
@@ -162,6 +162,6 @@ ul.menu {
     clear:both;
     float:left;
     width:100%;
-    background:#569fd3 url(footer.png) bottom repeat-x;
+    background:#569fd3 url(../img/footer.png) bottom repeat-x;
     color:#00243e;
 }

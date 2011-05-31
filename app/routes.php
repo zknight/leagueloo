@@ -64,10 +64,11 @@ function RouteSetup($router)
 
     $router->AddRoute('/content')->Controller('content');
     $router->AddRoute('/content/[A:controller]')->Group('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]')->Group('content');
+    //$router->AddRoute('/content/[A:controller]/[A:action]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Group('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Group('content');
-    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[i:id]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]?/[a:entity_id]?/[i:id]?')->Group('content');
+    //$router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]')->Group('content');
+    $router->AddRoute('/content/[A:controller]/[A:action]/[A:entity]/[a:entity_id]/[**:extra]?')->Group('content');
     $router->AddRoute('/content/event/[A:action]/[i:year]/[i:month]/[i:day]')
         ->Group('content')
         ->Controller('event');
@@ -80,7 +81,10 @@ function RouteSetup($router)
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
 
     $router->AddRoute('/news/[A:action]/[i:id]')->Controller('news');
-    $router->AddRoute('/event/[A:action]/[a:entity_type]/[i:id]')->Controller('event');
+    $router->AddRoute('/event/calendar/[i:year]/[i:month]/[a:entity_type]?/[i:id]?')
+        ->Controller('event')->Action('calendar');
+    $router->AddRoute('/event/[A:action]/[i:id]?')->Controller('event');
+    $router->AddRoute('/event/[A:action]/[a:entity_type]?/[i:id]?')->Controller('event');
 
     $router->AddRoute('/[a:program]/teams')->Controller('teams');
     $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('teams')->Action('by_gender');
