@@ -5,7 +5,7 @@ x add possiblity of creating event associated with article 1:1 and making public
   # just defer to article creation after event is successfully created...
   ? need to associate article to event?
 * team finance manager
-* article submission queue (send emails to publishers?)
+x article submission queue (send emails to publishers?)
 * event submission queue
 * recently updated pages app
 x event display
@@ -15,3 +15,6 @@ x event module admin
 * send emails
 * check for duplicate email on user sign-up
 * check for duplicate login on user sign-up
+* user prefs (receive email for updates)
+* personal messages
+* notifications app (messages)

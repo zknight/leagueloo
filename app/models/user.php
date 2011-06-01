@@ -6,6 +6,11 @@ class User extends \simp\Model
     protected $_password;
     protected $_password_verify;
 
+    const EMAIL = 0;
+    const MESSAGE = 1;
+    const EMAIL_AND_MESSAGE = 2;
+    const NONE = 3;
+
     public function Setup()
     {
         global $log;
@@ -172,6 +177,17 @@ class User extends \simp\Model
             break;
         case "password":
             return $this->_password;
+            break;
+        case "messages":
+            $messages = User::Find("Message", "user_id = ?", array($this->id));
+            return $messages;
+        case "unread_message_count":
+            //\R::debug(true);
+            $count = \R::getCell("select count(*) from message where user_id = ? and unread = ?",
+                array($this->id, true));
+            //global $log; $log->logDebug("User::__get() umc: " . print_r($count, true));
+            //\R::debug(false);
+            return $count;
             break;
         default: 
             return parent::__get($property);
@@ -428,6 +444,52 @@ class User extends \simp\Model
         }
         return $entity_arr;
     }
+
+    public function Notify($subject, $message, $data=array())
+    {
+        global $log;
+        $log->logDebug("User::Notify() notification_type for user: {$this->notification_type}");
+        $ok = true;
+        switch ($this->notification_type)
+        {
+        case User::EMAIL_AND_MESSAGE:
+            // intentional fall-through
+            $log->logDebug("sending message");
+            $this->SendMessage($subject, $message, $data);
+        case User::EMAIL:
+            $log->logDebug("sending email");
+            $ok = SendSiteEmail($this, $subject, $message, $data);
+            break;
+        case User::MESSAGE:
+            $log->logDebug("sending message");
+            $this->SendMessage($subject, $message, $data);
+            break;
+        default:
+            break;
+        }
+
+        if (!$ok)
+        {
+            global $log;
+            $log->logInfo("Failed to send email to {$user->login}");
+        }
+    }
+
+    public function SendMessage($subject, $message, $data=array())
+    {
+        global $APP_BASE_PATH;
+        ob_start();
+        require_once $APP_BASE_PATH . "/emails/" . SnakeCase($message) . ".phtml";
+        $message = ob_get_contents();
+        ob_end_clean();
+        $msg = User::Create('Message');
+        $msg->title = $subject;
+        $msg->body = $message;
+        $msg->user_id = $this->id;
+        $msg->unread = true;
+        $msg->Save();
+    }
+
 
     // login
     // first_name

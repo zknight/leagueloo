@@ -347,3 +347,16 @@ h3.sub-title {
         color:#d2903a;
     }
 
+table.form {
+    border-collapse: collapse;
+    width:100%;
+    border:1px solid #b9daf1;
+}
+    table.form th { width:33%; }
+    table.form th,
+    table.form td {
+        text-align:left;
+        padding:8px 6px;
+        background:#0f334d;
+        /*border-left:1px solid #00243e;*/
+    }

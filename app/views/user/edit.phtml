@@ -1,23 +1,44 @@
-<h2><?= $this->user->first_name; ?>'s Profile</h2>
+<h2><?= $this->user->first_name; ?>'s Preferences</h2>
+<?= l("change password", Path::user("change_pass")); ?> |
+<?= l("back", GetReturnURL()); ?>
+<br />
+<br />
 <?= GetErrorsFor($this->user); ?>
 <?= FormTag("edit", \simp\Request::PUT, Path::user_edit($this->user->id)); ?>
-<table>
+<table class="form">
     <tr>
-        <th>login:</th>
+        <th>My User Id</th>
         <td><?= $this->user->login; ?></td>
     </tr>
     <tr>
-        <th>First Name</th>
+        <th>My First Name</th>
         <td><?= TextField($this->user, "first_name"); ?></td>
     </tr>
     <tr>
-        <th>Last Name</th>
+        <th>My Last Name</th>
         <td><?= TextField($this->user, "last_name"); ?></td>
     </tr>
     <tr>
-        <th>Email</th>
+        <th>My Email Address</th>
         <td><?= TextField($this->user, "email"); ?></td>
     </tr>
+    <tr>
+        <th>Send Emails to Me</th>
+        <td>
+            <?= RadioButton($this->user, "email_html", 0); ?> in plain text <br />
+            <?= RadioButton($this->user, "email_html", 1); ?> in HTML 
+        </td>
+    </tr>
+    <tr>
+        <th>Send Site Notifications to Me</th>
+        <td>
+            <?= RadioButton($this->user, "notification_type", User::EMAIL); ?> via Email<br />
+            <?= RadioButton($this->user, "notification_type", User::MESSAGE); ?> via Site Message<br />
+            <?= RadioButton($this->user, "notification_type", User::EMAIL_AND_MESSAGE); ?> via Email and Site Message<br />
+            <?= RadioButton($this->user, "notification_type", User::NONE); ?> don't send any notifications
+        </td>
+    </tr>
+<? /*
     <tr>
         <th>Change Password</th>
         <td><?= PasswordField($this->user, "password"); ?></td>
@@ -26,8 +47,10 @@
         <th>Verify Password</th>
         <td><?= PasswordField($this->user, "password_verification"); ?></td>
     </tr>
+ */
+?>
     <tr>
-        <th>Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
+        <th>My Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
 </table>
 <input type="submit" value="Update Profile"\>

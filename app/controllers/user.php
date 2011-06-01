@@ -156,7 +156,7 @@ class UserController extends \simp\Controller
 
     function Update()
     {
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $vars = $this->GetFormVariable('User');
         $user = \simp\Model::FindById('User', $id);
         $user->UpdateFromArray($vars);

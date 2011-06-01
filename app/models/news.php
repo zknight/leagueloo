@@ -261,8 +261,7 @@ class News extends \simp\Model
         foreach ($users as $user)
         {
             $log->logDebug("attempting to send email to {$user->login}");
-            $ok = SendSiteEmail($user, $subject, 'new_article', array('article' => $this));
-            $log->logDebug("SendSiteEmail returned: $ok");
+            $user->Notify($subject, 'new_article', array('article' => $this));
         }
 
         return true;
