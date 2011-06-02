@@ -1,0 +1,18 @@
+<h1><?= $this->user->first_name; ?>'s Inbox</h1>
+<? if (count($this->messages) < 1): ?>
+<p>You have no messages</p>
+<? else: ?>
+<table class="messages">
+    <tr>
+        <th>Subject</th><th>Date Sent</th><th>&nbsp;</th>
+    </tr>
+    <? foreach($this->messages as $message): ?>
+        <? $class = $message->unread ? "unread" : "read"; ?>
+    <tr class="<?= $class; ?>">
+        <td><?= l($message->title, Path::message_show($message->id)); ?></td>
+        <td><?= FormatDateTime($message->date, "m/d/Y H:i"); ?></td>
+        <td><?= l("delete", Path::message_delete($message->id), array('method' => 'delete')); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

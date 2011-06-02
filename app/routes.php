@@ -53,16 +53,17 @@
 function RouteSetup($router)
 {
     $router->AddRoute('/')->Controller('main');
-    $router->AddRoute('/main')->Controller('main');
+    $router->AddRoute('/main/')->Controller('main');
+    $router->AddRoute('/home/')->Controller('main');
     $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
-    $router->AddRoute('/administrator')->Controller('administrator');
+    $router->AddRoute('/administrator/')->Controller('administrator');
 
     $router->AddRoute('/admin/[A:controller]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[a:name]')->Group('admin');
 
-    $router->AddRoute('/content')->Controller('content');
+    $router->AddRoute('/content/')->Controller('content');
     $router->AddRoute('/content/[A:controller]')->Group('content');
     //$router->AddRoute('/content/[A:controller]/[A:action]')->Group('content');
     $router->AddRoute('/content/[A:controller]/[A:action]/[i:id]')->Group('content');
@@ -79,6 +80,8 @@ function RouteSetup($router)
 
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
+
+    $router->AddRoute('/message/[A:action]?/[i:id]?')->Controller('message');
 
     $router->AddRoute('/news/[A:action]/[i:id]')->Controller('news');
     $router->AddRoute('/event/calendar/[i:year]/[i:month]/[a:entity_type]?/[i:id]?')

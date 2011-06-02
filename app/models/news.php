@@ -153,6 +153,10 @@ class News extends \simp\Model
                 }
                 break;
             case 'entity_name':
+                if ($this->entity_id == 0)
+                {
+                    return "-";
+                }
                 return \R::getCell(
                     "select name from " . SnakeCase($this->entity_type) . " where id = ?", 
                     array($this->entity_id));

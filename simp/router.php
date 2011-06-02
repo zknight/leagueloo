@@ -99,7 +99,8 @@ class Router
     {
         $this->Put( "<pre>");
         $this->_log->logDebug("Routing request: {$request->GetRequestURL()}");
-        $uri = "/" . $request->GetRequestURL();
+        $uri = "/" . $request->GetRequestURL() . "/";
+        if ($uri === "//") $uri = "/";
         $this->Put( "Request URL: $uri\n");
         $this->_params = $request->GetParams();
 
@@ -145,6 +146,7 @@ class Router
                 }
                 if (null === $substr || strpos($uri, $substr) !== 0)
                 {
+                    $this->Put( "strpos: " . strpos($uri, $substr));
                     $this->Put( "substr = $substr\n");
                     $this->Put( "uri = $uri\n");
                     continue;
@@ -192,7 +194,8 @@ class Router
 
         if (false == $match)
         {
-            Error404();
+            //Error404();
+            exit();
         }
 
         // set breadcrumb

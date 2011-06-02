@@ -347,7 +347,8 @@ h3.sub-title {
         color:#d2903a;
     }
 
-table.form {
+table.form,
+table.messages {
     border-collapse: collapse;
     width:100%;
     border:1px solid #b9daf1;
@@ -360,3 +361,6 @@ table.form {
         background:#0f334d;
         /*border-left:1px solid #00243e;*/
     }
+
+    table.messages tr.unread { font-weight:bold; }
+

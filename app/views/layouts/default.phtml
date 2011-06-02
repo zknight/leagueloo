@@ -13,13 +13,12 @@
             <? if ($this->UserLoggedIn()):?>
                 <? $user = $this->GetUser();
                    $unread_count = $user->unread_message_count;
+                   $link_img = $unread_count > 0 ?
+                       "<img src=\"" . GetImagePath("email_open_image.png") . "\" style=\"vertical-align:bottom\" />" :
+                       "<img src=\"" . GetImagePath("email.png") . "\" style=\"vertical-align:bottom\" />";
                 ?>
                     <li>Logged in as: <?= $user->login?></li>
-                    <? if ($unread_count): ?>
-                    <li><?= l("[$unread_count]", Path::messages($user->id)); ?></li>
-                    <? else: ?>
-                    <li><?= l("[0]", Path::messages($user->id)); ?></li>
-                    <? endif; ?>
+                    <li><?= l($link_img, Path::message()); ?></li>
                     <li><?= l("logout", Path::user_logout()); ?> </li>
                     <li><?= l("preferences", Path::user_edit()); ?> </li>
                 <? if ($this->GetUser()->super): ?>

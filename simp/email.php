@@ -23,7 +23,7 @@ class Email
         if (array_key_exists('data', $email_data)) $data = $email_data['data'];
         $ext = $email_data['type'] == "html" ? ".phtml" : "_txt.phtml";
         ob_start();
-        require_once $APP_BASE_PATH . "/emails/" . SnakeCase($message_template) . $ext;
+        include $APP_BASE_PATH . "/emails/" . SnakeCase($message_template) . $ext;
         $message = ob_get_contents();
         ob_end_clean();
         $headers = $email_data['type'] == "html" ?

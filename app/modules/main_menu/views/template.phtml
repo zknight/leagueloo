@@ -1,6 +1,9 @@
 <ul class="menu">
-    <li><?= l("Home", Path::home()); ?></li>
     <? foreach ($this->GetPrograms() as $program): ?>
-    <li><?= l($program->name, \Path::Relative($program->name)); ?></li>
+        <? if ($program->weight == 0): ?>
+    <li><?= l("Home", Path::home()); ?></li>
+        <? else: ?>
+    <li><?= l($program->name, \Path::Relative(SnakeCase($program->name))); ?></li>
+        <? endif; ?>
     <? endforeach; ?>
 </ul>

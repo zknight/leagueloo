@@ -12,9 +12,12 @@ x event display
 * inquiry form (routed to commissioner by age/division/gender)
 * photo gallery
 x event module admin
-* send emails
+x send emails
 * check for duplicate email on user sign-up
 * check for duplicate login on user sign-up
-* user prefs (receive email for updates)
-* personal messages
+x user prefs (receive email for updates)
+x personal messages
 * notifications app (messages)
+* team records
+* link module (per entity!)
+* club news (for main)

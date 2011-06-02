@@ -408,7 +408,7 @@ class User extends \simp\Model
         {
             if ($entity_types == 'all')
             {
-                $entity_types = array("Program", "Team", "PlugIn");
+                $entity_types = array("Club", "Program", "Team", "PlugIn");
             }
             else
             {
@@ -421,6 +421,8 @@ class User extends \simp\Model
         {
             foreach ($entity_types as $type)
             {
+                // don't try, no database table for this guy!
+                if ($type == "Club") continue;
                 $types = Pluralize(SnakeCase($type));
                 $$types = User::Find($type, $conditions, $values);
                 $entities = array_merge($entities, $$types);
@@ -441,6 +443,11 @@ class User extends \simp\Model
                 if (in_array($ability->entity_type, $entity_types))
                     $entity_arr["{$ability->entity_type}:{$ability->entity_id}"] = "{$ability->entity_type}-{$ability->entity_name}";
             }
+        }
+
+        if (in_array("Club", $entity_types))
+        {
+            $entity_arr["Club:0"] = "Club";
         }
         return $entity_arr;
     }
@@ -478,15 +485,31 @@ class User extends \simp\Model
     public function SendMessage($subject, $message, $data=array())
     {
         global $APP_BASE_PATH;
+        global $_SERVER;
+        if (!is_array($data))
+        {
+            $data = array('data' => $data);
+        }
+        $host = GetCfgVar('site_address');
+        if ($host == "") $host = $_SERVER['SERVER_NAME'];
+        $data = array_merge($data, array(
+            'site_name' => GetCfgVar('site_name'),
+            'host' => $host,
+            'user' => $this
+            )
+        );
+        $msg_path = $APP_BASE_PATH . "/emails/" .SnakeCase($message) . ".phtml";
+        global $log; $log->logDebug("sending message using template: $msg_path");
         ob_start();
-        require_once $APP_BASE_PATH . "/emails/" . SnakeCase($message) . ".phtml";
-        $message = ob_get_contents();
+        include $msg_path;
+        $body = ob_get_contents();
         ob_end_clean();
         $msg = User::Create('Message');
         $msg->title = $subject;
-        $msg->body = $message;
+        $msg->body = $body;
         $msg->user_id = $this->id;
         $msg->unread = true;
+        $msg->date = strtotime("now");
         $msg->Save();
     }
 

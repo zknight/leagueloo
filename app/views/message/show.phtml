@@ -1,0 +1,4 @@
+<?= l("back", GetReturnURL()); ?>
+<p><strong>Subject: <?= $this->message->title; ?></strong></p>
+<span class="date">Sent: <?= FormatDateTime($this->message->date, "m/d/Y H:i"); ?></span>
+<p><?= $this->message->body; ?></p>
