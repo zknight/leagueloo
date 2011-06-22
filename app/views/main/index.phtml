@@ -1,22 +1,48 @@
 <!--h2>Latest Info from South Lakes Soccer Club</h2-->
+<?= IncludeJS("slideshow.js"); ?>
+<script type="text/javascript">
+$(function(){
+    $('#news-show').slideshow({delay: 15000});
+});
+</script>
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<h1 class="title"><?= SiteName(); ?></h1>
+<? \simp\Module::Show("SectionMenu", array("current" => 'index', "entity_type" => 'Main', "entity_id" => 0)); ?>
+<ul class="admin-menu">
+    <li><?= l("new article", Path::content_news_add_main(0)); ?></li>
+    <li><?= l("upload image", Path::content_image_add()); ?></li>
+    <? if ($publisher): ?>
+    <li><?= l("manage articles", Path::content_news()); ?></li>
+    <li><?= l("manage images", Path::content_image()); ?></li>
+    <? endif; ?>
+</ul>
+
+<div id="news-show">
 <? foreach ($this->articles as $program => $articles): ?>
     <? if (count($articles) > 0): ?>
-<div class="program_news">
-    <div class="program_name"><?= l($program, Path::Relative($program)); ?></div>
         <? foreach ($articles as $article): ?>
     <div class="article">
+        <div class="program_name"><?= l($program, Path::Relative($program)); ?></div>
         <h3><?= l($article->title, GetArticlePath('show', $article)); ?></h3>
             <span class="date">
                 <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
             </span>
-                <? if ($this->is_editor[$program]): ?>
-            <?= l("edit this article", Path::content_news_edit_program($article->entity_id, $article->id)); ?><br />
-                <? endif; ?>
+            <? if ($this->is_editor[$program]): ?>
+            <?= l("edit this article", Path::content_news_edit($article->entity_type, $article->entity_id, $article->id)); ?><br />
+            <? endif; ?>
         <div class="intro"><?= $article->intro; ?></div>
         <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
     </div>
         <? endforeach; ?>
-</div>
     <? endif; ?>
 <? endforeach; ?>
-
+    <div id="controls"></div>
+</div>

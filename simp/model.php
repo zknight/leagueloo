@@ -3,27 +3,11 @@ namespace simp;
 require_once "rb.php";
 
 //load_database("sqlite:db/development.db");
-class Model 
+class Model extends BaseModel
 {
     protected $_bean;
     protected $_table_name;
-    protected $_errors;
     protected $_associations;
-
-    public static function LoadModel($classname)
-    {
-        global $log;
-        global $APP_BASE_PATH;
-        $filename = SnakeCase($classname) . ".php";
-        $path = $APP_BASE_PATH . "/models/" . $filename;
-        $module_path = $APP_BASE_PATH . "/modules/";
-        //$log->logDebug("attempting to find $classname @ $path");
-        if (file_exists($path))
-        {
-            //echo("attempting to find $classname @ $path");
-            require_once $path;
-        }
-    }
 
     public static function LoadDatabase($dbspec)
     {
@@ -34,19 +18,14 @@ class Model
 
     public function __construct($bean = NULL)
     {
+        parent::__construct();
         $this->_associations = array();
         $this->_table_name = Model::TableName($this->__toString());
         $this->_bean = $bean;
-        $this->_errors = array();
         if (method_exists($this, "Setup"))
         {
             $this->Setup();
         }
-    }
-
-    public function __toString()
-    {
-        return get_class($this);
     }
 
     static public function TableName($model_name)
@@ -78,7 +57,6 @@ class Model
 
         return $model;
     }
-
 
     static public function FindById($model_name, $id)
     {
@@ -309,131 +287,4 @@ class Model
             }
         }
     }
-
-    public function UpdateFromArray($vars)
-    {
-        global $log;
-        foreach ($vars as $name => $val)
-        {
-            if ($name != "id") $this->$name = $val;
-        }
-        $this->AfterUpdate();
-        // update associations
-        /*
-        foreach ($this->_associations as $assoc)
-        {
-            $assoc->UpdateFromArray($vars);
-        }
-     */
-    }
-
-    public function GetErrors()
-    {
-        return $this->_errors;
-    }
-
-    public function SetError($field, $error)
-    {
-        $this->_errors[$field] = $error;
-    }
-
-    //// Event CALLBACKS
-    // callback for when model is opened (find, load)
-    public function OnLoad()
-    {
-    }
-
-    // called after fields are updated from an array
-    public function AfterUpdate()
-    {
-    }
-
-    public function BeforeSave()
-    {
-        return true;
-    }
-
-    public function AfterSave()
-    {
-        return true;
-    }
-
-    public function AfterFirstSave()
-    {
-        return true;
-    }
-
-    public function BeforeDelete()
-    {
-        return true;
-    }
-
-    public function AfterDelete()
-    {
-        return true;
-    }
-
-    // verification methods
-    protected function HasErrors()
-    {
-        return (count($this->_errors) > 0);
-    }
-
-    protected function VerifyArraySize($field, $size, $errmsg = NULL)
-    {
-        $ok = true;
-        if (count($this->$field) !== $size)
-        {
-            $msg = $errmsg == NULL ? "{$field} must be an array of $size." : $errmsg;
-            $this->SetError($field, $msg);
-            $ok = false;
-        }
-        return $ok;
-    }
-
-    protected function VerifyMaxLength($field, $length, $errmsg = NULL)
-    {
-        $ok = true;
-        if (strlen($this->$field) > $length)
-        {
-            $msg = $errmsg == NULL ? "{$field} must be no longer than {$length} characters." : $errmsg;
-            $this->SetError($field, $msg);
-            $ok = false;
-        }
-        return $ok;
-    }
-
-    protected function VerifyMinLength($field, $length, $errmsg = NULL)
-    {
-        $ok = true;
-        if (strlen($this->$field) < $length)
-        {
-            $msg = $errmsg == NULL ? "{$field} must be at least {$length} characters." : $errmsg;
-            $this->SetError($field, $msg);
-            $ok = false;
-        }
-        return $ok;
-    }
-
-    protected function VerifyValidDate($field)
-    {
-        // valid dates are mm/dd/yyyy or mm-dd-yyyy
-        $ok = true;
-        if (preg_match('~(\d{1,2})[/:.,_\-\' ](\d{1,2})[/:.,_\-\' ](\d{4})~', $this->$field, $match))
-        {
-            if (checkdate($match[1], $match[2], $match[3]) == false)
-            {
-                $ok = false;
-            }
-        }
-        else $ok = false;
-
-        if ($ok == false)
-        {
-            $msg = "{$field} must be a valid date (mm/dd/yyyy)";
-            $this->setError($field, $msg);
-        }
-        return $ok;
-    }
-
 }

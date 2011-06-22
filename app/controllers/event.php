@@ -10,24 +10,40 @@ class EventController extends \simp\Controller
     function Calendar()
     {
         $this->StoreLocation();
-        $this->event_data = array();
+        $this->entity_type = "Main";
+        $this->entity_id = 0;
+        $this->entity_name = "Club";
+
         $conditions = NULL;
         $values = array();
         if ($this->CheckParam("entity_type"))
         {
             $etype = ClassCase($this->GetParam("entity_type"));
-            $this->event_data['entity_type'] = $etype;
-            $conditions = "entity_type = ?";
-            $values[] = $etype;
-            if ($this->CheckParam("id"))
+            $this->entity_type = $etype;
+            if ($etype == "Main")
             {
-                $eid = $this->GetParam("id");
-                $this->event_data['entity_id'] = $eid;
-                $conditions .= " and entity_id = ?";
-                $values[] = $eid;
+                $conditions = "entity_type <> ?";
+                $values[] = 'Team';
+            }
+            else
+            {
+                $conditions = "entity_type = ?";
+                $this->entity_name = $this->entity_type;
+                $values[] = $etype;
+                if ($this->CheckParam("id"))
+                {
+                    $eid = $this->GetParam("id");
+                    $this->entity_id = $eid;
+                    $conditions .= " and entity_id = ?";
+                    $values[] = $eid;
+                    $this->entity_name = \R::getCell(
+                        "select name from " . SnakeCase($this->entity_type) . " where id = ?",
+                        array($this->entity_id));
+                }
             }
         }
 
+        SetEntity($this->entity_type, $this->entity_id, $this->entity_name);
         $dt = new \DateTime("now");
         $today = FormatDateTime($dt->getTimestamp(), "d_m_Y");
         list($day, $month, $year) = explode("_", $today);

@@ -1,0 +1,7 @@
+<h1>Create a Notice</h1>
+<?= GetErrorsFor($this->notice); ?>
+<?= FormTag("notice", \simp\Request::POST); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>
+

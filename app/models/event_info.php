@@ -395,9 +395,16 @@ class EventInfo extends \simp\Model
             return $this->day_mask;
             break;
         case "entity_name":
-            return \R::getCell(
-                "select name from " . SnakeCase($this->entity_type) . " where id = ?",
-                array($this->entity_id));
+            if ($this->entity_id == 0)
+            {
+                return "Club";
+            }
+            else
+            {
+                return \R::getCell(
+                    "select name from " . SnakeCase($this->entity_type) . " where id = ?",
+                    array($this->entity_id));
+            }
             break;
         case "entity_designator":
             $entity_designator = "{$this->entity_type}:{$this->entity_id}";

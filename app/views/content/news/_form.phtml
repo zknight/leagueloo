@@ -2,26 +2,30 @@
     <legend>Article Content</legend>
     <table class="form">
         <tr>
-            <td><strong>Select category to which article belongs:</strong></td>
-            <td><?= SimpleSelect($this->article, 'entity_designator', $this->entities); ?></td>
-            <td>&nbsp;</td>
+            <td class="label"><strong>Select category to which article belongs:</td>
+            <td class="entry"><?= SimpleSelect($this->article, 'entity_designator', $this->entities); ?></td>
+            <td class="entry">&nbsp;</td>
         </tr>
+<? /*
         <tr>
-            <td><strong>Enter a short title:</strong></td>
-            <td><?= TextField($this->article, 'short_title', array('size' => 32)); ?></td>
-            <td>Max characters: 32</td>
+            <td class="label">Enter a short title:</td>
+            <td class="entry"><?= TextField($this->article, 'short_title', array('size' => 32)); ?></td>
+            <td class="entry">Max characters: 32</td>
         </tr>
+ */ ?>
         <tr>
-            <td><strong>Enter title:</strong></td>
-            <td colspan="2"><?= TextField($this->article, 'title', array('size' => 80));?></td>
+            <td class="label">Enter title:</td>
+            <td class="entry" colspan="2"><?= TextField($this->article, 'title', array('size' => 80));?></td>
         </tr>
+<? /*
         <tr>
-            <td><strong>Introduction:</strong></td>
-            <td colspan="2"><?= TextArea($this->article, 'intro', 3, 70); ?></td>
+            <td class="label">Introduction:</td>
+            <td class="entry" colspan="2"><?= TextArea($this->article, 'intro', 3, 70); ?></td>
         </tr>
+ */ ?>
         <tr>
-            <td><strong>Body:</strong></td>
-            <td colspan="2"><?= TextArea($this->article, 'body', 10, 70); ?></td>
+            <td class="label">Body:</td>
+            <td class="entry" colspan="2"><?= Wysiwyg($this->article, 'body', 10, 70); ?></td>
         </tr>
     </table>
 </fieldset>
@@ -29,35 +33,35 @@
     <legend>Article Parameters</legend>
     <table class="form">
         <tr>
-            <td><strong>Show Intro on Front Page:</strong></td>
-            <td><?= CheckBoxField($this->article, 'front_page'); ?></td>
-            <td>&nbsp;</td>
+            <td class="label">Show Intro on Front Page:</td>
+            <td class="entry"><?= CheckBoxField($this->article, 'front_page'); ?></td>
+            <td class="entry">&nbsp;</td>
         </tr>
 <? if ($this->GetUser()->CanPublish($this->article->entity_type, $this->article->entity_id)): ?>
         <tr>
-            <td><strong>Publish Now:</strong></td>
-            <td><?= CheckBoxField($this->article, 'publish_now'); ?></td>
-            <td>Checking this ignores Publish Date/Time</td>
+            <td class="label">Publish Now:</td>
+            <td class="entry"><?= CheckBoxField($this->article, 'publish_now'); ?></td>
+            <td class="entry">Checking this ignores Publish Date/Time</td>
         </tr>
         <tr>
-            <td><strong>Publish Date:</strong></td>
-            <td><?= TextField($this->article, 'publish_date'); ?></td>
-            <td>Format: mm/yy/dddd</td>
+            <td class="label">Publish Date:</td>
+            <td class="entry"><?= TextField($this->article, 'publish_date'); ?></td>
+            <td class="entry">Format: mm/yy/dddd</td>
         </tr>
         <tr>
-            <td><strong>Publish Time:</strong></td>
-            <td><?= TextField($this->article, 'publish_time'); ?></td>
-            <td>(Optional) Format: hh:mm [am/pm]</td>
+            <td class="label">Publish Time:</td>
+            <td class="entry"><?= TextField($this->article, 'publish_time'); ?></td>
+            <td class="entry">(Optional) Format: hh:mm [am/pm]</td>
         </tr>
         <tr>
-            <td><strong>Expiration Date:<strong></td>
-            <td><?= TextField($this->article, 'expire_date'); ?></td>
-            <td>Format: mm/yy/dddd (leave blank to never expire)</td>
+            <td class="label">Expiration Date:<strong></td>
+            <td class="entry"><?= TextField($this->article, 'expire_date'); ?></td>
+            <td class="entry">Format: mm/yy/dddd (leave blank to never expire)</td>
         </tr>
         <tr>
-            <td><strong>Expiration Time:</strong></td>
-            <td><?= TextField($this->article, 'expire_time'); ?></td>
-            <td>(Optional) Format: hh:mm [am/pm]</td>
+            <td class="label">Expiration Time:</td>
+            <td class="entry"><?= TextField($this->article, 'expire_time'); ?></td>
+            <td class="entry">(Optional) Format: hh:mm [am/pm]</td>
         </tr>
 <? endif; ?>
     </table>

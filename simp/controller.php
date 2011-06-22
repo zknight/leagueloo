@@ -131,9 +131,20 @@ class Controller
         $this->_params[$index] = $value;
     }
 
+    public function SetAction($action)
+    {
+        $this->_action = $action;
+    }
+
+    public function GetAction()
+    {
+        return $this->_action;
+    }
+
     function CallAction($action)
     {
         global $log;
+        $this->_action = $action;
         $func = ClassCase($action);
         $save = true;
         $log->logDebug("CallAction: looking up $action in map: \n" . print_r($this->_action_map, true));
@@ -151,7 +162,7 @@ class Controller
         $render = call_user_func(array($this, $func));
         if ($render)
         {
-            $this->Render($action);
+            $this->Render($this->_action);
             /* this ain't working
             if ($this->_method == Request::GET)
             {

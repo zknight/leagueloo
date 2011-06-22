@@ -5,8 +5,10 @@
             <?= SiteName(); ?>
         </title>
         <?= IncludeCSS("style.css"); ?>
+        <?= IncludeJS("jquery.js"); ?>
     </head>
     <body>
+        <? \simp\Module::Show("Notices"); ?>
         <div id="header">
             <div id="user-menu">
                 <ul class = "menu">
@@ -39,22 +41,20 @@
                 -->
                 <? \simp\Module::Show("MainMenu"); ?>
             </div>
-            <!--div id="notice">
-            </div-->
-            <? \simp\Module::Show("Notice"); ?>
         </div>
+        <?=GetFlash();?>
         <div class="colmask">
             <div class="middle">
                 <div class="left">
                     <div class="col1">
-                        <?=GetFlash();?>
         <!-- div class="breadcrumb"><?//= MainMenu::GetBreadcrumb(); ?></div-->
-                        <?= $this->content; ?>
+                        <div class="section">
+                            <?= $this->content; ?>
+                        </div>
                         <!--div style="height:400px;"></div-->
                     </div>
                     <div class="col2">
-                        <? if (!isset($this->event_data)) $this->event_data = array('entity_type' => 'Program'); ?>
-                        <? \simp\Module::Show("Events", $this->event_data); ?>
+                        <? \simp\Module::Show("Events"); //, array('entity_type' => GetEntityType(), 'entity_id' => GetEntityId())); ?>
                     </div>
                     <div class="col3">
                         <? \simp\Module::Show("FieldConditions"); ?>

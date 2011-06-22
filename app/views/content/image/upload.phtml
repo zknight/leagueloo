@@ -1,0 +1,22 @@
+<h1>Upload Image Archive</h1>
+<?= GetErrorsFor($this->archive); ?>
+<?= l("back", GetReturnURL()); ?>
+<p>
+    Upload pictures in bulk by creating an archive containing all the pictures you'd like to upload.
+    The archive should be either a zip file (.zip), gzip file (.gz), or tarball (.tgz).
+<p>
+<form enctype="mutlipart/form-data" method="post">
+<fieldset><legend>Image Information</legend>
+<table class="form">
+    <tr>
+        <td><strong>Select category to associate image with:</strong></td>
+        <td><?= SimpleSelect($this->archive, 'entity_designator', $this->entities); ?></td>
+    </tr>
+    <tr>
+        <td><strong>Select an image to upload:</strong></td>
+        <td><input type="file" name="archive" /></td>
+    </tr>
+</table>
+</fieldset>
+<input type="submit" value="upload" />
+</form>

@@ -1,0 +1,28 @@
+<h1>Tournament Manager</h1>
+<?= l("Add Tournament", Path::content_tournament_add()); ?>
+<? foreach($this->tournaments as $kind => $tournaments): ?>
+<h2><?= HumanCase($kind); ?> Tournaments</h2>
+    <? if (count($tournaments) < 1): ?>
+<p>
+    No <?= HumanCase($kind); ?> Tournaments.  
+    <? if ($kind == 'upcoming'): ?>
+    <?= l("Create one.", Path::content_tournament_add()); ?>
+    <? endif; ?>
+</p>
+    <? else: ?>
+<table>
+    <tr>
+        <th>Name</th><th>Type</th><th>Start Date</th><th colspan='2'>&nbsp;</th>
+    </tr>
+    <? foreach ($tournaments as $t): ?>
+    <tr>
+        <td><?= $t->name; ?></td>
+        <td><?= implode(', ', $t->leagues); ?></td>
+        <td><?= $t->start_date; ?></td>
+        <td><?= l("edit", Path::content_tournament_edit($t->id)); ?></td>
+        <td><?= l("delete", Path::content_tournament_delete($t->id), array("method" => "delete")); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+    <? endif; ?>
+<? endforeach; ?>

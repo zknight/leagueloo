@@ -22,28 +22,32 @@ class Events extends \simp\Module
         $this->num_days = $this->GetCfgVar('num_days', 30);
         $this->max_events = $this->GetCfgVar('num_events', 5);
         $this->show_category = true;
-        $this->entity_type = NULL;
-        $this->entity_id = NULL;
+        $this->entity_type = GetEntityType();
+        $this->entity_id = GetEntityId();
+        $this->entity_name = GetEntityName();
 
         $now = new \DateTime("now");
         $then = clone $now;
         $then->add(new \DateInterval("P{$this->num_days->value}D"));
         $conditions = NULL;
         $values = array();
-        if (isset($args['entity_type'])) 
+        if ($this->entity_type == "Main")
+        {
+            $conditions = "entity_type <> ?";
+            $values[] = 'Team';
+        }
+        else
         {
             // load events for entity
             $conditions = "entity_type = ?";
-            $values[] = $args['entity_type'];
-            $this->entity_type = $args['entity_type'];
-            if (isset($args['entity_id']))
+            $values[] = $this->entity_type;
+            if ($this->entity_id > 0)
             {
                 $conditions .= " and entity_id = ?";
-                $values[] = $args['entity_id'];
-                $this->show_category = false;
-                $this->entity_id = $args['entity_id'];
+                $values[] = $this->entity_id;
             }
-        } 
+            $this->show_category = false;
+        }
 
         $events = \EventInfo::GetEvents($now, $then, $conditions, $values);
         ksort($events);

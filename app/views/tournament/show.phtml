@@ -1,0 +1,79 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    //$editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    //$admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<? if ($publisher): ?>
+<?= l("edit tournament info", Path::content_tournament_edit($this->tournament->id)); ?>
+<? endif; ?>
+<h1 class="title"><?= $this->tournament->name; ?></h1>
+<!-- TODO: need to change Events plug-in to show nothing when there are no associated events. -->
+<div class="tournament">
+    <div class="date" style="text-align:center;">
+        <?= FormatDateTime($this->tournament->start, "l F jS"); ?> through 
+        <?= FormatDateTime($this->tournament->end, "l \\t\h\e jS, Y"); ?></br>
+        <span class="deadline">Registration Deadline: <?= FormatDateTime($this->tournament->deadline, "l F jS, Y"); ?></span>
+    </div>
+    <?= $this->tournament->description; ?>
+    <table>
+        <tr>
+        <!-- TODO: change this to email link with obfuscation -->
+            <td>
+                Contact:
+            </td>
+            <td>
+                <?= l($this->tournament->director, "mailto:{$this->tournament->director_email}"); ?>
+            </td>
+        </tr>
+        <tr>
+            <td>On-line Team Application:</td>
+            <? if ($this->tournament->application_link == false): ?>
+            <td>Not yet available</td>
+            <? else: ?>
+            <td><?= l("go", $this->tournament->application_link, array('target' => 'blank')); ?></td>
+            <? endif; ?>
+        <tr>
+            <td>Mail-in Team Application (pdf):</td>
+            <td><?= l("download", ($this->tournament->pdf_path . $this->tournament->app)); ?></td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>Tournament Rules:</td>
+            <td><?= l("download", $this->tournament->pdf_path . $this->tournament->rules); ?></td>
+        </tr>
+        <tr>
+            <td>Application to Host:</td>
+            <td><?= l("download", $this->tournament->pdf_path . $this->tournament->host_app); ?></td>
+        </tr>
+    </table>
+    <h3>Game Format and Team Fees</h3>
+    <table class="info">
+        <tr>
+            <th>Division</th><th>Fee</th><th colspan="2">Format</th><th>Roster</th><th>Guest Players</th>
+        </tr>
+<? foreach (Tournament::$age_divisions as $idx => $div): ?>
+    <? if ($this->tournament->age_division[$idx] == true): ?>
+        <tr>
+            <td><?= $div; ?></td>
+            <td>$<?= $this->tournament->cost[$idx]; ?></td>
+            <td>
+                <?= Tournament::$formats[$this->tournament->format[$idx]]; ?>
+            </td>
+            <td>
+                <?= Tournament::$match_length[$this->tournament->match_length[$idx]]; ?>
+            </td>
+            <td>
+                <?= $this->tournament->max_roster[$idx]; ?>
+            </td>
+            <td>
+                <?= $this->tournament->max_guest[$idx]; ?>
+            </td>
+        </tr>
+    <? endif; ?>
+<? endforeach; ?>
+    </table>
+</div>

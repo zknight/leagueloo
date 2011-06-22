@@ -1,0 +1,5 @@
+<ul class="menu">
+<? foreach ($this->links as $name => $info): ?>
+    <li><?= l($name, $info['link'], array('class' => $info['class'])); ?></li>
+<? endforeach; ?>
+</ul>

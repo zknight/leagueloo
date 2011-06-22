@@ -133,3 +133,54 @@ function SendSiteEmail($user, $subject, $message, $data=array())
 
     return \simp\Email::Send($message, $email_data);
 }
+
+function ShowImage($image)
+{
+    $html = "<img src='{$image->path}' height='{$image->height}' width='{image->width}' />";
+    return $html;
+}
+
+function SetEntity($entity_type, $entity_id, $entity_name)
+{
+    $_SESSION['entity_type'] = $entity_type;
+    $_SESSION['entity_id'] = $entity_id;
+    $_SESSION['entity_name'] = $entity_name;
+}
+
+function GetEntityId()
+{
+    return isset($_SESSION['entity_id']) ?
+        $_SESSION['entity_id'] :
+        '0';
+}
+
+function GetEntityType()
+{
+    return isset($_SESSION['entity_type']) ?
+        $_SESSION['entity_type'] :
+        'Main';
+}
+
+function GetEntityName()
+{
+    return isset($_SESSION['entity_name']) ?
+        $_SESSION['entity_name'] :
+        'Club';
+}
+
+function GetCfgVar($name, $default = NULL)
+{
+  $var = CfgVar::FindOne("CfgVar", "name=?", array($name));
+
+  if (!$var)
+  {
+    return $default;
+  }
+  return $var->value;
+}
+
+function SiteName()
+{
+    return GetCfgVar("site_name", "Leagueloo");
+}
+

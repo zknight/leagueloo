@@ -1,0 +1,22 @@
+app/models/tournament.php:2:// TODO: add more validation
+app/models/tournament.php:281:    // TODO: move this to base_model
+app/models/image.php:108:            // TODO: make this configurable (by gallery?)
+app/models/news.php:243:        // TODO add functions to validate/sanitize strings
+app/models/news.php:269:            // TODO: Generate introduction and short title from body and title, respectively
+app/models/user.php:590:    // TODO functions for: 
+app/controllers/tournament.php:10:    // TODO
+app/controllers/tournament.php:13:    // TODO: set entity info (see news.php)
+app/controllers/admin/ability.php:2:// TODO: rethink this
+app/controllers/admin/program.php:57:        // TODO: add validation and check to make sure it is saved, plus flash and redirect!
+app/controllers/admin/teams.php:94:            // TODO: need to remove events and articles
+app/controllers/content/event.php:31:        // TODO: figure out how to 'paginate' a calendar...
+app/controllers/content/event.php:208:            // TODO: figure out how to set day mask for day automatically when a new event is created
+app/controllers/news.php:10:    // TODO
+app/controllers/teams.php:33:        // TODO: make sure entity is set in all the right places
+simp/session.php:82:            // TODO: make this a configurable variable
+simp/boot.php:36:// TODO: cache this!
+simp/helpers.php:152:    // TODO: wrap each of these appropriately?
+simp/helpers.php:419:        // TODO: change this
+app/views/admin/user/_form.phtml:24:</table><!-- TODO: add logic to prevent non-site admin to do this -->
+app/views/tournament/show.phtml:2:<!-- TODO: need to change Events plug-in to show nothing when there are no associated events. -->
+app/modules/field_conditions/models/field.php:20:                return "todo: fixme";

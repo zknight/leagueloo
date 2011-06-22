@@ -8,19 +8,19 @@ if ($this->UserLoggedIn()) {
 }
 ?>
 <h1 class="title"><?= $this->team->name; ?></h1>
-<ul class="section-menu">
-    <li><?= l("Event_calendar", Path::event_calendar("team", $this->team->id)); ?></li>
-</ul>
+<? \simp\Module::Show("SectionMenu", array("current" => 'team', "entity_type" => 'Team', "entity_id" => $this->team->id)); ?>
 <? if ($editor): ?>
-<ul class="menu">
-    <li><?= l("create new article", Path::content_news_add_team($this->team->id)); ?></li>
-    <li><?= l("create new event", Path::content_event_add_team($this->team->id)); ?></li>
+<ul class="admin-menu">
+    <li><?= l("new article", Path::content_news_add_team($this->team->id)); ?></li>
+    <li><?= l("upload image", Path::content_image_add()); ?></li>
+    <li><?= l("new event", Path::content_event_add_team($this->team->id)); ?></li>
     <? if ($publisher): ?>
     <li><?= l("manage articles", Path::content_news()); ?></li>
+    <li><?= l("manage images", Path::content_image()); ?></li>
     <li><?= l("manage events", Path::content_event()); ?></li>
     <? endif; ?>
     <? if ($admin): ?>
-    <li><?= l("administer team page", Path::admin_team_show($this->team->id)); ?></li>
+    <li><?= l("administer", Path::admin_team_show($this->team->id)); ?></li>
     <? endif; ?>
 </ul>
 <? endif; ?>

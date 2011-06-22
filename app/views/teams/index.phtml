@@ -1,14 +1,19 @@
-<p><strong><?= HumanCase($this->program_name); ?> Teams</strong></p>
+<h1 class="title"><?= HumanCase($this->program_name); ?></h1>
+<? \simp\Module::Show("SectionMenu", array("current" => 'teams', "entity_type" => 'Program', "entity_id" => $this->program->id)); ?>
 <? if (count($this->teams) < 1): ?>
 <p>There are no <?= $this->program_name; ?> team pages.</p>
 <? else: ?>
+    <? foreach ($this->teams as $gender => $teams): ?>
+<h2><?= $gender == 'm' ? "Boys" : "Girls"; ?></h2>
 <table>
-    <? foreach ($this->teams as $team): ?>
+        <? foreach ($teams as $team): ?>
         <tr>
+            <td><?= $team->division; ?></td>
             <td>
                 <?= l($team->name, Path::Relative(GetTeamPath("", $team))) ?>
             </td>
         </tr>
-    <? endforeach; ?>
+        <?endforeach; ?>
 </table>
+    <? endforeach; ?>
 <? endif; ?>

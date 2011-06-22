@@ -45,12 +45,25 @@ class NewsController extends \simp\Controller
     {
         if ($this->CheckParam('entity') && $this->CheckParam('entity_id'))
         {
-            $entity = $this->GetParam('entity');
-            $id = $this->GetParam('entity_id');
+            $entity = ClassCase($this->GetParam('entity'));
+            if ($entity === "Main")
+            {
+                $entity_name = "Club";
+            }
+            else
+            {
+                if ($this->CheckParam('entity_id') == true)
+                {
+                    $id = $this->GetParam('entity_id');
+                    $entity_name = \R::getCell(
+                        "select name from " . SnakeCase($entity) . " where id = ?",
+                        array($id));
+                }
+            }
             if ($this->user->CanEdit($entity, $id))
             {
-                $entity = \simp\Model::FindById($entity, $id);
-                return array("{$entity}:$id" => "{$entity}-{$entity->name}");
+                //$entity = \simp\Model::FindById($entity, $id);
+                return array("{$entity}:$id" => "{$entity}-{$entity_name}");
             }
             else
             {
@@ -61,7 +74,7 @@ class NewsController extends \simp\Controller
         else
         {
             //$abilities = $this->user->abilities;
-            return $this->user->OptionsForEntitiesWithPrivilege("Club,Program,Team", \Ability::EDIT);
+            return $this->user->OptionsForEntitiesWithPrivilege("Main,Program,Team", \Ability::EDIT);
         }
     }
 

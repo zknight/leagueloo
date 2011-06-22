@@ -36,6 +36,13 @@ function SnakeCase($class)
     return $snake;
 }
 
+function ToCSSSel($text)
+{
+    $text = preg_replace("/\s/", "_", $text);
+    $text = strtolower($text);
+    return $text;
+}
+
 function Pluralize($string, $count = 1)
 {
     if ($count > 1)

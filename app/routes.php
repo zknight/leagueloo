@@ -54,7 +54,7 @@ function RouteSetup($router)
 {
     $router->AddRoute('/')->Controller('main');
     $router->AddRoute('/main/')->Controller('main');
-    $router->AddRoute('/home/')->Controller('main');
+    $router->AddRoute('/Club/')->Controller('main');
     $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
     $router->AddRoute('/administrator/')->Controller('administrator');
 

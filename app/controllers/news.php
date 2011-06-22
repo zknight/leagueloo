@@ -7,6 +7,9 @@ class NewsController extends \simp\Controller
     {
     }
 
+    // TODO
+    // may change this later to load program and show all pubilished news just for 
+    // that program!
     function Index()
     {
         $this->news = \News::FindPublished();
@@ -38,9 +41,10 @@ class NewsController extends \simp\Controller
         }
         else
         {
-            $this->event_data = array(
-                'entity_type' => $this->article->entity_type,
-                'entity_id' => $this->article->entity_id
+            SetEntity(
+                $this->article->entity_type,
+                $this->article->entity_id,
+                $this->article->entity_name
             );
         }
 

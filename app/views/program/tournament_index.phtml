@@ -1,0 +1,66 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<!--h3 class="sub-title"><?= $this->program->description; ?></h3-->
+<h1 class="title"><?= $this->program->name; ?></h1>
+<?/*
+<ul class="menu">
+    <li><?= l("Events", Path::event_calendar("program", $this->program->id)); ?></li>
+    <? if ($this->program->has_teams): ?>
+    <li><?= l("Teams", Path::Relative("{$this->program->name}/teams")); ?></li>
+    <? endif; ?>
+</ul>
+ */?>
+<?// \simp\Module::Show("SectionMenu", array("current" => 'index', "entity_type" => 'Program', "entity_id" => $this->program->id)); ?>
+<? if ($publisher): ?>
+<ul class="admin-menu">
+    <li><?= l("new tournament", Path::content_tournament_add()); ?></li>
+    <li><?= l("manage tournaments", Path::content_tournament()); ?></li>
+    <? /*
+    <li><?= l("new article", Path::content_news_add_program($this->program->id)); ?></li>
+    <li><?= l("upload image", Path::content_image_add()); ?></li>
+    <? if ($publisher): ?>
+    <li><?= l("manage articles", Path::content_news()); ?></li>
+    <li><?= l("manage images", Path::content_image()); ?></li>
+    <? endif; ?>
+    <? if ($admin): ?>
+    <li><?= l("administer", Path::admin_program_show($this->program->id)); ?></li>
+    <? endif; ?>
+    */ ?>
+</ul>
+<? endif; ?>
+<h3>Upcoming Tournaments</h3>
+<? if (count($this->upcoming_tournaments) < 1): ?>
+<p>No upcoming tournaments.</p>
+<? else: ?>
+    <? foreach ($this->upcoming_tournaments as $t): ?>
+        <?= l($t->name, Path::tournaments_tournament_show($t->short_name)); ?>
+        <ul>
+            <li>Level: <?= implode(" and ", $t->leagues); ?></li>
+            <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
+        </ul>
+    <? endforeach; ?>
+</table>
+<? endif; ?>    
+<h3>Past Tournaments</h3>
+<? foreach ($this->news as $article): ?>
+<div class="article">
+    <p class='title'><?= l($article->title, GetArticlePath('show', $article)); ?></p>
+    <? if ($editor): ?>
+        <span class="sub-title-link">
+        <?= l("edit this article", Path::content_news_edit_program($this->program->id, $article->id)); ?><br />
+        </span>
+    <? endif; ?>
+        <span class="date">
+            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
+        </span>
+    <div class="intro"><?= $article->intro; ?></div>
+    <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
+</div>
+<? endforeach; ?>

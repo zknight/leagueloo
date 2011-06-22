@@ -242,7 +242,7 @@ class EventController extends \simp\Controller
         else
         {
             //$abilities = $this->user->abilities;
-            return $this->user->OptionsForEntitiesWithPrivilege("Club,Program,Team", \Ability::EDIT);
+            return $this->user->OptionsForEntitiesWithPrivilege("Main,Program,Team", \Ability::EDIT);
         }
     }
 

@@ -401,6 +401,70 @@ class User extends \simp\Model
         return $events;
     }
 
+    public function GetEntitiesWithPrivilege($level=Ability::ADMIN, $except)
+    {
+        if (!is_array($except))
+        {
+            $except = explode(",", preg_replace("/\s/", '', $except));
+        }
+
+        foreach($except as &$type) $type = SnakeCase($type);
+        unset($type);
+
+        // find all entity_ids of all entity_types then do ability check
+        $types = array_diff(array('main', 'program', 'plug_in', 'team'), $except);
+        $placeholders = rtrim(str_repeat('? ,', count($types)), ',');
+
+        $entities = array();
+        if ($this->super)
+        {
+            foreach ($types as $type)
+            {
+                if ($type == "main")
+                {
+                    $entities[] = array(
+                        'type' => "Main",
+                        'id' => "0",
+                        'name' => "Club"
+                    );
+                }
+                else
+                {
+                    $entity_ar = User::FindAll($type);
+                    foreach ($entity_ar as $entity)
+                    {
+                        $entities [] = array(
+                            'type' => ClassCase($type),
+                            'id' => $entity->id,
+                            'name' => $entity->name
+                        );
+                    }
+                }
+            }
+        }
+        else
+        {
+            //$types = implode(",", $types);
+            $vals = array_merge(array($this->id, $level), $types);
+
+            $abilities = User::Find(
+                'Ability', 
+                "user_id = ? and level >= ? and entity_type in ($placeholders)", 
+                $vals);
+
+            foreach($abilities as $ability)
+            {
+                $entities[] = array(
+                    'type' => $ability->entity_type,
+                    'id' => $ability->entity_id, 
+                    'name' => $ability->entity_name);
+            }
+        }
+        //print_r($entities);
+        return $entities;
+            
+    }
+
     // return the name and id for programs that user can modify news for
     public function OptionsForEntitiesWithPrivilege($entity_types, $level = Ability::ADMIN, $conditions = 1, $values = array())
     {
@@ -408,7 +472,7 @@ class User extends \simp\Model
         {
             if ($entity_types == 'all')
             {
-                $entity_types = array("Club", "Program", "Team", "PlugIn");
+                $entity_types = array("Main", "Program", "Team", "PlugIn");
             }
             else
             {
@@ -445,9 +509,9 @@ class User extends \simp\Model
             }
         }
 
-        if (in_array("Club", $entity_types))
+        if (in_array("Main", $entity_types))
         {
-            $entity_arr["Club:0"] = "Club";
+            $entity_arr["Main:0"] = "Main-Club";
         }
         return $entity_arr;
     }

@@ -1,0 +1,26 @@
+<h1>Upload Image</h1>
+<?= GetErrorsFor($this->image); ?>
+<?= l("back", GetReturnURL()); ?>
+<form enctype="mutlipart/form-data" method="post">
+<fieldset><legend>Image Information</legend>
+<table class="form">
+    <tr>
+        <td><strong>Select category to associate image with:</strong></td>
+        <td><?= SimpleSelect($this->image, 'entity_designator', $this->entities); ?></td>
+    </tr>
+    <tr>
+        <td><strong>Select an image to upload:</strong></td>
+        <td><input type="file" name="image" /></td>
+    </tr>
+    <tr>
+        <td><strong>Caption:</strong></td>
+        <td><?= TextArea($this->image, 'caption'); ?></td>
+    </tr>
+    <tr>
+        <td><strong>Save As: (optionally change name of file)</strong></td>
+        <td><?= TextField($this->image, 'filename'); ?></td>
+    </tr>
+</table>
+</fieldset>
+<input type="submit" value="upload" />
+</form>

@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+    <?= IncludeJS("tiny_mce/tiny_mce_popup.js"); ?>
+    <?= IncludeJS("jquery.js"); ?>
+<script type="text/javascript">
+var ImageDialog = {
+    init : function () {
+    },
+    mySubmit : function () {
+        var path = $('input[name|="path"]').val();
+        var win = tinyMCEPopup.getWindowArg("window");
+        win.document.getElementById(tinyMCEPopup.getWindowArg("input")).value = path;
+        if (win.ImageDialog.getImageData) win.ImageDialog.getImageData();
+        if (win.ImageDialog.showPreviewImage) win.ImageDialog.showPreviewImage(path);
+        tinyMCEPopup.close();
+    }
+}
+
+tinyMCEPopup.onInit.add(ImageDialog.init, ImageDialog);
+
+function imgClick($id, path, filename)
+{
+    $('img').removeClass('sel');
+    $('img#'+$id).addClass('sel');
+    $('input[name|="path"]').val(path);
+    $('input[name|="filename"]').val(filename);
+}
+
+function catClick(etype, ename)
+{
+    $('li.node').removeClass('sel');
+    $('li#'+etype+"-"+ename).addClass('sel');
+    $('div.show').removeClass('show').addClass('hide');
+    $('div#'+etype+"-"+ename).removeClass('hide').addClass('show');
+}
+
+</script>
+<style>
+div.rhs,
+div.lhs {
+    float:left;
+    height:300px;
+}
+div.lhs {
+    color:#b9daf1;
+    background:#00243e;
+    padding:8px;
+    border:1px solid black;
+    width:20%;
+}
+    div.lhs h2 {
+        color: #b9daf1;
+        text-align:center;
+    }
+    div.lhs ul {
+        list-style-type:none;
+        padding:0 0 8px 0;
+    }
+
+        div.lhs li.node {
+            background:url(<?=GetImagePath("folder.png");?>) no-repeat;
+            padding:4px 0 0 18px;
+            margin:0;
+        }
+        div.lhs li.sel {
+            background:url(<?=GetImagePath("folder_image.png");?>) no-repeat;
+        }
+            div.lhs li.node a {
+                text-decoration:none;
+                color:#569fd3;
+            }
+            div.lhs li.node a:hover {
+                color:#ffb95e;
+            }
+            div.lhs li.sel a {
+                color:#dfa964;
+            }
+div.rhs {
+    padding:8px;
+    border:1px solid black;
+    width:75%;
+    overflow:auto;
+}
+    div.rhs div.image {
+        text-align:center;
+        float:left;
+        width:100px;
+        height:150px;
+        padding:8px;
+        font-size:8pt;
+    }
+div.hide {
+    display:none;
+}
+div.show {
+    display:block;
+}
+img {
+    border:1px solid #fff;
+}
+img.sel {
+    border:1px solid #000;
+}
+
+</style>
+</head>
+<body>
+<p><strong>Select an image:</strong></p>
+<div class='lhs'>
+<h2>Image Categories</h2>
+<ul>
+<? foreach ($this->images as $etype => $images_by_ename): ?>
+    <li class="type">
+        <?= $etype; ?>
+        <ul>
+    <? foreach (array_keys($images_by_ename) as $ename): ?>
+            <li id="<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>" class="node">
+                <a href="#" onClick='catClick("<?= ToCSSSel($etype); ?>", "<?= ToCSSSel($ename); ?>")'><?= $ename; ?></a>
+            </li>
+    <? endforeach; ?>
+        </ul>
+    </li>
+<? endforeach; ?>
+</ul>
+</div>
+<div class='rhs'>
+    <div class='show'>
+        <p>&lt;-- select a category</p>
+    </div>
+<? foreach ($this->images as $etype => $images_by_ename): ?>
+    <? foreach ($images_by_ename as $ename => $images): ?>
+    <div class='hide' id='<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>'>
+        <? if (count($images) < 1): ?>
+        <p>No Images in this category.</p>
+        <? else: ?>
+            <? foreach ($images as $image): ?>
+        <div class='image'>
+            <!--a class="img-select" href="#" onClick="$('input#value').value = '<?= $image->path; ?>'"><img src="<?=$image->thumb;?>" /></a-->
+            <?= $image->width; ?> x <?= $image->height; ?><br />
+                <? 
+                $height_constraint = "";
+                if ($image->height > $image->width) $height_constraint = "height=\"100px\"";
+                ?>
+            <img id="<?=$image->id;?>" 
+                <?= $height_constraint; ?> 
+                src="<?=$image->thumb; ?>" 
+                onClick='imgClick("<?= $image->id; ?>", "<?= $image->path; ?>", "<?= $image->filename; ?>")'
+                onDblClick="ImageDialog.mySubmit();" /><br/>
+            <?= wordwrap($image->filename, 15, "<br />", true); ?>
+        </div>
+            <? endforeach; ?>
+        <? endif; ?>
+    </div>
+    <? endforeach; ?>
+<? endforeach; ?>
+</div>
+<form name="image_selector">
+    <div style="text-align:center">
+        <input type="text" name="filename" size="100"/>
+        <input type="hidden" name="path"/>
+        <input type="button" value="submit" onClick="ImageDialog.mySubmit();" >
+    </div>
+</form>
+</body>
+</html>

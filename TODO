@@ -11,6 +11,8 @@ x article submission queue (send emails to publishers?)
 x event display
 * inquiry form (routed to commissioner by age/division/gender)
 * photo gallery
+    - pure html
+    - "progressively enhance" to js, then ajax
 x event module admin
 x send emails
 * check for duplicate email on user sign-up

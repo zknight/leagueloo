@@ -9,6 +9,7 @@ class MainController extends \simp\Controller
 
     function Index()
     {
+        SetEntity('Main', 0, 'Club');
         $this->StoreLocation();
         //\R::debug(true);
         $programs = \simp\Model::FindAll('Program', 'order by weight asc');
@@ -21,11 +22,11 @@ class MainController extends \simp\Controller
             $user = $this->GetUser();
         }
         $this->articles["Club"] = \News::FindPublished(
-            'Club',
+            'Main',
             0,
             '1 order by publish_on, entity_id asc'
         );
-        $this->is_editor['Club'] = isset($user) ? $user->CanEdit("Club", 0) : false;
+        $this->is_editor['Club'] = isset($user) ? $user->CanEdit("Main", 0) : false;
 
         foreach ($programs as $program)
         {

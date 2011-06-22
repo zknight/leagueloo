@@ -1,0 +1,146 @@
+<?= l("back", GetReturnURL()); ?>
+<fieldset>
+    <legend>Tournament Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">With which leagues is this tournament to be associated?</th>
+            <td class="entry">
+            <? foreach($this->leagues as $league): ?>
+                <?= CheckBoxField(
+                    $this->tournament,
+                    'assoc_leagues',
+                    array('array' => $league->name));
+                ?>
+                <?= $league->name; ?><br />
+            <? endforeach; ?>
+            </td>
+        </tr>
+        <tr>
+            <th class="label">Name of Tournament</th>
+            <td class="entry"><?= TextField($this->tournament, "name", array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Start Date</th>
+            <td class="entry"><?= DatePicker($this->tournament, "start_date");?></td>
+        </tr>
+        <tr>
+            <th class="label">End Date</th>
+            <td class="entry"><?= DatePicker($this->tournament, "end_date");?></td>
+        <tr>
+            <th class="label">Description</th>
+            <td class="entry"><?= wysiwyg($this->tournament, "description");?></td>
+        </tr>
+        <tr>
+            <th class="label">Application Deadline</th>
+            <td class="entry"><?= DatePicker($this->tournament, "app_deadline");?></td>
+        </tr>
+        <tr>
+            <th class="label">Tournament Director</th>
+            <td class="entry">
+                <table>
+                    <tr>
+                        <td>Name:</td> 
+                        <td>    
+                            <?= TextField($this->tournament, "director");?><br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td> 
+                        <td><?= TextField($this->tournament, "director_email");?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Divsion Information</legend>
+    <table class="form">
+        <tr>
+            <th>Age Division</th>
+            <th>Format</th>
+            <th>Match Length</th>
+            <th>Max Roster Size</th>
+            <th>Max Guest Players</th>
+            <th>Team Entry Fee</th>
+        </tr>
+        <? foreach(Tournament::$age_divisions as $val => $text): ?>
+        <tr>
+            <td>
+                <?= CheckBoxField(
+                    $this->tournament,
+                    'age_division',
+                    array('array' => $val)); ?>
+                <?=$text;?>
+            </td>
+            <td>
+                <?= SimpleSelect(
+                    $this->tournament,
+                    'format',
+                    Tournament::$formats,
+                    array('array' => $val)
+                ); ?>
+            </td>
+            <td>
+                <?= SimpleSelect(
+                    $this->tournament,
+                    'match_length',
+                    Tournament::$match_length,
+                    array('array' => $val)
+                ); ?>
+            </td>
+            <td>
+                <?= TextField(
+                    $this->tournament,
+                    'max_roster',
+                    array('array' => $val)
+                ); ?>
+            </td>
+            <td>
+                <?= TextField(
+                    $this->tournament,
+                    'max_guest',
+                    array('array' => $val)
+                ); ?>
+            </td>
+            <td>
+                <?= TextField(
+                    $this->tournament,
+                    'cost',
+                    array('array' => $val)); ?>
+            </td>
+        </tr>
+        <? endforeach; ?>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Links</legend>
+    <table class="form">
+        <tr>
+            <th class="label">On-line Application</th>
+            <td class="entry">http://<?= TextField($this->tournament, "application_link"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Tournament Schedule</th>
+            <td class="entry">http://<?= TextField($this->tournament, "schedule_link"); ?></td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Associated Documents</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Application To Host (pdf)</th>
+            <td class="entry"><?= FileSelect($this->tournament, "host_app"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Tournament Rules (pdf)</th>
+            <td class="entry"><?= FileSelect($this->tournament, "rules"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Team Application (pdf)</th>
+            <td class="entry"><?= FileSelect($this->tournament, "app"); ?></td>
+        </tr>
+    </table>
+</fieldset>
+    

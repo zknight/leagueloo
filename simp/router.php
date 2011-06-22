@@ -194,8 +194,8 @@ class Router
 
         if (false == $match)
         {
-            //Error404();
-            exit();
+            Error404();
+            //exit();
         }
 
         // set breadcrumb

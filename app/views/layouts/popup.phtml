@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+<head>
+    <?= IncludeJS("jquery.js"); ?>
+    <?= IncludeJS("tiny_mce/tiny_mce_popup.js"); ?>
+<script type="text/javascript">
+var FileBrowserDialogue = {
+    init : function () {
+        // Here goes your code for setting your custom things onLoad.
+    },
+    mySubmit : function () {
+        // Here goes your code to insert the retrieved URL value into the original dialogue window.
+        // For example code see below.
+    }
+}
+
+tinyMCEPopup.onInit.add(FileBrowserDialogue.init, FileBrowserDialogue);
+</script>
+
+</head>
+<body>
+    <?= $this->content; ?>
+</body>
+</html>

@@ -35,10 +35,12 @@ class UserController extends \simp\Controller
     protected function LoadEntitiesForAbilities()
     {
         $this->entities = array(
+            'main' => array(),
             'program' => array(),
             'team' => array(),
-            'plug_in' => array()
+            'plug_in' => array(),
             );
+        $this->entities['main']['Club'] = '0';
         $programs = \simp\Model::FindAll('Program');
         foreach ($programs as $program)
         {

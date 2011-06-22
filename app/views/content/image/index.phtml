@@ -1,0 +1,31 @@
+<h1>Image Manager</h1>
+<?= l("Upload Image", Path::content_image_add()); ?> |
+<?= l("Upload Image Archive (tgz, gz, zip)", Path::content_image_upload()); ?>
+<? if (count($this->images) < 1): ?>
+    <p>No images</p>
+<? else: ?>
+<? foreach ($this->images as $entity_type => $images_by_ename): ?>
+    <p><strong><?= $entity_type; ?></strong></p>
+    <? foreach ($images_by_ename as $entity_name => $images): ?>
+    <table>
+        <tr><th>Thumb</th><th>Filename</th><th>Dimensions</th><th>&nbsp;</th></tr>
+        <? foreach ($images as $image): ?>
+        <tr>
+            <td>
+                <?= l("<img src=\"$image->thumb\" />", Path::content_image_show($image->id)); ?>
+            </td>
+            <td>
+                <?= $image->filename; ?>
+            </td>
+            <td>
+                <?= $image->width; ?>x<?= $image->height; ?>
+            </td>
+            <td>
+                <?= l("delete", Path::content_image_delete($image->id), array("method" => "delete")); ?>
+            </td>
+        </tr>
+        <? endforeach; ?>
+    </table>
+    <? endforeach; ?>
+<? endforeach; ?>
+<? endif; ?>

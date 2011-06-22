@@ -11,17 +11,28 @@ class TeamsController extends \simp\Controller
         $this->StoreLocation();
         $this->program_name = $this->GetParam('program');
         //\R::debug(true);
-        $program = \simp\Model::FindOne(
+        $this->program = \simp\Model::FindOne(
             'Program',
             'name = ?',
             array(ClassCase($this->program_name)));
 
         // all teams
-        $this->teams = \simp\Model::Find(
+        $teams = \simp\Model::Find(
             'Team',
             'program_id = ? order by gender, year asc',
-            array($program->id));
+            array($this->program->id));
         //\R::debug(false);
+        
+        $this->teams = array();
+        foreach ($teams as $team)
+        {
+            if (!array_key_exists($team->gender, $this->teams))
+                $this->teams[$team->gender] = array();
+            $this->teams[$team->gender][] = $team;
+        }
+        // TODO: make sure entity is set in all the right places
+        // and add name to SetEntity()
+        SetEntity('Program', $this->program->id, $this->program->name);
 
         return true;
     }
@@ -65,7 +76,8 @@ class TeamsController extends \simp\Controller
             );
             //\R::debug(false);
 
-            $this->event_data = array('entity_type' => "Team", 'entity_id' => $this->team->id);
+            //$this->event_data = array('entity_type' => "Team", 'entity_id' => $this->team->id);
+            SetEntity('Team', $this->team->id, $this->team->name);
         }
         //\R::debug(false);
         return true;

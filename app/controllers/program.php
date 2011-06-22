@@ -18,7 +18,7 @@ class ProgramController extends \simp\Controller
             $id = $this->GetParam('id');
             $this->program = \simp\Model::FindById('Program', $id);
         }
-        else if ($this->CheckPAram('program'))
+        else if ($this->CheckParam('program'))
         {
             $name = $this->GetParam('program');
             $name = ucfirst($name);
@@ -29,12 +29,14 @@ class ProgramController extends \simp\Controller
 
         if ($this->program->id > 0)
         {
+            SetEntity('Program', $this->program->id, $this->program->name);
             // load news for this program
             $this->news = \News::FindPublished(
                 'Program',
                 $this->program->id
             );
-            $this->event_data = array('entity_type' => "Program", 'entity_id' => $this->program->id);
+
+            $this->RenderSpecialProgram();
             return true;
         }
         else
@@ -44,4 +46,21 @@ class ProgramController extends \simp\Controller
         }
 
     }
+
+    protected function RenderSpecialProgram()
+    {
+        switch ($this->program->type)
+        {
+        case \Program::LEAGUE:
+            break;
+        case \Program::TOURNAMENT:
+            $this->upcoming_tournaments = \Tournament::GetUpcoming();
+            $this->past_tournaments = \Tournament::GetPast();
+            $this->SetAction("tournament_index");
+            break;
+        case \Program::CAMP:
+            break;
+        }
+    }
+
 }

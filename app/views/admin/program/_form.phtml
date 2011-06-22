@@ -1,15 +1,17 @@
-<table>
-    <tr>
-        <th>Name:</th><td><?=TextField($this->program, 'name');?></td>
-    </tr>
-    <tr>
-        <th>Description:</th><td><?=TextArea($this->program, 'description');?></td>
-    </tr>
-    <tr>
-        <th>Weight:</th><td><?=TextField($this->program, 'weight', array('size' => '2'));?></td>
-    </tr>
-    <tr>
-        <th>Allow teams?</th><td><?=CheckBoxField($this->program, 'has_teams'); ?></td>
-    </tr>
-</table>
-        
+<fieldset>
+    <legend>Program Information</legend>
+    <table class="form">
+        <tr>
+            <th>Program Type:</th><td><?=SimpleSelect($this->program, 'type', Program::$types);?></td>
+        </tr>
+        <tr>
+            <th>Program Name:</th><td><?=TextField($this->program, 'name');?></td>
+        </tr>
+        <tr>
+            <th>Description:</th><td><?=TextArea($this->program, 'description');?></td>
+        </tr>
+        <tr>
+            <th>Weight:</th><td><?=TextField($this->program, 'weight', array('size' => '2'));?></td>
+        </tr>
+    </table>
+</fieldset>    

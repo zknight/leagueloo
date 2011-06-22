@@ -44,10 +44,11 @@ function h($str)
   return htmlentities($str, ENT_QUOTES);
 }
 
-function FormTag($name, $method, $action = NULL)
+function FormTag($name, $method, $action = NULL, $can_upload = false)
 {
     $html = "<form name=\"{$name}\" method=\"post\"";
     if (isset($action)) $html .= " action=\"{$action}\"";
+    if ($can_upload == true) $html .= " enctype=\"multipart/form-data\"";
     $html .= ">\n";
     switch ($method)
     {
@@ -92,6 +93,22 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
     $html .= "/>";
     return $html; 
 }
+
+function DatePicker($model, $field, $opts = array())
+{
+    $attrs = GetInputAttributes($model, $field, $opts);
+
+    $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
+    $html .= $attrs['id'];
+    $html .= " class=\"date-picker ";
+    $html .= array_key_exists('class', $opts) ? $opts['class'] : '';
+    $html .= "\"";
+    $html .= $attrs['size'];
+    $html .= " value=\"{$attrs['value']}\"";
+    $html .= "/>";
+    return $html; 
+}
+
 
 function PasswordField($model, $field, $opts = array())
 {
@@ -179,14 +196,25 @@ function CheckBoxField($model, $field, $opts = array())
     $html .= $attrs['size'];
     $html .= " value='1'";
 
+    /*
     if (isset($model))
     {
         if ($model->__get($field)) $html .= " checked='true'";
     }
+     */
+    if ($attrs['value'] == true) $html .= " checked='true'";
     $html .= "/>";
 
     return $html;
 }
+
+function Wysiwyg($model, $field, $rows=3, $cols=80, $class=NULL, $id=NULL)
+{
+    $nclass = "wysiwyg";
+    if (isset($class)) $nclass .= " $class";
+    return TextArea($model, $field, $rows, $cols, $nclass, $id);
+}
+
 
 function TextArea($model, $field, $rows = 3, $cols = 80, $class = NULL, $id = NULL)
 {
@@ -205,11 +233,16 @@ function TextArea($model, $field, $rows = 3, $cols = 80, $class = NULL, $id = NU
     return $html;
 }
 
-function SimpleSelect($model, $field, $options, $class = NULL, $id = NULL)
+function SimpleSelect($model, $field, $options, $opts = array())
 {
+    $attrs = GetInputAttributes($model, $field, $opts);
     $html = "<select";
-    if (isset($class)) $html .= " class=\"{$class}\"";
-    if (isset($id)) $html .= " id=\"{$id}\"";
+    //if (isset($class)) $html .= " class=\"{$class}\"";
+    //if (isset($id)) $html .= " id=\"{$id}\"";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= " name=\"{$attrs['name']}\"";
+    /*
     if (isset($model))
     {
         $mname = $model;
@@ -217,15 +250,27 @@ function SimpleSelect($model, $field, $options, $class = NULL, $id = NULL)
         $html .= " name=\"$input_field\"";
         $value = $model->__get($field);
     }
+     */
     $html .= ">\n";
     foreach($options as $val => $text)
     {
         $text = HumanCase($text);
         $html .= "\t<option value=\"{$val}\"";
-        if ($val == $value) $html .= " selected=\"selected\"";
+        if ($val == $attrs['value']) $html .= " selected=\"selected\"";
         $html .= ">{$text}</option>\n";
     }
     $html .= "</select>";
+    return $html;
+}
+
+function FileSelect($model, $field, $opts = array())
+{
+    $attrs = GetInputAttributes($model, $field, $opts);
+    $html = "<input type=\"file\"";
+    $html .= $attrs['id'];
+    $html .= $attrs['class'];
+    $html .= " name=\"{$field}\" \>";
+    if (isset($attrs['value'])) $html .= " currently: {$attrs['value']}";
     return $html;
 }
 
@@ -343,13 +388,21 @@ function GetInputAttributes($model, $field, $opts)
     if (isset($model)) 
     {
         $mname = isset($opts['parent']) ? $opts['parent'] . "[{$model}]" : $model;
-        $newopts['name'] = isset($opts['array']) ?
-            "{$mname}[{$opts['array']}][{$field}]" :
+        $newopts['name'] = array_key_exists('array', $opts) ?
+            "{$mname}[{$field}][{$opts['array']}]" :
             "{$mname}[{$field}]";
         //if (is_subclass_of($model, "\simp\Model"))
         if (is_object($model))
         {
-            $newopts['value'] = $model->__get($field);
+            if (is_array($model->$field)) 
+            {
+                $arr = $model->$field;
+                $newopts['value'] = $arr[$opts['array']];
+            }
+            else
+            {
+                $newopts['value'] = $model->__get($field);
+            }
             $errors = $model->GetErrors();
             if (array_key_exists($field, $errors))
             {
@@ -363,6 +416,7 @@ function GetInputAttributes($model, $field, $opts)
     }
     else
     {
+        // TODO: change this
         $newopts['name'] = isset($opts['array']) ?
             "{$opts['array']}[$field]" :
             "$field";
@@ -529,22 +583,6 @@ function GetCurrentName()
     ->where('u.id = ?', GetCurrentUser())
     ->fetchOne();
   return $usr->first_name . " " . $usr->last_name . " (" . $usr->login . ")";
-}
-
-function GetCfgVar($name, $default = NULL)
-{
-  $var = CfgVar::FindOne("CfgVar", "name=?", array($name));
-
-  if (!$var)
-  {
-    return $default;
-  }
-  return $var->value;
-}
-
-function SiteName()
-{
-    return GetCfgVar("site_name", "Leagueloo");
 }
 
 function GetBasePath()

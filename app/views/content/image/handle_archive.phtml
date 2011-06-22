@@ -1,0 +1,13 @@
+<h1>Image List</h1>
+<?= GetErrorsFor($this->archive); ?>
+<?= l("cancel", GetReturnURL()); ?>
+<?= FormTag("image_select", \simp\Request::POST, Path::content_image_select()); ?>
+<table class="form">
+<? foreach ($this->archive->files as $index => $file): ?>
+    <tr>
+        <td><?= CheckBoxField($this->archive, $index, array('array' => 'files', 'value')); ?></td>
+        <td><?= $file; ?></td>
+    </tr>
+<? endforeach; ?>
+    <input type="submit" value="
+<?= EndForm(); ?>

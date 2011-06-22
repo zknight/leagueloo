@@ -1,0 +1,35 @@
+<h1>"Notice" Configuration</h1>
+<?= FormTag("notice_cfg", \simp\Request::POST); ?>
+    <fieldset><legend>Cycle Delay</legend>
+        <p>This setting determines how long a notice will be displayed before it cycles to the next notice (if there is more than one notice).</p>
+        <?= TextField($this->cycle_delay, 'value', array('array' => 'cycle_delay', 'size' => 3)); ?>
+    </fieldset>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>
+
+<?= l("Create Notice", path::module('notices', 'admin', 'add')); ?>
+<? if (count($this->all_notices) > 0): ?>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Display Text</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
+    <? foreach ($this->all_notices as $notice): ?>
+    <tr>
+        <td><?= $notice->name; ?></td>
+        <td><?= $notice->text; ?></td>
+        <td><?= FormatDateTime($notice->start_date, "m/d/Y"); ?></td>
+        <td><?= FormatDateTime($notice->end_date, "m/d/Y"); ?></td>
+        <td><?= l("Edit", Path::module('notices', 'admin', 'edit', $notice->id)); ?></td>
+        <td>
+            <?= l("Delete", Path::module('notices', 'admin', 'delete', $notice->id), array("method" => "delete")); ?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?> 
+        

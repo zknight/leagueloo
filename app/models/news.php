@@ -24,6 +24,7 @@ class News extends \simp\Model
     private $_pub_now;
     private $_exp_date;
     private $_exp_time;
+    private $_break_tags;
 
     public function Setup()
     {
@@ -32,6 +33,17 @@ class News extends \simp\Model
         $this->_pub_now = false;
         $this->_exp_date = "12/31/2037";
         $this->_exp_time = "00:00:00";
+        $this->_break_tags = array(
+            "</p>" => 3,
+            "</tr>" => 4,
+            "<br>" => 3,
+            "<br />" => 5,
+            "<br/>" => 4,
+            ". " => 1,
+            "? " => 1,
+        );
+
+        $this->SkipSanity("body");
     }    
 
     public function OnLoad()
@@ -53,26 +65,35 @@ class News extends \simp\Model
         $entity_name)
     {
         $entity_table = SnakeCase($entity_type);
-        $q = "select news.* from news, {$entity_table} ";
-        $q .= "where {$entity_type}.name like ? ";
-        $q .= "and news.entity_type like ? ";
-        $q .= "and news.entity_id = {$entity_type}.id ";
-        $q .= "and news.short_title = ? ";
-        $q .= "limit 1";
-        
-        //\R::debug(true);
-        $result = \R::getRow(
-            $q,
-            array($entity_name, $entity_type, $short_title)
-        );
-        //\R::debug(true);
-        //print_r($result);
-        //$beans = \R::$redbean->convertToBeans("news", $result);
-        if (isset($result))
+        $q = "";
+        if ($entity_name == "Club")
         {
-            $bean = \R::dispense("news");
-            $bean->import($result);
-            return new News($bean);
+            $article = News::FindOne(
+                'News', 
+                'entity_type = ? and short_title = ?',
+                array("Main", $short_title)
+            );
+
+            return $article;
+        }
+        else
+        {
+            $q = "select news.* from news, {$entity_table} ";
+            $q .= "where {$entity_type}.name like ? ";
+            $q .= "and news.entity_type like ? ";
+            $q .= "and news.entity_id = {$entity_type}.id ";
+            $q .= "and news.short_title = ? ";
+            $q .= "limit 1";
+            $result = \R::getRow(
+                $q,
+                array($entity_name, $entity_type, $short_title)
+            );
+            if (isset($result))
+            {
+                $bean = \R::dispense("news");
+                $bean->import($result);
+                return new News($bean);
+            }
         }
         return null;
     }
@@ -155,7 +176,7 @@ class News extends \simp\Model
             case 'entity_name':
                 if ($this->entity_id == 0)
                 {
-                    return "-";
+                    return "Club";
                 }
                 return \R::getCell(
                     "select name from " . SnakeCase($this->entity_type) . " where id = ?", 
@@ -206,16 +227,19 @@ class News extends \simp\Model
     public function BeforeSave()
     {
         $errors = 0;
-        
+
+        $this->SplitIntro();
         if (!$this->VerifyDateFormat('publish_date', $this->_pub_date)) $errors++;
         if (!$this->VerifyTimeFormat('publish_time', $this->_pub_time)) $errors++;
         if (!$this->VerifyDateFormat('expire_date', $this->_exp_date)) $errors++;
         if (!$this->VerifyTimeFormat('expire_time', $this->_exp_time)) $errors++;
+        /*
         if (strlen($this->short_title) > 32) 
         {
             $errors++;
             $this->SetError('short_title', "Short title must be less than 30 characters");
         }
+        */
         // TODO add functions to validate/sanitize strings
 
         if ($errors == 0)
@@ -242,8 +266,14 @@ class News extends \simp\Model
                 $this->expiration = $dt->getTimestamp();
             }
 
-            $arr = explode(" ", strtolower($this->short_title));
-            $this->short_title = implode("_", $arr);
+            // TODO: Generate introduction and short title from body and title, respectively
+
+            $arr = explode(" ", strtolower($this->title));
+            $short_title = implode("_", $arr);
+            $sz = strlen($short_title);
+            $this->short_title = $sz > 31 ?
+                substr($short_title, 0, 31) : 
+                $short_title;
         }
         
         return $errors == 0;
@@ -304,6 +334,47 @@ class News extends \simp\Model
             $retval = false;
         }
         return $retval;
+    }
+
+    protected function SplitIntro()
+    {
+        $max_pos = GetCfgVar('intro_chars', 600);
+        $break = strpos($this->body, "<!--break-->");
+        if ($break !== false)
+        {
+            $intro = substr($this->body, 0, $break);
+        }
+        else
+        {
+            $intro = substr($this->body, 0, $max_pos);
+            $ortni = strrev($intro);
+            $min_rpos = $max_pos;
+
+            foreach ($this->_break_tags as $tag => $offset)
+            {
+                $pos = strpos($ortni, strrev($tag));
+                if ($pos !== false)
+                {
+                    $min_rpos = min($pos + $offset, $min_rpos);
+                }
+            }
+
+            $intro = ($min_rpos === $max_pos) || ($min_rpos === 0) ?
+                $intro :
+                substr($intro, 0, 0-$min_rpos);
+
+            $tidy = new Tidy();
+            $tidy->parseString(
+                $intro, 
+                array('show-body-only' => true),
+                'utf8');
+            $tidy->cleanRepair();
+            $intro = $tidy->body()->value;
+        }
+        global $log;
+        $log->logDebug("saving intro: " . print_r($intro, true));
+
+        $this->intro = $intro;
     }
 
 }
