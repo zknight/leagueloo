@@ -1,0 +1,124 @@
+<fieldset><legend>Coach Information</legend>
+<table class="form">
+    <tr>
+        <? if ($this->coach->pic != ""): ?>
+            <tr><th class="label"><img width="100" src="<?= $this->coach->img_path; ?>" /></th></tr>
+        <? endif; ?>
+        <th class="label">
+            Name: (first)(last)</th>
+        <td class="entry">
+            <?= TextField($this->coach, 'first_name');?>
+            <?= TextField($this->coach, 'last_name'); ?>
+        </td>
+    </tr>
+    <tr>
+        <th class="label">Email</th>
+        <td class="entry"><?= TextField($this->coach, 'email'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Currently Active:</th>
+        <td class="entry"><?= CheckBoxField($this->coach, 'active'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Title:</th>
+        <td class="entry"><?= SimpleSelect($this->coach, 'title', Coach::$coach_titles); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Years with Club</th>
+        <td class="entry"><?= TextField($this->coach, 'years_with_club'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Coaching History</th>
+        <td class="entry"><?= Wysiwyg($this->coach, 'coaching_history'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Playing Experience</th>
+        <td class="entry"><?= Wysiwyg($this->coach, 'playing_experience'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Licenses</th>
+        <td class="entry">
+            <!--table>
+<? foreach(Coach::$license_levels as $val => $text): ?>
+                <tr>
+                    <td-->
+            <div style="width:33%;float:left;">
+                        <?= CheckBoxField(
+                            $this->coach,
+                            'license',
+                            array('array' => $val)); ?>
+                        <?= $text; ?>
+            </div>
+                    <!--/td>
+                </tr>
+<? endforeach; ?>
+            </table-->
+        </td>
+    </tr>
+    <tr>
+        <th class="label">Bio</th>
+        <td class="entry"><?= Wysiwyg($this->coach, 'bio'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Picture</th>
+        <td class="entry"><?= FileSelect($this->coach, 'pic'); ?></td>
+    </tr>
+</table>
+</fieldset>
+<script type="text/javascript">
+$(function(){
+    $('#add_team').show();
+    $('#add_team').click(function() {
+        var url = '<?= Path::admin_teams_add() . ".no_template"; ?>';
+        $('#team_form').dialog({minHeight:500, minWidth:600, modal:true}).load(url, function() {
+            $('#team_form > form').submit(function(event) {
+                event.preventDefault();
+                //alert('Foo!');
+                var data = $(this).serialize();
+                var url = '<?= Path::admin_teams_add() . ".json"; ?>';
+                $.post(url, data, function(rdata) {
+                    $('#error').hide();
+                    $('#message').hide();
+                    rdata = $.parseJSON(rdata);
+                    console.log(rdata);
+                    if (rdata['status'] < 1)
+                    {
+                        $('#error').append(rdata['message']).show();
+                    }
+                    else
+                    {
+                        $('#message').append(rdata['message']).show();
+                        var info = "<div class='team' style='width:33%;float:left;'>\n";
+                        info += "   <input type='hidden' name='Coach[assoc_teams][";
+                        info += rdata['team']['id']; 
+                        info += "]' value='0' />\n";
+                        info += "   <input type='checkbox' name='Coach[assoc_teams][";
+                        info += rdata['team']['id'];
+                        info += "]' size='20' value='1' checked='true' />\n";
+                        info += rdata['team']['league'] + ": " + rdata['team']['name'] + " " + rdata['team']['gender'];
+                        info += "\n</div>";
+                        $('fieldset#teams > div#teams').append(info);
+                    }
+                    $('#team_form').dialog('close');
+                });
+            });
+        });
+    });
+});
+</script>
+<fieldset id="teams"><legend>Teams</legend>
+    <div id="error" style="display:none;"></div>
+    <div id="message" class="flash" style="display:none;"></div>
+    <div id="teams">
+<? foreach($this->teams as $team): ?>
+    <div class="team" style="width:33%;float:left;">
+        <?= CheckBoxField($this->coach, "assoc_teams", array('array' => $team->id)); ?>
+        <?= "{$team->program_name}: {$team->name} {$team->gender_str}" ?>
+    </div>
+<? endforeach; ?>
+    </div>
+    <a name="#team" />
+    <a id='add_team' href='#team' style="display:none;">Create New Team</a>
+</fieldset>
+<div id='team_form'>
+</div>

@@ -1,10 +1,11 @@
 <?php
 namespace app;
 
-class TournamentController extends \simp\Controller
+class TournamentController extends \app\AppController
 {
     function Setup()
     {
+        parent::Setup();
     }
 
     // TODO
@@ -21,7 +22,7 @@ class TournamentController extends \simp\Controller
         $this->StoreLocation();
         $this->program = \simp\Model::FindOne(
             "Program",
-            "name = tournament",
+            "name = Tournaments",
             array()
         );
         if ($this->CheckParam("name"))

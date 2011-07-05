@@ -2,6 +2,12 @@
 namespace simp;
 require_once "request.php";
 require_once "helpers.php";
+global $BASE_PATH;
+if (file_exists($BASE_PATH . "app/controllers/app_controller.php"))
+{
+    require_once $BASE_PATH . "app/controllers/app_controller.php";
+}
+
 
 /// Controller is responsible for launching a view
 /// A controller has actions, which are methods.  Each action has an 
@@ -26,6 +32,7 @@ class Controller
     protected $_current_user;
     protected $_authorization_params;
     protected $_current_url;
+    protected $_preactions;
 
     function __construct()
     {
@@ -52,6 +59,7 @@ class Controller
         $this->_action_map = array();
         $this->_current_user = NULL;
         $this->_authorization_params = array();
+        $this->_preactions = array();
         $this->Setup();
         // can override this
         $this->_default_action = "Index";
@@ -80,6 +88,23 @@ class Controller
         }
         $this->_action_map[$action][$method] = $funcname;
     }
+
+    protected function AddPreaction($actions, $funcname)
+    {
+        global $log;
+        if (!is_array($actions))
+        {
+            $actions = explode(",", preg_replace("/\s/", '', $actions));
+        }
+        foreach ($actions as $action)
+        {
+            if (!isset($this->_preactions[$action])) $this->_preactions[$action] = array();
+            $log->logDebug("AddPreaction: adding $funcname to $action");
+            $this->_preactions[$action][] = $funcname;
+        }
+        $log->logDebug("AddPreaction: preactions = " . print_r($this->_preactions, true));
+    }
+
 
     protected function RequireAuthorization(
         $actions, 
@@ -123,7 +148,10 @@ class Controller
 
     protected function GetParam($index)
     {
-        return $this->_params[$index];
+        if (isset($this->_params[$index]))
+            return $this->_params[$index];
+        else
+            return false;
     }
 
     protected function SetParam($index, $value)
@@ -147,16 +175,25 @@ class Controller
         $this->_action = $action;
         $func = ClassCase($action);
         $save = true;
+        $prefuncs = array();
         $log->logDebug("CallAction: looking up $action in map: \n" . print_r($this->_action_map, true));
         if (array_key_exists($action, $this->_action_map))
         {
             $log->logDebug("CallAction: looking up method {$this->_method}");
             if (array_key_exists($this->_method, $this->_action_map[$action]))
             {
+                //$prefuncs = $this->_preactions[$action];
                 $func = $this->_action_map[$action][$this->_method];
             }
         }
 
+        if (isset($this->_preactions['all'])) $prefuncs = $this->_preactions['all'];
+        if (isset($this->_preactions[$action])) $prefuncs = array_merge($prefuncs, $this->_preactions[$action]);
+        foreach ($prefuncs as $prefunc)
+        {
+            $log->logDebug("CallAction: calling preaction $prefunc");
+            call_user_func(array($this, $prefunc));
+        }
             
         $log->logDebug("CallAction: calling $func");
         $render = call_user_func(array($this, $func));
@@ -190,6 +227,7 @@ class Controller
         if ($this->Authorized($action))
         {
             $log->logDebug("Dispatching {$action} with request:\n " . print_r($request->GetRequest(), true));
+            $log->logDebug("                      and params:\n " . print_r($this->_params, true));
             $this->_form_vars = $request->GetVariables();
             $this->CallAction($action);
         }
@@ -213,7 +251,10 @@ class Controller
         require_once $this->_view_path . SnakeCase($view) . ".phtml";
         $this->content .= ob_get_contents();
         ob_end_clean();
-        require_once $this->_layout_path . $this->_layout_name . ".phtml";
+        if (isset($this->_params['format']) && $this->_params['format'] == "no_template")
+            echo $this->content;
+        else
+            require_once $this->_layout_path . $this->_layout_name . ".phtml";
     }
 
     function NotFound($msg = "")

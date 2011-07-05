@@ -1,7 +1,11 @@
 <p><strong>Plug-In Administration</strong></p>
 <? if (count($this->uninstalled_plug_ins) > 0): ?>
 <p><strong>Uninstalled Plug-ins</strong></p>
-<table>
+<table class="pretty">
+    <tr>
+        <th>Name</th>
+        <th>&nbsp;</th>
+    </tr>
     <? foreach($this->uninstalled_plug_ins as $plug_in): ?>
     <tr>
         <td><?= HumanCase($plug_in); ?></td>
@@ -12,7 +16,13 @@
 <? endif; ?>
 <? if (count($this->plug_ins) > 0): ?>
 <p><strong>Installed Plug-ins</strong></p>
-<table>
+<table class="pretty">
+    <tr>
+        <th>Name</th>
+        <th>Enabled?</th>
+        <th>&nbsp;</th>
+        <th>&nbsp;</th>
+    </tr>
     <? foreach($this->plug_ins as $plug_in): ?>
         <? $enabled = $plug_in->enabled == true ? array("enabled", "disable") : array("disabled", "enable"); ?>
     <tr>

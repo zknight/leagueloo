@@ -1,0 +1,7 @@
+<h1>New Camp</h1>
+<?= GetErrorsFor($this->camp); ?>
+<?= FormTag("camp", \simp\Request::POST, NULL, true); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>
+

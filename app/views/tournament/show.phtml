@@ -11,22 +11,28 @@ if ($this->UserLoggedIn()) {
 <?= l("edit tournament info", Path::content_tournament_edit($this->tournament->id)); ?>
 <? endif; ?>
 <h1 class="title"><?= $this->tournament->name; ?></h1>
-<!-- TODO: need to change Events plug-in to show nothing when there are no associated events. -->
 <div class="tournament">
     <div class="date" style="text-align:center;">
         <?= FormatDateTime($this->tournament->start, "l F jS"); ?> through 
         <?= FormatDateTime($this->tournament->end, "l \\t\h\e jS, Y"); ?></br>
-        <span class="deadline">Registration Deadline: <?= FormatDateTime($this->tournament->deadline, "l F jS, Y"); ?></span>
+        <span class="deadline">Application Deadline: <?= FormatDateTime($this->tournament->deadline, "l F jS, Y"); ?></span>
     </div>
+<? if ($this->tournament->schedule_link != ""): ?>
+    <div class="schedule_link"><?= l("Tournament Schedule", $this->tournament->schedule_link, array('external' => true)); ?></div>
+<? endif; ?>
+<? if ($this->tournament->application_link != ""): ?>
+    <div class="schedule_link"><?= l("Apply On-line", $this->tournament->application_link, array('external' => true)); ?></div>
+<? endif; ?>
     <?= $this->tournament->description; ?>
     <table>
         <tr>
-        <!-- TODO: change this to email link with obfuscation -->
             <td>
                 Contact:
             </td>
             <td>
-                <?= l($this->tournament->director, "mailto:{$this->tournament->director_email}"); ?>
+                <?= $this->tournament->director; ?> <br />
+                <?= ObsEmailLink($this->tournament->director_email); ?><br />
+                <?= $this->tournament->director_phone; ?>
             </td>
         </tr>
         <tr>
@@ -34,30 +40,44 @@ if ($this->UserLoggedIn()) {
             <? if ($this->tournament->application_link == false): ?>
             <td>Not yet available</td>
             <? else: ?>
-            <td><?= l("go", $this->tournament->application_link, array('target' => 'blank')); ?></td>
+            <td>
+                <?= l("go", $this->tournament->application_link, array('target' => 'blank')); ?>
+            </td>
             <? endif; ?>
+        </tr>
         <tr>
             <td>Mail-in Team Application (pdf):</td>
+            <? if ($this->tournament->app == false): ?>
+            <td>Coming Soon</td>
+            <? else: ?>
             <td><?= l("download", ($this->tournament->pdf_path . $this->tournament->app)); ?></td>
+            <? endif; ?>
         </tr>
         <tr><td>&nbsp;</td></tr>
         <tr>
             <td>Tournament Rules:</td>
+            <? if ($this->tournament->rules == false): ?>
+            <td>Coming Soon</td>
+            <? else: ?>
             <td><?= l("download", $this->tournament->pdf_path . $this->tournament->rules); ?></td>
+            <? endif; ?>
         </tr>
+        <? if ($this->tournament->host_app != false): ?>
         <tr>
             <td>Application to Host:</td>
             <td><?= l("download", $this->tournament->pdf_path . $this->tournament->host_app); ?></td>
         </tr>
+        <? endif; ?>
     </table>
     <h3>Game Format and Team Fees</h3>
-    <table class="info">
+    <table class="pretty">
         <tr>
             <th>Division</th><th>Fee</th><th colspan="2">Format</th><th>Roster</th><th>Guest Players</th>
         </tr>
+<? $r=false; ?>
 <? foreach (Tournament::$age_divisions as $idx => $div): ?>
     <? if ($this->tournament->age_division[$idx] == true): ?>
-        <tr>
+        <tr class="<?= ($r=!$r)?"odd":"even";?>">
             <td><?= $div; ?></td>
             <td>$<?= $this->tournament->cost[$idx]; ?></td>
             <td>

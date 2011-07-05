@@ -1,0 +1,6 @@
+<h1 class="title">Add Privileged User</h1>
+<?= GetErrorsFor($this->ability); ?>
+<?= FormTag("ability", \simp\Request::POST, Path::admin_ability_add(), true); ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Add" />
+<?= EndForm(); ?>

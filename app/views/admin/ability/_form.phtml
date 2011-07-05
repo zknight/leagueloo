@@ -1,0 +1,32 @@
+<strong><?=HumanCase($this->entity_type);?>: </strong><?= $this->entity->name; ?>
+<input type="hidden" name="Ability[entity_type]" value="<?=$this->entity_type?>" />
+<input type="hidden" name="Ability[entity_id]" value="<?=$this->entity->id?>" />
+<input type="hidden" name="Ability[entity_name]" value="<?=$this->entity->name?>" />
+<fieldset><legend>Select a user:</legend>
+<? foreach ($this->users as $id => $user): ?>
+<div style="width:100%;">
+    <div style="float:left;width:25%;height:20px;"><?= RadioButton($this->ability, 'user_id', $id); ?> <?= $user; ?></div>
+<? endforeach; ?>
+    <div class="pager" style="clear:both;">
+    <? if ($this->cur_page != 0): ?>
+        <? $prev_page = $this->cur_page-1; $param = "u=" . $prev_page*$this->per_page; ?>
+        <?= l("prev {$this->per_page}", Path::admin_ability_add($this->entity_type, $this->entity_id, $param)); ?>
+    <? else: ?>
+        <span class="disabled">prev <?= $this->per_page; ?></span>
+    <? endif; ?>
+<? foreach ($this->pages as $i => $page): ?>
+    <? $class = $this->cur_page == $i ? 'current' : '' ?>
+    <?= l($i+1, Path::admin_ability_add($this->entity_type, $this->entity->id, $page), array('class' => $class)); ?>&nbsp;
+<? endforeach; ?>
+    <? if($this->cur_page != count($this->pages) - 1): ?>
+        <? $next_page = $this->cur_page+1; $param = "u=" . $next_page*$this->per_page; ?>
+        <?= l("next {$this->per_page}", Path::admin_ability_add($this->entity_type, $this->entity_id, $param)); ?>
+    <? else: ?>
+        <span class="disabled">next <?= $this->per_page; ?></span>
+    <? endif; ?>
+    </div>
+</div>
+</fieldset>
+<fieldset><legend>Select Ability Level</legend>
+<?= SimpleSelect($this->ability, 'level', Ability::$ability_level_strings); ?>
+</fieldset>

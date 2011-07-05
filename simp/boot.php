@@ -1,6 +1,7 @@
 <?php
 namespace simp;
 //$TEST = true;
+require_once "cache.php";
 require_once "KLogger.php";
 $log = \KLogger::instance('log', \KLogger::DEBUG);
 $log->logDebug('---------START---------');

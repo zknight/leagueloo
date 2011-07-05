@@ -73,3 +73,18 @@
     <input type="submit" value="Modify"/>
     </fieldset>
 <?= EndForm(); ?>
+
+<?= FormTag(
+    "max_recent",
+    \simp\Request::PUT,
+    path::admin_configuration_update($this->max_recent->id));
+?>
+    <fieldset><legend>Maximum Recent Updates</legend>
+    <strong>
+        This is the number of recent updates that will show in the "Recent Updates" 
+        section of the page.
+    <strong><br />
+    <?=TextField($this->max_recent, 'value');?><br />
+    <input type="submit" value="Modify"/>
+    </fieldset>
+<?= EndForm(); ?>

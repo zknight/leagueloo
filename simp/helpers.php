@@ -14,15 +14,27 @@ class Path
         //global $log;
         //$log->logDebug("Path::{$name}({$arguments[0]})");
         $name_arr = explode('_', $name);
+        $params = array();
         if (count($arguments) > 0)
         {
-            $name_arr = array_merge($name_arr, $arguments);
-            foreach ($name_arr as $i => $name)
+            //$fields = array_merge($fields, $arguments);
+            foreach ($arguments as $name)
             {
-                $name_arr[$i] = SnakeCase($name);
+                if (strpos($name, "=") != false)
+                {
+                    $params[] = $name;
+                }
+                else {
+                    $name_arr[] = SnakeCase($name);
+                }
             }
         }
         $path = $REL_PATH . implode('/', $name_arr);
+        if (count($params) > 0)
+        {
+            $p = implode("&", $params);
+            $path .= "?" . $p;
+        }
         return $path;
     }
 
@@ -98,9 +110,17 @@ function DatePicker($model, $field, $opts = array())
 {
     $attrs = GetInputAttributes($model, $field, $opts);
 
+    $errors = $model->GetErrors();
+    $error_class = "";
+    //print_r($field);
+    //print_r($errors);
+    if (array_key_exists($field, $errors))
+    {
+        $error_class = "error";
+    }
     $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
     $html .= $attrs['id'];
-    $html .= " class=\"date-picker ";
+    $html .= " class=\"date-picker {$error_class} ";
     $html .= array_key_exists('class', $opts) ? $opts['class'] : '';
     $html .= "\"";
     $html .= $attrs['size'];
@@ -237,27 +257,32 @@ function SimpleSelect($model, $field, $options, $opts = array())
 {
     $attrs = GetInputAttributes($model, $field, $opts);
     $html = "<select";
-    //if (isset($class)) $html .= " class=\"{$class}\"";
-    //if (isset($id)) $html .= " id=\"{$id}\"";
     $html .= $attrs['id'];
     $html .= $attrs['class'];
     $html .= " name=\"{$attrs['name']}\"";
-    /*
-    if (isset($model))
-    {
-        $mname = $model;
-        $input_field = $mname . "[{$field}]";
-        $html .= " name=\"$input_field\"";
-        $value = $model->__get($field);
-    }
-     */
     $html .= ">\n";
     foreach($options as $val => $text)
     {
-        $text = HumanCase($text);
-        $html .= "\t<option value=\"{$val}\"";
-        if ($val == $attrs['value']) $html .= " selected=\"selected\"";
-        $html .= ">{$text}</option>\n";
+        if (is_array($text))
+        {
+            $html .= "\t<optgroup label=\"$val\">\n";
+            foreach ($text as $val2 => $text2)
+            {
+                $text = HumanCase($text2);
+                $html .= "\t<option value=\"{$val2}\"";
+                if ($val2 == $attrs['value']) $html .= " selected=\"selected\"";
+                $html .= ">{$text2}</option>\n";
+            }
+            $html .= "\t</optgroup>\n";
+
+        }
+        else
+        {
+            $text = HumanCase($text);
+            $html .= "\t<option value=\"{$val}\"";
+            if ($val == $attrs['value']) $html .= " selected=\"selected\"";
+            $html .= ">{$text}</option>\n";
+        }
     }
     $html .= "</select>";
     return $html;
@@ -287,8 +312,8 @@ function rand_str($length = 10)
     
 function l($text, $path, $opts = array())
 {
-    global $REL_PATH;
-    $pathstr = $REL_PATH;
+    //global $REL_PATH;
+    //$pathstr = $REL_PATH;
     $class = '';
     $target = '';
 
@@ -302,14 +327,21 @@ function l($text, $path, $opts = array())
         $t = $opts['target'];
         $target = "target='$t'";
     }
+    if (isset($opts['external']) && $opts['external'] == true)
+    {
+        $target = $target == '' ? "target='blank'" : $target;
+        if (strpos($path, "http://") === false) $path = "http://" . $path;
+    }
     if (isset($opts['method']))
     {
         $method = $opts['method'];
         $name = rand_str();
         $html = <<<HERE
-        <form name="$name" method="post" action="$path">
+        <form style="display:none;" name="$name" method="post" action="$path">
+            <div style="display:none;">
             <input type="hidden" name="method" value="$method"/>
             <script type="text/javascript">function submit_$name() { document.$name.submit();}</script>
+            </div>
         </form>
         <a href="javascript:submit_$name();">$text</a>
 HERE;
@@ -328,13 +360,13 @@ function ObsEmailLink($email)
     $parts = explode("@", $email);
     //$domain = explode(".", $parts[1]);
     $html = <<<EOD
-<span id='email_obs'>$parts[0]@<del>REMOVE</del>$parts[1]</span>
+<span id='email_obs_$parts[0]'>$parts[0]@<del>REMOVE</del>$parts[1]</span>
 <script type='text/javascript'>
 <!--
     var name = "$parts[0]";
     var at = "@";
     var domain = "$parts[1]";
-    $('#email_obs').replaceWith("<a href='" + "mail" + "to:" + name + at + domain + ">" + name + at + domain + "</a>");
+    $('span#email_obs_$parts[0]').replaceWith("<a href='" + "mail" + "to:" + name + at + domain + "'>" + name + at + domain + "</a>");
 -->
 </script>
 EOD;
@@ -356,6 +388,24 @@ function FormatDateTime($timestamp, $format = NULL)
     return $dt->format($format);
 
 }
+
+function TimeAgoInWords($timestamp, $two_fields = false)
+{
+    $cur_tm = time(); 
+
+    $dif = $cur_tm-$timestamp;
+
+    $pds = array('second','minute','hour','day','week','month','year','decade');
+
+    $lngh = array(1,60,3600,86400,604800,2630880,31570560,315705600);
+
+    for($v = sizeof($lngh)-1; ($v >= 0)&&(($no = $dif/$lngh[$v])<=1); $v--); if($v < 0) $v = 0; $_tm = $cur_tm-($dif%$lngh[$v]);
+
+    $no = floor($no); if($no <> 1) $pds[$v] .='s'; $x=sprintf("%d %s ",$no,$pds[$v]);
+    if(($two_fields == true)&&($v >= 1)&&(($cur_tm-$_tm) > 0)) $x .= TimeAgoInWords($_tm);
+    return $x;
+}
+
 
 function GetErrorsFor($model)
 {

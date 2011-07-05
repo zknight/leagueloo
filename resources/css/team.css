@@ -1,0 +1,17 @@
+div.team-photo {
+  padding: 8px 0;
+  background: #002142 url(../img/striped-fade-bg.png);
+  border-bottom: 1px solid #002e5c;
+  width: 100%;
+  text-align: center; }
+  div.team-photo img {
+    border-top: 5px solid #e0ba3a;
+    border-left: 5px solid #e0ba3a;
+    border-right: 5px solid #76621e;
+    border-bottom: 5px solid #76621e;
+    /*
+    top:5px solid $light_navy;
+    left:5px solid $light_navy;
+    right:5px solid $dark_navy;
+    bottom:5px solid $dark_navy;
+    */ }

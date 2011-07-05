@@ -1,0 +1,16 @@
+<h1 class="title">Club Information</h1>
+<? if ($this->show_preview): ?>
+<h2>Preview:</h2>
+<hr />
+<?= $this->page->copy; ?>
+<hr />
+<? endif; ?>
+<?= GetErrorsFor($this->page); ?>
+<?= FormTag("club_information", \simp\Request::PUT); ?>
+    <fieldset><legend>About Your Club</legend>
+    <div style="position:relative;margin:8px auto;">
+        <?= Wysiwyg($this->page, 'copy', 20, 100); ?>
+    </div>
+    </fieldset>
+    <input type="submit" name="submit" value="Preview" /><input type="submit" name="submit" value="Save" />
+<?= EndForm(); ?>

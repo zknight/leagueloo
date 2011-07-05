@@ -1,5 +1,6 @@
 <h1>Create New Program</h1>
-<?= FormTag("program", \simp\Request::POST); ?>
+<?= GetErrorsFor($this->program); ?>
+<?= FormTag("program", \simp\Request::POST, NULL, true); ?>
     <? require("_form.phtml"); ?>
     <input type="submit" value="Add"/>
 <?= EndForm(); ?>

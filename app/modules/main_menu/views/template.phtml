@@ -1,6 +1,12 @@
 <ul class="menu">
-    <li><?= l("Home", Path::home()); ?></li>
+    <? $class = $this->current == 'main' || $this->current == '' ? array('class' => 'selected') : NULL; ?>
+    <li><?= l("Home", Path::home(), $class); ?></li>
+    <? $class = NULL; ?>
     <? foreach ($this->GetPrograms() as $program): ?>
-    <li><?= l($program->name, \Path::Relative(SnakeCase($program->name))); ?></li>
+        <? if (SnakeCase($this->current) == SnakeCase($program->name))
+                $class = array('class' => 'selected'); 
+        ?>
+    <li><?= l($program->name, \Path::Relative(SnakeCase($program->name)), $class); ?></li>
+        <? $class = NULL; ?>
     <? endforeach; ?>
 </ul>

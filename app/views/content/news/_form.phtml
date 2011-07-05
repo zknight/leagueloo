@@ -6,26 +6,18 @@
             <td class="entry"><?= SimpleSelect($this->article, 'entity_designator', $this->entities); ?></td>
             <td class="entry">&nbsp;</td>
         </tr>
-<? /*
-        <tr>
-            <td class="label">Enter a short title:</td>
-            <td class="entry"><?= TextField($this->article, 'short_title', array('size' => 32)); ?></td>
-            <td class="entry">Max characters: 32</td>
-        </tr>
- */ ?>
         <tr>
             <td class="label">Enter title:</td>
             <td class="entry" colspan="2"><?= TextField($this->article, 'title', array('size' => 80));?></td>
         </tr>
-<? /*
-        <tr>
-            <td class="label">Introduction:</td>
-            <td class="entry" colspan="2"><?= TextArea($this->article, 'intro', 3, 70); ?></td>
-        </tr>
- */ ?>
         <tr>
             <td class="label">Body:</td>
             <td class="entry" colspan="2"><?= Wysiwyg($this->article, 'body', 10, 70); ?></td>
+        </tr>
+        <tr>
+            <td class="label">Associated Image:</td>
+            <td class="entry"><?= FileSelect($this->article, 'image'); ?>
+            <td class="entry">(optional) This image will show at top of article (on front page)</td>
         </tr>
     </table>
 </fieldset>

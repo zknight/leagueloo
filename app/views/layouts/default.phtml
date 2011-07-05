@@ -39,7 +39,7 @@
                 <ul class="menu">
                 </ul>
                 -->
-                <? \simp\Module::Show("MainMenu"); ?>
+                <? \simp\Module::Show("MainMenu", array('current' => $this->cur_page)); ?>
             </div>
         </div>
         <?=GetFlash();?>
@@ -55,6 +55,7 @@
                     </div>
                     <div class="col2">
                         <? \simp\Module::Show("Events"); //, array('entity_type' => GetEntityType(), 'entity_id' => GetEntityId())); ?>
+                        <? \simp\Module::Show("RecentUpdates"); ?>
                     </div>
                     <div class="col3">
                         <? \simp\Module::Show("FieldConditions"); ?>

@@ -1,0 +1,44 @@
+<h1 class="title"><?= SiteName(); ?> Coaching Staff</h1>
+<div class="coach">
+    <img src="<?= $this->coach->img_path; ?>" style="float:right;"/>
+    <h2> <?= "{$this->coach->first_name} {$this->coach->last_name}" ?> </h2>
+    <h3> <?= Coach::$coach_titles[$this->coach->title] ?> </h3>
+    <table>
+        <tr>
+            <th>Email:</th>
+            <td><?= ObsEmailLink($this->coach->email); ?></td>
+        </tr>
+        <tr>
+            <th>Current Club Teams:</th>
+            <td>
+            <? foreach($this->coach->teams as $team): ?>
+                <?= l("{$team->name} {$team->gender_str}", Path::relative(GetTeamPath("", $team))); ?><br />
+            <? endforeach; ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Coaching Licenses and Certifications:</th>
+            <td>
+            <? foreach($this->coach->coaching_licenses as $level): ?>
+                <?= $level; ?><br />
+            <? endforeach; ?>
+            </td>
+        </tr>
+        <tr>
+            <th>Years with <?= SiteName(); ?>:</th>
+            <td> <?= $this->coach->years_with_club; ?></td>
+        </tr>
+        <tr>
+            <th>Coaching Experience:</th>
+            <td><?= $this->coach->coaching_history; ?></td>
+        </tr>
+        <tr>
+            <th>Playing Experience:</th>
+            <td><?= $this->coach->playing_experience; ?></td>
+        </tr>
+        <tr>
+            <th>Bio:</th>
+            <td><?= $this->coach->bio; ?></td>
+        </tr>
+    </table>
+</div>

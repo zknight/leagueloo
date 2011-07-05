@@ -1,10 +1,13 @@
 <?
 namespace app;
-class MainController extends \simp\Controller
+class MainController extends \app\AppController
 {
     
     function Setup()
     {
+        global $log;
+        $log->logDebug('In: MainController::Setup()');
+        parent::Setup();
     }
 
     function Index()
@@ -42,6 +45,12 @@ class MainController extends \simp\Controller
                 //array("Program", 1, $program->id));
             $this->is_editor[$program->name] = isset($user) ? $user->CanEdit("Program", $program->id) : false;
         }
+        return true;
+    }
+
+    public function About()
+    {
+        $this->page = \simp\Model::FindOne("Page", "name = ?", array("club_information"));
         return true;
     }
 }

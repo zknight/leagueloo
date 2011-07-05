@@ -1,18 +1,89 @@
-<p><strong>Users</strong></p>
+<h1 class="title">Users</h1>
 <?= l("Add New User", Path::admin_user_add());?>
-<table>
+<div class="pager">
+    <? if ($this->cur_page != 0): ?>
+        <? $prev_page = $this->cur_page-1; $param = "u=" . $prev_page*$this->per_page; ?>
+        <?= l("prev {$this->per_page}", Path::admin_user($param, "s={$this->sort_field}", "d={$this->dir}")); ?>
+    <? else: ?>
+        <span class="disabled">prev <?= $this->per_page; ?></span>
+    <? endif; ?>
+    <? foreach ($this->pages as $i => $page): ?>
+    <? $class = $this->cur_page == $i ? 'current' : '' ?>
+    <?= l($i+1, Path::admin_user($page, "s={$this->sort_field}", "d={$this->dir}"), array('class' => $class)); ?>&nbsp;
+    <? endforeach; ?>
+    <? if($this->cur_page != count($this->pages) - 1): ?>
+        <? $next_page = $this->cur_page+1; $param = "u=" . $next_page*$this->per_page; ?>
+        <?= l("next {$this->per_page}", Path::admin_user($param, "s={$this->sort_field}", "d={$this->dir}")); ?>
+    <? else: ?>
+        <span class="disabled">next <?= $this->per_page; ?></span>
+    <? endif; ?>
+</div>
+<table class="pretty" style="font-size:10pt;">
     <tr>
-        <th>User</th>
-        <th>Name</th>
-        <th>Last Login</th>
-        <th>Created</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th width="17%">
+            <?=l("User", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=login", 
+                    "d={$this->sort_dir['login']}")); ?> 
+            <?=l("", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=login", 
+                    "d={$this->sort_dir['login']}"), 
+                array('class' => $this->sort_dir['login']));?> 
+        </th>
+        <th width="17%">
+            <?=l("First Name", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=first_name", 
+                    "d={$this->sort_dir['first_name']}")); ?>
+            <?=l("", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=first_name", 
+                    "d={$this->sort_dir['first_name']}"), 
+                array('class' => $this->sort_dir['first_name']));?>
+        </th>
+        <th width="17%">
+            <?=l("Last Name", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=last_name", 
+                    "d={$this->sort_dir['last_name']}")); ?>
+            <?=l("", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=last_name", 
+                    "d={$this->sort_dir['last_name']}"), 
+                array('class' => $this->sort_dir['first_name']));?>
+        </th>
+        <th width="17%">
+            <?=l("Last Login", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=last_login", 
+                    "d={$this->sort_dir['last_login']}")); ?> 
+            <?=l("", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=last_login", 
+                    "d={$this->sort_dir['last_login']}"), 
+                array('class' => $this->sort_dir['last_login']));?>
+        </th>
+        <th width="17%">
+            <?=l("Created", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=created_on",
+                    "d={$this->sort_dir['created_on']}"));?>
+            <?=l("", Path::admin_user(
+                    $this->pages[$this->cur_page], 
+                    "s=created_on",
+                    "d={$this->sort_dir['created_on']}"), 
+                array('class' => $this->sort_dir['created_on']));?>
+        </th>
+        <th width="8%">&nbsp;</th>
+        <th width="8%">&nbsp;</th>
     </tr>
+<? $r=false; ?>
 <? foreach ($this->users as $user): ?>
-    <tr>
-        <td><?= l($user->login, Path::admin_user_show($user->id)); ?><? if ($user->super) echo "*"?></td>
-        <td><?= $user->last_name; ?>, <?= $user->first_name; ?></td>
+    <tr class="<?=($r=!$r)?'odd':'even';?>">
+        <td><?= l($user->login, Path::admin_user_show($user->id)); ?><? if ($user->super) echo "*"?></td> 
+        <td><?= $user->first_name; ?></td>
+        <td><?= $user->last_name; ?></td>
         <td><?= FormatDateTime($user->last_login); ?></td>
         <td><?= FormatDateTime($user->created_on); ?></td>
         <td><?= l("Edit", Path::admin_user_edit($user->id)); ?></td> 
@@ -21,3 +92,21 @@
 <? endforeach; ?>
 </table>
 <span class="note">* super user, has access to everything</span>
+<div class="pager">
+    <? if ($this->cur_page != 0): ?>
+        <? $prev_page = $this->cur_page-1; $param = "u=" . $prev_page*$this->per_page; ?>
+        <?= l("prev {$this->per_page}", Path::admin_user($param, "s={$this->sort_field}", "d={$this->dir}")); ?>
+    <? else: ?>
+        <span class="disabled">prev <?= $this->per_page; ?></span>
+    <? endif; ?>
+    <? foreach ($this->pages as $i => $page): ?>
+    <? $class = $this->cur_page == $i ? 'current' : '' ?>
+    <?= l($i+1, Path::admin_user($page, "s={$this->sort_field}", "d={$this->dir}"), array('class' => $class)); ?>&nbsp;
+    <? endforeach; ?>
+    <? if($this->cur_page != count($this->pages) - 1): ?>
+        <? $next_page = $this->cur_page+1; $param = "u=" . $next_page*$this->per_page; ?>
+        <?= l("next {$this->per_page}", Path::admin_user($param, "s={$this->sort_field}", "d={$this->dir}")); ?>
+    <? else: ?>
+        <span class="disabled">next <?= $this->per_page; ?></span>
+    <? endif; ?>
+</div>

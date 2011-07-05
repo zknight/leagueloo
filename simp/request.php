@@ -42,6 +42,8 @@ class Request
         $rel_path = preg_replace("/\//", "\/", trim($this->_relative_path, "/"));
         $log->logDebug("rel_path: $rel_path");
         $url = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
+        // rip off query string
+        list($url, $junk) = explode('?', $url);
         $log->logDebug("url: $url");
         $url = trim($url, "/");
         $this->_request_url = $url;
@@ -57,6 +59,7 @@ class Request
         $this->_DetermineMethod();
         $this->_post_variables = $_POST;
         $this->_params = $_GET;
+        $log->logDebug("Request: _GET = " . print_r($_GET, true));
 
     }
 

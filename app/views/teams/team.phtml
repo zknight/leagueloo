@@ -1,3 +1,4 @@
+<?= IncludeCSS("team.css"); ?>
 <? 
 $editor = false;
 if ($this->UserLoggedIn()) {
@@ -20,9 +21,14 @@ if ($this->UserLoggedIn()) {
     <li><?= l("manage events", Path::content_event()); ?></li>
     <? endif; ?>
     <? if ($admin): ?>
-    <li><?= l("administer", Path::admin_team_show($this->team->id)); ?></li>
+    <li><?= l("administer", Path::admin_teams_show($this->team->id)); ?></li>
     <? endif; ?>
 </ul>
+<? endif; ?>
+<? if ($this->team->image): ?>
+<div class="team-photo">
+    <img src="<?= $this->team->img_path; ?>" />
+</div>
 <? endif; ?>
 <? foreach ($this->news as $article): ?>
 <h3>Latest News</h3>

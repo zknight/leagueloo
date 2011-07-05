@@ -4,6 +4,7 @@ class PlugInController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             array(
                 'index',

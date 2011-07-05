@@ -1,5 +1,4 @@
 <?
-
 function GetArticlePath($action, $article)
 {
     return Path::Relative("{$article->entity_name}/news/{$action}/{$article->short_title}");
@@ -170,17 +169,99 @@ function GetEntityName()
 
 function GetCfgVar($name, $default = NULL)
 {
-  $var = CfgVar::FindOne("CfgVar", "name=?", array($name));
+    // check for cached
+    $value = Cache::Read("cfgvar:$name");
+    if ($value === false)
+    {
+        $value = $default;
+        $var = CfgVar::FindOne("CfgVar", "name=?", array($name));
+        if ($var) 
+        {
+            $value = $var->value;
+        }
+        Cache::Write("cfgvar:$name", $value);
+    }
+    else 
+    {
+        global $log;
+        $log->logDebug("Cache: got cfg var $name $value");
+    }
 
-  if (!$var)
-  {
-    return $default;
-  }
-  return $var->value;
+    return $value;
+}
+
+function SetCfgVar($name, $value)
+{
+    $var = CfgVar::FindOrCreate("CfgVar", "name=?", array($name));
+    $var->name = $name;
+    $var->value = $value;
+    $var->Save();
+    Cache::Write("cfgvar:$name", $value);
 }
 
 function SiteName()
 {
     return GetCfgVar("site_name", "Leagueloo");
+}
+
+function AddRecentUpdate($type, $id, $text, $namespace, $controller, $action=NULL, $param=NULL) 
+{
+    $url = '';
+    if (isset($namespace))
+    {
+        $url = "$namespace/";
+    }
+
+    $url .= "$controller/";
+
+    if (isset($action))
+    {
+        $url .= "$action/";
+    }
+
+    if (isset($param))
+    {
+        if (is_array($param))
+        {
+            $param = implode("/", $param);
+        }
+        $url .= "$param";
+    }
+    $dt = new DateTime("now");
+    $updated_at = $dt->getTimestamp();
+
+    // check to see if this is already in the recent updates list
+    $update = \simp\Model::FindOne("RecentUpdate", "type = ? and rid = ?", array($type, $id));
+    if ($update)
+    {
+        $update->text = $text;
+        $update->url = $url;
+        $update->updated_at = $dt->getTimestamp();
+        $update->Save();
+    }
+    else
+    {
+        $cur_update_id = GetCfgVar("cur_update_id", -1);
+        if ($cur_update_id == -1)
+        {
+            $cur_update_id = 0;
+        }
+
+        $max_updates = GetCfgVar("max_recent", 5);
+
+        $cur_update = \simp\Model::FindOrCreate('RecentUpdate', "update_id = ?", array($cur_update_id));
+        $cur_update->update_id = $cur_update_id;
+        $cur_update->text = $text;
+        $cur_update->url = $url;
+        $cur_update->rid = $id;
+        $cur_update->type = $type;
+        $cur_update->updated_at = $updated_at;
+        $cur_update->Save();
+
+        $next_update_id = ($cur_update_id + 1) >= $max_updates ? 0 : $cur_update_id + 1;
+        
+        SetCfgVar("cur_update_id", $next_update_id);
+    }
+    SetCfgVar('recently_updated', true);
 }
 

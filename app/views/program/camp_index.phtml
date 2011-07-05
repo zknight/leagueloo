@@ -1,0 +1,57 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<h1 class="title"><?= $this->program->name; ?></h1>
+<? if ($publisher): ?>
+<ul class="admin-menu">
+    <li><?= l("new camp", Path::content_camp_add()); ?></li>
+    <li><?= l("manage camps", Path::content_camp()); ?></li>
+</ul>
+<? endif; ?>
+<h3>Upcoming Camps</h3>
+<? if (count($this->upcoming_camps) < 1): ?>
+<p>No upcoming camps.</p>
+<? else: ?>
+    <? foreach ($this->upcoming_camps as $t): ?>
+        <?= l($t->name, Path::camps_camps($t->short_name)); ?>
+        <ul>
+            <li>Level: <?= implode(" and ", $t->leagues); ?></li>
+            <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
+        </ul>
+    <? endforeach; ?>
+<? endif; ?>    
+<? if (GetCfgVar('camps_show_past_camps') == true): ?>
+    <h3>Past Camps</h3>
+    <? if (count($this->past_camps) < 1): ?>
+    <p>No past camps.</p>
+    <? else: ?>
+        <? foreach ($this->past_camps as $t): ?>
+            <?= l($t->name, Path::camps_camp_show($t->short_name)); ?>
+            <ul>
+                <li>Level: <?= implode(" and ", $t->leagues); ?></li>
+                <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
+            </ul>
+        <? endforeach; ?>
+    <? endif; ?>
+<? endif; ?>
+<? foreach ($this->news as $article): ?>
+<div class="article">
+    <p class='title'><?= l($article->title, GetArticlePath('show', $article)); ?></p>
+    <? if ($editor): ?>
+        <span class="sub-title-link">
+        <?= l("edit this article", Path::content_news_edit_program($this->program->id, $article->id)); ?><br />
+        </span>
+    <? endif; ?>
+        <span class="date">
+            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
+        </span>
+    <div class="intro"><?= $article->intro; ?></div>
+    <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
+</div>
+<? endforeach; ?>

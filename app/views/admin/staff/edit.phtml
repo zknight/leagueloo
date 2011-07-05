@@ -1,0 +1,7 @@
+<h1>Edit A Staff Memeber</h1>
+<?= GetErrorsFor($this->staff); ?>
+<?= FormTag("staff", \simp\Request::PUT, NULL, true)?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>
+

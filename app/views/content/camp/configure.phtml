@@ -1,0 +1,11 @@
+<h1>Camp Section Configuration</h1>
+<?= l("back", GetReturnURL()); ?>
+<?= FormTag("camp", \simp\Request::PUT, Path::content_camp_configure($this->show_past_camps->id)); ?>
+    <fieldset><legend>Show Past Camps on "Camps" page</legend>
+        <strong>Check this box to show past camp information on "camps" page.  By default,
+        past camps will not be available (those that have started before the date viewed.)</strong><br />
+        <?= CheckBoxField($this->show_past_camps, 'value'); ?>
+        Show past camps?<br />
+        <input type="submit" value="Modify"/>
+    </fieldset>
+<?= Endform(); ?>

@@ -71,7 +71,7 @@ class BaseModel
                 if (!array_key_exists($name, $this->_skip_sanity) || $this->_skip_sanity[$name] == false)
                 {
                     // sanitize to further prevent sql injection/xss on simple inputs
-                    $val = preg_replace('`[^a-zA-Z0-9@.,$#:_/ ]`', '', $val);
+                    $val = preg_replace('`[^a-zA-Z0-9@.,$?&=#:_/ -]`', '', $val);
                 }
             }
             if ($name != "id") $this->$name = $val;
@@ -157,6 +157,18 @@ class BaseModel
         return $ok;
     }
 
+    protected function VerifyNotEmpty($field, $errmsg = NULL)
+    {
+        $ok = true;
+        if ($this->$field == "")
+        {
+            $msg = $errmsg == NULL ? "{$field} must not be blank." : $errmsg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
+
     protected function VerifyValidDate($field)
     {
         // valid dates are mm/dd/yyyy or mm-dd-yyyy
@@ -177,6 +189,37 @@ class BaseModel
         }
         return $ok;
     }
+
+    protected function VerifyDateFormat($field, &$date)
+    {
+        $retval = true;
+        if ($date == "")
+        {
+            $date = "12/31/2037";
+        }
+        else if (strtotime($date) == FALSE)
+        {
+            $this->SetError($field, "Date must be in format: mm/dd/yyyy or mm-dd-yyyy");
+            $retval = false;
+        }
+        return $retval;
+    }
+
+    protected function VerifyTimeFormat($field, &$time)
+    {
+        $retval = true;
+        if ($time == "")
+        {
+            $time = "00:00:00";
+        }
+        else if (strtotime($time) == FALSE)
+        {
+            $this->SetError($field, "Time must be in format: (24 hour) hh:mm:ss or (12 hour) hh:mm:ss [am/pm]");
+            $retval = false;
+        }
+        return $retval;
+    }
+
 
 }
 

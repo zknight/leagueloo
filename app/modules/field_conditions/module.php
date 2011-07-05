@@ -26,14 +26,15 @@ class FieldConditions extends \simp\Module
 
     public function Status($field)
     {
-        $class = ($field->status == 0) ? 'open' : 'closed';
-        return "<span class=\"$class\">{$field->status_text}</span>";
+        $class = ($field->status > 0) ? 'closed' : 'open';
+        return $field->status == 3 ? "" : "<div class=\"$class\">{$field->status_text}</div>";
     }
 
     public function Time($field)
     {
-        $time = FormatDateTime($field->updated_on, "Y/m/d H:i:s");
-        return "<span class=\"time\">$time</span>";
+        //$time = FormatDateTime($field->updated_on, "Y/m/d H:i:s");
+        $time = TimeAgoInWords($field->updated_on);
+        return "$time ago";
     }
 
     // admin methods

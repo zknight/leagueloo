@@ -1,0 +1,92 @@
+<?= l("back", GetReturnURL()); ?>
+<fieldset>
+    <legend>Camp Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">With which leagues is this camp to be associated?</td>
+            <td class="entry">
+            <? foreach($this->leagues as $league): ?>
+                <?= CheckBoxField(
+                    $this->camp,
+                    'assoc_leagues',
+                    array('array' => $league->name));
+                ?>
+                <?= $league->name; ?><br />
+            <? endforeach; ?>
+            </td>
+        </tr>
+        <tr>
+        <tr>
+            <th class="label">Name of Camp</th>
+            <td class="entry"><?= TextField($this->camp, "name", array('size' => 60)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Registration Fee</th>
+            <td class="entry">$<?= TextField($this->camp, "fee", array('size' => 5)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Date</th>
+            <td class="entry">
+                From <?= DatePicker($this->camp, "start_date"); ?> to
+                <?= DatePicker($this->camp, "end_date"); ?>
+            </td>
+        </tr>
+        <tr>
+            <th class="label">Time</th>
+            <td class="entry">
+                From <?= TextField($this->camp, "start_time"); ?> until 
+                <?= TextField($this->camp, "end_time"); ?> 
+            </td>
+        </tr>
+        <tr>
+            <th class="label">Registration Deadline</th>
+            <td class="entry"><?= DatePicker($this->camp, "reg_deadline"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Location</th>
+            <td class="entry"><?= TextField($this->camp, "location", array('size' => 60)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Description</th>
+            <td class="entry"><?= Wysiwyg($this->camp, "description"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Camp Director</th>
+            <td class="entry">
+                <table>
+                    <tr>
+                        <td>Name:</td> 
+                        <td>    
+                            <?= TextField($this->camp, "director");?><br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Email:</td> 
+                        <td><?= TextField($this->camp, "director_email");?></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Links</legend>
+    <table class="form">
+        <tr>
+            <th class="label">On-line Registration</th>
+            <td class="entry"><?= TextField($this->camp, "registration_link"); ?></td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Associated Documents</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Registration Form (pdf)</th>
+            <td class="entry"><?= FileSelect($this->camp, "registration_form"); ?></td>
+        </tr>
+    </table>
+</fieldset>
+        
+            
+         

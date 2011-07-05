@@ -99,6 +99,15 @@ class Model extends BaseModel
         return $model;
     }
 
+    static public function Count($model_name, $conditions = 1, $values = array())
+    {
+        $name = Model::TableName($model_name);
+        $count = \R::getCell(
+            "select count(*) from {$name} where {$conditions};",
+            $values);
+
+        return $count;
+    }
     
     public function Bean()
     {
@@ -224,7 +233,7 @@ class Model extends BaseModel
         }
         else
         {
-            if (!isset($this->_bean)) $log->logDebug("Wholly crap!");
+            if (!isset($this->_bean)) $log->logDebug("Holy crap!");
             $log->logDebug("Getting $this -> $property as bean");
             return $this->_bean->$property;
         }

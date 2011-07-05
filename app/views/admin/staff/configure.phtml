@@ -1,0 +1,45 @@
+<?= l("back", GetReturnURL()); ?>
+<?= FormTag("configuration", \simp\Request::PUT); ?>
+<fieldset><legend>Position Types</legend>
+    <p><em>Position Types</em> define the categories to put staff into, e.g. Board Members, General Staff, etc.</p>
+    <p>The <em>Position Weight</em> determines where staff members assigned this position type will appear in listings.  The lower the weight, the higher up they will appear.</p>
+    <fieldset><legend>Current Position Types</legend>
+    <table>
+        <tr><th>Position Type</th><th>Weight</th></tr>
+    <? foreach($this->position_types as $idx => $pos_type): ?>
+        <tr>
+            <td><?= TextField('staff', 'types', array('array' => $idx, 'value' => $pos_type['name'])); ?></td>
+            <td><?= TextField('staff', 'weights', array('array' => $idx, 'value' => $pos_type['weight'])); ?></td>
+        </tr>
+    <? endforeach; ?>
+    </table>
+    <input type='submit' name='submit' value='Update Position Types' />
+    </fieldset>
+    <fieldset><legend>Add Position Type</legend>
+    Position Type: <?= TextField('staff', 'position_type'); ?> Weight: <?= TextField('staff', 'position_type_weight'); ?>
+    <input type='submit' name='submit' value='Add Position Type' />
+    </fieldset>
+</fieldset>
+<? //print_r($this->positions); ?>
+<? foreach($this->positions as $pidx => $positions): ?>
+<fieldset><legend><?= $this->position_types[$pidx]['name']; ?> Positions</legend>
+    <fieldset><legend>Current Positions</legend>
+        <table>
+            <tr><th>Position</th><th>Weight</th></tr>
+    <? foreach($positions as $idx => $pos): ?>
+            <tr>
+                <td><?= TextField('staff', "positions-$pidx", array('array' => $idx, 'value' => $pos['name'])); ?></td>
+                <td><?= TextField('staff', "pos_weights-$pidx", array('array' => $idx, 'value' => $pos['weight'])); ?></td>
+            </tr>
+    <? endforeach; ?>
+        </table>
+    <input type='submit' name='submit' value='Update Positions' />
+    </fieldset>
+    <fieldset><legend>Add Position</legend>
+    Position: <?= TextField('staff', "position-$pidx"); ?> Weight: <?= TextField('staff', "pos_weight-$pidx"); ?>
+    <input type='submit' name='submit' value='Add Position' />
+    </fieldset>
+</fieldset>
+<? endforeach; ?>
+<?= EndForm(); ?>
+<?= l("I'm Done.", GetReturnURL()); ?>

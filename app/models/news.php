@@ -25,9 +25,20 @@ class News extends \simp\Model
     private $_exp_date;
     private $_exp_time;
     private $_break_tags;
+    public $file_info;
+    protected $rel_path;
+    protected $abs_path;
+    public $img_path;
 
     public function Setup()
     {
+        $this->img_path = NULL;
+        $this->file_info = NULL;
+        global $REL_PATH;
+        global $BASE_PATH;
+        $path = "resources/files/img/";
+        $this->rel_path = $REL_PATH . $path;
+        $this->abs_path = $BASE_PATH . $path;
         $this->_pub_date = "12/31/2037";
         $this->_pub_time = "00:00:00";
         $this->_pub_now = false;
@@ -52,6 +63,18 @@ class News extends \simp\Model
         $this->_pub_time = FormatDateTime($this->publish_on, "H:i:s");
         $this->_exp_date = FormatDateTime($this->expiration, "m/d/Y");
         $this->_exp_time = FormatDateTime($this->expiration, "H:i:s");
+        if (!$this->image)
+        {
+            global $REL_PATH;
+            $this->img_path = $REL_PATH . "resources/files/img/{$this->entity_type}/{$this->entity_name}/";
+            $this->img_path .= \R::getCell(
+                "select image from " . SnakeCase($this->entity_type) . " where id = ?",
+                array($this->entity_id));
+        }
+        else
+        {
+            $this->img_path = $this->rel_path . "news/{$this->image}";
+        }
     }
 
     public function GetPath()
@@ -269,13 +292,32 @@ class News extends \simp\Model
             // TODO: Generate introduction and short title from body and title, respectively
 
             $arr = explode(" ", strtolower($this->title));
-            $short_title = implode("_", $arr);
+            $short_title = preg_replace("`[^a-zA-Z0-9_]`", "_", implode("_", $arr));
             $sz = strlen($short_title);
             $this->short_title = $sz > 31 ?
                 substr($short_title, 0, 31) : 
                 $short_title;
         }
-        
+        if ($errors == 0)
+        {
+            $img_path = $this->abs_path . "news/";
+            $info = $this->file_info;
+            $name = NULL ;
+            $err = ProcessImage(
+                $info,
+                $img_path,
+                $name,
+                array('max_height' => 315, 'max_width' => 420)
+            );
+
+            $this->image = $name;
+
+            if ($err != false)
+            {
+                $errors++;
+                $this->SetError("image", $err);
+            }
+        }
         return $errors == 0;
     }
 
@@ -306,6 +348,7 @@ class News extends \simp\Model
         return true;
     }
 
+    /*
     protected function VerifyDateFormat($field, &$date)
     {
         $retval = true;
@@ -320,21 +363,7 @@ class News extends \simp\Model
         }
         return $retval;
     }
-
-    protected function VerifyTimeFormat($field, &$time)
-    {
-        $retval = true;
-        if ($time == "")
-        {
-            $time = "00:00:00";
-        }
-        else if (strtotime($time) == FALSE)
-        {
-            $this->SetError($field, "Time must be in format: (24 hour) hh:mm:ss or (12 hour) hh:mm:ss [am/pm]");
-            $retval = false;
-        }
-        return $retval;
-    }
+     */
 
     protected function SplitIntro()
     {

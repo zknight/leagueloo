@@ -6,8 +6,8 @@ class Field extends \simp\Model
     {
         $this->status_options = array(
             0 => 'Open',
-            1 => 'Closed (Weather)',
-            2 => 'Closed (Unplayable)',
+            1 => 'Closed (Inclement Weather)',
+            2 => 'Closed (Fields Unplayable)',
             3 => 'See Comment'
             );
     }

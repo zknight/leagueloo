@@ -1,5 +1,23 @@
-<? if (count($this->notices) > 0): ?>
-        <div id="notice">
-            <?= $this->notices[0]->text; ?>
+<? if (count($this->notices) > 1): ?>
+<?= IncludeJS("cycle.js"); ?>
+<script type="text/javascript">
+$(function(){
+    $('#notices').cycle({div_class: 'notice', delay: '<?= $this->cycle_delay->value*1000; ?>'});
+});
+</script>
+<? endif; ?>
+<div id="notices">
+<? foreach ($this->notices as $notice): ?>
+        <div class="notice">
+            <?= $notice->text; ?>
+    <? if ($this->show_menu): ?>
+            <?= l("[edit]", Path::module_notices_admin_edit($notice->id)); ?>
+    <? endif; ?>
+        </div>
+<? endforeach; ?>
+</div>
+<? if ($this->show_menu): ?>
+        <div id="notice-menu">
+            <?= l("add notice", Path::module_notices_admin_add()); ?>
         </div>
 <? endif; ?>

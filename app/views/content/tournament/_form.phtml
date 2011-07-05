@@ -48,6 +48,10 @@
                         <td>Email:</td> 
                         <td><?= TextField($this->tournament, "director_email");?></td>
                     </tr>
+                    <tr>
+                        <td>Phone:</td>
+                        <td><?= TextField($this->tournament, "director_phone");?></td>
+                    </tr>
                 </table>
             </td>
         </tr>
@@ -118,11 +122,11 @@
     <table class="form">
         <tr>
             <th class="label">On-line Application</th>
-            <td class="entry">http://<?= TextField($this->tournament, "application_link"); ?></td>
+            <td class="entry"><?= TextField($this->tournament, "application_link"); ?></td>
         </tr>
         <tr>
             <th class="label">Tournament Schedule</th>
-            <td class="entry">http://<?= TextField($this->tournament, "schedule_link"); ?></td>
+            <td class="entry"><?= TextField($this->tournament, "schedule_link"); ?></td>
         </tr>
     </table>
 </fieldset>

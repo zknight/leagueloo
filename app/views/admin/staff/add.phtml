@@ -1,0 +1,7 @@
+<h1>Add A Staff Member</h1>
+<?= GetErrorsFor($this->staff); ?>
+<?= FormTag("staff", \simp\Request::POST, NULL, true)?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Add"/>
+<?= EndForm(); ?>
+

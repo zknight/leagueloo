@@ -1,8 +1,39 @@
-<h1>Administrator Console</h1>
-<ul>
-    <li><?= l("Site Configuration", Path::admin_configuration()); ?></li>
-    <li><?= l("User Editor", Path::admin_user()); ?></li>
-    <li><?= l("Club Program Editor", Path::admin_program()); ?></li>
-    <li><?= l("Manage Plug-ins", Path::admin("plug_in")); ?></li>
-</ul>
+<h1 class="title">Administrator Console</h1>
+<div class="cfg-group">
+    <h1>General Configuration</h1>
+    <table>
+        <tr>
+            <th><?= l("Site Configuration", Path::admin_configuration()); ?></th>
+            <th><?= l("Clear Cache", Path::administrator("clear_cache")); ?></th>
+            <th><?= l("User Editor", Path::admin_user()); ?></th>
+            <th><?= l("Manage Plug-ins", Path::admin("plug_in")); ?></th>
+        </tr>
+        <tr>
+            <td>Set site-specific configuration parameters such as Site Name, Session Timeout, Site Email, etc.</td>
+            <td>Clear the site cache (do this if things seem out of whack).</td>
+            <td>Add/Modify user accounts</td>
+            <td>Install/Enable/Disable plug-ins (special menus, modules, etc.)</td>
+        </tr>
+    </table>
+</div>
+<div class="cfg-group">
+    <h1>Club Information</h1>
+    <table>
+        <tr>
+            <th><?= l("Club Information", Path::admin_about()); ?></th>
+            <th><?= l("Club Program Editor", Path::admin_program()); ?></th>
+            <th><?= l("Coaches", Path::admin_coaches()); ?></th>
+            <th><?= l("Club Staff", Path::admin_staff()); ?></th>
+            <th><?= l("Teams", Path::admin_teams()); ?></th>
+        </tr>
+        <tr>
+            <td>Modify information about club (shown on "About" page)</td>
+            <td>Add/Edit/Delete Club programs (leagues, tournaments, camps, etc.)</td>
+            <td>Add/Edit/Delete Club Coach information</td>
+            <td>Add/Edit/Delete Club Staff (board members, commissioners, etc.)</td>
+            <td>Add/Edit/Delete Club Teams</td>
+        </tr>
+    </table>
+</div>
+
 

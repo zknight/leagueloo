@@ -1,0 +1,17 @@
+<div class="module">
+    <div class="title">
+        <ul class="menu">
+            <li>Recent Updates</li>
+        </ul>
+    </div>
+    <div class="content">
+<? $age = 0; ?>
+<? foreach ($this->updates as $update): ?>
+        <div class="recent age-<?= $age; ?>">
+            <?= l($update['text'], Path::relative($update['url'])); ?>
+                <div class="date"><?= TimeAgoInWords($update['time']); ?> ago</div>
+        </div>
+    <? $age++; ?>
+<? endforeach; ?>
+    </div>
+</div>

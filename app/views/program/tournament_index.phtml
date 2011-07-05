@@ -39,16 +39,34 @@ if ($this->UserLoggedIn()) {
 <? if (count($this->upcoming_tournaments) < 1): ?>
 <p>No upcoming tournaments.</p>
 <? else: ?>
+    <table class="pretty">
+        <tr><th>Tournament</th><th>Level</th><th>When</th></tr>
+    <? $r=false; ?>
     <? foreach ($this->upcoming_tournaments as $t): ?>
-        <?= l($t->name, Path::tournaments_tournament_show($t->short_name)); ?>
-        <ul>
-            <li>Level: <?= implode(" and ", $t->leagues); ?></li>
-            <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
-        </ul>
+        <tr class="<?= ($r=!$r)?'odd':'even';?>">
+            <td><?= l($t->name, Path::tournaments_tournament_show($t->short_name)); ?></td>
+            <td><?= implode(" and ", $t->leagues); ?></td>
+            <td><?= $t->start_date; ?> through <?= $t->end_date; ?></td>
+        </tr>
     <? endforeach; ?>
-</table>
+    </table>
 <? endif; ?>    
 <h3>Past Tournaments</h3>
+<? if (count($this->past_tournaments) < 1): ?>
+<p>No past tournaments.</p>
+<? else: ?>
+    <table class="pretty">
+        <tr><th>Tournament</th><th>Level</th><th>When</th></tr>
+    <? $r=false; ?>
+    <? foreach ($this->past_tournaments as $t): ?>
+        <tr class="<?= ($r=!$r)?'odd':'even';?>">
+            <td><?= l($t->name, Path::tournaments_tournament_show($t->short_name)); ?></td>
+            <td><?= implode(" and ", $t->leagues); ?></td>
+            <td><?= $t->start_date; ?> through <?= $t->end_date; ?></td>
+        </tr>
+    <? endforeach; ?>
+    </table>
+<? endif; ?>
 <? foreach ($this->news as $article): ?>
 <div class="article">
     <p class='title'><?= l($article->title, GetArticlePath('show', $article)); ?></p>

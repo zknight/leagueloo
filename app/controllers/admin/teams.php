@@ -4,6 +4,7 @@ class TeamsController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             array(
                 'index',
@@ -36,8 +37,9 @@ class TeamsController extends \simp\Controller
 
     public function Show()
     {
-        echo "not yet implemented.";
-        return false;
+        $this->StoreLocation();
+        $this->team = \simp\Model::FindById('Team', $this->GetParam('id'));
+        return true;
     }
 
     public function Add()
@@ -57,7 +59,33 @@ class TeamsController extends \simp\Controller
     public function Create()
     {
         $this->team = \simp\Model::Create('Team');
-        $this->team->UpdateFromArray($this->GetFormVariable('Team'));
+        $vars = $this->GetFormVariable('Team');
+        $vars['file_info'] = $_FILES['image'];
+        $this->team->UpdateFromArray($vars);
+        if ($this->GetParam('format') == 'json')
+        {
+            if (!$this->team->Save())
+            {
+                $errors = array(status => -1, 'message' => GetErrorsFor($this->team));
+                echo json_encode($errors);
+                return false;
+            }
+            else
+            {
+                $ok = array(
+                    'status' => 0,
+                    'message' => "Team Page Created for {$this->team->division} {$this->team_gender_str} {$this->team->name}",
+                    'team' => array(
+                        'name' => $this->team->name,
+                        'id' => $this->team->id,
+                        'league' => $this->team->program_name,
+                        'gender' => $this->team->gender_str)
+                );
+                echo json_encode($ok);
+                return false;
+            }
+
+        }
         if (!$this->team->Save())
         {
             $this->programs = $this->GetPrograms();
@@ -71,7 +99,9 @@ class TeamsController extends \simp\Controller
     public function Update()
     {
         $this->team = \simp\Model::FindById('Team', $this->GetParam('id'));
-        $this->team->UpdateFromArray($this->GetFormVariable('Team'));
+        $vars = $this->GetFormVariable('Team');
+        $vars['file_info'] = $_FILES['image'];
+        $this->team->UpdateFromArray($vars);
         if (!$this->team->Save())
         {
             $this->programs = $this->GetPrograms();
@@ -102,7 +132,8 @@ class TeamsController extends \simp\Controller
 
     protected function GetPrograms()
     {
-        return $this->GetUser()->ProgramsWithPrivilege(\Ability::ADMIN, "has_teams = ?", array(true));
+        //return $this->GetUser()->ProgramsWithPrivilege(\Ability::ADMIN, "has_teams = ?", array(true));
+        return $this->GetUser()->OptionsForEntitiesWithPrivilege("Program", \Ability::ADMIN, "has_teams = ?", array(true));
     }
 
 }

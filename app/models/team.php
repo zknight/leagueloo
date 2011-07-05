@@ -13,9 +13,21 @@ class Team extends \simp\Model
 {
 
     protected $gender_str;
+    public $coaches;
+    public $file_info;
+    public $rel_path;
+    public $abs_path;
+    public $img_path;
 
     public function Setup()
     {
+        $this->coaches = array();
+        $this->img_path = NULL;
+        global $REL_PATH;
+        global $BASE_PATH;
+        $path = "resources/files/img/";
+        $this->rel_path = $REL_PATH . $path;
+        $this->abs_path = $BASE_PATH . $path;
         $this->gender_str = array(
             "m" => array("boys", "men"),
             "f" => array("girls", "women")
@@ -111,12 +123,96 @@ class Team extends \simp\Model
                 "select name from program where id = ?",
                 array($this->program_id));
             break;
+
+        case "program_designator":
+            return "{$this->program_type}:{$this->program_id}";
+            break;
         default:
             return parent::__get($property);
             break;
 
         }
 
+    }
+
+    public function __set($property, $value)
+    {
+        switch($property)
+        {
+        case "program_designator":
+            list($this->program_type, $this->program_id) = explode(":", $value);
+            break;
+        default:
+            parent::__set($property, $value);
+            break;
+        }
+    }
+
+    public function OnLoad()
+    {
+        $this->img_path = $this->rel_path . "team_pics/{$this->image}";
+        $coach_beans = \R::related($this->_bean, 'coach');
+        foreach ($coach_beans as $id => $bean)
+        {
+            $this->coaches[$id] = new Coach($bean);
+        }
+    }
+
+
+    public function BeforeSave()
+    {
+        $errors = 0;
+
+        // check for existing on first save
+        if ($this->id < 1)
+        {
+            $count = \simp\Model::Count(
+                'Team',
+                'name = ? and program_id = ? and gender = ? and year = ?',
+                array($this->name, $this->program_id, $this->gender, $this->year)
+            );
+            
+            if ($count > 0)
+            {
+                $errors++;
+                $this->SetError('name', "This team already exists.");
+            }
+        }
+
+        $errors = $this->VerifyNotEmpty('name') ? $errors : $errors+1;
+
+        if ($errors == 0)
+        {
+            $img_path = $this->abs_path . "team_pics/";
+            $info = $this->file_info;
+            $img_name = NULL;
+            $err = ProcessImage(
+                $info,
+                $img_path,
+                $img_name,
+                array('max_width' => 400)
+            );
+
+            if ($img_name != "") $this->image = $img_name;
+
+            if ($err != false)
+            {
+                $errors++;
+                $this->SetError("image", $err);
+            }
+        }
+
+        return $errors == 0;
+    }
+
+    public function BeforeDelete()
+    {
+        // unassociated coach(es)
+        foreach ($this->coaches as $coach)
+        {
+            \R::unassociate($this->_bean, $coach->Bean());
+        }
+        return true;
     }
 
 }

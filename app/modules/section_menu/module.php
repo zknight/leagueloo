@@ -15,6 +15,10 @@ class SectionMenu extends \simp\Module
         // $args should have current page, entity_type, entity_id
         if ($entity_type === "Main")
         {
+            $this->links['Club Information'] = array(
+                'link' => Path::main_about(),
+                'class' => ($current == 'about' ? 'selected' : ''),
+            );
             $this->links['News'] = array(
                 'link' => Path::home(),
                 'class' => ($current == 'index' ? 'selected' : ''),

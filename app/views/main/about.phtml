@@ -1,0 +1,23 @@
+<?php
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<h1 class="title"><?= SiteName(); ?></h1>
+<? \simp\Module::Show("SectionMenu", array("current" => 'about', "entity_type" => 'Main', "entity_id" => 0)); ?>
+<? if ($admin): ?>
+<ul class="admin-menu">
+    <li><?= l("edit page", Path::admin("club_information")); ?></li>
+    <li><?= l("manage coaches", Path::admin_staff()); ?></li>
+    <li><?= l("manage staff", Path::admin_staff()); ?></li>
+</ul>
+<? endif; ?>
+<ul class="menu">
+    <li><?= l("Meet Our Coaches", Path::staff_coaches()); ?></li>
+    <li><?= l("Meet Our Club Administrators", Path::staff_administration()); ?></li>
+</ul>
+<div class="page">
+    <h1>About <?= SiteName(); ?></h2>
+    <?= $this->page->copy; ?>
+</div>

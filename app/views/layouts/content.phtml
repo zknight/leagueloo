@@ -6,6 +6,7 @@
         </title>
         <?= IncludeCSS("ce_layout.css"); ?>
         <?= IncludeCSS("style.css"); ?>
+        <?= IncludeCSS("content.css"); ?>
         <?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
         <?= IncludeJS("jquery.js"); ?>
         <?= IncludeJS("jquery-ui.js"); ?>
@@ -43,6 +44,16 @@ $(function($) {
             <div id="main-menu">
                 <? \simp\Module::Show("MainMenu"); ?>
             </div>
+        </div>
+        <div id="content-menu">
+            <ul class="menu">
+                <li><?= l("Articles", Path::content_news()); ?></li>
+                <li><?= l("Events", Path::content_event()); ?></li>
+                <li><?= l("Tournaments", Path::content_tournament()); ?></li>
+                <li><?= l("Camps", Path::content_camp()); ?></li>
+                <li><?= l("Images", Path::content_image()); ?></li>
+                <li>Documents</li>
+            </ul>
         </div>
         <?=GetFlash();?>
         <div id="content">

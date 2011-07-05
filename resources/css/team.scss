@@ -1,0 +1,25 @@
+@import "colors";
+
+div.team-photo {
+    padding:8px 0;
+    background:$navy url(../img/striped-fade-bg.png);
+    border: {
+        bottom: 1px solid $light_navy;
+    }
+    width:100%;
+    text-align:center;
+    img {
+        border: {
+            top:5px solid $orange;
+            left:5px solid $orange;
+            right:5px solid $brown;
+            bottom:5px solid $brown;
+            /*
+            top:5px solid $light_navy;
+            left:5px solid $light_navy;
+            right:5px solid $dark_navy;
+            bottom:5px solid $dark_navy;
+            */
+        }
+    }
+}

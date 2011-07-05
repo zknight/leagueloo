@@ -1,0 +1,21 @@
+<h1 class="title"><?= SiteName(); ?> Administration</h1>
+<div class="coach">
+    <img src="<?= $this->staff_member->img_path; ?>" style="float:right;"/>
+    <h2> <?= "{$this->staff_member->first_name} {$this->staff_member->last_name}" ?> </h2>
+    <h3> <?= $this->staff_member->group; ?> - <?= $this->staff_member->title ?> </h3>
+    <table>
+        <tr>
+            <th>Email:</th>
+            <td><?= ObsEmailLink($this->staff_member->email); ?></td>
+        </tr>
+        <tr>
+            <th>Years with <?= SiteName(); ?>:</th>
+            <td> <?= $this->staff_member->years_with_club; ?></td>
+        </tr>
+        <tr>
+            <th>Bio:</th>
+            <td><?= $this->staff_member->bio; ?></td>
+        </tr>
+    </table>
+</div>
+

@@ -1,6 +1,6 @@
 <h1>Create an Article</h1>
 <?= GetErrorsFor($this->article); ?>
-<?= FormTag("article", \simp\Request::POST); ?>
+<?= FormTag("article", \simp\Request::POST, NULL, true); ?>
     <? require "_form.phtml"; ?>
     <input type="submit" value="Create"/>
 <?= EndForm(); ?>

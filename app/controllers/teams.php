@@ -1,9 +1,10 @@
 <?
 namespace app;
-class TeamsController extends \simp\Controller
+class TeamsController extends \app\AppController
 {
     public function Setup()
     {
+        parent::Setup();
     }
 
     public function Index()

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
+    <head>
+        <title>
+            <?= SiteName(); ?>
+        </title>
+        <?= IncludeJS("jquery.js"); ?>
+        <?= IncludeJS("tiny_mce/jquery.tinymce.js"); ?>
+        <?= IncludeJS("jquery-ui.js"); ?>
+        <?= IncludeJS("editor.js"); ?>
+        <?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
+        <?= IncludeCSS("style.css"); ?>
+        <?= IncludeCSS("admin.css"); ?>
+        <!--?= IncludeCSS("ce_layout.css"); ?-->
+        <script type="text/javascript">
+$(function($) {
+    $(document).ready(function() {
+        loadEditor($("textarea.wysiwyg"), "<?= GetJSPath("tiny_mce/tiny_mce.js"); ?>" );
+        $(".date-picker").datepicker();
+    });
+});
+        </script>
+        <meta name='url_base' content='<?=Path::home()?>' />
+    </head>
+    <body>
+        <div id="header">
+            <div id="user-menu">
+                <ul class = "menu">
+                <? $user = $this->GetUser();
+                   $unread_count = $user->unread_message_count;
+                   $link_img = $unread_count > 0 ?
+                       "<img src=\"" . GetImagePath("email_open_image.png") . "\" style=\"vertical-align:bottom\" />" :
+                       "<img src=\"" . GetImagePath("email.png") . "\" style=\"vertical-align:bottom\" />";
+                ?>
+                    <li>Logged in as: <?= $user->login?></li>
+                    <li><?= l($link_img, Path::message()); ?></li>
+                    <li><?= l("logout", Path::user_logout()); ?> </li>
+                    <li><?= l("my profile", Path::user_edit()); ?> </li>
+                <? if ($this->GetUser()->super): ?>
+                    <li><?= l("administration", Path::administrator()); ?> </li>
+                    <li><?= l("manage content", Path::content()); ?></li>
+                <? endif; ?>
+                </ul>
+            </div>
+            <div id="main-menu">
+                <? \simp\Module::Show("MainMenu"); ?>
+            </div>
+        </div>
+        <div id="content-menu">
+            <ul class="menu">
+                <li><?= l("Site Configuration", Path::admin_configuration()); ?></li>
+                <li><?= l("Users", Path::admin_user()); ?></li>
+                <li><?= l("Coaches", Path::admin_coaches()); ?></li>
+                <li><?= l("Teams", Path::admin_teams()); ?></li>
+                <li><?= l("Programs", Path::admin_program()); ?></li>
+                <li><?= l("Plug-ins", Path::admin("plug_in")); ?></li>
+            </ul>
+        </div>
+        <?=GetFlash();?>
+        <div id="content">
+            <?= $this->content ?>
+        </div>
+    </body>
+</html>
+        

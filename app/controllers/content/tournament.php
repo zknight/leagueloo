@@ -50,7 +50,7 @@ class TournamentController extends \simp\Controller
         $this->leagues = \simp\Model::Find(
             "Program", 
             "type = ?",
-            array(0)
+            array(\Program::LEAGUE)
         );
         return true;
     }
@@ -63,6 +63,14 @@ class TournamentController extends \simp\Controller
         $this->tournament->file_info = $_FILES;
         if ($this->tournament->Save())
         {
+            AddRecentUpdate(
+                'tournament',
+                $this->tournament->id,
+                $this->tournament->name,
+                "tournaments", 
+                "tournament", 
+                "show", 
+                $this->tournament->short_name);
             AddFlash("Tournament {$this->tournament->name} Created.");
             \Redirect(GetReturnURL());
         }
@@ -72,7 +80,7 @@ class TournamentController extends \simp\Controller
             $this->leagues = \simp\Model::Find(
                 "Program", 
                 "type = ?",
-                array(0)
+                array(\Program::LEAGUE)
             );
             $this->Render("Add");
             return false;
@@ -85,7 +93,7 @@ class TournamentController extends \simp\Controller
         $this->leagues = \simp\Model::Find(
             "Program", 
             "type = ?",
-            array(0)
+            array(\Program::LEAGUE)
         );
         return true;
     }
@@ -98,6 +106,14 @@ class TournamentController extends \simp\Controller
         $this->tournament->file_info = $_FILES;
         if ($this->tournament->Save())
         {
+            AddRecentUpdate(
+                'tournament',
+                $this->tournament->id,
+                $this->tournament->name,
+                "tournaments", 
+                "tournament", 
+                "show", 
+                $this->tournament->short_name);
             AddFlash("Tournament {$this->tournament->name} Updated.");
             \Redirect(GetReturnURL());
         }
@@ -107,7 +123,7 @@ class TournamentController extends \simp\Controller
             $this->leagues = \simp\Model::Find(
                 "Program", 
                 "type = ?",
-                array(0)
+                array(\Program::LEAGUE)
             );
             $this->Render("Edit");
             return false;

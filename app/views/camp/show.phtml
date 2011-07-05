@@ -1,0 +1,49 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    //$editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    //$admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<? if ($publisher): ?>
+<?= l("edit camp info", Path::content_camp_edit($this->camp->id)); ?>
+<? endif; ?>
+<h1 class="title"><?= $this->camp->name; ?></h1>
+<div class="camp">
+    <div class="date" style="text-align:center;">
+        <?= FormatDateTime($this->camp->start, "l F jS"); ?> through 
+        <?= FormatDateTime($this->camp->end, "l \\t\h\e jS, Y"); ?><br />
+        from <?= FormatDateTime($this->camp->stime, "g:i a"); ?>
+        to <?= FormatDateTime($this->camp->etime, "g:i a"); ?><br />
+        <span class="deadline">Registration Deadline: <?= FormatDateTime($this->camp->deadline, "l F jS, Y"); ?></span>
+    </div>
+    <?= $this->camp->description; ?>
+    <table>
+        <tr>
+            <td>Contact:</td>
+            <td>
+                <?= $this->camp->director; ?><br /><?= ObsEmailLink($this->camp->director_email); ?>
+            </td>
+        </tr>
+        <tr>
+            <td>Location:</td>
+            <td><?= $this->camp->location; ?></td>
+        </tr>
+        <tr><td>&nbsp;</td></tr>
+        <tr>
+            <td>On-line Registration:</td>
+            <? if ($this->camp->registration_link == false): ?>
+            <td>Not yet available</td>
+            <? else: ?>
+            <td><?= l("go", $this->camp->registration_link, array('target' => 'blank')); ?></td>
+            <? endif; ?>
+        </tr>
+        <tr>
+            <td>Mail-in Registration (pdf):</td>
+            <td><?= l("download", $this->camp->pdf_path . $this->camp->registration_form); ?></td>
+        </tr>
+    </table>
+</div>
+

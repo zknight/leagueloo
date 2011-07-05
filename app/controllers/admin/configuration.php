@@ -4,6 +4,7 @@ class ConfigurationController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             'index',
             'update'
@@ -20,6 +21,7 @@ class ConfigurationController extends \simp\Controller
         $this->site_email = $this->LoadVariable('site_email');
         $this->default_timezone = $this->LoadVariable('default_timezone');
         $this->site_address = $this->LoadVariable('site_address', $_SERVER['SERVER_NAME']);
+        $this->max_recent = $this->LoadVariable('max_recent', 5);
         global $log;
         $log->logDebug("site_address from global: {$_SERVER['SERVER_NAME']}");
         return true;

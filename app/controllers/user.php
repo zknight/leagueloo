@@ -58,6 +58,9 @@ class UserController extends \simp\Controller
         else if ($user->Authenticate($user_vars['password']))
         {
             AddFlash("You are now logged in, {$user->first_name}.");
+            $dt = new \DateTime("now");
+            $user->last_login = $dt->getTimestamp();
+            $user->Save();
             SetAuthorizedUser($user->id);
             \Redirect(GetReturnURL());
         }

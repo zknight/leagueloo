@@ -1,5 +1,6 @@
 <h1>Edit Program</h1>
-<?= FormTag("program", \simp\Request::PUT, path::admin_program_edit($this->program->id)) ?>
+<?= GetErrorsFor($this->program); ?>
+<?= FormTag("program", \simp\Request::PUT, NULL, true) ?>
     <? require("_form.phtml"); ?>
     <input type="submit" value="Update"/>
 <?= EndForm(); ?>

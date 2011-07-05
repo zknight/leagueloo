@@ -39,6 +39,7 @@ class EventController extends \simp\Controller
                     $this->entity_name = \R::getCell(
                         "select name from " . SnakeCase($this->entity_type) . " where id = ?",
                         array($this->entity_id));
+                    $this->cur_page = $this->entity_name;
                 }
             }
         }
@@ -72,6 +73,7 @@ class EventController extends \simp\Controller
     function Show()
     {
         $this->event_info = \simp\Model::FindById("EventInfo", $this->GetParam('id'));
+        $this->cur_page = $this->event_info->entity_name;
         return true;
     }
 }

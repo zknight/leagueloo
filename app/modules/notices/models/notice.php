@@ -8,6 +8,12 @@ class Notice extends \simp\Model
     {
     }
 
+    public function OnLoad()
+    {
+        $this->_pub_date = FormatDateTime($this->start_date, "m/d/Y");
+        $this->_exp_date = FormatDateTime($this->end_date, "m/d/Y");
+    }
+
     public function BeforeSave()
     {
         $errors = 0;
@@ -17,10 +23,10 @@ class Notice extends \simp\Model
             $this->SetError('name', "Name must be less than 40 characters.");
         }
 
-        if (strlen($this->text) > 40)
+        if (strlen($this->text) > 80)
         {
             $errors++;
-            $this->SetError('text', "Text must be less than 40 characters.");
+            $this->SetError('text', "Text must be less than 80 characters.");
         }
 
         if (!$this->VerifyValidDate('publish_date', $this->_pub_date)) $errors++;

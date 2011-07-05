@@ -52,9 +52,9 @@ class Tournament extends \simp\Model
         $this->file_info = NULL;
         global $REL_PATH;
         global $BASE_PATH;
-        $this->path = "resources/files/pdf/";
-        $this->rel_path = $REL_PATH . $this->path;
-        $this->abs_path = $BASE_PATH . $this->path;
+        $path = "resources/files/pdf/";
+        $this->rel_path = $REL_PATH . $path;
+        $this->abs_path = $BASE_PATH . $path;
         $this->pdf_path = NULL;
         $this->SkipSanity("description");
     }
@@ -150,7 +150,7 @@ class Tournament extends \simp\Model
             return unserialize($this->team_fees);
             break;
         case "file_path":
-            return $this->rel_path . "tournament/{$this->id}";
+            return $this->rel_path . "tournament/{$this->short_name}";
             break;
         default:
             return parent::__get($property);
@@ -224,7 +224,7 @@ class Tournament extends \simp\Model
         if ($this->end < $this->start)
         {
             $errors++;
-            $this->SetError('end', "Tournament end date must come after start date");
+            $this->SetError('end_date', "Tournament end date must come after start date");
         }
 
         if ($this->deadline > $this->start)
@@ -279,21 +279,5 @@ class Tournament extends \simp\Model
             return false;
         }
         return true;
-    }
-    
-    // TODO: move this to base_model
-    protected function VerifyDateFormat($field, &$date)
-    {
-        $retval = true;
-        if ($date == "")
-        {
-            $date = "12/31/2037";
-        }
-        else if (strtotime($date) == FALSE)
-        {
-            $this->SetError($field, "Date must be in format: mm/dd/yyyy or mm-dd-yyyy");
-            $retval = false;
-        }
-        return $retval;
     }
 }

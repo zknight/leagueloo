@@ -1,7 +1,7 @@
-<h1>Create a Notice</h1>
+<h1>Edit a Notice</h1>
 <?= GetErrorsFor($this->notice); ?>
-<?= FormTag("notice", \simp\Request::POST); ?>
+<?= FormTag("notice", \simp\Request::PUT); ?>
     <? require "_form.phtml"; ?>
-    <input type="submit" value="Create" />
+    <input type="submit" value="Update" />
 <?= EndForm(); ?>
 

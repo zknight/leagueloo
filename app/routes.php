@@ -53,13 +53,14 @@
 function RouteSetup($router)
 {
     $router->AddRoute('/')->Controller('main');
-    $router->AddRoute('/main/')->Controller('main');
-    $router->AddRoute('/Club/')->Controller('main');
+    $router->AddRoute('/main/[A:action]?')->Controller('main');
+    $router->AddRoute('/Club/[A:action]?')->Controller('main');
     $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
     $router->AddRoute('/administrator/')->Controller('administrator');
 
     $router->AddRoute('/admin/[A:controller]')->Group('admin');
-    $router->AddRoute('/admin/[A:controller]/[A:action]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action]/[A:entity]/[i:entity_id]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action].[A:format]?')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[a:name]')->Group('admin');
 
@@ -89,6 +90,8 @@ function RouteSetup($router)
     $router->AddRoute('/event/[A:action]/[i:id]?')->Controller('event');
     $router->AddRoute('/event/[A:action]/[a:entity_type]?/[i:id]?')->Controller('event');
 
+    $router->AddRoute('/staff/[A:action]?/[i:id]?')->Controller('staff');
+
     $router->AddRoute('/[a:program]/teams')->Controller('teams');
     $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('teams')->Action('by_gender');
     $router->AddRoute('/[a:program]/teams/[A:gender]/[a:division]')->Controller('teams')->Action('by_division');
@@ -99,6 +102,7 @@ function RouteSetup($router)
     //$router->AddRoute('/program/[A:action]/[i:id]')->Controller('program');
 
     $router->AddRoute('/[a:program]')->Controller('program');
+    $router->AddRoute('/[a:program]/about')->Action('about')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]')->Action('index')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]')->Param('type', 'program');

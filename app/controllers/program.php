@@ -1,10 +1,11 @@
 <?
 namespace app;
-class ProgramController extends \simp\Controller
+class ProgramController extends \app\AppController
 {
 
     function Setup()
     {
+        parent::Setup();
     }
     
     // Actions
@@ -30,6 +31,7 @@ class ProgramController extends \simp\Controller
         if ($this->program->id > 0)
         {
             SetEntity('Program', $this->program->id, $this->program->name);
+            $this->cur_page = $this->program->name;
             // load news for this program
             $this->news = \News::FindPublished(
                 'Program',
@@ -59,6 +61,9 @@ class ProgramController extends \simp\Controller
             $this->SetAction("tournament_index");
             break;
         case \Program::CAMP:
+            $this->upcoming_camps = \Camp::GetUpcoming();
+            $this->past_camps = \Camp::GetPast();
+            $this->SetAction("camp_index");
             break;
         }
     }

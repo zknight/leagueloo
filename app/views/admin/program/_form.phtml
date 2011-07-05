@@ -2,16 +2,24 @@
     <legend>Program Information</legend>
     <table class="form">
         <tr>
-            <th>Program Type:</th><td><?=SimpleSelect($this->program, 'type', Program::$types);?></td>
+            <th class="label">Program Type:</th>
+            <td class="entry"><?=SimpleSelect($this->program, 'type', Program::$types);?></td>
         </tr>
         <tr>
-            <th>Program Name:</th><td><?=TextField($this->program, 'name');?></td>
+            <th class="label">Program Name:</th>
+            <td class="entry"><?=TextField($this->program, 'name');?></td>
         </tr>
         <tr>
-            <th>Description:</th><td><?=TextArea($this->program, 'description');?></td>
+            <th class="label">Description:</th>
+            <td class="entry"><?=Wysiwyg($this->program, 'description');?></td>
         </tr>
         <tr>
-            <th>Weight:</th><td><?=TextField($this->program, 'weight', array('size' => '2'));?></td>
+            <th class="label">Weight:</th>
+            <td class="entry"><?=TextField($this->program, 'weight', array('size' => '2'));?></td>
+        </tr>
+        <tr>
+            <th class="label">Default Image</th>
+            <td class="entry"><?=FileSelect($this->program, 'image'); ?></td>
         </tr>
     </table>
 </fieldset>    

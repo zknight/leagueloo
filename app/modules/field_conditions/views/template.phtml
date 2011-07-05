@@ -5,22 +5,18 @@
         </ul>
     </div>
     <div class="content">
-<? foreach ($this->fields as $field): ?>
-    <strong><?= $field->name; ?></strong><br />
-    <table style="width:100%;">
-        <tr>
-            <td><?= $this->Time($field); ?></td>
-            <td><?= $this->Status($field); ?></td>
-        </tr>
-        <tr>
-            <td colspan='2'><?= $field->comment; ?></td>
-        </tr>
-    <? if (IsLoggedIn() && $this->HasAccess(CurrentUser(), "update_status")): ?>
-        <tr>
-            <td colspan='2'><?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $field->id)); ?></td>
-        </tr>
-    <? endif; ?>
-    </table>
+    <? foreach ($this->fields as $field): ?>
+        <div class="field">
+            <strong><?= $field->name; ?></strong><br />
+            <?= $this->Status($field); ?>
+            <span class="comment"><?= $field->comment; ?></span>
+            <div class="date">
+                <?= $this->Time($field); ?>
+            </div>
+            <? if (IsLoggedIn() && $this->HasAccess(CurrentUser(), "update_status")): ?>
+            <?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $field->id)); ?>
+            <? endif; ?>
+        </div>
 <? endforeach; ?>
     </div>
 </div>

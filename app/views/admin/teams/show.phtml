@@ -1,0 +1,22 @@
+<h1 class="title"><?= $this->team->name; ?> Administration</h1>
+<div class="cfg-group">
+    <h1>Team Info</h1>
+    <table>
+        <tr>
+            <th><?= l("Edit Team Information", Path::admin_teams_edit($this->team->id)); ?></th>
+            <th>Manage Members</th>
+            <th>Manage Articles</th>
+            <th>Manage Images</th>
+            <th>Manage Events</th>
+            <th>Manage 'Pages'</th>
+        </tr>
+        <tr>
+            <td>Edit this team's information (team photo, name, etc.)</td>
+            <td>Add/Modify/Remove which users have access to this team</td>
+            <td>Create/Edit/Remove news articles for this team</td>
+            <td>Upload/Remove images for this team</td>
+            <td>Create/Edit/Remove calendar events for this team</td>
+            <td>Create/Edit/Remove special pages for this team</td>
+        </tr>
+    </table>
+</div>

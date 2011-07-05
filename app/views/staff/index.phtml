@@ -1,0 +1,32 @@
+<h1 class="title"><?= SiteName(); ?> Staff</h1>
+<h2>Coaches</h2>
+<div class="coach">
+<table>
+<? foreach($this->coaches as $coach): ?>
+    <tr>
+        <th><img src="<?= $coach->img_path; ?>"/></th>
+        <td><?= l("{$coach->first_name} {$coach->last_name}", Path::staff_coach($coach->id)); ?></td>
+        <td><?= Coach::$coach_titles[$coach->title]; ?></td>
+        <td><?= ObsEmailLink($coach->email); ?></td>
+    </tr>
+<? endforeach; ?>
+</table>
+</div>
+<h2>Administration</h2>
+<? $group = ""; ?>
+<div class="coach">
+<table>
+<? foreach($this->staff as $staff_member): ?>
+    <? if ($group != $staff_member->group): ?>
+        <? $group = $staff_member->group; ?>
+    <tr><th colspan="4"><?= $group; ?></th></tr>
+    <? endif; ?>
+    <tr>
+        <th><img src="<?= $staff_member->img_path; ?>"/></th>
+        <td><?= l("{$staff_member->first_name} {$staff_member->last_name}", Path::staff_staff($staff_member->id)); ?></td>
+        <td><?= $staff_member->title; ?></td>
+        <td><?= ObsEmailLink($staff_member->email); ?></td>
+    </tr>
+<? endforeach;?>
+</table>
+</div>

@@ -1,0 +1,36 @@
+<?= l("back", GetReturnURL()); ?>
+<fieldset><legend>Staff Member Information</legend>
+<table class="form">
+    <tr>
+        <? if ($this->staff->image != ""): ?>
+            <tr><th class="label"><img width="100" src="<?= $this->staff->img_path; ?>" /></th></tr>
+        <? endif; ?>
+        <th class="label">
+            Name: (first)(last)</th>
+        <td class="entry">
+            <?= TextField($this->staff, 'first_name');?>
+            <?= TextField($this->staff, 'last_name'); ?>
+        </td>
+    </tr>
+    <tr>
+        <th class="label">Email</th>
+        <td class="entry"><?= TextField($this->staff, 'email'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Position (Title):</th>
+        <td class="entry"><?= SimpleSelect($this->staff, 'position', Staff::StaffPositionOpts()); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Years with Club</th>
+        <td class="entry"><?= TextField($this->staff, 'years_with_club'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Bio</th>
+        <td class="entry"><?= Wysiwyg($this->staff, 'bio'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Picture</th>
+        <td class="entry"><?= FileSelect($this->staff, 'image'); ?></td>
+    </tr>
+</table>
+</fieldset>

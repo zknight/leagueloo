@@ -1,0 +1,29 @@
+<h1>Camp Manager</h1>
+<?= l("Configure Camp Section Parameters", Path::content_camp_configure()); ?> |
+<?= l("Add Camp", Path::content_camp_add()); ?>
+<? foreach($this->camps as $kind => $camps): ?>
+<h2><?= HumanCase($kind); ?> camps</h2>
+    <? if (count($camps) < 1): ?>
+<p>
+    No <?= HumanCase($kind); ?> Camps.  
+    <? if ($kind == 'upcoming'): ?>
+    <?= l("Create one.", Path::content_camp_add()); ?>
+    <? endif; ?>
+</p>
+    <? else: ?>
+<table>
+    <tr>
+        <th>Name</th><th>Type</th><th>Start Date</th><th colspan='2'>&nbsp;</th>
+    </tr>
+    <? foreach ($camps as $t): ?>
+    <tr>
+        <td><?= $t->name; ?></td>
+        <td><?= implode(', ', $t->leagues); ?></td>
+        <td><?= $t->start_date; ?></td>
+        <td><?= l("edit", Path::content_camp_edit($t->id)); ?></td>
+        <td><?= l("delete", Path::content_camp_delete($t->id), array("method" => "delete")); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+    <? endif; ?>
+<? endforeach; ?>

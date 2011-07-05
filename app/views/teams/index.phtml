@@ -1,5 +1,19 @@
+<? 
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
 <h1 class="title"><?= HumanCase($this->program_name); ?></h1>
 <? \simp\Module::Show("SectionMenu", array("current" => 'teams', "entity_type" => 'Program', "entity_id" => $this->program->id)); ?>
+<? if ($publisher): ?>
+<ul class="admin-menu">
+    <li><?= l("new team", Path::admin_teams_add()); ?></li>
+    <li><?= l("manage teams", Path::admin_teams()); ?></li>
+</ul>
+<? endif; ?>
 <? if (count($this->teams) < 1): ?>
 <p>There are no <?= $this->program_name; ?> team pages.</p>
 <? else: ?>

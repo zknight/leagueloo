@@ -18,6 +18,7 @@ class Notices extends \simp\Module
                 "index" => Ability::ADMIN,
                 "add" => Ability::ADMIN,
                 "edit" => Ability::ADMIN,
+                "delete" => Ability::ADMIN
             )
         );
         $dt = new \DateTime("now");
@@ -29,6 +30,7 @@ class Notices extends \simp\Module
         );
 
         $this->cycle_delay = $this->GetCfgVar('cycle_delay', 15);
+        $this->show_menu = IsLoggedIn() ? $this->HasAccess(CurrentUser(), 'add') : false;
     }
 
     public function Index($method, $params, $vars)
@@ -37,7 +39,7 @@ class Notices extends \simp\Module
         $this->all_notices = \simp\Model::FindAll("Notice");
         if ($method == \simp\Request::POST)
         {
-            $this->cycle_delay->value = $vars['NoticeCfg']['cycle_delay']['value'];
+            $this->cycle_delay->value = $vars['NoticeCfg']['value']['cycle_delay'];
             $this->cycle_delay->Save();
             AddFlash("\"Notice\" Configuration Updated.");
         }

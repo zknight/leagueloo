@@ -85,8 +85,8 @@ class Image extends \simp\Model
             $this->SetError('image', GetUploadError($this->image_info['error']));
             return false;
         }
-        $gd_img = $this->GetImg($this->image_info);
-        $this->filename = preg_replace('/\s/', '', $this->filename);
+        $gd_img = GetPNGImg($this->image_info);
+        $this->filename = preg_replace('/\s/', '_', $this->filename);
         if ($this->filename == NULL || $this->filename == '')
         {
             $this->filename = $this->image_info['name'];
@@ -157,6 +157,7 @@ class Image extends \simp\Model
         return true;
     }
 
+    /*
     protected function GetImg($img)
     {
         global $log; $log->logDebug("GetImg: creating image from {$img['tmp_name']}");
@@ -177,6 +178,7 @@ class Image extends \simp\Model
             return FALSE;
         }
     }
+     */
 
     protected function CopyPics($img, $thumb)
     {

@@ -1,0 +1,39 @@
+@import "colors";
+.cfg-group {
+    width:100%;
+    background:$dark_navy;
+    margin:4px 0 12px 0;
+
+    h1 {
+        width:100%;
+        text-align:center;
+        padding:4px 0;
+        margin:0;
+        font-size:14pt;
+    }
+
+    table {
+        border-collapse:collapse;
+        th {
+            width:(100%/5);
+            background:$navy;
+            padding:8px;
+            a {
+                color:$orange_tan;
+                &:hover {
+                    color: $brown;
+                }
+            }
+            border:1px solid $dark_carolina;
+        }
+        td {
+            border:1px solid $navy;
+            text-align:center;
+            vertical-align:top;
+            background:$dark_navy;
+            padding:8px;
+        }
+    }
+}
+
+

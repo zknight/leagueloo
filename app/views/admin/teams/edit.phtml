@@ -1,6 +1,6 @@
 <h1>Edit Team Page</h1>
 <?= GetErrorsFor($this->team); ?>
-<?= FormTag("team", \simp\Request::PUT) ?>
+<?= FormTag("team", \simp\Request::PUT, Path::admin_teams_edit($this->team->id), true); ?>
     <? require("_form.phtml"); ?>
     <input type="submit" value="Update" />
 <?= EndForm(); ?>

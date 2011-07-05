@@ -4,13 +4,15 @@ class ProgramController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             array(
                 'index',
                 'show',
                 'add',
                 'edit',
-                'delete'
+                'delete',
+                'privileges'
                 )
             );
 
@@ -27,6 +29,7 @@ class ProgramController extends \simp\Controller
 
     function Show()
     {
+        $this->program = \simp\Model::FindById('Program', $this->GetParam('id'));
         return true;
     }
 
@@ -55,31 +58,55 @@ class ProgramController extends \simp\Controller
     function Create()
     {
         // TODO: add validation and check to make sure it is saved, plus flash and redirect!
+        $this->program = \simp\Model::Create('Program');
         $vars = $this->GetFormVariable('Program');
-        $program = \simp\Model::Create('Program');
-        $program->name = $vars['name'];
-        $program->description = $vars['description'];
-        $program->Save();
-        \Redirect(\Path::admin_program());
-        return false;
+        $vars['file_info'] = $_FILES['image'];
+        $this->program->UpdateFromArray($vars);
+        if ($this->program->Save())
+        {
+            AddFlash("Program {$this->program->name} created.");
+            \Redirect(\Path::admin_program());
+        }
+        else
+        {
+            $this->SetAction("add");
+        }
+        return true;
     }
 
     function Update()
     {
         $vars = $this->GetFormVariable('Program');
-        $program = \simp\Model::FindById('Program', $this->GetParam('id'));
-        $program->UpdateFromArray($vars);
-        $program->Save();
-        \Redirect(\Path::admin_program());
+        $this->program = \simp\Model::FindById('Program', $this->GetParam('id'));
+        $vars['file_info'] = $_FILES['image'];
+        $this->program->UpdateFromArray($vars);
+        if ($this->program->Save())
+        {
+            AddFlash("Program {$this->program->name} updated.");
+            \Redirect(\Path::admin_program());
+        }
+        else
+        {
+            $this->SetAction("edit");
+        }
+        return true;
     }
 
     function Remove()
     {
         $program = \simp\Model::FindById('Program', $this->GetParam('id'));
+        $name = $program->name;
         if ($program->id > 0)
         {
             $program->Delete();
+            AddFlash("Program $name deleted.");
         }
         \Redirect(\Path::admin_program());
+    }
+
+    function Privileges()
+    {
+        echo "TODO: implement this.";
+        return false;
     }
 }

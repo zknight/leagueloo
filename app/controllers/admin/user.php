@@ -3,6 +3,7 @@ class UserController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             array( 
                 'index',
@@ -21,7 +22,35 @@ class UserController extends \simp\Controller
     
     function Index()
     {
-        $this->users = \simp\Model::FindAll('User');
+        $offset = $this->GetParam('u');
+        $sort_field = $this->GetParam('s');
+        $dir = $this->GetParam('d');
+        $this->sort_dir = array(
+            'login' => 'desc',
+            'last_name' => 'desc', 
+            'first_name' => 'desc', 
+            'created_on' => 'desc', 
+            'last_login' => 'desc'
+        );
+        $dir_swap = array('asc' => 'desc', 'desc' => 'asc');
+
+        $offset = $offset == NULL ? 0 : $offset;
+        $sort_field = $sort_field == NULL ? 'login' : $sort_field;
+        $dir = $dir == NULL ? 'asc' : $dir;
+        $this->dir = $dir;
+        $this->sort_dir[$sort_field] = $dir_swap[$dir];
+        $this->sort_field = $sort_field;
+        $this->offset = $offset;
+
+        $this->per_page = 50;
+        $this->users = \simp\Model::Find('User', "1 order by $sort_field collate nocase $dir limit {$this->per_page} offset {$offset};", array());
+        $this->pages = array();
+        $uc = \R::count('user');
+        for ($i=0; $i<$uc; $i+=$this->per_page)
+        {
+            $this->pages[] = "u=$i";
+        }
+        $this->cur_page = $offset/$this->per_page;
         return true;
     }
 
@@ -54,7 +83,7 @@ class UserController extends \simp\Controller
         $teams = \simp\Model::FindAll('Team');
         foreach ($teams as $team)
         {
-            $this->entities['team'][$team->name] = $team->id;
+            $this->entities['team']["{$team->program_name} {$team->division} {$team->name} {$team->gender_str}"] = $team->id;
         }
     }
 

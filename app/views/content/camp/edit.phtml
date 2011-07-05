@@ -1,0 +1,7 @@
+<h1>Edit Camp</h1>
+<?= GetErrorsFor($this->camp); ?>
+<?= FormTag("camp", \simp\Request::PUT, NULL, true); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Update" />
+<?= EndForm(); ?>
+

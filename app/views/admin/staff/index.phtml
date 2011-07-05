@@ -1,0 +1,26 @@
+<h1 class='title'>Staff</h1>
+<?= l("Configure Staff", Path::admin_staff_configure()); ?>
+<? if ($this->configured): ?>
+ | <?= l("Add Staff", Path::admin_staff_add()); ?>
+    <? if (count($this->staff_members) < 1): ?>
+    <p>No staff members have been added.  <?= l("Add a new staff member", Path::admin_staff_add()); ?>
+    <? else: ?>
+    <table class="pretty">
+        <tr>
+            <th>Name</th><th>Title</th><th colspan="2">&nbsp;</th>
+        </tr>
+        <? foreach($this->staff_members as $staff): ?>
+        <tr>
+            <td><?= $staff->first_name; ?> <?= $staff->last_name; ?></td>
+            <td><?= $staff->title; ?></td>
+            <td><?= l("edit", Path::admin_staff_edit($staff->id)); ?></td>
+            <td><?= l("remove", Path::admin_staff_delete($staff->id), array("method" => "delete")); ?></td>
+        </tr>
+        <? endforeach; ?>
+    </table>
+    <p>
+        <?= l("Add a new staff member", Path::admin_staff_add()); ?>
+    </p>
+    <? endif; ?>
+<? endif; ?>
+

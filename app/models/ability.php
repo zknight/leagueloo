@@ -9,18 +9,18 @@ class Ability extends \simp\Model
     // access entity id: id of entity
     // access level: admin, publish, edit
     // user id
-    protected $_ability_level_strings;
+    public static $ability_level_strings =  array(
+        Ability::EDIT => 'editor',
+        Ability::PUBLISH => 'publisher',
+        Ability::ADMIN => 'administrator',
+    );
+
     function Setup()
     {
-        $this->_ability_level_strings = array(
-            Ability::EDIT => 'edit',
-            Ability::PUBLISH => 'publish',
-            Ability::ADMIN => 'administer',
-        );
     }
 
     function LevelString()
     {
-        return $this->_ability_level_strings[$this->level];
+        return self::$ability_level_strings[$this->level];
     }
 }

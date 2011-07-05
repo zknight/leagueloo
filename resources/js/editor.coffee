@@ -3,6 +3,7 @@ $.extend window,
         el.tinymce
             script_url: url
             theme: "advanced"
+            skin: "slsc"
             mode: "exact"
             plugins: "advimage,inlinepopups,table"
             theme_advanced_toolbar_location: "top"

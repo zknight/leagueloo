@@ -18,6 +18,21 @@ class User extends \simp\Model
         $this->_abilities = array();
     }
 
+    public static function GetPrivilegedUsers($entity_type, $entity_id, $level=0)
+    {
+        $users = array();
+        $q = "select ability.level, user.* from user, ability ";
+        $q .= "where user.id = ability.user_id and ability.entity_type = ? and ability.entity_id = ?";
+        if ($level > 0)
+        {
+            $q .= "and ability.level = ?";
+        }
+        $q .= " order by ability.level, user.first_name";
+
+        $result = \R::getAll($q, array(SnakeCase($entity_type), $entity_id));
+        return $result;
+    }
+
     public function Abilities()
     {
         if (count($this->_abilities) == 0)
@@ -255,6 +270,7 @@ class User extends \simp\Model
         }
         else if ($this->id == 0)
         {
+            // TODO: check for matching email as well
             $user_with_matching_login = User::FindOne("User", "login=?", array($this->login));
             if (isset($user_with_matching_login))
             {

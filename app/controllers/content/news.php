@@ -117,6 +117,7 @@ class NewsController extends \simp\Controller
     {
         $this->article = \simp\Model::Create('News');
         $vars = $this->GetFormVariable('News');
+        $vars['file_info'] = $_FILES['image'];
         $this->article->UpdateFromArray($vars);
         $this->article->created_on = time();
         $this->article->updated_on = $this->article->created_on;
@@ -124,6 +125,14 @@ class NewsController extends \simp\Controller
         $log->logDebug("NewsController::Create() program id = {$this->article->entity_id}");
         if ($this->article->Save())
         {
+            AddRecentUpdate(
+                'article',
+                $this->article->id,
+                $this->article->title,
+                $this->article->entity_name, 
+                "news", 
+                "show", 
+                $this->article->short_title);
             AddFlash("Article {$this->article->short_title} Created.");
             \Redirect(GetReturnURL());
         }
@@ -151,6 +160,7 @@ class NewsController extends \simp\Controller
 
         $id = $this->GetParam('id');
         $vars = $this->GetFormVariable('News');
+        $vars['file_info'] = $_FILES['image'];
         $this->article = \simp\Model::FindById("News", $id);
         $this->article->UpdateFromArray($vars);
         $this->article->updated_on = time();
@@ -158,6 +168,14 @@ class NewsController extends \simp\Controller
         {
             AddFlash("Article {$this->article->short_title} updated.");
             //\Redirect(\Path::content_news());
+            AddRecentUpdate(
+                'article',
+                $this->article->id,
+                $this->article->title,
+                $this->article->entity_name, 
+                "news", 
+                "show", 
+                $this->article->short_title);
             \Redirect(GetReturnURL());
         }
         else

@@ -1,0 +1,18 @@
+<h1 class="title"><?= SiteName(); ?> Administration</h1>
+<? $group = ""; ?>
+<div class="coach">
+<table>
+<? foreach($this->staff as $staff_member): ?>
+    <? if ($group != $staff_member->group): ?>
+        <? $group = $staff_member->group; ?>
+    <tr><th colspan="4"><?= $group; ?></th></tr>
+    <? endif; ?>
+    <tr>
+        <th><img src="<?= $staff_member->img_path; ?>"/></th>
+        <td><?= l("{$staff_member->first_name} {$staff_member->last_name}", Path::staff("staff_member", $staff_member->id)); ?></td>
+        <td><?= $staff_member->title; ?></td>
+        <td><?= ObsEmailLink($staff_member->email); ?></td>
+    </tr>
+<? endforeach;?>
+</table>
+</div>

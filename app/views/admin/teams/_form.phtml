@@ -6,15 +6,15 @@ $ye = \Team::GetCurrentYearEnd();
     <legend>Team Information</legend>
     <table class="form">
         <tr>
-            <td><strong>Select the program to which team page belongs:</strong></td>
-            <td><?= SimpleSelect($this->team, 'program_id', $this->programs); ?></td>
+            <th class='label'>Select the program to which team page belongs:</th>
+            <td class='entry'><?= SimpleSelect($this->team, 'program_designator', $this->programs); ?></td>
         </tr>
         <tr>
-            <td><strong>Enter name of team:</strong></td>
-            <td><?= TextField($this->team, 'name', array('size' => 32)); ?></td>
+            <th class='label'>Enter name of team:</th>
+            <td class='entry'><?= TextField($this->team, 'name', array('size' => 32)); ?></td>
         </tr>
         <tr>
-            <td><strong>Select the division this team *CURRENTLY belongs to:</strong><br \>
+            <th class='label'>Select the division this team *CURRENTLY belongs to:</strong><br \>
                 *
                 <em>between
                     <?= FormatDateTime($ys, "F jS, Y"); ?>
@@ -22,11 +22,15 @@ $ye = \Team::GetCurrentYearEnd();
                     <?= FormatDateTime($ye, "F jS, Y"); ?>
                 </em>
             </td>
-            <td><?= SimpleSelect($this->team, 'year', $this->team->GetDivisions()); ?></td>
+            <td class='entry'><?= SimpleSelect($this->team, 'year', $this->team->GetDivisions()); ?></td>
         </tr>
         <tr>
-            <td><strong>Select team gender:</strong></td>
-            <td><?= SimpleSelect($this->team, 'gender', $this->team->GetGenders()); ?></td>
+            <th class='label'>Select team gender:</th>
+            <td class='entry'><?= SimpleSelect($this->team, 'gender', $this->team->GetGenders()); ?></td>
+        </tr>
+        <tr>
+            <th class='label'>Team Photo:</th>
+            <td class='entry'><?= FileSelect($this->team, 'image'); ?></td>
         </tr>
     </table>
 </fieldset>
