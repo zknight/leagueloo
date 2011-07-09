@@ -1,0 +1,24 @@
+<h1 class=title>Add Sub-category for "<?= Email::$categories[$this->category]; ?>"</h1>
+<?= GetErrorsFor($this->sub_category); ?>
+<?= FormTag("sub_category", \simp\Request::POST); ?>
+    <fieldset><legend>Sub-category information</legend>
+        <table class="form">
+<? if ($this->programs): ?>
+            <tr>
+                <th class="label">Associated Program</th>
+                <td class="entry"><?= SimpleSelect($this->sub_category, "program_id", $this->programs); ?></td>
+            </tr>
+<? endif; ?>
+            <tr>
+                <th class="label">Name:</th>
+                <td class="entry"><?= TextField($this->sub_category, "name", array('size' => 40)); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Additional Classification Check:</th>
+                <td class="entry"><?= SimpleSelect($this->sub_category, "check_type", SubCategory::$check_types, array('size' => 40)); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <input type="hidden" name="SubCategory[category]" value="<?=$this->category;?>" />
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>

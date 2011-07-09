@@ -111,19 +111,20 @@ class UserController extends \simp\Controller
     function ConfirmPost()
     {
         $vars = $this->GetFormVariable('User');
-        $this->SetParam(0, $vars['id']);
-        $this->SetParam(1, $vars['confirm_check']);
+        $this->SetParam('id', $vars['id']);
+        $this->SetParam('token', $vars['confirm_check']);
         return $this->Confirm();
     }
 
     function Confirm()
     {
-        $id = $this->GetParam(0);
-        $token = $this->GetParam(1); 
+        $id = $this->GetParam('id');
+        $token = $this->GetParam('token'); 
         $user = \simp\Model::FindById('User', $id);
         if ($user->Verify($token))
         {
             $user->Save();
+            AddFlash("You have been confirmed.  You can log in now, {$user->login}.");
             Redirect(\Path::user_login());
         }
         else
@@ -137,7 +138,7 @@ class UserController extends \simp\Controller
     function RequestConfirm()
     {
         global $_SERVER;
-        $id = $this->GetParam(0);
+        $id = $this->GetParam('id');
         $user = \simp\Model::FindById('User', $id);
         $host = GetCfgVar('site_address');
         if ($host == "") $host = $_SERVER['SERVER_NAME'];

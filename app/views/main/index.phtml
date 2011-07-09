@@ -45,7 +45,7 @@ if ($this->UserLoggedIn()) {
             <?= TimeAgoInWords($article->updated_on); ?> ago
         </span>
         <? if ($this->is_editor[$program]): ?>
-        <?= l("edit this article", Path::content_news_edit($article->entity_type, $article->entity_id, $article->id)); ?><br />
+        <?= l("[edit this article]", Path::content_news_edit($article->entity_type, $article->entity_id, $article->id)); ?><br />
         <? endif; ?>
         <div class="copy">
             <div class="intro"><?= $article->intro; ?></div>

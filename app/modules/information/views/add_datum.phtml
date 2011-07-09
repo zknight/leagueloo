@@ -1,0 +1,26 @@
+<?= GetErrorsFor($this->datum); ?>
+<?= FormTag("datum", \simp\Request::POST); ?>
+<fieldset><legend>Data Field for <?= $this->type; ?> "<?= $this->name; ?>"</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Label:</th>
+            <td class="entry"><?= TextField($this->datum, 'label'); ?></td>
+            <td class="help">Label presented next to the entry for data collected</td>
+        </tr>
+        <tr>
+            <th class="label">Type:</th>
+            <td class="entry"><?= SimpleSelect($this->datum, 'type', Datum::$types); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Required?:</th>
+            <td class="entry"><?= CheckBoxField($this->datum, 'required'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Options for Select:</th>
+            <td class="entry"><?= TextArea($this->datum, 'option_string'); ?></td>
+            <td class="help">If this is a 'selection', enter a list of options, one per line</td>
+        </tr>
+    </table>
+</fieldset>
+<input type="submit" name="add_datum" value="Add Data Field" />
+<?= EndForm(); ?>

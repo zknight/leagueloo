@@ -1,0 +1,29 @@
+<? 
+$editor = false;
+if ($this->UserLoggedIn()) {
+    $user = $this->GetUser();
+    $editor = $user->CanEdit("Program", $this->program->id);
+    $publisher = $user->CanPublish("Program", $this->program->id);
+    $admin = $user->CanAdmin("Program", $this->program->id);
+}
+?>
+<? \simp\Module::Show("SectionMenu", array("current" => 'about', "entity_type" => 'Program', "entity_id" => $this->program->id)); ?>
+<? if ($editor): ?>
+<ul class="admin-menu">
+    <li><?= l("new article", Path::content_news_add_program($this->program->id)); ?></li>
+    <li><?= l("upload image", Path::content_image_add()); ?></li>
+    <? if ($publisher): ?>
+    <li><?= l("manage articles", Path::content_news()); ?></li>
+    <li><?= l("manage images", Path::content_image()); ?></li>
+    <? endif; ?>
+    <? if ($admin): ?>
+    <li><?= l("administer", Path::admin_program_show($this->program->id)); ?></li>
+    <? endif; ?>
+</ul>
+<?endif;?>
+<div class="page">
+    <? if ($admin): ?>
+    <?= l('edit', Path::admin_program_edit($this->program->id)); ?>
+    <? endif; ?>
+    <?= $this->program->description; ?>
+</div>

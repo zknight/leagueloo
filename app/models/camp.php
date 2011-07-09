@@ -117,6 +117,11 @@ class Camp extends \simp\Model
     {
         $errors = 0;
 
+        if (strpos($this->registration_link, "http") == false &&
+            strpos($this->registration_link, "/") != 1)
+        {
+            $this->registration_link = "http://" . $this->registration_link;
+        }
         $arr = explode(" ", strtolower($this->name));
         $short_name = implode("_", $arr);
         $this->short_name = strlen($short_name) > 47 ?

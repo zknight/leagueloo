@@ -95,9 +95,10 @@ ul.admin-menu,
           color: #00152c;
           text-decoration: none; }
           #header #main-menu ul li a:hover {
-            color: #99badd; }
+            color: #002e5c; }
         #header #main-menu ul li a.selected {
-          color: #76621e; }
+          color: #002e5c;
+          text-shadow: #e0ba3a 0 0 4px; }
     #header #main-menu .submenu {
       text-align: left;
       position: absolute;
@@ -237,6 +238,7 @@ h3.subtitle {
 
 .page {
   background: #00152c url(../img/module-bg.png) repeat-x;
+  border: 1px solid #002e5c;
   padding: 8px; }
   .page h1 {
     font-size: 13pt;
@@ -291,19 +293,33 @@ h3.subtitle {
       font-weight: bold;
       color: #002142; }
 .section .article {
+  font-size: 9pt;
   padding: 4px 12px;
-  background: #002142; }
+  background: #00152c url(../img/module-bg.png) repeat-x;
+  border: 1px solid #002e5c;
+  margin-bottom: 8px; }
   .section .article p.title {
     width: 100%;
     margin: 0;
     padding: 2px 0;
     font-size: 14pt;
     text-align: center; }
-  .section .article .sub-title-link a {
-    font-size: 8pt;
-    color: #fff5d4; }
-    .section .article .sub-title-link a:hover {
-      color: #e0ba3a; }
+  .section .article .sub-title {
+    width: 100%;
+    height: 20px; }
+    .section .article .sub-title .date {
+      float: left;
+      font-size: 8pt; }
+    .section .article .sub-title .link {
+      float: right; }
+      .section .article .sub-title .link a {
+        font-size: 8pt;
+        color: #fff5d4; }
+        .section .article .sub-title .link a:hover {
+          color: #e0ba3a; }
+  .section .article .intro, .section .article .body {
+    margin: 0 8px;
+    border-top: 1px solid #002142; }
 
 .module {
   margin-bottom: 8px; }
@@ -444,14 +460,16 @@ table.messages {
   width: 100%;
   border: 1px solid #f5fafe; }
 
-table.form th.label, table.form td.entry {
+table.form th.label, table.form td.entry, table.form td.help {
   text-align: left;
   padding: 8px 6px; }
 table.form th.label {
   background: #002142; }
-table.form td.entry {
+table.form td.entry, table.form td.help {
   background: #00152c;
   border-bottom: 1px dashed #002142; }
+table.form td.help {
+  font-size: 8pt; }
 table.form .label {
   font-weight: bold;
   width: 25%;
@@ -461,7 +479,7 @@ table.messages tr.unread {
   font-weight: bold; }
 
 a.asc, a.desc {
-  padding-right: 16px;
+  width: 16px;
   background-image: url(custom-theme/images/ui-icons_00152c_256x240.png);
   background-repeat: no-repeat;
   background-position: right; }
@@ -482,8 +500,8 @@ table.pretty {
     background: #002142; }
   table.pretty th {
     text-align: left;
-    border: 1px solid #99badd;
-    background: #99badd;
+    border: 1px solid #d6eafe;
+    background: #99badd url(../img/light-bar-bg.png);
     color: #002142; }
     table.pretty th a {
       color: #002142; }
@@ -518,6 +536,8 @@ table.pretty {
     color: #002e5c; }
 
 .tournament, .camp {
+  background: #00152c url(../img/module-bg.png) repeat-x;
+  border: 1px solid #002e5c;
   padding: 4px 8px; }
   .tournament h3, .camp h3 {
     padding: 8px 0 0 0;
@@ -555,12 +575,14 @@ table.pretty {
     height: 500px;
     overflow: hidden;
     background: #002142; }
+    #news-show .article .date {
+      font-size: 8pt; }
     #news-show .article .copy {
       clear: both;
       overflow: auto;
       font-size: 8pt; }
     #news-show .article .title {
-      float: left;
+      text-align: center;
       font-size: 10pt; }
     #news-show .article .program_name {
       float: right;

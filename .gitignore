@@ -5,5 +5,4 @@
 log/*
 cachegrind.*
 foo
-.sass-cache*
 

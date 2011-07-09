@@ -79,7 +79,7 @@ class Router
         $this->_log = &$log;
         $this->AddRoute('/module/[A:module]/admin')->Group('simp')->Controller('module');
         $this->AddRoute('/module/[A:module]/admin/[A:action]')->Group('simp')->Controller('module');
-        $this->AddRoute('/module/[A:module]/admin/[A:action]/[i:id]')->Group('simp')->Controller('module');
+        $this->AddRoute('/module/[A:module]/admin/[A:action]/[i:id]/[a:extra]?')->Group('simp')->Controller('module');
     }
 
     public function AddRoute($pattern)

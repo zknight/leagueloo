@@ -127,6 +127,13 @@ class UserController extends \simp\Controller
             $this->Render('Add');
             return false;
         }
+        if (!$user->verified)
+        {
+            $site_name = GetCfgVar('site_name');
+            $subject = "[{$site_name}] New Website Account Confirmation";
+            \SendSiteEmail($user, $subject, "confirmation"); 
+        }
+
         AddFlash("User {$user->login} created.");
         \Redirect(\Path::admin_user());
         return false;
@@ -148,6 +155,12 @@ class UserController extends \simp\Controller
             $this->LoadEntitiesForAbilities();
             $this->Render('Edit');
             return false;
+        }
+        if (!$user->verified)
+        {
+            $site_name = GetCfgVar('site_name');
+            $subject = "[{$site_name}] New Website Account Confirmation";
+            \SendSiteEmail($user, $subject, "confirmation"); 
         }
         AddFlash("User {$user->login} updated.");
         \Redirect(\Path::admin_user());

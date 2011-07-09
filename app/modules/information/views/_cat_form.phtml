@@ -1,0 +1,52 @@
+<fieldset>
+    <legend>Category</legend>
+    <input type="hidden" name="category_id" value="<?= $this->category->id; ?>" />
+    <table class="form">
+        <tr>
+            <th class="label">Name:</th>
+            <td class="entry"><?= TextField($this->category, 'name', array('size' => 40)); ?></td>
+            <td class="help">Name of the category</td>
+        </tr>
+        <tr>
+            <th class="label">Text:</th>
+            <td class="entry"><?= TextField($this->category, 'text', array('size' => 40)); ?></td>
+            <td class="help">This is the text that will show in the selection box when a site user is requesting information</td>
+        </tr>
+        <tr>
+            <th class="label">Email Classification Type:</th>
+            <td class="entry"><?= SimpleSelect($this->category, 'classification', Category::$check_types); ?></td>
+            <td class="help">
+                This is the classification by which emails will be connected to this category.
+                <ul>
+                    <li>none: requests under this category will go to all emails associated with it</li>
+                    <li>age: when an information request under this category is selected, the requesting
+                        user will be asked to enter their players birthdate.  Requests under this category
+                        will be sent to the appropriate email associated with the age
+                    </li>
+                    <li>custom: when an information request unser this category is slected, the requesting
+                        user will be asked to select an additional parameter.  Requests under this category
+                        will be sent to the matching email.
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset>
+    <legend>Additional Data To Collect</legend>
+    <table class="pretty">
+        <tr><th>Label</th><th>Type</th><th>Required</th><th>Options</th></tr>
+    <? foreach ($this->category->data as $id => $datum): ?>
+        <tr>
+            <td>
+                <?= l("[x]", Path::module('information', 'admin', 'remove_datum', $datum->id)); ?>
+                <?= $datum->label; ?>
+            </td>
+            <td><?= Datum::$types[$datum->type]; ?></td>
+            <td><?= $datum->required ? 'yes':'no'; ?></td>
+            <td><? foreach ($datum->options as $opt) echo "$opt<br />"?></td>
+            <input type="hidden" name="Category[datum_id][<?=$id?>]" value="<?= $datum->id; ?>" />
+        </tr>
+    <? endforeach; ?>
+    </table>
+</fieldset>

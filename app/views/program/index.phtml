@@ -34,14 +34,16 @@ if ($this->UserLoggedIn()) {
 <? foreach ($this->news as $article): ?>
 <div class="article">
     <p class='title'><?= l($article->title, GetArticlePath('show', $article)); ?></p>
+    <div class="sub-title">
     <? if ($editor): ?>
-        <span class="sub-title-link">
+        <div class="link">
         <?= l("edit this article", Path::content_news_edit_program($this->program->id, $article->id)); ?><br />
-        </span>
+        </div>
     <? endif; ?>
-        <span class="date">
-            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
-        </span>
+        <div class="date">
+            <?= TimeAgoInWords($article->updated_on); ?> ago
+        </div>
+    </div>
     <div class="intro"><?= $article->intro; ?></div>
     <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
 </div>

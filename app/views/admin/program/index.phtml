@@ -24,7 +24,7 @@
             <div style="margin:0 12px;padding:4px;font-size:8pt;">
             Privileged Users:<br/><br />
                 <table style="width:400px;">
-                    <th style="width:33%">Privilege</th><th style="width:33%">User</th><th style="width:33%">&nbsp;</th>
+                    <tr><th style="width:33%">Privilege</th><th style="width:33%">User</th><th style="width:33%">&nbsp;</th></tr>
             <? foreach ($users as $user): ?>
                     <tr>
                         <td><?= Ability::$ability_level_strings[$user['level']] ?></td>

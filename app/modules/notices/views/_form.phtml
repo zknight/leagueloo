@@ -2,19 +2,19 @@
     <legend>Notice Information</legend>
     <table class="form">
         <tr>
-            <th>Name:</th>
+            <th class="label">Name:</th>
             <td class="entry"><?= TextField($this->notice, 'name', array('size' => 40)); ?></td>
         </tr>
         <tr>
-            <th>Text of Notice:</th>
+            <th class="label">Text of Notice:</th>
             <td class="entry"><?= TextField($this->notice, 'text', array('size' => 40)); ?></td>
         </tr>
         <tr>
-            <th>Date to Start Displaying</th>
+            <th class="label">Date to Start Displaying</th>
             <td class="entry"><?= TextField($this->notice, 'publish_date', array('size' => 10)); ?></td>
         </tr>
         <tr>
-            <th>Date to Stop Displaying</th>
+            <th class="label">Date to Stop Displaying</th>
             <td class="entry"><?= TextField($this->notice, 'expire_date', array('size' => 10)); ?></td>
         </tr>
     </table>

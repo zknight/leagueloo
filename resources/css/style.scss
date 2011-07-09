@@ -169,11 +169,12 @@ ul.admin-menu,
                     }
                     color:$dark_navy;
                     text-decoration:none;
-                    &:hover { color:$dark_carolina; }
+                    &:hover { color:$light_navy; }
                 }
                 a.selected {
-                    //text-decoration:underline;
-                    color:$brown;
+                    color:$light_navy;
+                    text-shadow:$orange 0 0 4px;
+                    //color:$dark_carolina;
                 }
             }
         }
@@ -324,6 +325,7 @@ h3.subtitle {
 // static page
 .page {
     background:$dark_navy url(../img/module-bg.png) repeat-x;
+    border:1px solid $light_navy;
     padding:8px;
     h1 {
         font-size:13pt;
@@ -381,8 +383,11 @@ h3.subtitle {
     }
 
     .article {
+        font-size:9pt;
         padding:4px 12px;
-        background:$navy;
+        background:$dark_navy url(../img/module-bg.png) repeat-x;
+        border:1px solid $light-navy;
+        margin-bottom:8px;
 
         p.title { 
             width:100%; 
@@ -392,10 +397,24 @@ h3.subtitle {
             text-align:center; 
         }
 
-        .sub-title-link a {
-            font-size:8pt;
-            color:$light_orange_tan;
-            &:hover { color:$orange; }
+        .sub-title {
+            width:100%;
+            height:20px;
+
+            .date { float:left; font-size:8pt;}
+            .link {
+                float:right;
+                a {
+                    font-size:8pt;
+                    color:$light_orange_tan;
+                    &:hover { color:$orange; }
+                }
+            }
+        }
+
+        .intro, .body {
+            margin:0 8px;
+            border-top:1px solid $navy;
         }
     }
 }
@@ -593,12 +612,13 @@ table.form {
     
     //th { width:33%; }
 
-    th.label, td.entry {
+    th.label, td.entry, td.help {
         text-align:left;
         padding:8px 6px;
     }
     th.label { background:$navy; }
-    td.entry { background:$dark_navy; border-bottom:1px dashed $navy; }
+    td.entry, td.help { background:$dark_navy; border-bottom:1px dashed $navy; }
+    td.help { font-size:8pt; }
 
     .label {
         font-weight:bold;
@@ -633,8 +653,8 @@ table.pretty {
     }
     th {
         text-align:left;
-        border:1px solid $dark_carolina;
-        background:$dark_carolina;
+        border:1px solid $carolina;
+        background:$dark_carolina url(../img/light-bar-bg.png);
         color:$navy;
         a { 
             color:$navy;
@@ -681,7 +701,8 @@ table.pretty {
 
 // tournament
 .tournament, .camp {
-    //background:$navy;
+    background:$dark_navy url(../img/module-bg.png) repeat-x;
+    border:1px solid $light-navy;
     padding:4px 8px;
 
     h3 {
@@ -737,6 +758,7 @@ table.pretty {
         //background:$dark_navy url(../img/module-bg.png) repeat-x;
         background:$navy;
 
+        .date { font-size:8pt; }
         .copy {
             clear:both;
             overflow:auto;
@@ -744,7 +766,7 @@ table.pretty {
         }
 
         .title {
-            float:left;
+            text-align:center;
             font-size:10pt;
         }
         .program_name {

@@ -183,6 +183,16 @@ class Tournament extends \simp\Model
     {
         $errors = 0;
 
+        if (strpos($this->application_link, "http") === false &&
+            strpos($this->application_link, "/") !== 0)
+        {
+            $this->application_link = "http://" . $this->application_link;
+        }
+        if (strpos($this->schedule_link, "http") === false &&
+            strpos($this->schedule_link, "/") !== 0)
+        {
+            $this->schedule_link = "http://" . $this->schedule_link;
+        }
         // short name
         $arr = explode(" ", strtolower($this->name));
         $short_name = implode("_", $arr);

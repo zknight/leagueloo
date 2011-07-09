@@ -1,0 +1,7 @@
+<h1 class="title">Create Information Category</h1>
+<?= GetErrorsFor($this->category); ?>
+<?= GetErrorsFor($this->datum); ?>
+<?= FormTag("email", \simp\Request::POST); ?>
+    <? require "_cat_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>

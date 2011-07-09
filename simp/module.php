@@ -19,11 +19,13 @@ class Module
     static protected $_has_admin = false;
     protected $_template_path;
     protected $_abilities;
+    protected $_layout;
     public $id;
 
     public function __construct()
     {
         global $APP_BASE_PATH;
+        $this->_layout = "admin";
         $this->_template_path = $APP_BASE_PATH . "/modules/";
         $this->_template_path .= SnakeCase(get_class($this));
         $this->_template_path .= "/views/";
@@ -132,6 +134,16 @@ class Module
     // override to have installation specific stuff
     protected static function OnInstall()
     {
+    }
+
+    public function SetLayout($layout)
+    {
+        $this->_layout = $layout;
+    }
+
+    public function GetLayout()
+    {
+        return $this->_layout;
     }
 
 }

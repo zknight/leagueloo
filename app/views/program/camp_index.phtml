@@ -18,26 +18,34 @@ if ($this->UserLoggedIn()) {
 <? if (count($this->upcoming_camps) < 1): ?>
 <p>No upcoming camps.</p>
 <? else: ?>
+    <table class="pretty">
+        <tr><th>Camp</th><th>Level</th><th>When</th></tr>
+    <? $r=false; ?>
     <? foreach ($this->upcoming_camps as $t): ?>
-        <?= l($t->name, Path::camps_camps($t->short_name)); ?>
-        <ul>
-            <li>Level: <?= implode(" and ", $t->leagues); ?></li>
-            <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
-        </ul>
+        <tr class="<?=($r=!$r)?'odd':'even';?>">
+            <td><?= l($t->name, Path::camps_camp_show($t->short_name)); ?></td>
+            <td><?= implode(" and ", $t->leagues); ?></td>
+            <td><?= $t->start_date; ?> through <?= $t->end_date; ?></td>
+        </tr>
     <? endforeach; ?>
+    </table>
 <? endif; ?>    
 <? if (GetCfgVar('camps_show_past_camps') == true): ?>
     <h3>Past Camps</h3>
     <? if (count($this->past_camps) < 1): ?>
     <p>No past camps.</p>
     <? else: ?>
+        <table class="pretty">
+            <tr><th>Camp</th><th>Level</th><th>When</th></tr>
+        <? $r=false; ?>
         <? foreach ($this->past_camps as $t): ?>
-            <?= l($t->name, Path::camps_camp_show($t->short_name)); ?>
-            <ul>
-                <li>Level: <?= implode(" and ", $t->leagues); ?></li>
-                <li>When: <?= $t->start_date; ?> through <?= $t->end_date; ?></li>
-            </ul>
+            <tr class="<?=($r=!$r)?'odd':'even';?>">
+                <td><?= l($t->name, Path::camps_camp_show($t->short_name)); ?></td>
+                <td><?= implode(" and ", $t->leagues); ?></td>
+                <td><?= $t->start_date; ?> through <?= $t->end_date; ?></td>
+            </tr>
         <? endforeach; ?>
+        </table>
     <? endif; ?>
 <? endif; ?>
 <? foreach ($this->news as $article): ?>

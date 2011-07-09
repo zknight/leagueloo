@@ -1,10 +1,11 @@
 <?
 namespace app;
 
-class NewsController extends \simp\Controller
+class NewsController extends \app\AppController
 {
     function Setup()
     {
+        parent::Setup();
     }
 
     // TODO
@@ -12,6 +13,7 @@ class NewsController extends \simp\Controller
     // that program!
     function Index()
     {
+        $this->StoreLocation();
         $this->news = \News::FindPublished();
         return true;
     }
@@ -19,6 +21,7 @@ class NewsController extends \simp\Controller
     function Show()
     {
         global $log;
+        $this->StoreLocation();
         $log->logDebug("in NewsController::Show()");
         $log->logDebug("params: " . print_r($this->_params, true));
         $this->StoreLocation();

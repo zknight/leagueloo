@@ -49,6 +49,18 @@ class ProgramController extends \app\AppController
 
     }
 
+    function About()
+    {
+        $this->StoreLocation();
+        $this->program = \simp\Model::FindOne("Program", 'name = ?', array($this->GetParam('program')));
+        /*
+        echo "<pre>About: ";
+        print_r($this->_params);
+        echo "</pre>";
+         */
+        return true;
+    }
+
     protected function RenderSpecialProgram()
     {
         switch ($this->program->type)

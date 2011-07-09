@@ -1,0 +1,29 @@
+<h1 class="title">Site Information Module Administration</h1>
+<h2>Information Categories</h2>
+<p>These are the categories with which to associate information requests by site users.  Each category
+can have 1 or more associated email address to which information requests will be sent.</p>
+<table class="pretty">
+    <tr><th>Category</th><th>Associated Emails</th></tr>
+<? foreach ($this->categories as $category): ?>
+    <tr>
+        <td>
+            <?=$category->name; ?> 
+            <?= l("[edit]", Path::module('information', 'admin', 'edit_category', $category->id)); ?>
+            <?= l("Add Email", path::module('information', 'admin', 'add_email', $category->id)); ?></td>
+        <td>
+    <? foreach($category->emails as $email): ?>
+            <?= $email->address; ?> - 
+        <? if($category->classification == Category::AGE): ?>
+            <?= Email::$genders[$email->param1] ?>
+            <?= Email::$ages[$email->param2] ?>
+            <?= Email::$end_ages[$email->param3] ?>
+        <? endif; ?>
+            <br />
+    <? endforeach; ?>
+        </td>
+    </tr>
+<? endforeach; ?>
+</table>
+<?= l("Add Category", Path::module('information', 'admin', 'add_category')); ?>
+<? if (count($this->categories) > 0): ?>
+<?endif;?>

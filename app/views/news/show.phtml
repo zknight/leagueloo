@@ -8,9 +8,19 @@ if ($this->UserLoggedIn()) {
     //$admin = $user->CanAdmin("Program", $this->program->id);
 }
 ?>
-<? if ($editor): ?>
-<?= l("edit this article", Path::content_news_edit(
-        $entity_type, $this->article->entity_id, $this->article->id)); ?><br />
-<? endif; ?>
-<h2><?= $this->article->title; ?></h2>
-<p><?= $this->article->body; ?></p>
+<? \simp\Module::Show("SectionMenu", array("current" => 'index', "entity_type" => $this->article->entity_type, "entity_id" => $this->article->entity_id)); ?>
+<div class="article">
+    <p class="title"><?= $this->article->title; ?></p>
+    <div class="sub-title">
+    <? if ($editor): ?>
+        <div class="link">
+        <?= l("edit this article", Path::content_news_edit(
+            $entity_type, $this->article->entity_id, $this->article->id)); ?><br />
+        </div>
+    <? endif; ?>
+        <div class="date">
+            <?= TimeAgoInWords($this->article->updated_on); ?> ago
+        </div>
+    </div>
+    <div class="body"><?= $this->article->body; ?></div>
+</div>

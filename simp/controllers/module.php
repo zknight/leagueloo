@@ -10,6 +10,7 @@ class ModuleController extends \simp\Controller
     {
         // load module and delegate admin action
         $module = Module::Load(ClassCase($this->GetParam('module')));
+        $this->SetLayout($module->GetLayout());
 
         // check permissions for module
         if ($this->UserLoggedIn()) 
@@ -27,6 +28,7 @@ class ModuleController extends \simp\Controller
                 }
                 else
                 {
+                    return false;
                     \Redirect(\Path::Home());
                 }
             }

@@ -5,18 +5,39 @@
     <? if (count($teams) < 1): ?>
     No team pages have been created.
     <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Gender</th><th>Division</th><th>Name</th><th>&nbsp;</th><th>&nbsp;</th>
     </tr>
     <? foreach($teams as $team): ?>
+        <? $users = User::GetPrivilegedUsers('team', $team->id); ?></td>
     <tr>
         <td><?= $team->gender_str; ?></td>
         <td><?= $team->division; ?></td>
         <td><?= $team->name; ?></td>
         <td><?= l("edit", Path::admin_teams_edit($team->id)); ?></td>
         <td><?= l("Delete", Path::admin_teams_delete($team->id), array("method" => "delete")); ?></td>
-
+    </tr>
+    <tr style="border-bottom:1px solid #003e5c;">
+        <td colspan='5'>
+            <div style="margin:0 1px;padding:4px;font-size:8pt;">
+                Priveleged Users:<br /><br />
+                <table style="width:400px;">
+                    <tr><th style="width:33%">Privilege</th><th style="width:33%">User</th><th style="width:33%">&nbsp;</th></tr>
+            <? foreach ($users as $user): ?>
+                    <tr>
+                        <td><?= Ability::$ability_level_strings[$user['level']] ?></td>
+                        <td><?= "{$user['first_name']} {$user['last_name']}"; ?></td>
+                        <td><?= l('remove privilege', Path::admin_ability_remove('Team', $team->id, "uid={$user['id']}")); ?></td>
+                    </tr>
+            <? endforeach; ?>
+                </table>
+                <p>
+                    <?= l('add privileged user', Path::admin_ability_add('Team', $team->id)); ?>
+                </p>
+            </div>
+        </td>
+    </tr>
     <? endforeach; ?>
 </table>
     <? endif; ?>

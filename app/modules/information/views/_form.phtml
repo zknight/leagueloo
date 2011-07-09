@@ -1,0 +1,26 @@
+<fieldset>
+<legend>Email for "<?= $this->category->name; ?>"</legend>
+<input type='hidden' name='Email[category_id]' value='<?= $this->category->id; ?>' />
+    <table class="form">
+<? if ($this->category->classification == Category::AGE): ?>
+        <tr>
+            <th class="label">Associated Age Group:</th>
+            <td class="entry">
+                <?= SimpleSelect($this->email, 'param1', Email::$genders); ?>
+                <?= SimpleSelect($this->email, 'param2', Email::$ages); ?>
+                <?= SimpleSelect($this->email, 'param3', Email::$end_ages); ?>
+            </td>
+        </tr>
+<? elseif ($this->category->classification == Category::CUSTOM): ?>
+        <tr>
+            <th class="label">Associated Custom Option:</th>
+            <td class="entry"><?= TextField($this->email, 'param1'); ?>
+            <td class="help">When user selects this option, request will go to this email</td>
+        </tr>
+<? endif; ?>
+        <tr>
+            <th class="label">Email Address:</th>
+            <td class="entry"><?= TextField($this->email, 'address'); ?>
+        </tr>
+    </table>
+</fieldset>

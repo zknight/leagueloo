@@ -60,9 +60,9 @@ function RouteSetup($router)
 
     $router->AddRoute('/admin/[A:controller]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[A:entity]/[i:entity_id]')->Group('admin');
-    $router->AddRoute('/admin/[A:controller]/[A:action].[A:format]?')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[i:id]')->Group('admin');
     $router->AddRoute('/admin/[A:controller]/[A:action]/[a:name]')->Group('admin');
+    $router->AddRoute('/admin/[A:controller]/[A:action].[A:format]?')->Group('admin');
 
     $router->AddRoute('/content/')->Controller('content');
     $router->AddRoute('/content/[A:controller]')->Group('content');
@@ -102,7 +102,7 @@ function RouteSetup($router)
     //$router->AddRoute('/program/[A:action]/[i:id]')->Controller('program');
 
     $router->AddRoute('/[a:program]')->Controller('program');
-    $router->AddRoute('/[a:program]/about')->Action('about')->Param('type', 'program');
+    $router->AddRoute('/[a:program]/about')->Controller('program')->Action('about')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]')->Action('index')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]')->Param('type', 'program');
     $router->AddRoute('/[a:program]/[A:controller]/[A:action]/[i:id]')->Param('type', 'program');

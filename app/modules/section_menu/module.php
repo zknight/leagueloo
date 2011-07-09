@@ -31,6 +31,12 @@ class SectionMenu extends \simp\Module
         else if ($entity_type === "Program")
         {
             $program = \simp\Model::FindById("Program", $entity_id);
+
+            $this->links['About'] = array(
+                'link' => Path::Relative("{$program->name}/about"),
+                'class' => ($current == 'about' ? 'selected' : ''),
+            );
+                
             $this->links['News'] = array(
                 'link' => Path::Relative($program->name),
                 'class' => ($current == 'index' ? 'selected' : ''),
