@@ -1,6 +1,5 @@
 <h1 class="title">Edit Information Category</h1>
 <?= GetErrorsFor($this->category); ?>
-<?= GetErrorsFor($this->datum); ?>
 <?= FormTag("catetory", \simp\Request::PUT); ?>
     <? require "_cat_form.phtml"; ?>
     <input type="submit" value="Modify" />

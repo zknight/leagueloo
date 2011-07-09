@@ -24,3 +24,35 @@
         </tr>
     </table>
 </fieldset>
+<fieldset>
+    <legend>Additional Data To Collect</legend>
+    <? if (count($this->email->data) > 0): ?>
+    <p><strong>Current Data</strong></p>
+    <table class="pretty">
+        <tr><th style="width:15%">Label</th><th style="width:15%">Type</th><th style="width:15%">Required</th><th style="width:55%">Options</th></tr>
+        <? foreach ($this->email->data as $id => $datum): ?>
+        <tr>
+            <td>
+                <?= l("[x]", Path::module('information', 'admin', 'remove_datum', $datum->id)); ?>
+                <?= $datum->label; ?>
+            </td>
+            <td><?= Datum::$types[$datum->type]; ?></td>
+            <td><?= $datum->required ? 'yes':'no'; ?></td>
+            <td><? foreach ($datum->options as $opt) echo "$opt<br />"?></td>
+        </tr>
+        <? endforeach; ?>
+    </table>
+    <? endif; ?>
+    <p><strong>New Data</strong></p>
+    <table class="pretty">
+        <tr><th style="width:15%">Label</th><th style="width:15%">Type</th><th style="width:15%">Required</th><th style="width:55%">Options</th></tr>
+    <? for($i=0;$i<10;$i++): ?>
+        <tr>
+            <td><?= TextField($this->email, 'datum_label', array('array' => $i)); ?></td>
+            <td><?= SimpleSelect($this->email, 'datum_type', Datum::$types, array('array' => $i)); ?></td>
+            <td><?= CheckBoxField($this->email, 'datum_required', array('array' => $i)); ?></td>
+            <td><?= TextField($this->email, 'datum_options', array('array' => $i, 'size' => 80)); ?></td>
+        </tr>
+    <? endfor; ?>
+    </table>
+</fieldset>

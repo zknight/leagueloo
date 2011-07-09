@@ -1,0 +1,16 @@
+<div class="module">
+    <div class="title">
+        <ul class="menu">
+            <li>Contact Us</li>
+        </ul>
+    </div>
+    <div class="content" style="text-align:center;">
+        <h3><?= SiteName(); ?></h3>
+<? foreach ($this->info as $item): ?>
+        <?= $item->text; ?><br />
+<? endforeach; ?>
+<? foreach ($this->categories as $cat): ?>
+        <?= l($cat->text, Path::module('information', 'show_form', $cat->id)); ?><br />
+<? endforeach; ?>
+    </div>
+</div>

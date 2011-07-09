@@ -1,0 +1,7 @@
+<h1 class="title">Create Information Item</h1>
+<?= GetErrorsFor($this->item); ?>
+<?= FormTag("info", \simp\Request::POST); ?>
+    <? require "_info_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>
+

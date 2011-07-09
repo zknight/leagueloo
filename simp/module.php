@@ -111,14 +111,18 @@ class Module
     {
         global $log;
         $view = SnakeCase($view);
-        $log->logDebug("checking $view for {$user->login}");
-        if (isset($user) and array_key_exists($view, $this->abilities))
+        if (array_key_exists($view, $this->abilities))
         {
-            $level = $this->abilities[$view];
-            $log->logDebug("    level: $level");
-            return $user->CanAccess("plug_in", $this->id, $level);
+            if (isset($user))
+            {
+                $log->logDebug("checking $view for {$user->login}");
+                $level = $this->abilities[$view];
+                $log->logDebug("    level: $level");
+                return $user->CanAccess("plug_in", $this->id, $level);
+            }
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static function Install()

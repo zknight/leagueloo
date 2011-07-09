@@ -1,0 +1,7 @@
+<h1 class="title">Edit Information Item</h1>
+<?= GetErrorsFor($this->item); ?>
+<?= FormTag("info", \simp\Request::PUT); ?>
+    <? require "_info_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>
+

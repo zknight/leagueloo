@@ -1,0 +1,61 @@
+<h1 class="title"><?= $this->category->text; ?></h1>
+<br />
+<?= FormTag("contact", \simp\Request::GET); ?>
+<table class="form">
+    <tr>
+        <th class="label">*Email Address:</th> 
+        <td class="entry"><?= TextField($this->info_request, 'email', array('size' => 40)); ?></td>
+    </tr>
+<? if ($this->category->classification == Category::AGE): ?>
+<?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
+<?= IncludeJS("jquery-ui.js"); ?>
+<script type="text/javascript">
+$(function($) {
+    $(document).ready(function() {
+        $(".date-picker").datepicker({
+                maxDate: '-4y', 
+                minDate: '-18y', 
+                changeYear: true,
+                changeMonth: true,
+                showOn: 'both',
+                showAnim: 'drop',
+                showButtonPanel: true,
+                yearRange: 'c-18:c+18'
+        });
+    });
+});
+</script>
+    <tr>
+        <th class="label">*Enter players Date of Birth:</th> 
+        <td class="entry"><?= DatePicker($this->info_request, 'birthdate'); ?></td>
+    </tr>
+<? endif; ?>
+<? foreach($this->info_request->field_info as $id => $field): ?>
+    <tr>
+        <th class="label"><?= $field['required']?"*":""?><?= $field['label']?>:</th> 
+<? 
+        $tag = "";
+        switch ($field['type'])
+        {
+        case 0:
+            $tag = CheckBoxField($this->info_request, 'fields', array('array' => $id));
+            break;
+        case 1:
+            $tag = TextField($this->info_request, 'fields', array('array' => $id, 'size' => 40));
+            break;
+        case 2:
+            $tag = SimpleSelect($this->info_request, 'fields', $field['opt'], array('array' => $id));
+            break;
+        }
+?>
+        <td class="entry"><?= $tag; ?></td>
+    </tr>
+<? endforeach; ?>
+    <tr>
+        <th class="label">*Enter your query:</th> 
+        <td class="entry"><?= TextArea($this->info_request, 'body'); ?></td>
+    </tr>
+</table>
+<p><em>* required fields</em></p>
+<input type="submit" value="Submit Request" />
+<? EndForm(); ?>

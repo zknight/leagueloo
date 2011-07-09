@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>Information Item Details</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Label:</th>
+            <td class="entry"><?= TextField($this->item, 'label');?></td>
+            <td class="help">This is the label (name) for the information item.</td>
+        </tr>
+        <tr>
+            <th class="label">Text:</th>
+            <td class="entry"><?= TextField($this->item, 'text', array('size' => 40)); ?></td>
+            <td class="help">
+                This is the text that will be displayed in the information model for this item.
+                It would be wise to keep it concise.
+            </td>
+        </tr>
+        <tr>
+            <th class="label">Weight:</th>
+            <td class="entry"><?= TextField($this->item, 'weight', array('size' => 3));?></td>
+            <td class="help">
+                The <em>weight</em> controls the order of this info item relative to others
+                when displayed.  Higher values (heavier items) are closer to the bottom.
+            </td>
+        </tr>
+</fieldset>

@@ -71,7 +71,7 @@ class BaseModel
                 if (!array_key_exists($name, $this->_skip_sanity) || $this->_skip_sanity[$name] == false)
                 {
                     // sanitize to further prevent sql injection/xss on simple inputs
-                    $val = preg_replace('`[^a-zA-Z0-9@.,$?&=#:_/ -]`', '', $val);
+                    $val = preg_replace("`[^a-zA-Z0-9@'.,$?&=#:_/() -]`", '', $val);
                 }
             }
             if ($name != "id") $this->$name = $val;

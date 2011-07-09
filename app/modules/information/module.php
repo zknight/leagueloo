@@ -9,24 +9,75 @@ class Information extends \simp\Module
     protected function Setup($args)
     {
         require_once "models/email.php";
+        require_once "models/info.php";
         $this->SetPermissions(
             array(
                 "index" => Ability::ADMIN,
                 "add_email" => Ability::ADMIN,
+                "edit_email" => Ability::ADMIN,
+                "remove_email" => Ability::ADMIN,
                 "add_category" => Ability::ADMIN,
                 "edit_category" => Ability::ADMIN,
+                "remove_category" => Ability::ADMIN,
+                "add_info" => Ability::ADMIN,
+                "edit_info" => Ability::ADMIN,
+                "remove_info" => Ability::ADMIN,
                 "remove_datum" => Ability::ADMIN
             )
         );
+        $this->categories = \simp\Model::FindAll("Category");
+        $this->info = \simp\Model::Find("Info", "1 order by weight asc", array());
     }
 
+    /////////  Admin actions
     public function Index()
     {
-        $this->categories = \simp\Model::FindAll("Category");
+        //$this->categories = \simp\Model::FindAll("Category");
+        //$this->info = \simp\Model::Find("Info", "1 order by weight asc", array());
         //$this->general = \simp\Model::Find("SubCategory", "category = ?", array(Email::GENERAL));
         //$this->program = \simp\Model::Find("SubCategory", "category = ?", array(Email::PROGRAM));
         //$this->website = \simp\Model::Find("SubCategory", "category = ?", array(Email::WEBSITE));
         return true;
+    }
+
+    public function AddInfo($method, $params, $vars)
+    {
+        $this->item = \simp\Model::Create("Info");
+        if ($method == \simp\Request::POST)
+        {
+            $this->item->UpdateFromArray($vars['Info']);
+            if ($this->item->Save())
+            {
+                AddFlash("Info item {$this->item->label} created.");
+                \Redirect(Path::module('information', 'admin'));
+            }
+        }
+        return true;
+    }
+
+    public function EditInfo($method, $params, $vars)
+    {
+        $this->item = \simp\Model::FindById("Info", $params['id']);
+        if ($method == \simp\Request::PUT)
+        {
+            $this->item->UpdateFromArray($vars['Info']);
+            if ($this->item->Save())
+            {
+                AddFlash("Info item {$this->item->label} updated.");
+                \Redirect(Path::module('information', 'admin'));
+            }
+        }
+        return true;
+    }
+
+    public function RemoveInfo($method, $params, $vars)
+    {
+        $item = \simp\Model::FindById("Info", $params['id']);
+        if ($method == \simp\Request::DELETE && $item->id > 0)
+        {
+            $item->Delete();
+        }
+        \Redirect(Path::module('information', 'admin'));
     }
 
     public function AddEmail($method, $params, $vars)
@@ -36,12 +87,10 @@ class Information extends \simp\Module
         if ($method == \simp\Request::POST)
         {
             $this->email->UpdateFromArray($vars['Email']);
+            if ($this->email->Save())
             {
-                if ($this->email->Save())
-                {
-                    AddFlash("Site Email {$this->email->type} created.");
-                    \Redirect(Path::module('information', 'admin'));
-                }
+                AddFlash("Site Email {$this->email->address} created.");
+                \Redirect(Path::module('information', 'admin'));
             }
         }
         else
@@ -55,10 +104,34 @@ class Information extends \simp\Module
         return true;
     }
 
+    public function EditEmail($method, $params, $vars)
+    {
+        $this->email = \simp\Model::FindById("Email", $params['id']);
+        if ($method == \simp\Request::PUT)
+        {
+            $this->email->UpdateFromArray($vars['Email']);
+            if ($this->email->Save())
+            {
+                AddFlash("Site Email {$this->email->address} updated.");
+                \Redirect(Path::module('information', 'admin'));
+            }
+        }
+        return true;
+    }
+
+    public function RemoveEmail($method, $params, $vars)
+    {
+        $email = \simp\Model::FindById("Email", $params['id']);
+        if ($method == \simp\Request::DELETE && $email->id > 0)
+        {
+            $email->Delete();
+        }
+        \Redirect(Path::module('information', 'admin'));
+    }
+
     public function AddCategory($method, $params, $vars)
     {
         $this->category = \simp\Model::Create("Category");
-        $this->datum = \simp\Model::Create("Datum");
 
         if ($method == \simp\Request::POST)
         {
@@ -75,45 +148,27 @@ class Information extends \simp\Module
     public function EditCategory($method, $params, $vars)
     {
         $this->category = \simp\Model::FindById('Category', $params['id']);
-        global $log; 
-        $log->logDebug("EditCategory() $vars = " . print_r($vars, true));
 
         if ($method == \simp\Request::PUT)
         {
-            if (isset($vars['add_datum']))
+            $this->category->UpdateFromArray($vars['Category']);
+            if ($this->category->Save())
             {
-                $this->datum->UpdateFromArray($vars['Datum']);
-                $this->datum->category_id = $this->category->id;
-                if ($this->datum->Save())
-                {
-                    $this->category->data[$this->datum->id] = $this->datum;
-                    $this->category->UpdateFromArray($vars['Category']);
-                    $this->category->Save();
-                }
-            }
-            else 
-            {
-                $this->category->UpdateFromArray($vars['Category']);
-                if ($this->category->Save())
-                {
-                    AddFlash("Category {$this->category->name} updated.");
-                    \Redirect(Path::module('information', 'admin'));
-                }
+                AddFlash("Category {$this->category->name} updated.");
+                \Redirect(Path::module('information', 'admin'));
             }
         }
         return true;
     }
 
-
-    public function AddDatum($type, $id)
+    public function RemoveCategory($method, $params, $vars)
     {
-
-        $this->datum = \simp\Model::Create("Datum");
-        if ($method == \simp\Request::POST)
+        $category = \simp\Model::FindById("Category", $params['id']);
+        if ($method == \simp\Request::DELETE && $category->id > 0)
         {
-
+            $category->Delete();
         }
-
+        \Redirect(Path::module('information', 'admin'));
     }
 
     public function RemoveDatum($method, $params, $vars)
@@ -123,18 +178,15 @@ class Information extends \simp\Module
             $datum->Delete();
         Redirect(GetReturnURL());
     }
-    /*
-    public function RemoveSub($method, $params, $vars)
+
+    //////// User actions
+    public function ShowForm($method, $params, $vars)
     {
-        if ($method == \simp\Request::DELETE)
-        {
-            $this->sub_category = \simp\Model::FindById('SubCategory', $params['id']);
-            if ($this->sub_category->id > 0)
-            {
-                $this->sub_category->Delete();
-            }
-        }
-        Redirect(GetReturnURL());
+        require_once "models/info_request.php";
+        $this->SetLayout('default');
+        $this->category = \simp\Model::FindById('Category', $params['id']);
+        $this->info_request = new InfoRequest();
+        $this->info_request->AddFields($this->category->data);
+        return true;
     }
-     */
 }

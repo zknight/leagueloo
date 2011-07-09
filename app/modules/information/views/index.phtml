@@ -1,5 +1,20 @@
 <h1 class="title">Site Information Module Administration</h1>
-<h2>Information Categories</h2>
+<h2>Club Information</h2>
+<p>These items will be shown in the Information module.  Typical items are: address, phone, fax, etc.</p>
+<table class="pretty">
+    <tr><th>Label</th><th>Text</th></tr>
+<? foreach ($this->info as $item): ?>
+    <tr>
+        <td>
+            <?= l("[edit]", Path::module('information', 'admin', 'edit_info', $item->id)); ?>
+            <?= l("[x]", Path::module('information', 'admin', 'remove_info', $item->id), array('method' => 'delete')); ?>
+            <?= $item->label; ?>
+        </td>
+        <td><?= $item->text; ?></td></tr>
+<? endforeach; ?>
+</table>
+<?= l("Add Information Item", Path::module('information', 'admin', 'add_info')); ?>
+<h2>Email Information Request Categories</h2>
 <p>These are the categories with which to associate information requests by site users.  Each category
 can have 1 or more associated email address to which information requests will be sent.</p>
 <table class="pretty">
@@ -7,16 +22,21 @@ can have 1 or more associated email address to which information requests will b
 <? foreach ($this->categories as $category): ?>
     <tr>
         <td>
-            <?=$category->name; ?> 
             <?= l("[edit]", Path::module('information', 'admin', 'edit_category', $category->id)); ?>
+            <?= l("[x]", Path::module('information', 'admin', 'remove_category', $category->id), array('method' => 'delete')); ?>
+            <?=$category->name; ?> 
             <?= l("Add Email", path::module('information', 'admin', 'add_email', $category->id)); ?></td>
         <td>
     <? foreach($category->emails as $email): ?>
+            <?= l("[edit]", Path::module('information', 'admin', 'edit_email', $email->id)); ?>
+            <?= l("[x]", Path::module('information', 'admin', 'remove_email', $email->id), array('method' => 'delete')); ?>
             <?= $email->address; ?> - 
         <? if($category->classification == Category::AGE): ?>
             <?= Email::$genders[$email->param1] ?>
             <?= Email::$ages[$email->param2] ?>
             <?= Email::$end_ages[$email->param3] ?>
+        <? elseif($category->classification == Category::CUSTOM): ?>
+            <?= $email->param1; ?>
         <? endif; ?>
             <br />
     <? endforeach; ?>
