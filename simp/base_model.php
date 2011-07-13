@@ -121,6 +121,32 @@ class BaseModel
         return (count($this->_errors) > 0);
     }
 
+    protected function GetFieldForVerify($field)
+    {
+        $matches = array();
+        if (preg_match("/(\w+)\[(.+)\]/", $field, $matches))
+        {
+            echo "GetFieldForVerify is array";
+            $field = $matches[1];
+            $i = $matches[2];
+            $arr = $this->$field;
+            return $arr[$i];
+        }
+        return $this->$field;
+    }
+
+    protected function VerifyEmail($field, $errmsg = NULL)
+    {
+        $ok = true;
+        if (!filter_var($this->$field, FILTER_VALIDATE_EMAIL))
+        {
+            $msg = $errmsg == NULL ? "Please enter a valid email address." : $errmsg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
+
     protected function VerifyArraySize($field, $size, $errmsg = NULL)
     {
         $ok = true;
@@ -148,7 +174,8 @@ class BaseModel
     protected function VerifyMinLength($field, $length, $errmsg = NULL)
     {
         $ok = true;
-        if (strlen($this->$field) < $length)
+        $val = $this->GetFieldForVerify($field);
+        if (strlen($val) < $length)
         {
             $msg = $errmsg == NULL ? "{$field} must be at least {$length} characters." : $errmsg;
             $this->SetError($field, $msg);

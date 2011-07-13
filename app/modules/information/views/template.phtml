@@ -10,7 +10,11 @@
         <?= $item->text; ?><br />
 <? endforeach; ?>
 <? foreach ($this->categories as $cat): ?>
+    <? if ($cat->classification == Category::CUSTOM): ?>
+        <?= l($cat->text, Path::module('information', 'show_select', $cat->id)); ?><br />
+    <? else: ?>
         <?= l($cat->text, Path::module('information', 'show_form', $cat->id)); ?><br />
+    <? endif; ?>
 <? endforeach; ?>
     </div>
 </div>

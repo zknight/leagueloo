@@ -107,6 +107,7 @@ class Information extends \simp\Module
     public function EditEmail($method, $params, $vars)
     {
         $this->email = \simp\Model::FindById("Email", $params['id']);
+        $this->category = \simp\Model::FindById("Category", $this->email->category_id);
         if ($method == \simp\Request::PUT)
         {
             $this->email->UpdateFromArray($vars['Email']);
@@ -174,12 +175,27 @@ class Information extends \simp\Module
     public function RemoveDatum($method, $params, $vars)
     {
         $datum = \simp\Model::FindById('Datum', $params['id']);
+        if ($datum->parent_type == 'Email')
+            $url = (Path::module('information', 'admin', 'edit_email', $datum->parent_id));
+        else
+            $url = (Path::module('information', 'admin', 'edit_category', $datum->parent_id));
         if ($datum->id > 0)
             $datum->Delete();
-        Redirect(GetReturnURL());
+        Redirect($url);
     }
 
     //////// User actions
+    public function ShowSelect($method, $params, $vars)
+    {
+        $this->SetLayout('default');
+        $this->category = \simp\Model::FindById('Category', $params['id']);
+        if ($method == \simp\Request::POST)
+        {
+            \Redirect(Path::module('information', 'show_form', $this->category->id, $vars['option']['selection']));
+        }
+        return true;
+    }
+
     public function ShowForm($method, $params, $vars)
     {
         require_once "models/info_request.php";
@@ -187,6 +203,27 @@ class Information extends \simp\Module
         $this->category = \simp\Model::FindById('Category', $params['id']);
         $this->info_request = new InfoRequest();
         $this->info_request->AddFields($this->category->data);
+        $this->info_request->category = $this->category;
+        if (isset($params['extra'])) 
+        {
+            $eid = $params['extra'];
+            global $log; $log->logDebug("ShowForm() looking up user: $eid");
+            $email = \simp\Model::FindById("Email", $eid);
+            $this->info_request->AddFields($email->data);
+            $this->info_request->email_id = $eid;
+            $opts = $this->category->CustomOptions();
+            $this->info_request->subject = $opts[$eid];
+        }
+        if ($method == \simp\Request::POST)
+        {
+            $this->info_request->UpdateFromArray($vars['InfoRequest']);
+            if ($this->info_request->Save())
+            {
+                $this->info_request->SendEmail();
+                AddFlash("Your request has been emailed to the appropriate person.");
+                \Redirect(GetReturnURL());
+            }
+        }
         return true;
     }
 }

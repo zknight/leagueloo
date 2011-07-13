@@ -45,6 +45,16 @@ class Category extends \simp\Model
 
     }
 
+    public function CustomOptions()
+    {
+        $options = array();
+        foreach ($this->emails as $email)
+        {
+            $options[$email->id] = $email->param1;
+        }
+        return $options;
+    }
+
     /*
     public function __set($property, $value)
     {

@@ -6,11 +6,11 @@ if ($this->UserLoggedIn())
     $editor = $user->CanEdit($this->entity_type, $this->entity_id);
 }
 ?>
-<h1 class="title"><?= HumanCase($this->entity_name); ?></h1>
 <? \simp\Module::Show("SectionMenu", array(
     "current" => 'calendar', 
     "entity_type" => $this->entity_type,
     "entity_id" => $this->entity_id)); ?>
+<h1 class="title"><?= HumanCase($this->entity_name); ?></h1>
 <div style="text-align:center;">
 <?= ShowCalendar(Path::event(), $this->start_date, $this->dates, $editor); ?>
 </div>

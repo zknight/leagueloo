@@ -7,19 +7,22 @@ x add possiblity of creating event associated with article 1:1 and making public
 * team finance manager
 x article submission queue (send emails to publishers?)
 * event submission queue
-* recently updated pages app
+x recently updated pages app
 x event display
-* inquiry form (routed to commissioner by age/division/gender)
+* enquiry form (routed to commissioner by age/division/gender)
 * photo gallery
     - pure html
     - "progressively enhance" to js, then ajax
 x event module admin
 x send emails
-* check for duplicate email on user sign-up
+x check for duplicate email on user sign-up
 * check for duplicate login on user sign-up
 x user prefs (receive email for updates)
 x personal messages
-* notifications app (messages)
+x notifications app (messages)
 * team records
 * link module (per entity!)
-* club news (for main)
+x club news (for main)
+
+* information module: put all email form parts in show_form for each email with data and
+  show based on selection (ajax?)

@@ -240,15 +240,21 @@ function TextArea($model, $field, $rows = 3, $cols = 80, $class = NULL, $id = NU
 {
     $value = "";
     $html = "<textarea";
-    if (isset($class)) $html .= " class=\"{$class}\"";
+    $error_class = '';
     if (isset($id)) $html .= " id=\"{$id}\"";
     if (isset($model))
     {
         $mname = $model;
+        $errors = $model->GetErrors();
+        if (array_key_exists($field, $errors))
+        {
+            $error_class =  " error";
+        }
         $input_field = $mname . "[{$field}]";
         $html .= " name=\"$input_field\"";
         $value = $model->__get($field);
     }
+    $html .= " class=\"{$class}{$error_class}\"";
     $html .= " rows=\"${rows}\" cols=\"${cols}\">$value</textarea>\n";
     return $html;
 }
@@ -448,15 +454,21 @@ function GetInputAttributes($model, $field, $opts)
             {
                 $arr = $model->$field;
                 $newopts['value'] = $arr[$opts['array']];
+                $errors = $model->GetErrors();
+                $efield = "{$field}[{$opts['array']}]";
+                if (array_key_exists($efield, $errors))
+                {
+                    $error_class = " error"; 
+                }
             }
             else
             {
                 $newopts['value'] = $model->__get($field);
-            }
-            $errors = $model->GetErrors();
-            if (array_key_exists($field, $errors))
-            {
-                $error_class = " error";
+                $errors = $model->GetErrors();
+                if (array_key_exists($field, $errors))
+                {
+                    $error_class = " error";
+                }
             }
         }
         else

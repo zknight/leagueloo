@@ -1,0 +1,7 @@
+<h1 class="title">Edit Site Email</h1>
+<?= GetErrorsFor($this->email); ?>
+<?= FormTag("email", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>
+

@@ -1,0 +1,7 @@
+<h1 class="title"><?= $this->category->text; ?></h1>
+<br />
+<?= FormTag("contact", \simp\Request::POST); ?>
+Subject: <?= SimpleSelect('option', 'selection', $this->category->CustomOptions()); ?>
+<input type="submit" value="Submit" />
+<?= EndForm(); ?>
+

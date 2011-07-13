@@ -19,6 +19,10 @@ class Email
     static public function Send($message_template, $email_data)
     {
         global $APP_BASE_PATH;
+        if (!$message_template || $message_template == 'none')
+        {
+            $message_template = 'raw';
+        }
         $data = array();
         if (array_key_exists('data', $email_data)) $data = $email_data['data'];
         $ext = $email_data['type'] == "html" ? ".phtml" : "_txt.phtml";

@@ -1,9 +1,14 @@
 <h1 class="title"><?= $this->category->text; ?></h1>
 <br />
-<?= FormTag("contact", \simp\Request::GET); ?>
+<?= GetErrorsFor($this->info_request); ?>
+<?= FormTag("contact", \simp\Request::POST); ?>
 <table class="form">
     <tr>
-        <th class="label">*Email Address:</th> 
+        <th class="label">Your Name:</th> 
+        <td class="entry"><?= TextField($this->info_request, 'name', array('size' => 40)); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Your Email Address:</th> 
         <td class="entry"><?= TextField($this->info_request, 'email', array('size' => 40)); ?></td>
     </tr>
 <? if ($this->category->classification == Category::AGE): ?>
@@ -26,13 +31,22 @@ $(function($) {
 });
 </script>
     <tr>
-        <th class="label">*Enter players Date of Birth:</th> 
+        <th class="label">Player's Date of Birth:</th> 
         <td class="entry"><?= DatePicker($this->info_request, 'birthdate'); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Player's Gender:</th>
+        <td class="entry"><?= SimpleSelect($this->info_request, 'gender', array(1 => 'Male', 2 => 'Female')); ?></td>
+    </tr>
+<? elseif ($this->category->classification == Category::CUSTOM): ?>
+    <tr>
+        <th class="label">Subject:</th>
+        <td class="entry"><?= $this->info_request->subject; ?></td> 
     </tr>
 <? endif; ?>
 <? foreach($this->info_request->field_info as $id => $field): ?>
     <tr>
-        <th class="label"><?= $field['required']?"*":""?><?= $field['label']?>:</th> 
+        <th class="label"><?= $field['label']?>:</th> 
 <? 
         $tag = "";
         switch ($field['type'])
@@ -52,10 +66,9 @@ $(function($) {
     </tr>
 <? endforeach; ?>
     <tr>
-        <th class="label">*Enter your query:</th> 
+        <th class="label">Enter your enquiry:</th> 
         <td class="entry"><?= TextArea($this->info_request, 'body'); ?></td>
     </tr>
 </table>
-<p><em>* required fields</em></p>
 <input type="submit" value="Submit Request" />
 <? EndForm(); ?>

@@ -17,7 +17,7 @@ class ModuleController extends \simp\Controller
 
             if ($module->$name($this->_method, $this->_params, $this->_form_vars) == true)
             {
-                $this->StoreLocation();
+                //$this->StoreLocation();
                 $this->SetLayout($module->GetLayout());
                 $this->content = $module->GetView($name);
                 require_once $this->_layout_path . $this->_layout_name . ".phtml";

@@ -38,7 +38,9 @@ class Email extends \simp\Model
     {
         if ($this->id > 0) 
         {
+            global $log;
             $data = \simp\Model::Find("Datum", "parent_type = ? and parent_id = ?", array("Email", $this->id));
+            $log->logDebug("Email::OnLoad() data " . print_r($data, true));
             foreach ($data as $datum) $this->data[$datum->id] = $datum;
         }
 

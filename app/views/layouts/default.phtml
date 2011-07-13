@@ -8,6 +8,7 @@
         <?= IncludeJS("jquery.js"); ?>
     </head>
     <body>
+    <div id="wrapper">
         <? \simp\Module::Show("Notices"); ?>
         <div id="header">
             <div id="user-menu">
@@ -70,8 +71,11 @@
                 </div>
             </div>
         </div>
-        <div id="footer">
-            &copy; 2011 South Lakes Soccer Club
+        <div class="push">
         </div>
+    </div>
+    <div id="footer">
+        &copy; 2011 South Lakes Soccer Club
+    </div>
     </body>
 </html>

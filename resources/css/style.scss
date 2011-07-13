@@ -4,6 +4,7 @@
 $sans: Verdana, Kalimati, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, Arial, Sans-serif;
 $serif: Georgia, "Nimbus Roman No9 L", serif;
 
+* { margin:0; }
 // mixins
 @mixin three-d-border {
     border: {
@@ -56,6 +57,19 @@ body {
     padding:0; margin:0;
     font-family: $sans;
     min-width:1000px;
+}
+html, body {
+    height:100%;
+}
+
+div#wrapper {
+    min-height:100%;
+    height:auto !important;
+    height:100%;
+    margin:0 auto -4em;
+}
+.push, #footer {
+    height:8em;
 }
 
 a {
@@ -280,11 +294,12 @@ ul.admin-menu,
     clear:both;
     float:left;
     width:100%;
-    background:$carolina url(../img/footer.png) bottom repeat-x;
-    color:$dark_navy;
+    padding-top:12px;
+    background:$carolina url(../img/footer-hatch.png) top repeat-x;
+    color:$dark_carolina;
 }
 
-input.error {
+input.error, textarea.error {
     background:$light-red url(../img/error.png);
     border-color:$red;
 }
@@ -340,6 +355,11 @@ h3.subtitle {
     ul.menu {
         @include menu_ul;
         @include section_menu;
+    }
+
+    p {
+        line-height:1.4em;
+        padding:1em 0 0 0;
     }
     
     ul.admin-menu {
