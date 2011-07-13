@@ -1,0 +1,16 @@
+<databases>
+    <mode>development</mode>
+    <database mode="development">
+        <adapter>sqlite</adapter>
+        <filename>db/development.db</filename>
+    </database>
+    <database mode="production">
+        <adapter>mysql</adapter>
+        <type>host</type>
+        <host>localhost</host>
+        <port></port>
+        <user>root</user>
+        <password>zayne</password>
+        <schema>southlakes</schema>
+    </database>
+</databases>

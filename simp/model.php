@@ -9,10 +9,10 @@ class Model extends BaseModel
     protected $_table_name;
     protected $_associations;
 
-    public static function LoadDatabase($dbspec)
+    public static function LoadDatabase($dbspec, $user, $password)
     {
         static $DB_loaded = false;
-        if (!$DB_loaded) \R::setup($dbspec);
+        if (!$DB_loaded) \R::setup($dbspec, $user, $password);
         $DB_loaded = true;
     }
 

@@ -38,7 +38,7 @@ class Request
         $pathAr = array();
         // since this may be installed in a subdirectory 
         // of the DOCUMENT_ROOT, strip it off of the REQUEST_URI
-        $this->_relative_path = preg_replace("/index.php/", "", $_SERVER["SCRIPT_NAME"]);
+        $this->_relative_path = preg_replace("/(\w+).php/", "", $_SERVER["SCRIPT_NAME"]);
         $rel_path = preg_replace("/\//", "\/", trim($this->_relative_path, "/"));
         $log->logDebug("rel_path: $rel_path");
         $url = preg_replace("/$rel_path/", "", $_SERVER["REQUEST_URI"]);
@@ -55,7 +55,7 @@ class Request
         else $this->_request_array = array();
         $text = print_r($this->_request_array, true);
         $log->logDebug("request_array = $text"); 
-        $this->_base_path = preg_replace("/index.php/", "", $_SERVER["SCRIPT_FILENAME"]);
+        $this->_base_path = preg_replace("/(\w+).php/", "", $_SERVER["SCRIPT_FILENAME"]);
         $this->_DetermineMethod();
         $this->_post_variables = $_POST;
         $this->_params = $_GET;
