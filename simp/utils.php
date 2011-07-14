@@ -71,7 +71,12 @@ function Redirect($path)
     //global $REL_PATH;
     //header("Location: /" . $REL_PATH . $path);
     global $log;
+    if (isset($_SESSION['redirect']) && $_SESSION['redirect'] === $path)
+    {
+        $path = Path::Home();
+    }
     $log->logDebug("Redirecting to $path");
+    $_SESSION['redirect'] = $path;
     session_commit();
     header("Location: " . $path);
     exit();

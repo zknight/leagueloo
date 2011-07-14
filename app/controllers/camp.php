@@ -7,6 +7,7 @@ class CampController extends \app\AppController
     function Setup()
     {
         parent::Setup();
+        $this->AddPreaction("show", "SetContext", "program");
     }
 
     // TODO
@@ -15,7 +16,7 @@ class CampController extends \app\AppController
     // TODO: set entity info (see news.php)
     function Index()
     {
-        \Redirect(\Path::tournaments());
+        \Redirect(\Path::camp());
     }
 
     function Show()

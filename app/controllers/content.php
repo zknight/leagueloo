@@ -1,6 +1,6 @@
 <?
 namespace app;
-class ContentController extends \simp\Controller
+class ContentController extends \app\AppController
 {
     function Setup()
     {

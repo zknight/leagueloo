@@ -48,12 +48,20 @@ $(function($) {
         </div>
         <div id="content-menu">
             <ul class="menu">
+                <? if ($user->super): ?>
                 <li><?= l("Site Configuration", Path::admin_configuration()); ?></li>
                 <li><?= l("Users", Path::admin_user()); ?></li>
                 <li><?= l("Coaches", Path::admin_coaches()); ?></li>
+                <? endif; ?>
+                <? if ($user->CanAccessAny("Team", Ability::ADMIN)): ?>
                 <li><?= l("Teams", Path::admin_teams()); ?></li>
+                <? endif; ?>
+                <? if ($user->CanAccessAny("Program", Ability::ADMIN)): ?>
                 <li><?= l("Programs", Path::admin_program()); ?></li>
+                <? endif; ?>
+                <? if ($user->CanAccessAny("Plug-ins", Ability::ADMIN)): ?>
                 <li><?= l("Plug-ins", Path::admin("plug_in")); ?></li>
+                <? endif; ?>
             </ul>
         </div>
         <?=GetFlash();?>

@@ -33,6 +33,17 @@ class User extends \simp\Model
         return $result;
     }
 
+    public function FindEntitiesWithPrivilege($entity_type, $level=Ability::ADMIN)
+    {
+        $entities = array();
+        $etype = SnakeCase($entity_type);
+        $q = "select $etype.* from ability, $etype ";
+        $q .= "where ability.user_id = ? and ability.level >= ? and $etype.id = ability.entity_id";
+
+        $result = \R::getAll($q, array($this->id, $level));
+        return \R::convertToBeans($etype, $result);
+    }
+
     public function Abilities()
     {
         if (count($this->_abilities) == 0)
@@ -110,6 +121,25 @@ class User extends \simp\Model
             $ok = false;
         }
         return $ok;
+    }
+
+    public function CanAccessAny($entity_type, $level)
+    {
+        $entity_type = SnakeCase($entity_type);
+        if ($this->super) return true;
+        $abilities = User::Find(
+            "Ability",
+            "user_id = ? and entity_type = ?",
+            array($this->id, $entity_type));
+        $can = false;
+        foreach ($abilities as $ability)
+        {
+            if ($ability->level >= $level)
+            {
+                $can = true;
+            }
+        }
+        return $can;
     }
 
     public function CanAccess($entity_type, $entity_id, $level)

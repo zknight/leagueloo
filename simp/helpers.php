@@ -637,16 +637,6 @@ function CurrentUser()
     return \simp\Model::FindById("User", $_SESSION['user']);
 }
 
-function GetCurrentName()
-{
-  $usr = Doctrine_Query::create()
-    ->select('u.login')
-    ->from('User u')
-    ->where('u.id = ?', GetCurrentUser())
-    ->fetchOne();
-  return $usr->first_name . " " . $usr->last_name . " (" . $usr->login . ")";
-}
-
 function GetBasePath()
 {
   global $REL_PATH;

@@ -1,9 +1,10 @@
 <?
 namespace app;
-class UserController extends \simp\Controller
+class UserController extends \app\AppController
 {
     function Setup()
     {
+        parent::Setup();
         $this->MapAction('login', 'Authorize', \simp\Request::POST);
         $this->MapAction('signup', 'Create', \simp\Request::POST);
         $this->MapAction('confirm', 'ConfirmPost', \simp\Request::POST);

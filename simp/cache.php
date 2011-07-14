@@ -22,6 +22,24 @@ class Cache
         return false;
     }
 
+    static public function Delete($key)
+    {
+        if (Cache::$enabled == true)
+        {
+            return apc_delete($key);
+        }
+        return false;
+    }
+
+    static public function Exists($key)
+    {
+        if (Cache::$enabled == true)
+        {
+            return apc_exists($key);
+        }
+        return false;
+    }
+
     static public function Reset()
     {
         if (Cache::$enabled == true)

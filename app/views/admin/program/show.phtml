@@ -1,4 +1,16 @@
-<p><strong>Would show.</strong></p>
+<h1 class='title'><?= $this->program->name; ?> Program Administration</h1>
+<div class="cfg-group">
+    <h1>Program Info</h1>
+    <table>
+        <tr>
+            <th><?= l("Edit Program Information", Path::admin_program_edit($this->program->id)); ?></th>
+            <th><?= l("Manage Privileged Users", Path::admin_program_privileges($this->program->id)); ?></th>
+        </tr>
+        <tr>
+            <td>Edit this program's information</td>
+            <td>Add/Modify/Remove which users have prvilieged access to modify assets for this program</td>
+        </tr>
+    </table>
 <pre>
 <?R::debug(true); ?>
 <?print_r(User::GetPrivilegedUsers($this->program, $this->program->id));?>

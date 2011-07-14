@@ -1,7 +1,7 @@
 <?php
 namespace app;
 
-class StaffController extends \simp\Controller
+class StaffController extends \app\AppController
 {
     function Setup()
     {

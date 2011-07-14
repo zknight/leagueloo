@@ -18,6 +18,17 @@ class UserController extends \simp\Controller
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
 
+        $this->AddPreaction("all", "CheckAccess");
+
+    }
+
+    protected function CheckAccess()
+    {
+        if (!$this->GetUser()->super)
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
     }
     
     function Index()

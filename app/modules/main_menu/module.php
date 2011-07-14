@@ -13,7 +13,16 @@ class MainMenu extends \simp\Module
         $this->current = $args['current'];
         //echo "current page: $this->current";
 
-        $this->_programs = \simp\Model::FindAll("Program", "order by weight asc");
+        if (Cache::Exists('programs'))
+        {
+            global $log; $log->logDebug("MainMenu::Setup() reading programs from cache.");
+            $this->_programs = Cache::Read("programs");
+        }
+        else
+        {
+            $this->_programs = \simp\Model::FindAll("Program", "order by weight asc");
+            Cache::Write("programs", $this->_programs);
+        }
     }
 
     public function GetPrograms()

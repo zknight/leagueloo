@@ -1,5 +1,8 @@
 <p><strong>Programs</strong></p>
+<? $user = $this->GetUser(); ?>
+<? if ($user->super()): ?>
 <?= l("Add New Program", path::admin_program_add());?>
+<? endif; ?>
 <table class="pretty">
     <tr>
         <th>Program</th>
@@ -17,7 +20,9 @@
         <td><?= $program->Type(); ?></td>
         <td><?= $program->has_teams ? 'yes': 'no'; ?></td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
+        <? if ($user->super()): ?>
         <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>
+        <? endif; ?>
     </tr>
     <tr style="border-bottom:1px solid #002e5c;">
         <td colspan='6'>

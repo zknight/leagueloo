@@ -15,7 +15,14 @@ class MainController extends \app\AppController
         SetEntity('Main', 0, 'Club');
         $this->StoreLocation();
         //\R::debug(true);
-        $programs = \simp\Model::FindAll('Program', 'order by weight asc');
+        if (\Cache::Exists('programs'))
+        {
+            $programs = \Cache::Read('programs');
+        }
+        else
+        {
+            $programs = \simp\Model::FindAll('Program', 'order by weight asc');
+        }
         //global $log; $log->logDebug("programs: " . print_r($this->program_names, true));
         $this->articles = array();
         $this->is_editor = array();

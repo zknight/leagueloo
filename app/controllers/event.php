@@ -1,10 +1,11 @@
 <?
 namespace app;
 
-class EventController extends \simp\Controller
+class EventController extends \app\AppController
 {
     function Setup()
     {
+        parent::Setup();
     }
 
     function Calendar()

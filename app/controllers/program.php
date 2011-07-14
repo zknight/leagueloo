@@ -6,6 +6,7 @@ class ProgramController extends \app\AppController
     function Setup()
     {
         parent::Setup();
+        $this->AddPreaction('all', 'SetContext', 'program');
     }
     
     // Actions

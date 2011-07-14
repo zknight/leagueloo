@@ -5,11 +5,13 @@ class TeamsController extends \app\AppController
     public function Setup()
     {
         parent::Setup();
+        $this->AddPreaction("all", "StoreLocation");
+        $this->AddPreaction("team", "SetContext", "team");
+        $this->AddPreaction(array("index", "by_gender", "by_division"), "SetContext", "program");
     }
 
     public function Index()
     {
-        $this->StoreLocation();
         $this->program_name = $this->GetParam('program');
         //\R::debug(true);
         $this->program = \simp\Model::FindOne(
@@ -40,19 +42,16 @@ class TeamsController extends \app\AppController
 
     public function ByGender()
     {
-        $this->StoreLocation();
         return true;
     }
 
     public function ByDivision()
     {
-        $this->StoreLocation();
         return true;
     }
 
     public function Team()
     {
-        $this->StoreLocation();
         $gender = $this->GetParam('gender');
         $division = $this->GetParam('division');
         $name = preg_replace("/_/", ' ', $this->GetParam('name'));

@@ -1,6 +1,6 @@
 <?
 namespace app;
-class MessageController extends \simp\Controller
+class MessageController extends \app\AppController
 {
     function Setup()
     {

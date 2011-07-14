@@ -89,22 +89,25 @@ class Controller
         $this->_action_map[$action][$method] = $funcname;
     }
 
-    protected function AddPreaction($actions, $funcname)
+    protected function AddPreaction($actions, $funcname, $args=array())
     {
         global $log;
         if (!is_array($actions))
         {
             $actions = explode(",", preg_replace("/\s/", '', $actions));
         }
+        if (!is_array($args))
+        {
+            $args = explode(",", preg_replace("/\s/", '', $args));
+        }
         foreach ($actions as $action)
         {
             if (!isset($this->_preactions[$action])) $this->_preactions[$action] = array();
             $log->logDebug("AddPreaction: adding $funcname to $action");
-            $this->_preactions[$action][] = $funcname;
+            $this->_preactions[$action][] = array('function' => $funcname, 'args' => $args);
         }
         $log->logDebug("AddPreaction: preactions = " . print_r($this->_preactions, true));
     }
-
 
     protected function RequireAuthorization(
         $actions, 
@@ -191,8 +194,8 @@ class Controller
         if (isset($this->_preactions[$action])) $prefuncs = array_merge($prefuncs, $this->_preactions[$action]);
         foreach ($prefuncs as $prefunc)
         {
-            $log->logDebug("CallAction: calling preaction $prefunc");
-            call_user_func(array($this, $prefunc));
+            $log->logDebug("CallAction: calling preaction {$prefunc['function']}");
+            call_user_func_array(array($this, $prefunc['function']), $prefunc['args']);
         }
             
         $log->logDebug("CallAction: calling $func");
