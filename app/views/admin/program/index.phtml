@@ -1,6 +1,6 @@
 <p><strong>Programs</strong></p>
 <? $user = $this->GetUser(); ?>
-<? if ($user->super()): ?>
+<? if ($user->super): ?>
 <?= l("Add New Program", path::admin_program_add());?>
 <? endif; ?>
 <table class="pretty">
@@ -20,7 +20,7 @@
         <td><?= $program->Type(); ?></td>
         <td><?= $program->has_teams ? 'yes': 'no'; ?></td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
-        <? if ($user->super()): ?>
+        <? if ($user->super): ?>
         <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>
         <? endif; ?>
     </tr>
@@ -30,11 +30,11 @@
             Privileged Users:<br/><br />
                 <table style="width:400px;">
                     <tr><th style="width:33%">Privilege</th><th style="width:33%">User</th><th style="width:33%">&nbsp;</th></tr>
-            <? foreach ($users as $user): ?>
+            <? foreach ($users as $u): ?>
                     <tr>
-                        <td><?= Ability::$ability_level_strings[$user['level']] ?></td>
-                        <td><?= "{$user['first_name']} {$user['last_name']}"; ?></td>
-                        <td><?= l('remove privilege', Path::admin_ability_remove('Program', $program->id, "uid={$user['id']}")); ?></td>
+                        <td><?= Ability::$ability_level_strings[$u['level']] ?></td>
+                        <td><?= "{$u['first_name']} {$u['last_name']}"; ?></td>
+                        <td><?= l('remove privilege', Path::admin_ability_remove('Program', $program->id, "uid={$u['id']}")); ?></td>
                     </tr>
             <? endforeach; ?>
                 </table>

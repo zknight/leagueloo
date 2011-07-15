@@ -18,13 +18,22 @@ class CoachesController extends \simp\Controller
 
         );
 
+        $this->AddPreaction("all", "CheckAccess");
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
 
     }
 
-    // TODO: make it so only club admin can do this
+    protected function CheckAccess()
+    {
+        if (!$this->GetUser()->super)
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
+    }
+
     public function Index()
     {
         $this->StoreLocation();

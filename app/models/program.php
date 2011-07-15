@@ -74,62 +74,35 @@ class Program extends \simp\Model
         return $errors == 0;
     }
 
-    public function Type()
+    public static function FindByType($type)
     {
-        return Program::$types[$this->type];
+        return self::Find("Program", "type = ?", array($type));
     }
 
-    /*
-    protected function CopyPic($img, $info, $name)
+    public function Types()
     {
-        $img_path = $this->abs_path . "program/{$this->name}/";
-        if (!is_dir($img_path))
-        {
-            $ok = mkdir($img_path, 0755, true);
-            if ($ok == false)
-            {
-                $this->SetError("image", "Failed to create Coach's image path.  Contact sysadmin.");
-                return false;
-            }
-        }
-
-        // TODO: make this configurable
-        $max_width = 450;
-        $new_img = NULL;
-        list($width, $height) = getimagesize($info['tmp_name']);
-        $w = $width;
-        $h = $height;
-        $ratio = $width / $height;
-        if ($width > $max_width)
-        {
-            $height = round($max_width/$ratio);
-            $width = $max_width;
-        }
-        $new_img = imagecreatetruecolor($width, $height);
-        $success = imagecopyresampled(
-            $new_img,
-            $img,
-            0,0,0,0,
-            $width,
-            $height,
-            $w,
-            $h);
-        if ($success == true)
-        {
-            if (!imagepng($new_img, $img_path . $name, 4))
-            {
-                $this->SetError('image', "Failed to copy image.  Contact sysadmin.");
-                return false;
-            }
-        }
+        if (Cache::Exists("program_types"))
+            return Cache::Read("program_types");
         else
         {
-            $this->SetError('image', "Failed to process image.");
-            return false;
+            $types = array(Program::LEAGUE => 'league');
+            if (self::Count("Program", "type = ?", array(Program::TOURNAMENT)) == 0)
+            {
+                $types[Program::Tournament] = 'tournament';
+            }
+            if (self::Count("Program", "type = ?", array(Program::CAMP)) == 0)
+            {
+                $types[Program::CAMP] = 'camp';
+            }
+            Cache::Write("program_types", $types);
+            return $types;
         }
-
-        return true;
     }
-     */
+
+    public function Type()
+    {
+        $types = Program::Types();
+        return $types[$this->type];
+    }
 
 }

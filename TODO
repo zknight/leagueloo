@@ -27,9 +27,10 @@ x club news (for main)
 x information module: put all email form parts in show_form for each email with data and
   show based on selection (ajax?)
 
-* Finish protecting admin stuff with CanAccessAny and CanAdmin, also fix menus to only display
+x Finish protecting admin stuff with CanAccessAny and CanAdmin, also fix menus to only display
   that which user CanAccessAny
 * Do the same for content
+  - figure out what to do about tournaments and camps since there's only one controller each
 * Add links to Program/Teams
 * Create 'Links" menu
 * Add special links to teams (GotSoccer page, etc)

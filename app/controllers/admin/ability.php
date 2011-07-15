@@ -22,6 +22,10 @@ class AbilityController extends \simp\Controller
         $this->per_page = 32;
         $this->entity_type = $this->GetParam('entity');
         $this->entity_id = $this->GetParam('entity_id');
+        if (!$this->GetUser()->CanAdmin($this->entity_type, $this->entity_id))
+        {
+            \Redirect(GetReturnURL());
+        }
         if ($this->entity_type == NULL || $this->entity_id == NULL)
         {
             AddFlash("No such entity.");
@@ -63,6 +67,10 @@ class AbilityController extends \simp\Controller
     {
         $entity_id = $this->GetParam('entity_id');
         $entity = $this->GetParam('entity');
+        if (!$this->GetUser()->CanAdmin($entity, $entity_id))
+        {
+            \Redirect(GetReturnURL());
+        }
         $uid = $this->GetParam('uid');
         \R::debug(true);
         $ability = \simp\Model::FindOne(

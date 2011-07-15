@@ -10,7 +10,17 @@ class ConfigurationController extends \simp\Controller
             'update'
         );
 
+        $this->AddPreaction("all", "CheckAccess");
         $this->MapAction("update", "Update", \simp\Request::PUT);
+    }
+
+    protected function CheckAccess()
+    {
+        if (!$this->GetUser()->super)
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
     }
 
     function Index()

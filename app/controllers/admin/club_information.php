@@ -12,7 +12,18 @@ class ClubInformationController extends \simp\Controller
             )
         );
 
+        $this->AddPreaction("all", "CheckAccess");
+
         $this->MapAction("index", "Update", \simp\Request::PUT);
+    }
+
+    protected function CheckAccess()
+    {
+        if (!$this->GetUser()->super)
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
     }
 
     public function Index()
@@ -24,7 +35,6 @@ class ClubInformationController extends \simp\Controller
 
     public function Update()
     {
-        //print_r($this->_form_vars);
         $this->page = \simp\Model::FindOrCreate("Page", "name = ?", array("club_information"));
         $vars = $this->GetFormVariable('Page');
         $vars['name'] = 'club_information';

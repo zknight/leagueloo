@@ -35,8 +35,11 @@ class User extends \simp\Model
 
     public function FindEntitiesWithPrivilege($entity_type, $level=Ability::ADMIN)
     {
-        $entities = array();
         $etype = SnakeCase($entity_type);
+        if ($this->super)
+        {
+            return self::FindAll($etype);
+        }
         $q = "select $etype.* from ability, $etype ";
         $q .= "where ability.user_id = ? and ability.level >= ? and $etype.id = ability.entity_id";
 
@@ -65,7 +68,7 @@ class User extends \simp\Model
             {
                 $ability = User::FindById('Ability', $vals['id']);
                 global $log;
-                $log->logDebug("UpdateAbilities: ability[{$vals['id']}]: \n" . print_r($ability, true));
+                //$log->logDebug("UpdateAbilities: ability[{$vals['id']}]: \n" . print_r($ability, true));
                 if ($vals['level'] > 0)
                 {
                     $ability->UpdateFromArray($vals);
@@ -142,16 +145,18 @@ class User extends \simp\Model
         return $can;
     }
 
-    public function CanAccess($entity_type, $entity_id, $level)
+    public function CanAccess($entity_type, $entity, $level, $by_name = false)
     {
         global $log;
         $entity_type = SnakeCase($entity_type);
         $log->logDebug("CanAccess: checking $entity_type, $entity_id, $level");
         if ($this->super) return true;
+        $conditions = "user_id = ? and entity_type = ? and ";
+        $conditions .= $by_name === true ? "entity_name = ?" : "entity_id = ?";
         $ability = User::FindOne(
             "Ability", 
-            "user_id = ? and entity_type = ? and entity_id = ?",
-            array($this->id, $entity_type, $entity_id));
+            "conditions",
+            array($this->id, $entity, $entity_id));
         //echo "ability: " . print_r($ability, true);
         if ($ability)
         {
@@ -161,19 +166,19 @@ class User extends \simp\Model
         return false;
     }
 
-    public function CanEdit($entity_type, $entity_id)
+    public function CanEdit($entity_type, $entity, $by_name = false)
     {
         return $this->CanAccess($entity_type, $entity_id, Ability::EDIT);
     }
 
-    public function CanPublish($entity_type, $entity_id)
+    public function CanPublish($entity_type, $entity, $by_name = false)
     {
-        return $this->CanAccess($entity_type, $entity_id, Ability::PUBLISH);
+        return $this->CanAccess($entity_type, $entity, Ability::PUBLISH);
     }
 
-    public function CanAdmin($entity_type, $entity_id)
+    public function CanAdmin($entity_type, $entity, $by_name = false)
     {
-        return $this->CanAccess($entity_type, $entity_id, Ability::ADMIN);
+        return $this->CanAccess($entity_type, $entity, Ability::ADMIN);
     }
 
     public function FindPublishers($entity_type, $entity_id)
@@ -491,12 +496,17 @@ class User extends \simp\Model
         else
         {
             //$types = implode(",", $types);
+            global $log;
             $vals = array_merge(array($this->id, $level), $types);
+            //$log->logDebug("User::GetEntitiesWithPrivilege() vals = " . print_r($vals, true));
 
+            //\R::debug(true);
             $abilities = User::Find(
                 'Ability', 
                 "user_id = ? and level >= ? and entity_type in ($placeholders)", 
                 $vals);
+            //\R::debug(false);
+            $log->logDebug("User::GetEntitiesWithPrivilege() abilities = " . print_r($abilities, true));
 
             foreach($abilities as $ability)
             {
@@ -522,7 +532,8 @@ class User extends \simp\Model
             }
             else
             {
-                $entity_types = explode(",", preg_replace("/\s/", '', $entity_types));
+                $etypes = preg_replace("/\s/", '', $entity_types);
+                $entity_types = explode(",", $etypes);
             }
         }
         $entity_arr = array();
@@ -541,24 +552,25 @@ class User extends \simp\Model
             {
                 $entity_arr["{$entity}:{$entity->id}"] = "{$entity}-{$entity->name}";
             }
+            if (in_array("Main", $entity_types))
+            {
+                $entity_arr["Main:0"] = "Main-Club";
+            }
         }
         else
         {
             $abilities = User::Find(
                 "Ability",
-                "user_id = ? and level = ?",
+                "user_id = ? and level >= ?",
                 array($this->id, $level));
             foreach ($abilities as $ability)
             {
-                if (in_array($ability->entity_type, $entity_types))
+                $etype = ClassCase($ability->entity_type);
+                if (in_array($etype, $entity_types))
                     $entity_arr["{$ability->entity_type}:{$ability->entity_id}"] = "{$ability->entity_type}-{$ability->entity_name}";
             }
         }
 
-        if (in_array("Main", $entity_types))
-        {
-            $entity_arr["Main:0"] = "Main-Club";
-        }
         return $entity_arr;
     }
 

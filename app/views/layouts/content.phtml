@@ -48,8 +48,12 @@ $(function($) {
             <ul class="menu">
                 <li><?= l("Articles", Path::content_news()); ?></li>
                 <li><?= l("Events", Path::content_event()); ?></li>
+                <? //if ($user->CanAdmin("Program", "Tournaments", true)): ?>
                 <li><?= l("Tournaments", Path::content_tournament()); ?></li>
+                <? //endif; ?>
+                <? //if ($user->CanAdmin("Program", "Camps", true): ?>
                 <li><?= l("Camps", Path::content_camp()); ?></li>
+                <? //endif; ?>
                 <li><?= l("Images", Path::content_image()); ?></li>
                 <li>Documents</li>
             </ul>
