@@ -1,0 +1,6 @@
+<h1 class="title">Edit a Link</h1>
+<?= GetErrorsFor($this->link); ?>
+<?= FormTag("link", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<? EndForm(); ?>

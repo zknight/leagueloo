@@ -1,0 +1,6 @@
+<h1 class="title">Create a Link</h1>
+<?= GetErrorsFor($this->link); ?>
+<?= FormTag("link", \simp\Request::POST); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<? EndForm(); ?>

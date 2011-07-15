@@ -21,7 +21,19 @@ class TournamentController extends \simp\Controller
             )
         );
 
+        $this->AddPreaction("all", "CheckAccess");
+
     }
+
+    protected function CheckAccess()
+    {
+        if (!\Program::CanAccessTournament($this->GetUser(), \Ability::ADMIN))
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
+    }
+
 
     public function Index()
     {

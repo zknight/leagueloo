@@ -253,6 +253,7 @@ class Controller
         ob_start();
         require_once $this->_view_path . SnakeCase($view) . ".phtml";
         $this->content .= ob_get_contents();
+        ClearRedirect();
         ob_end_clean();
         if (isset($this->_params['format']) && $this->_params['format'] == "no_template")
             echo $this->content;

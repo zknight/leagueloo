@@ -5,10 +5,12 @@ $ye = \Team::GetCurrentYearEnd();
 <fieldset>
     <legend>Team Information</legend>
     <table class="form">
+        <? if ($this->GetUser()->CanPublish('Program', $this->team->program_id)): ?>
         <tr>
             <th class='label'>Select the program to which team page belongs:</th>
             <td class='entry'><?= SimpleSelect($this->team, 'program_designator', $this->programs); ?></td>
         </tr>
+        <? endif; ?>
         <tr>
             <th class='label'>Enter name of team:</th>
             <td class='entry'><?= TextField($this->team, 'name', array('size' => 32)); ?></td>
@@ -31,6 +33,10 @@ $ye = \Team::GetCurrentYearEnd();
         <tr>
             <th class='label'>Team Photo:</th>
             <td class='entry'><?= FileSelect($this->team, 'image'); ?></td>
+        </tr>
+        <tr>
+            <th class='label'>GotSoccer Page:</th>
+            <td class='entry'><?= TextField($this->team, 'gotsoccer', array('size' => 40)); ?></td>
         </tr>
     </table>
 </fieldset>

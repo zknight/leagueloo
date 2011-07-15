@@ -9,9 +9,9 @@
     margin: 0;
     font-size: 14pt; }
   .cfg-group table {
-    border-collapse: collapse; }
+    border-collapse: collapse;
+    table-layout: fixed; }
     .cfg-group table th {
-      width: 20%;
       background: #002142;
       padding: 8px;
       border: 1px solid #99badd; }

@@ -19,6 +19,11 @@ class ContentController extends \app\AppController
 
     public function Index()
     {
+        $this->StoreLocation();
+        $tournament = \simp\Model::FindOne("Program", "type = ?", array(\Program::TOURNAMENT));
+        $camp = \simp\Model::FindOne("Program", "type = ?", array(\Program::CAMP));
+        $this->tournament_id = $tournament->id;
+        $this->camp_id = $camp->id;
         return true;
     }
 

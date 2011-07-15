@@ -24,6 +24,16 @@ class CampController extends \simp\Controller
             )
         );
 
+        $this->AddPreaction("all", "CheckAccess");
+    }
+
+    protected function CheckAccess()
+    {
+        if (!\Program::CanAccessCamp($this->GetUser(), \Ability::ADMIN))
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
     }
 
     public function Index()

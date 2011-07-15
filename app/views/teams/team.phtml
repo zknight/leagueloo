@@ -8,8 +8,8 @@ if ($this->UserLoggedIn()) {
     $admin = $user->CanAdmin("Team", $this->team->id);
 }
 ?>
-<h1 class="title"><?= $this->team->name; ?></h1>
 <? \simp\Module::Show("SectionMenu", array("current" => 'team', "entity_type" => 'Team', "entity_id" => $this->team->id)); ?>
+<h1 class="title"><?= $this->team->name; ?></h1>
 <? if ($editor): ?>
 <ul class="admin-menu">
     <li><?= l("new article", Path::content_news_add_team($this->team->id)); ?></li>

@@ -66,6 +66,11 @@ function RedirectURI($path)
     exit();
 }
 
+function ClearRedirect()
+{
+    $_SESSION['redirect'] = null;
+}
+
 function Redirect($path)
 {
     //global $REL_PATH;

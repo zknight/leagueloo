@@ -2,22 +2,22 @@
     <legend>Article Content</legend>
     <table class="form">
         <tr>
-            <td class="label"><strong>Select category to which article belongs:</td>
+            <th class="label">Select category to which article belongs:</th>
             <td class="entry"><?= SimpleSelect($this->article, 'entity_designator', $this->entities); ?></td>
             <td class="entry">&nbsp;</td>
         </tr>
         <tr>
-            <td class="label">Enter title:</td>
+            <th class="label">Enter title:</th>
             <td class="entry" colspan="2"><?= TextField($this->article, 'title', array('size' => 80));?></td>
         </tr>
         <tr>
-            <td class="label">Body:</td>
+            <th class="label">Body:</th>
             <td class="entry" colspan="2"><?= Wysiwyg($this->article, 'body', 10, 70); ?></td>
         </tr>
         <tr>
-            <td class="label">Associated Image:</td>
+            <th class="label">Associated Image:</th>
             <td class="entry"><?= FileSelect($this->article, 'image'); ?>
-            <td class="entry">(optional) This image will show at top of article (on front page)</td>
+            <td class="help">(optional) This image will show at top of article (on front page)</td>
         </tr>
     </table>
 </fieldset>
@@ -25,33 +25,33 @@
     <legend>Article Parameters</legend>
     <table class="form">
         <tr>
-            <td class="label">Show Intro on Front Page:</td>
+            <th class="label">Show Intro on Front Page:</th>
             <td class="entry"><?= CheckBoxField($this->article, 'front_page'); ?></td>
             <td class="entry">&nbsp;</td>
         </tr>
 <? if ($this->GetUser()->CanPublish($this->article->entity_type, $this->article->entity_id)): ?>
         <tr>
-            <td class="label">Publish Now:</td>
+            <th class="label">Publish Now:</th>
             <td class="entry"><?= CheckBoxField($this->article, 'publish_now'); ?></td>
             <td class="entry">Checking this ignores Publish Date/Time</td>
         </tr>
         <tr>
-            <td class="label">Publish Date:</td>
+            <th class="label">Publish Date:</th>
             <td class="entry"><?= TextField($this->article, 'publish_date'); ?></td>
             <td class="entry">Format: mm/yy/dddd</td>
         </tr>
         <tr>
-            <td class="label">Publish Time:</td>
+            <th class="label">Publish Time:</th>
             <td class="entry"><?= TextField($this->article, 'publish_time'); ?></td>
             <td class="entry">(Optional) Format: hh:mm [am/pm]</td>
         </tr>
         <tr>
-            <td class="label">Expiration Date:<strong></td>
+            <th class="label">Expiration Date:<strong></th>
             <td class="entry"><?= TextField($this->article, 'expire_date'); ?></td>
             <td class="entry">Format: mm/yy/dddd (leave blank to never expire)</td>
         </tr>
         <tr>
-            <td class="label">Expiration Time:</td>
+            <th class="label">Expiration Time:</th>
             <td class="entry"><?= TextField($this->article, 'expire_time'); ?></td>
             <td class="entry">(Optional) Format: hh:mm [am/pm]</td>
         </tr>

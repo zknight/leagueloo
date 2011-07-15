@@ -1,0 +1,14 @@
+<? if (count($this->links) > 0): ?>
+<div class="module">
+    <div class="title">
+        <ul class="menu">
+            <li><?= $this->entity_name; ?> Links</li>
+        </ul>
+    </div>
+    <div class="content" style="text-align:center;">
+<? foreach ($this->links as $link): ?>
+    <? $target = $link->new_window ? array('target' => '_blank') : array(); ?>
+    <?= l($link->text, $link->uri, $target); ?> <br />
+<? endforeach; ?>
+</div>
+<? endif; ?>

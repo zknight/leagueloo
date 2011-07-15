@@ -1,0 +1,29 @@
+<h1 class="title">Link Manager</h1>
+<?= l("Add Link", Path::content_link_add()); ?>
+<? if (count($this->links) < 1): ?>
+<p>
+No Links.  
+<?= l("Add one.", Path::content_link_add()); ?>
+</p>
+<? else: ?>
+<? foreach ($this->links as $entity_type => $links_by_ename): ?>
+    <p><strong><?= $entity_type; ?></strong></p>
+    <? foreach ($links_by_ename as $entity_name => $links): ?>
+    <table class="pretty">
+        <tr><th>Text</th><th>URI</th><th>Open In</th><th>Enabled?</th><th>&nbsp;</th></tr>
+        <? foreach ($links as $link): ?>
+        <tr>
+            <td><?= $link->text; ?></td>
+            <td><?= $link->uri; ?></td>
+            <td><?= $link->new_window ? "New Window" : "Same Window"; ?></td>
+            <td><?= $link->disabled ? "No" : "Yes"; ?></td>
+            <td>
+                <?= l("edit", Path::content_link_edit($link->id)); ?>
+                <?= l("delete", Path::content_link_delete($link->id), array("method" => "delete")); ?>
+            </td>
+        </tr>
+        <? endforeach; ?>
+    </table>
+    <? endforeach; ?>
+<? endforeach; ?>
+<? endif; ?>

@@ -14,8 +14,9 @@
 
     table {
         border-collapse:collapse;
+        table-layout:fixed;
         th {
-            width:(100%/5);
+            //width:(100%/5);
             background:$navy;
             padding:8px;
             a {

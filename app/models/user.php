@@ -149,14 +149,14 @@ class User extends \simp\Model
     {
         global $log;
         $entity_type = SnakeCase($entity_type);
-        $log->logDebug("CanAccess: checking $entity_type, $entity_id, $level");
+        $log->logDebug("CanAccess: checking $entity_type, $entity, $level");
         if ($this->super) return true;
         $conditions = "user_id = ? and entity_type = ? and ";
         $conditions .= $by_name === true ? "entity_name = ?" : "entity_id = ?";
         $ability = User::FindOne(
             "Ability", 
-            "conditions",
-            array($this->id, $entity, $entity_id));
+            $conditions,
+            array($this->id, $entity_type, $entity));
         //echo "ability: " . print_r($ability, true);
         if ($ability)
         {
@@ -168,17 +168,17 @@ class User extends \simp\Model
 
     public function CanEdit($entity_type, $entity, $by_name = false)
     {
-        return $this->CanAccess($entity_type, $entity_id, Ability::EDIT);
+        return $this->CanAccess($entity_type, $entity, Ability::EDIT, $by_name);
     }
 
     public function CanPublish($entity_type, $entity, $by_name = false)
     {
-        return $this->CanAccess($entity_type, $entity, Ability::PUBLISH);
+        return $this->CanAccess($entity_type, $entity, Ability::PUBLISH, $by_name);
     }
 
     public function CanAdmin($entity_type, $entity, $by_name = false)
     {
-        return $this->CanAccess($entity_type, $entity, Ability::ADMIN);
+        return $this->CanAccess($entity_type, $entity, Ability::ADMIN, $by_name);
     }
 
     public function FindPublishers($entity_type, $entity_id)

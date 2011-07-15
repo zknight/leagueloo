@@ -18,6 +18,7 @@ class Team extends \simp\Model
     public $rel_path;
     public $abs_path;
     public $img_path;
+    public $gotsoccer;
 
     public function Setup()
     {
@@ -156,6 +157,15 @@ class Team extends \simp\Model
         {
             $this->coaches[$id] = new Coach($bean);
         }
+        if ($this->id > 0)
+        {
+            $link = self::FindOne(
+                'Link', 
+                'entity_type = ? and entity_id = ? and text = ?',
+                array('team', $this->id, 'Gotsoccer Ranking'));
+            if ($link)
+                $this->gotsoccer = $link->uri;
+        }
     }
 
 
@@ -202,7 +212,35 @@ class Team extends \simp\Model
             }
         }
 
+
         return $errors == 0;
+    }
+
+    public function AfterSave()
+    {
+        $link = self::FindOrCreate(
+            'Link', 
+            'entity_type = ? and entity_id = ? and text = ?',
+            array('team', $this->id, 'Gotsoccer Ranking'));
+
+        if ($link->id == 0)
+        {
+            $link->entity_type = 'team';
+            $link->text = "Gotsoccer Ranking";
+            $link->entity_id = $this->id;
+            $link->disabled = false;
+            $link->new_window = true;
+            global $log;
+            $log->logDebug("Team::AfterSave link = " . print_r($link, true));
+        }
+        $link->uri = $this->gotsoccer;
+        ob_start();
+        \R::debug(true);
+        $link->Save();
+        \R::debug(false);
+        $log->logDebug("Team::AfterSave: " . ob_get_contents());
+        ob_end_clean();
+        //$log->logDebug("Team::AfterSave link (after save) = " . print_r($link, true));
     }
 
     public function BeforeDelete()

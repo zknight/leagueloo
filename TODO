@@ -21,7 +21,7 @@ x user prefs (receive email for updates)
 x personal messages
 x notifications app (messages)
 * team records
-* link module (per entity!)
+x link module (per entity!)
 x club news (for main)
 
 x information module: put all email form parts in show_form for each email with data and
@@ -29,8 +29,17 @@ x information module: put all email form parts in show_form for each email with 
 
 x Finish protecting admin stuff with CanAccessAny and CanAdmin, also fix menus to only display
   that which user CanAccessAny
-* Do the same for content
+x Do the same for content
   - figure out what to do about tournaments and camps since there's only one controller each
-* Add links to Program/Teams
-* Create 'Links" menu
-* Add special links to teams (GotSoccer page, etc)
+x Add links to Program/Teams
+x Create 'Links" menu
+x Add special links to teams (GotSoccer page, etc)
+x clear Redirect URL from session on successful page render?
+
+* finish up team administration page
+* 'page' controllers
+* finish image upload in tinyMCE
+    - add ajax handler to upload image to appropriate destination
+    - update image list in image browser
+    - extract css into separate file
+* document upload (with article?)

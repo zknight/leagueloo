@@ -40,7 +40,7 @@ function catClick(etype, ename)
 div.rhs,
 div.lhs {
     float:left;
-    height:300px;
+    height:400px;
 }
 div.lhs {
     color:#b9daf1;
@@ -80,8 +80,14 @@ div.rhs {
     padding:8px;
     border:1px solid black;
     width:75%;
-    overflow:auto;
+    overflow:hidden;
 }
+    div.rhs div.thumbs {
+        height:350px;
+        overflow:auto;
+        background:white;
+        border:1px solid #888;
+    }
     div.rhs div.image {
         text-align:center;
         float:left;
@@ -131,25 +137,34 @@ img.sel {
 <? foreach ($this->images as $etype => $images_by_ename): ?>
     <? foreach ($images_by_ename as $ename => $images): ?>
     <div class='hide' id='<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>'>
+        <div style="height:30px;">
+            <form name="image_upload">
+            <p><strong>Upload an image:</strong>
+                <input type="file" name="image" />
+                <input type="button" value="upload" />
+            </form>
+        </div>
         <? if (count($images) < 1): ?>
         <p>No Images in this category.</p>
         <? else: ?>
+        <div class='thumbs'>
             <? foreach ($images as $image): ?>
-        <div class='image'>
-            <!--a class="img-select" href="#" onClick="$('input#value').value = '<?= $image->path; ?>'"><img src="<?=$image->thumb;?>" /></a-->
-            <?= $image->width; ?> x <?= $image->height; ?><br />
-                <? 
-                $height_constraint = "";
-                if ($image->height > $image->width) $height_constraint = "height=\"100px\"";
-                ?>
-            <img id="<?=$image->id;?>" 
-                <?= $height_constraint; ?> 
-                src="<?=$image->thumb; ?>" 
-                onClick='imgClick("<?= $image->id; ?>", "<?= $image->path; ?>", "<?= $image->filename; ?>")'
-                onDblClick="ImageDialog.mySubmit();" /><br/>
-            <?= wordwrap($image->filename, 15, "<br />", true); ?>
-        </div>
+            <div class='image'>
+                <!--a class="img-select" href="#" onClick="$('input#value').value = '<?= $image->path; ?>'"><img src="<?=$image->thumb;?>" /></a-->
+                <?= $image->width; ?> x <?= $image->height; ?><br />
+                    <? 
+                    $height_constraint = "";
+                    if ($image->height > $image->width) $height_constraint = "height=\"100px\"";
+                    ?>
+                <img id="<?=$image->id;?>" 
+                    <?= $height_constraint; ?> 
+                    src="<?=$image->thumb; ?>" 
+                    onClick='imgClick("<?= $image->id; ?>", "<?= $image->path; ?>", "<?= $image->filename; ?>")'
+                    onDblClick="ImageDialog.mySubmit();" /><br/>
+                <?= wordwrap($image->filename, 15, "<br />", true); ?>
+            </div>
             <? endforeach; ?>
+        </div>
         <? endif; ?>
     </div>
     <? endforeach; ?>

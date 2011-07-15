@@ -1,3 +1,6 @@
+<? 
+$user = $this->GetUser();
+?>
 <h1 class="title">Content Console</h1>
 <div class="cfg-group">
     <h1>Content Management</h1>
@@ -5,16 +8,26 @@
         <tr>
             <th><?= l("Articles", Path::content_news()); ?></th>
             <th><?= l("Events", Path::content_event()); ?></th>
+            <? if (Program::CanAccessTournament($user, Ability::ADMIN)): ?>
             <th><?= l("Tournaments", Path::content_tournament()); ?></th>
+            <? endif; ?>
+            <? if (Program::CanAccessCamp($user, Ability::ADMIN)): ?>
             <th><?= l("Camps", Path::content_camp()); ?></th>
+            <? endif; ?>
             <th><?= l("Images", Path::content_image()); ?></th>
+            <th><?= l("Links", Path::content_link()); ?></th>
         </tr>
         <tr>
             <td>Manage articles for various programs (create, edit, delete)</td>
             <td>Manage events (calendar) for various programs (create, edit, delete)</td>
+            <? if (Program::CanAccessTournament($user, Ability::ADMIN)): ?>
             <td>Manage tournament information (create, edit, delete)</td>
+            <? endif; ?>
+            <? if (Program::CanAccessCamp($user, Ability::ADMIN)): ?>
             <td>Manage camp information (create, edit, delete)</td>
+            <? endif; ?>
             <td>Manage images to be used with articles (upload, bulk upload, delete)</td>
+            <td>Manage links to external sites be displayed on page</td>
         </tr>
     </table>
 </div>

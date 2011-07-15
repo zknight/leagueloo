@@ -3,10 +3,10 @@
     <h1>General Configuration</h1>
     <table>
         <tr>
-            <th><?= l("Site Configuration", Path::admin_configuration()); ?></th>
-            <th><?= l("Clear Cache", Path::administrator("clear_cache")); ?></th>
-            <th><?= l("User Editor", Path::admin_user()); ?></th>
-            <th><?= l("Manage Plug-ins", Path::admin("plug_in")); ?></th>
+            <th style="width:25%"><?= l("Site Configuration", Path::admin_configuration()); ?></th>
+            <th style="width:25%"><?= l("Clear Cache", Path::administrator("clear_cache")); ?></th>
+            <th style="width:25%"><?= l("User Editor", Path::admin_user()); ?></th>
+            <th style="width:25%"><?= l("Manage Plug-ins", Path::admin("plug_in")); ?></th>
         </tr>
         <tr>
             <td>Set site-specific configuration parameters such as Site Name, Session Timeout, Site Email, etc.</td>
@@ -20,11 +20,11 @@
     <h1>Club Information</h1>
     <table>
         <tr>
-            <th><?= l("Club Information", Path::admin("club_information")); ?></th>
-            <th><?= l("Club Program Editor", Path::admin_program()); ?></th>
-            <th><?= l("Coaches", Path::admin_coaches()); ?></th>
-            <th><?= l("Club Staff", Path::admin_staff()); ?></th>
-            <th><?= l("Teams", Path::admin_teams()); ?></th>
+            <th style="width:20%"><?= l("Club Information", Path::admin("club_information")); ?></th>
+            <th style="width:20%"><?= l("Club Program Editor", Path::admin_program()); ?></th>
+            <th style="width:20%"><?= l("Coaches", Path::admin_coaches()); ?></th>
+            <th style="width:20%"><?= l("Club Staff", Path::admin_staff()); ?></th>
+            <th style="width:20%"><?= l("Teams", Path::admin_teams()); ?></th>
         </tr>
         <tr>
             <td>Modify information about club (shown on "About" page)</td>

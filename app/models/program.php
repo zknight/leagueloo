@@ -74,6 +74,18 @@ class Program extends \simp\Model
         return $errors == 0;
     }
 
+    public static function CanAccessTournament($user, $level)
+    {
+        $tournament = self::FindOne("Program", "type = ?", array(\Program::TOURNAMENT));
+        return $user->CanAccess("Program", $tournament->id, $level);
+    }
+
+    public static function CanAccessCamp($user, $level)
+    {
+        $camp = self::FindOne("Program", "type = ?", array(\Program::CAMP));
+        return $user->CanAccess("Program", $camp->id, $level);
+    }
+
     public static function FindByType($type)
     {
         return self::Find("Program", "type = ?", array($type));
@@ -88,7 +100,7 @@ class Program extends \simp\Model
             $types = array(Program::LEAGUE => 'league');
             if (self::Count("Program", "type = ?", array(Program::TOURNAMENT)) == 0)
             {
-                $types[Program::Tournament] = 'tournament';
+                $types[Program::TOURNAMENT] = 'tournament';
             }
             if (self::Count("Program", "type = ?", array(Program::CAMP)) == 0)
             {

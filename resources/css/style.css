@@ -422,15 +422,17 @@ h3.subtitle {
   font-size: 9pt; }
 
 .calendar {
-  width: 100%;
+  table-layout: fixed;
+  width: 99%;
   border-collapse: collapse;
   background: #002142; }
   .calendar th {
-    font-size: 16pt; }
+    font-size: 16pt;
+    width: 100px; }
   .calendar td {
     border: 1px solid #e0ba3a;
-    width: 100px;
-    height: 100px;
+    overflow: hidden;
+    height: 50px;
     padding: 0;
     margin: 0;
     font-size: 10pt;
@@ -453,18 +455,20 @@ h3.subtitle {
     padding: 0;
     margin: 0;
     width: 14px; }
-  .calendar .event td {
-    border: none;
-    font-size: 8pt; }
-  .calendar .event td.time {
-    width: 25%; }
-  .calendar .event td.title {
-    width: 75%; }
+  .calendar table.event {
+    table-layout: fixed; }
+    .calendar table.event td {
+      border: none;
+      font-size: 8pt; }
+    .calendar table.event td.time {
+      width: 25%; }
+    .calendar table.event td.title {
+      width: 75%; }
   .calendar td.current-month {
-    background: #fff5d4;
-    color: #00152c; }
+    background: #002142;
+    color: white; }
     .calendar td.current-month td.date {
-      background: #e0ba3a;
+      background: #002142;
       color: #fffdf5; }
   .calendar td.current_day {
     background: #ffe690;
@@ -472,6 +476,8 @@ h3.subtitle {
     .calendar td.current_day td.date {
       background: #fffdf5;
       color: #e0ba3a; }
+  .calendar td.out {
+    background: #00152c; }
 
 table.form,
 table.messages {

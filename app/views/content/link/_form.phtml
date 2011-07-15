@@ -1,0 +1,27 @@
+<fieldset>
+    <legend>Link Info</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Select category to which link belongs:</td>
+            <td class="entry"><?= SimpleSelect($this->link, 'entity_designator', $this->entities); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Text (label) of link</th>
+            <td class="entry"><?= TextField($this->link, 'text', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">URI (address) of link</th>
+            <td class="entry"><?= TextField($this->link, 'uri', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Open in new browser window?</th>
+            <td class="entry"><?= CheckBoxField($this->link, 'new_window'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Disable</th>
+            <td class="entry"><?= CheckBoxField($this->link, 'disabled'); ?></td>
+        </tr>
+    </table>
+</fieldset>
+        
+            
