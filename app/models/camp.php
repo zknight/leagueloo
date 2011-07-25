@@ -216,6 +216,9 @@ class Camp extends \simp\Model
                 }
             }
         }
+        $this->updated_on = time();
+        if ($this->id == 0) $this->created_on = $this->updated_on;
+
         return $errors == 0;
     }
 

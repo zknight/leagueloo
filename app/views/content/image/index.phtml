@@ -5,10 +5,10 @@
     <p>No images</p>
 <? else: ?>
 <? foreach ($this->images as $entity_type => $images_by_ename): ?>
-    <p><strong><?= $entity_type; ?></strong></p>
     <? foreach ($images_by_ename as $entity_name => $images): ?>
-    <table>
-        <tr><th>Thumb</th><th>Filename</th><th>Dimensions</th><th>&nbsp;</th></tr>
+    <p><strong><?= $entity_type; ?>:<?= $entity_name; ?></strong></p>
+    <table class="pretty">
+        <tr><th>Thumb</th><th>Filename</th><th>Dimensions</th><th colspan="2">&nbsp;</th></tr>
         <? foreach ($images as $image): ?>
         <tr>
             <td>
@@ -19,6 +19,9 @@
             </td>
             <td>
                 <?= $image->width; ?>x<?= $image->height; ?>
+            </td>
+            <td>
+                <?= l("edit", Path::content_image_edit($image->id)); ?>
             </td>
             <td>
                 <?= l("delete", Path::content_image_delete($image->id), array("method" => "delete")); ?>

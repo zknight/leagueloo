@@ -1,0 +1,48 @@
+<h1 class="title">"Page" Management</h1>
+<?= l("Add a Page to a section", Path::content_page_add()); ?>
+<h2>Published Pages</h2>
+<? if (count($this->published_pages) < 1): ?>
+    <p>None.</p>
+<? else: ?>
+<table class="pretty">
+    <tr>
+        <th>Section</th><th>Page Title</th><th>Published?</th><th>Link Location</th><th colspan="2">&nbsp;</th>
+    </tr>
+    <? foreach ($this->published_pages as $page): ?>
+    <tr>
+        <td>
+            <?= $page->entity_type; ?>:
+            <strong><?= $page->entity_name; ?></strong>
+        </td>
+        <td><?= $page->title; ?></td>
+        <td><?= $page->published ? "yes":"no"; ?></td>
+        <td><?= Page::$locations[$page->location]; ?></td>
+        <td><?= l("Edit", Path::content_page_edit($page->id)); ?></td>
+        <td><?= l("Remove", Path::content_page_edit($page->id)); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<h2>Unpublished Pages</h2>
+<? if (count($this->unpublished_pages) < 1): ?>
+    <p>None.</p>
+<? else: ?>
+<table class="pretty">
+    <tr>
+        <th>Section</th><th>Page Title</th><th>Published?</th><th>Link Location</th><th colspan="2">&nbsp;</th>
+    </tr>
+    <? foreach ($this->unpublished_pages as $page): ?>
+    <tr>
+        <td>
+            <?= $page->entity_type; ?>:
+            <strong><?= $page->entity_name; ?></strong>
+        </td>
+        <td><?= $page->title; ?></td>
+        <td><?= $page->published ? "yes":"no"; ?></td>
+        <td><?= Page::$locations[$page->location]; ?></td>
+        <td><?= l("Edit", Path::content_page_edit($page->id)); ?></td>
+        <td><?= l("Remove", Path::content_page_edit($page->id)); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

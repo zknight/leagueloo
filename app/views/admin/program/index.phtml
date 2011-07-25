@@ -9,21 +9,38 @@
         <th>Weight</th>
         <th>Type</th>
         <th>Can Have Team Pages</th>
+        <th>Special Users</th>
         <th>&nbsp;</th>
         <th>&nbsp;</th>
     </tr>
+<? $r=false; ?>
 <? foreach ($this->programs as $program): ?>
     <? $users = User::GetPrivilegedUsers('program', $program->id); ?>
-    <tr>
+    <tr class="<?= ($r=!$r)?'odd':'even';?>">
         <td><?= l($program->name, Path::admin_program_show($program->id)); ?></td>
         <td><?= $program->weight; ?></td>
         <td><?= $program->Type(); ?></td>
         <td><?= $program->has_teams ? 'yes': 'no'; ?></td>
+        <td>
+            <div style="margin:0 12px;padding:4px;font-size:8pt;">
+                <table>
+                <? foreach ($users as $u): ?>
+                    <tr>
+                        <td style="width:100px;"><?= "{$u['first_name']} {$u['last_name']}"; ?></td>
+                        <td style="width:80px;"><?= Ability::$ability_level_strings[$u['level']] ?></td>
+                        <td><?= l('remove privilege', Path::admin_ability_remove('Program', $program->id, "uid={$u['id']}")); ?></td>
+                    </tr>
+                <? endforeach; ?>
+                </table>
+                <?= l('add privileged user', Path::admin_ability_add('Team', $team->id)); ?>
+            </div>
+        </td>
         <td><?= l("Edit", Path::admin_program_edit($program->id)); ?></td>
         <? if ($user->super): ?>
         <td><?= l("Delete", Path::admin_program_delete($program->id), array("method" => "delete")); ?></td>
         <? endif; ?>
     </tr>
+<? /*
     <tr style="border-bottom:1px solid #002e5c;">
         <td colspan='6'>
             <div style="margin:0 12px;padding:4px;font-size:8pt;">
@@ -44,5 +61,6 @@
             </div>
         </td>
     </tr>
+ */ ?>
 <? endforeach; ?>
 </table>

@@ -691,8 +691,9 @@ table.pretty {
 
     td, th {
         padding:2px 4px;
+        vertical-align:top;
     }
-    table {
+    table.inner {
         background:$navy;
         border-collapse:collapse;
         th {

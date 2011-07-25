@@ -8,6 +8,7 @@ $user = $this->GetUser();
         <tr>
             <th><?= l("Articles", Path::content_news()); ?></th>
             <th><?= l("Events", Path::content_event()); ?></th>
+            <th><?= l("Pages", Path::content_page()); ?></th>
             <? if (Program::CanAccessTournament($user, Ability::ADMIN)): ?>
             <th><?= l("Tournaments", Path::content_tournament()); ?></th>
             <? endif; ?>
@@ -20,6 +21,7 @@ $user = $this->GetUser();
         <tr>
             <td>Manage articles for various programs (create, edit, delete)</td>
             <td>Manage events (calendar) for various programs (create, edit, delete)</td>
+            <td>Manage pages attached to sections (create, edit, delete)</td>
             <? if (Program::CanAccessTournament($user, Ability::ADMIN)): ?>
             <td>Manage tournament information (create, edit, delete)</td>
             <? endif; ?>

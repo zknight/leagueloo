@@ -533,11 +533,12 @@ table.pretty {
       table.pretty th a:hover {
         color: #002e5c; }
   table.pretty td, table.pretty th {
-    padding: 2px 4px; }
-  table.pretty table {
+    padding: 2px 4px;
+    vertical-align: top; }
+  table.pretty table.inner {
     background: #002142;
     border-collapse: collapse; }
-    table.pretty table th {
+    table.pretty table.inner th {
       background: #002e5c;
       border: none;
       color: #f5fafe; }

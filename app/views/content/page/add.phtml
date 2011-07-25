@@ -1,0 +1,6 @@
+<h1>Create a Page</h1>
+<?= GetErrorsFor($this->page); ?>
+<?= FormTag("page", \simp\Request::POST); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>

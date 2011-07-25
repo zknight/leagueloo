@@ -1,0 +1,26 @@
+<fieldset>
+    <legend>Page Content and Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Select a section/category to put this page:</th>
+            <td colspan="2" class="entry"><?= SimpleSelect($this->page, 'entity_designator', $this->entities); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Enter title for page:</th>
+            <td colspan="2" class="entry"><?= TextField($this->page, 'title', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Link Location:</th>
+            <td class="entry"><?= SimpleSelect($this->page, 'location', Page::$locations); ?></td>
+            <td class="help">This is where the link for this page will show up with respect to the section it is placed in.</td>
+        </tr>
+        <tr>
+            <th class="label">Page Content:</th>
+            <td colspan="2" class="entry"><?= Wysiwyg($this->page, 'copy'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Published?:</th>
+            <td colspan="2" class="entry"><?= CheckBoxField($this->page, 'published'); ?></td>
+        </tr>
+    </table>
+</fieldset>

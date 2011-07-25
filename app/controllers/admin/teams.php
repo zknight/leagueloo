@@ -66,7 +66,7 @@ class TeamsController extends \simp\Controller
         {
             if (!$this->team->Save())
             {
-                $errors = array(status => -1, 'message' => GetErrorsFor($this->team));
+                $errors = array('status' => -1, 'message' => GetErrorsFor($this->team));
                 echo json_encode($errors);
                 return false;
             }

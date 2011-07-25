@@ -1,0 +1,6 @@
+<h1>Update a Page</h1>
+<?= GetErrorsFor($this->page); ?>
+<?= FormTag("page", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>

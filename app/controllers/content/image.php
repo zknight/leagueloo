@@ -63,8 +63,10 @@ class ImageController extends \simp\Controller
 
     public function Edit()
     {
-        echo "Not yet implemented";
-        return false;
+        $this->image = \simp\Model::FindById("Image", $this->GetParam('id'));
+        $this->user = CurrentUser();
+        $this->entities = $this->GetEntities();
+        return true;
     }
 
     public function Create()
@@ -73,7 +75,41 @@ class ImageController extends \simp\Controller
         $vars = $this->GetFormVariable('Image');
         $this->image->UpdateFromArray($vars);
         $this->image->image_info = $_FILES['image'];
-
+        /*
+        if ($this->GetParam('format') == 'json')
+        {
+            global $log;
+            $log->logDebug("ImageController::Create() _FILES" . print_r($_FILES, true));
+            $this->image->entity_type = $this->GetFormVariable('entity_type');
+            $ename = $this->GetFormVariable('entity_name');
+            $this->image->entity_name = \R::getCell(
+                "select id from " . SnakeCase($this->image->entity_type) . " where name = ?",
+                array($ename));
+            if (!$this->image->Save())
+            {
+                $errors = array('status' => -1, 'message' => GetErrorsFor($this->image));
+                echo json_encode($errors);
+                return false;
+            }
+            else
+            {
+                $ok = array(
+                    'status' => 0,
+                    'message' => "Image uploaded.  You still have to select it.",
+                    'image' => array(
+                        'width' => $this->image->width,
+                        'height' => $this->image->height,
+                        'thumb' => $this->image->thumb,
+                        'filename' => $this->image->filename,
+                        'id' => $this->image->id,
+                        'path' => $this->image->path,
+                    )
+                );
+                echo json_encode($ok);
+                return false;
+            }
+        }
+         */
         if ($this->image->Save())
         {
             AddFlash("Image {$this->image->filename} Uploaded.");
@@ -90,8 +126,21 @@ class ImageController extends \simp\Controller
 
     public function Update()
     {
-        echo "Not yet implemented";
-        return false;
+        $this->image = \simp\Model::Create("Image");
+        $vars = $this->GetFormVariable('Image');
+        $this->image->UpdateFromArray($vars);
+        if ($this->image->Save())
+        {
+            AddFlash("Image ($this->image->filename} Updated.");
+            \Redirect(GetReturnURL());
+        }
+        else
+        {
+            $this->user = $this->GetUser();
+            $this->entities = $this->GetEntities();
+            $this->Render("Edit");
+            return false;
+        }
     }
 
     public function Remove()

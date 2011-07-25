@@ -1,0 +1,15 @@
+<h1 class="title">Edit Image</h1>
+<?= GetErrorsFor($this->image); ?>
+<?= l("back", GetReturnURL()); ?>
+<?= FormTag("image", \simp\Request::PUT); ?>
+<fieldset><legend>Image Information</legend>
+<img src="<?= $this->image->path; ?>" />
+<table class="form">
+    <tr>
+        <td><strong>Caption:</strong></td>
+        <td><?= TextArea($this->image, 'caption'); ?></td>
+    </tr>
+</table>
+</fieldset>
+<input type="submit" value="modify" />
+<?= EndForm(); ?>

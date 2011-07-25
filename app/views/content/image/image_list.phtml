@@ -35,12 +35,46 @@ function catClick(etype, ename)
     $('div#'+etype+"-"+ename).removeClass('hide').addClass('show');
 }
 
+function uploadClick(etype, ename)
+{
+    var tgt = "form#"+etype+"-"+ename;
+    var data = $(tgt).serialize();
+    var url = '<?=Path::content_image_create() . ".json"; ?>';
+    $.post(url, data, function(rdata) {
+        rdata = $.parseJSON(rdata);
+        if (rdata['status'] < 1)
+        {
+            $('#error').append(rdata['message']).show();
+        }
+        else
+        {
+            var $div = $("<div class='image'></div>");
+            var width = rdata['image']['width'];
+            var height = rdata['image']['height'];
+            var thumb = rdata['image']['thumb'];
+            var fname = rdata['image']['filename'];
+            var constraint = height > width ? "height='100px'" : "";
+            var id = rdata['image']['id'];
+            var path = rdata['image']['path'];
+            $div.append(rdata['image']['width'] + ' x ' + rdata['image']['height']);
+            $div.append("<img id='"+id+"' "+constraint+" src='"+thumb+
+                "' onClick='imgClick('"+id+"','"+path+"',"+"'"+filename+"') "+
+                "' onDblClick='ImageDialog.mySubmit();' /><br/>" +
+                filename);
+            $('div#'+etype+'-'+ename+' > div.thumbs').append($div).show();
+        }
+    });
+                
+    //var img = $('form#' + tgt + ' > input[name|="image"]').val();
+    //alert(img); 
+}
+
 </script>
 <style>
 div.rhs,
 div.lhs {
     float:left;
-    height:400px;
+    height:360px;
 }
 div.lhs {
     color:#b9daf1;
@@ -80,7 +114,7 @@ div.rhs {
     padding:8px;
     border:1px solid black;
     width:75%;
-    overflow:hidden;
+    /*overflow:hidden;*/
 }
     div.rhs div.thumbs {
         height:350px;
@@ -108,11 +142,18 @@ img {
 img.sel {
     border:1px solid #000;
 }
+div#submit {
+    clear:both;
+    text-align:center;
+    padding:16px;
+}
 
 </style>
 </head>
 <body>
+<div style="height:20px;">
 <p><strong>Select an image:</strong></p>
+</div>
 <div class='lhs'>
 <h2>Image Categories</h2>
 <ul>
@@ -137,13 +178,21 @@ img.sel {
 <? foreach ($this->images as $etype => $images_by_ename): ?>
     <? foreach ($images_by_ename as $ename => $images): ?>
     <div class='hide' id='<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>'>
-        <div style="height:30px;">
-            <form name="image_upload">
-            <p><strong>Upload an image:</strong>
-                <input type="file" name="image" />
-                <input type="button" value="upload" />
+<? /*
+        <div style="height:120px;">
+            <form id='<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>' name="image_upload" enctype"multipart/form-data" method="post">
+                <p style="text-align:center"><strong>Upload an image</strong></p> 
+                <table class="form" style="font-size:8pt;">
+                    <td class="label">File:</td><td class="entry"><input type="file" name="image" /></td></tr>
+                    <td class="label">Caption:</td><td class="entry"><input type="text" name="Image[caption]" /></td></tr>
+                    <td class="label">Save As: (optional)</td><td class="entry"><input type="text" name="Image[filename]" /></td></tr>
+                </table>
+                <input type="button" value="upload" onClick='uploadClick("<?= ToCSSSel($etype); ?>", "<?= ToCSSSel($ename); ?>")'/>
+                <input type="hidden" name="entity_type" value="<?= $etype ?>" />
+                <input type="hidden" name="entity_name" value="<?= $ename ?>" />
             </form>
         </div>
+ */ ?>
         <? if (count($images) < 1): ?>
         <p>No Images in this category.</p>
         <? else: ?>
@@ -166,16 +215,16 @@ img.sel {
             <? endforeach; ?>
         </div>
         <? endif; ?>
-    </div>
+                    </div><!-- id='<?= ToCSSSel($etype)."-".ToCSSSel($ename); ?>' -->
     <? endforeach; ?>
 <? endforeach; ?>
 </div>
-<form name="image_selector">
-    <div style="text-align:center">
+<div id='submit'>
+    <form name="image_selector">
         <input type="text" name="filename" size="100"/>
         <input type="hidden" name="path"/>
         <input type="button" value="submit" onClick="ImageDialog.mySubmit();" >
-    </div>
-</form>
+    </form>
+</div>
 </body>
 </html>
