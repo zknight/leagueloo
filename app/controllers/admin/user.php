@@ -36,9 +36,12 @@ class UserController extends \simp\Controller
     
     function Index()
     {
+        global $log;
+        $log->logDebug("admin/User/Index 1");
         $offset = $this->GetParam('u');
         $sort_field = $this->GetParam('s');
         $dir = $this->GetParam('d');
+        $log->logDebug("admin/User/Index 2");
         $this->sort_dir = array(
             'login' => 'desc',
             'last_name' => 'desc', 
@@ -57,14 +60,19 @@ class UserController extends \simp\Controller
         $this->offset = $offset;
 
         $this->per_page = 50;
+        $log->logDebug("admin/User/Index 3");
         $this->users = \simp\Model::Find('User', "1 order by $sort_field collate nocase $dir limit {$this->per_page} offset {$offset};", array());
+        $log->logDebug("admin/User/Index 4");
         $this->pages = array();
         $uc = \R::count('user');
+        $log->logDebug("admin/User/Index 5");
         for ($i=0; $i<$uc; $i+=$this->per_page)
         {
             $this->pages[] = "u=$i";
         }
+        $log->logDebug("admin/User/Index 6");
         $this->cur_page = $offset/$this->per_page;
+        $log->logDebug("admin/User/Index 7");
         return true;
     }
 
