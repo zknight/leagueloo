@@ -11,7 +11,7 @@ class RecentUpdates extends \simp\Module
             {
                 $this->updates = Cache::Read("updates");
                 global $log;
-                $log->logDebug("updates from cache: " . print_r($this->updates));
+                $log->logDebug("updates from cache: " . print_r($this->updates, true));
             }
             else
             {
