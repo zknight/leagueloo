@@ -20,7 +20,7 @@ if ($this->UserLoggedIn()) {
 <? if ($this->tournament->schedule_link != ""): ?>
     <div class="schedule_link"><?= l("Tournament Schedule", $this->tournament->schedule_link, array('external' => true)); ?></div>
 <? endif; ?>
-<? if ($this->tournament->application_link != ""): ?>
+<? if (!$this->tournament->past_deadline && $this->tournament->application_link != ""): ?>
     <div class="schedule_link"><?= l("Apply On-line", $this->tournament->application_link, array('external' => true)); ?></div>
 <? endif; ?>
     <?= $this->tournament->description; ?>
@@ -35,6 +35,7 @@ if ($this->UserLoggedIn()) {
                 <?= $this->tournament->director_phone; ?>
             </td>
         </tr>
+        <? if (!$this->tournament->past_deadline): ?>
         <tr>
             <td>On-line Team Application:</td>
             <? if ($this->tournament->application_link == false): ?>
@@ -47,12 +48,13 @@ if ($this->UserLoggedIn()) {
         </tr>
         <tr>
             <td>Mail-in Team Application (pdf):</td>
-            <? if ($this->tournament->app == false): ?>
-            <td>Coming Soon</td>
-            <? else: ?>
-            <td><?= l("download", ($this->tournament->pdf_path . $this->tournament->app)); ?></td>
-            <? endif; ?>
+                <? if ($this->tournament->app == false): ?>
+                <td>Coming Soon</td>
+                <? else: ?>
+                <td><?= l("download", ($this->tournament->pdf_path . $this->tournament->app)); ?></td>
+                <? endif; ?>
         </tr>
+        <? endif; ?>
         <tr><td>&nbsp;</td></tr>
         <tr>
             <td>Tournament Rules:</td>

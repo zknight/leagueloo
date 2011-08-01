@@ -115,6 +115,9 @@ class Tournament extends \simp\Model
     {
         switch ($property)
         {
+        case "past_deadline":
+            return $this->deadline < time();
+            break;
         case "leagues":
             $assoc_leagues = $this->assoc_leagues;
             $league_arr = array();
@@ -186,12 +189,12 @@ class Tournament extends \simp\Model
         if (strpos($this->application_link, "http") === false &&
             strpos($this->application_link, "/") !== 0)
         {
-            $this->application_link = "http://" . $this->application_link;
+            if ($this->application_link !== "") $this->application_link = "http://" . $this->application_link;
         }
         if (strpos($this->schedule_link, "http") === false &&
             strpos($this->schedule_link, "/") !== 0)
         {
-            $this->schedule_link = "http://" . $this->schedule_link;
+            if ($this->schedule_link !== "") $this->schedule_link = "http://" . $this->schedule_link;
         }
         // short name
         $arr = explode(" ", strtolower($this->name));
