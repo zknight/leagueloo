@@ -28,16 +28,17 @@ class ClubInformationController extends \simp\Controller
 
     public function Index()
     {
-        $this->page = \simp\Model::FindOrCreate("Page", "name = ?", array("club_information"));
+        $this->page = \simp\Model::FindOrCreate("Page", "short_title = ?", array("club_information"));
         $this->show_preview = false;
         return true;
     }
 
     public function Update()
     {
-        $this->page = \simp\Model::FindOrCreate("Page", "name = ?", array("club_information"));
+        $this->page = \simp\Model::FindOrCreate("Page", "short_title = ?", array("club_information"));
         $vars = $this->GetFormVariable('Page');
-        $vars['name'] = 'club_information';
+        $vars['title'] = 'Club Information';
+        $vars['location'] = \Page::MAIN_MENU;
         $submit = $this->GetFormVariable('submit');
         $this->page->UpdateFromArray($vars);
         switch($submit)
