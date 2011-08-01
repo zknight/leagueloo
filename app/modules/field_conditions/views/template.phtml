@@ -7,7 +7,11 @@
     <div class="content">
     <? foreach ($this->fields as $field): ?>
         <div class="field">
-            <strong><?= $field->name; ?></strong><br />
+            <strong>
+                <?= l("$field->name", Path::module('field_conditions', 'show_field', $field->id)); ?>
+            </strong>
+            <div style="float:right;"><?= l("location", $field->map_link, array('external' => 'true')); ?></div>
+            <br />
             <?= $this->Status($field); ?>
             <span class="comment"><?= $field->comment; ?></span>
             <div class="date">

@@ -332,11 +332,16 @@ function l($text, $path, $opts = array())
     {
         $t = $opts['target'];
         $target = "target='$t'";
+        if ($t == 'blank')
+        {
+            $text .= "[&#x2197]";
+        }
     }
     if (isset($opts['external']) && $opts['external'] == true)
     {
         $target = $target == '' ? "target='blank'" : $target;
         if (strpos($path, "http://") === false) $path = "http://" . $path;
+        $text .= "[&#x2197]";
     }
     if (isset($opts['method']))
     {

@@ -393,20 +393,20 @@ h3.subtitle {
   .module .recent .date {
     font-size: 8pt; }
 
-.module .field {
+.module .field, .field {
   padding: 8px 0;
   border-bottom: 1px solid #002142; }
-  .module .field .date {
+  .module .field .date, .field .date {
     font-size: 8pt; }
-  .module .field .open, .module .field .closed {
+  .module .field .open, .module .field .closed, .field .open, .field .closed {
     width: 100%;
     padding: 2px 4px;
     text-align: center; }
-  .module .field .open {
+  .module .field .open, .field .open {
     border: 1px solid #194300;
     background: #b0df95;
     color: #194300; }
-  .module .field .closed {
+  .module .field .closed, .field .closed {
     border: 1px solid #4d1a00;
     background: #ffc7aa;
     color: #4d1a00; }

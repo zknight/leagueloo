@@ -126,5 +126,12 @@ class FieldConditions extends \simp\Module
         \Redirect(\Path::module("field_conditions", "admin"));
     }
 
+    function ShowField($method, $params, $vars)
+    {
+        $this->SetLayout('default');
+        $this->field = \simp\Model::FindById('Field', $params['id']);
+        return true;
+    }
+
 
 }
