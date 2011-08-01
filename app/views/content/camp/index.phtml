@@ -1,4 +1,4 @@
-<h1>Camp Manager</h1>
+<h1 class="title">Camp Manager</h1>
 <?= l("Configure Camp Section Parameters", Path::content_camp_configure()); ?> |
 <?= l("Add Camp", Path::content_camp_add()); ?>
 <? foreach($this->camps as $kind => $camps): ?>
@@ -11,7 +11,7 @@
     <? endif; ?>
 </p>
     <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Name</th><th>Type</th><th>Start Date</th><th colspan='2'>&nbsp;</th>
     </tr>

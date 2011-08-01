@@ -2,7 +2,8 @@
 <div class="module">
     <div class="title">
         <ul class="menu">
-            <li>Upcoming <?=$this->entity_name;?> Events</li>
+            <li>Upcoming '<?=$this->entity_name;?>' Events</li>
+            <? $path_args = isset($this->entity_id) ? "{$this->entity_type}/{$this->entity_id}" : $this->entity_type; ?>
             <li><?=l("Calendar", Path::event_calendar($path_args)); ?></li>
         </ul>
 <? /*

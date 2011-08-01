@@ -5,6 +5,7 @@ class User extends \simp\Model
     protected $_abilities;
     protected $_password;
     protected $_password_verify;
+    public $affiliations;
 
     const EMAIL = 0;
     const MESSAGE = 1;
@@ -16,6 +17,16 @@ class User extends \simp\Model
         global $log;
         $log->logDebug("in User::__construct()");
         $this->_abilities = array();
+        $this->affiliations = array();
+    }
+
+    public function OnLoad()
+    {
+        $this->affiliations = \simp\Model::Find(
+            "Affiliation",
+            "user_id = ?",
+            array($this->id)
+        );
     }
 
     public static function GetPrivilegedUsers($entity_type, $entity_id, $level=0)
@@ -306,10 +317,16 @@ class User extends \simp\Model
         else if ($this->id == 0)
         {
             // TODO: check for matching email as well
-            $user_with_matching_login = User::FindOne("User", "login=?", array($this->login));
-            if (isset($user_with_matching_login))
+            $count = User::Count("User", "login=?", array($this->login));
+            if ($count > 0)
             {
                 $this->_errors['login'] = "That login already exists.  Please try another.";
+                $errors++;
+            }
+            $count = User::Count("User", "email=?", array($this->email));
+            if ($count > 0)
+            {
+                $this->_errors['email'] = "An account with that email address already exists.";
                 $errors++;
             }
         }
@@ -344,6 +361,10 @@ class User extends \simp\Model
         foreach ($this->_abilities as $ability)
         {
             $ability->Delete();
+        }
+        foreach ($this->affiliations as $aff)
+        {
+            $aff->Delete();
         }
         return true;
     }

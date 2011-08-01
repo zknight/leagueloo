@@ -1,4 +1,4 @@
-<h1>Tournament Manager</h1>
+<h1 class="title">Tournament Manager</h1>
 <?= l("Add Tournament", Path::content_tournament_add()); ?>
 <? foreach($this->tournaments as $kind => $tournaments): ?>
 <h2><?= HumanCase($kind); ?> Tournaments</h2>
@@ -10,7 +10,7 @@
     <? endif; ?>
 </p>
     <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Name</th><th>Type</th><th>Start Date</th><th colspan='2'>&nbsp;</th>
     </tr>

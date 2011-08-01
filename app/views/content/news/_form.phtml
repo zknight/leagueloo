@@ -16,7 +16,12 @@
         </tr>
         <tr>
             <th class="label">Associated Image:</th>
-            <td class="entry"><?= FileSelect($this->article, 'image'); ?>
+            <td class="entry">
+                <?= FileSelect($this->article, 'image'); ?>
+                <? if ($this->article->image): ?><br />
+                <?= CheckBoxField($this->article, 'default_image'); ?> Remove and use default
+                <? endif; ?>
+            </td>
             <td class="help">(optional) This image will show at top of article (on front page)</td>
         </tr>
     </table>

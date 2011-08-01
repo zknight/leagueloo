@@ -17,7 +17,7 @@ class Page extends \simp\Model
     const LINK_MENU = 2;
 
     public static $locations = array(
-        self::FRONT => "In list on category landing page (default)",
+        //self::FRONT => "In list on category landing page (default)",
         self::MAIN_MENU => "On main menu for category",
         self::LINK_MENU => "In link menu for category"
     );
@@ -34,9 +34,11 @@ class Page extends \simp\Model
         {
             if ($this->entity_id == 0 && $this->entity_type == "Main") $this->entity_name = "Club";
             else
+            {
                 $this->entity_name = \R::getCell(
                     "select name from " . SnakeCase($this->entity_type) . " where id = ?",
                     array($this->entity_id));
+            }
         }
     }
 
@@ -95,6 +97,58 @@ class Page extends \simp\Model
                         array($ability->entity_id, $ability->entity_type, $published)));
             }
         }
+        return $pages;
+    }
+
+    public function AfterSave()
+    {
+        \RegenerateRecentUpdates();
+        return true;
+    }
+
+    public static function FindWithShortTitleByEntityName($short_title, $entity_type, $entity_name)
+    {
+        $entity_table = SnakeCase($entity_type);
+        $q = "";
+        if ($entity_name == "Club")
+        {
+            $page = Page::FindOne(
+                'Page', 
+                'entity_type = ? and short_title = ?',
+                array("Main", $short_title)
+            );
+
+            return $page;
+        }
+        else
+        {
+            $q = "select page.* from page, {$entity_table} ";
+            $q .= "where {$entity_type}.name like ? ";
+            $q .= "and page.entity_type like ? ";
+            $q .= "and page.entity_id = {$entity_type}.id ";
+            $q .= "and page.short_title = ? ";
+            $q .= "limit 1";
+            $result = \R::getRow(
+                $q,
+                array($entity_name, $entity_type, $short_title)
+            );
+            if (isset($result))
+            {
+                $bean = \R::dispense("page");
+                $bean->import($result);
+                return new Page($bean);
+            }
+        }
+        return null;
+    }
+
+    public static function GetPagesForLocation($entity_type, $entity_id, $location)
+    {
+        $pages = self::Find(
+            'Page', 
+            'entity_type = ? and entity_id = ? and location = ? and published = ?',
+            array($entity_type, $entity_id, $location, true)
+        );
         return $pages;
     }
 

@@ -269,6 +269,7 @@ class Controller
         require_once $BASE_PATH . "/public/error404.phtml";
         $this->content .= ob_get_contents();
         ob_end_clean();
+        header("HTTP/1.0 404 Not Found");
         require_once $this->_layout_path . $this->_layout_name . ".phtml";
     }
 

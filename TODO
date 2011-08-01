@@ -4,15 +4,9 @@ x add possiblity of creating event associated with article 1:1 and making public
   conincident with event expiration?
   # just defer to article creation after event is successfully created...
   ? need to associate article to event?
-* team finance manager
 x article submission queue (send emails to publishers?)
-* event submission queue
 x recently updated pages app
 x event display
-* enquiry form (routed to commissioner by age/division/gender)
-* photo gallery
-    - pure html
-    - "progressively enhance" to js, then ajax
 x event module admin
 x send emails
 x check for duplicate email on user sign-up
@@ -20,7 +14,6 @@ x check for duplicate email on user sign-up
 x user prefs (receive email for updates)
 x personal messages
 x notifications app (messages)
-* team records
 x link module (per entity!)
 x club news (for main)
 
@@ -35,6 +28,7 @@ x Add links to Program/Teams
 x Create 'Links" menu
 x Add special links to teams (GotSoccer page, etc)
 x clear Redirect URL from session on successful page render?
+x enquiry form (routed to commissioner by age/division/gender)
 
 * finish up team administration page
 * 'page' controllers
@@ -43,3 +37,10 @@ x clear Redirect URL from session on successful page render?
     - update image list in image browser
     - extract css into separate file
 * document upload (with article?)
+* teams in selection should show gender/division!
+* team finance manager
+* photo gallery
+    - pure html
+    - "progressively enhance" to js, then ajax
+* team records
+* event submission queue

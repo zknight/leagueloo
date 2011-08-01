@@ -48,7 +48,7 @@ if ($this->UserLoggedIn()) {
         <?= l("[edit this article]", Path::content_news_edit($article->entity_type, $article->entity_id, $article->id)); ?><br />
         <? endif; ?>
         <div class="copy">
-            <div class="intro"><?= $article->intro; ?></div>
+            <div class="intro"><?= $article->body; ?></div>
             <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
         </div>
     </div>

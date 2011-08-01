@@ -125,6 +125,7 @@ class NewsController extends \simp\Controller
         $log->logDebug("NewsController::Create() program id = {$this->article->entity_id}");
         if ($this->article->Save())
         {
+            /*
             AddRecentUpdate(
                 'article',
                 $this->article->id,
@@ -133,6 +134,7 @@ class NewsController extends \simp\Controller
                 "news", 
                 "show", 
                 $this->article->short_title);
+             */
             AddFlash("Article {$this->article->short_title} Created.");
             \Redirect(GetReturnURL());
         }
@@ -168,6 +170,7 @@ class NewsController extends \simp\Controller
         {
             AddFlash("Article {$this->article->short_title} updated.");
             //\Redirect(\Path::content_news());
+            /*
             AddRecentUpdate(
                 'article',
                 $this->article->id,
@@ -176,6 +179,7 @@ class NewsController extends \simp\Controller
                 "news", 
                 "show", 
                 $this->article->short_title);
+             */
             \Redirect(GetReturnURL());
         }
         else

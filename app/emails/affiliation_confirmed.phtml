@@ -1,0 +1,16 @@
+<?php
+$user = $data['user'];
+$aff = $data['affiliation'];
+$site_name = $data['site_name'];
+?>
+<p>
+Hi, <?= $user->first_name; ?>.
+</p>
+<p>
+You have been associated with <?= $aff->team_name; ?> as a "<?= Affiliation::$types[$aff->type]; ?>."
+</p>
+<p>
+Thanks!
+<br />
+<?= $site_name; ?> Robot Webmaster
+</p>

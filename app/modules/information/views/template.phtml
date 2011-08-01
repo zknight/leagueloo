@@ -1,20 +1,23 @@
 <div class="module">
     <div class="title">
         <ul class="menu">
-            <li>Contact Us</li>
+            <li>Club Staff and Contact Info</li>
         </ul>
     </div>
     <div class="content" style="text-align:center;">
-        <h3><?= SiteName(); ?></h3>
-<? foreach ($this->info as $item): ?>
-        <?= $item->text; ?><br />
-<? endforeach; ?>
+        <?= l("Club Administrators", Path::staff_administration()); ?><br />
+        <?= l("Coaching Staff", Path::staff_coaches()); ?> <br /><br />
 <? foreach ($this->categories as $cat): ?>
     <? if ($cat->classification == Category::CUSTOM): ?>
         <?= l($cat->text, Path::module('information', 'show_select', $cat->id)); ?><br />
     <? else: ?>
         <?= l($cat->text, Path::module('information', 'show_form', $cat->id)); ?><br />
     <? endif; ?>
+<? endforeach; ?>
+        <br />
+        <h3><?= SiteName(); ?></h3>
+<? foreach ($this->info as $item): ?>
+        <?= $item->text; ?><br />
 <? endforeach; ?>
     </div>
 </div>

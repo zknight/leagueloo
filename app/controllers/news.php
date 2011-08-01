@@ -13,15 +13,19 @@ class NewsController extends \app\AppController
     // that program!
     function Index()
     {
+        /*
         $this->StoreLocation();
         $this->news = \News::FindPublished();
         return true;
+         */
+        //$etype = $this->GetParam('type');
+        $ename = $this->GetParam('program');
+        \Redirect(\Path::relative("{$ename}"));
     }
 
     function Show()
     {
         global $log;
-        $this->StoreLocation();
         $log->logDebug("in NewsController::Show()");
         $log->logDebug("params: " . print_r($this->_params, true));
         $this->StoreLocation();
@@ -49,6 +53,7 @@ class NewsController extends \app\AppController
                 $this->article->entity_id,
                 $this->article->entity_name
             );
+
         }
 
         return true;

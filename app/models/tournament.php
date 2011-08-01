@@ -273,6 +273,12 @@ class Tournament extends \simp\Model
         //return false;
     }
 
+    public function AfterSave()
+    {
+        \RegenerateRecentUpdates();
+        return true;
+    }
+
     protected function CopyFile($file, $name)
     {
         $pdf_path = $this->abs_path . "tournament/{$this->short_name}/";

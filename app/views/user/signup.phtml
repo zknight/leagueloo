@@ -1,51 +1,55 @@
-<h1>Request website account</h1>
+<h1 class="title">Request website account</h1>
+<?= l("back", GetReturnURL()); ?>
 <?= GetErrorsFor($this->user); ?>
+<?= FormTag("signup", \simp\Request::POST); ?>
+<fieldset><legend>Account Information</legend>
 <p>
 Getting a website account is a two step process.  First, fill out this form
 and submit it.  After you submit, an email will be sent to the address you provide
 to verify you email address.  Follow the instructions in that email to confirm and
 you will have an account!
 </p>
-<?= FormTag("signup", \simp\Request::POST); ?>
-<table>
+<br />
+<table class="form">
     <tr>
-        <td><strong>Login</strong></td>
-        <td><?= TextField($this->user, "login"); ?></td>
-        <td>This is your login id.  You will use it to login to the site.</td>
+        <th class="label">Login</th>
+        <td class="entry"><?= TextField($this->user, "login"); ?></td>
+        <td class="help">This is your login id.  You will use it to login to the site.</td>
     </tr>
     <tr>
-        <td><strong>Name (first last)</strong></td>
-        <td>
+        <th class="label">Name (first last)</th>
+        <td class="entry">
             <?= TextField($this->user, "first_name"); ?>
             <?= TextField($this->user, "last_name"); ?>
         </td>
-        <td>This is your name.</td>
+        <td class="help">This is your name.</td>
     </tr>
     <tr>
-        <td><strong>Password</strong></td>
-        <td><?= PasswordField($this->user, "password"); ?></td>
-        <td>This will be your password.  Make it a good one.</td>
+        <th class="label">Password</th>
+        <td class="entry"><?= PasswordField($this->user, "password"); ?></td>
+        <td class="help">This will be your password.  Make it a good one.</td>
     </tr>
     <tr>
-        <td><strong>Password Confirmation</strong></td>
-        <td><?= PasswordField($this->user, "password_verification");?></td>
-        <td>Type your password again to make sure you didn't mess up the first time</td>
+        <th class="label">Password Confirmation</th>
+        <td class="entry"><?= PasswordField($this->user, "password_verification");?></td>
+        <td class="help">Type your password again to make sure you didn't mess up the first time</td>
     </tr>
     <tr>
-        <td><strong>Timezone</strong></td>
-        <td><?= SimpleSelect($this->user, 'timezone', SupportedTimeZones());?></td>
-        <td>Select the timezone you are in so that date/time display is correct for you.</td>
+        <th class="label">Timezone</th>
+        <td class="entry"><?= SimpleSelect($this->user, 'timezone', SupportedTimeZones());?></td>
+        <td class="help">Select the timezone you are in so that date/time display is correct for you.</td>
     </tr>
     <tr>
-        <td><strong>Email</strong></td>
-        <td><?= TextField($this->user, 'email', array('size' => 40));?></td>
-        <td>This is your email address.</td>
+        <th class="label">Email</th>
+        <td class="entry"><?= TextField($this->user, 'email', array('size' => 40));?></td>
+        <td class="help">This is your email address.</td>
     </tr>
     <tr>
-        <td><strong>Send Email in HTML</strong></td>
-        <td><?= CheckBoxField($this->user, 'email_html'); ?></td>
-        <td>Check this box if you want email to be sent in HTML format (pretty!)</td>
+        <th class="label">Send Email in HTML</th>
+        <td class="entry"><?= CheckBoxField($this->user, 'email_html'); ?></td>
+        <td class="help">Check this box if you want email to be sent in HTML format (pretty!)</td>
     </tr>
 </table>
+</fieldset>
 <input type="submit" value="Request Account"/>
 <?= EndForm(); ?> 

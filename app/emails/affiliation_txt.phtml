@@ -1,0 +1,17 @@
+<?php
+global $REL_PATH;
+$user = $data['user'];
+$aff = $data['affiliation'];
+$site_name = $data['site_name'];
+$requestor = $data['requestor'];
+$host = $data['host']
+?>
+Hi, <?= $user->first_name; ?>.
+
+<?= $requestor->first_name; ?> <?= $requestor->last_name; ?> (<?= $requestor->login; ?>) has requested
+to be associated with <?= $aff->team_name; ?> as a "<?= Affiliation::$types[$aff->type]; ?>".  Please verify
+this and visit the team administration page http://<?= $host . $REL_PATH . "/admin/teams/show/{$aff->team_id}"; ?> to confirm or deny this request.
+
+Thanks!
+
+<?= $site_name; ?> Robot Webmaster

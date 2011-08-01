@@ -1,0 +1,21 @@
+<h1 class="title">Request to be Associated with a Team</h1>
+<?= l("back", GetReturnURL()); ?>
+<?= GetErrorsFor($this->affiliation); ?>
+<?= FormTag("signup", \simp\Request::POST); ?>
+<fieldset><legend>Team Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Select Team</th>
+            <td class="entry"><?= SimpleSelect($this->affiliation, 'team_id', $this->teams)?></td>
+        </tr>
+        <tr>
+            <th class="label">How are you associated?</th>
+            <td class="entry"><?= SimpleSelect($this->affiliation, 'type', Affiliation::$types); ?></td>
+        </tr>
+    </table>
+</fieldset>
+<input type="hidden" name="Affiliation[user_id]" value="<?= $this->user->id; ?>" />
+<input type="hidden" name="Affiliation[confirmed]" value="0" />
+<input type="submit" value="Request to be Associated"/>
+<?= EndForm(); ?>
+

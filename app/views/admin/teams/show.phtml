@@ -4,11 +4,11 @@
     <table>
         <tr>
             <th><?= l("Edit Team Information", Path::admin_teams_edit($this->team->id)); ?></th>
-            <th>Manage Members</th>
-            <th>Manage Articles</th>
-            <th>Manage Images</th>
-            <th>Manage Events</th>
-            <th>Manage 'Pages'</th>
+            <th><?= l("Manage Members", Path::admin_user("team_manager", $this->team->id)); ?></th>
+            <th><?= l("Manage Articles", Path::content_news()); ?></th>
+            <th><?= l("Manage Images", Path::content_image()); ?></th>
+            <th><?= l("Manage Events", Path::content_event()); ?></th>
+            <th><?= l("Manage 'Pages'", Path::content_page()); ?></th>
         </tr>
         <tr>
             <td>Edit this team's information (team photo, name, etc.)</td>

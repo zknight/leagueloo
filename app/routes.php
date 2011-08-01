@@ -53,8 +53,10 @@
 function RouteSetup($router)
 {
     $router->AddRoute('/')->Controller('main');
-    $router->AddRoute('/main/[A:action]?')->Controller('main');
-    $router->AddRoute('/Club/[A:action]?')->Controller('main');
+    $router->AddRoute('/main/[A:action]?/[a:name]?')->Controller('main');
+    $router->AddRoute('/main/[A:action]?/[i:id]?')->Controller('main');
+    $router->AddRoute('/Club/[A:action]?/[a:name]?')->Controller('main');
+    $router->AddRoute('/Club/[A:action]?/[i:id]?')->Controller('main');
     $router->AddRoute('/administrator/[A:action]')->Controller('administrator');
     $router->AddRoute('/administrator/')->Controller('administrator');
 
@@ -86,6 +88,7 @@ function RouteSetup($router)
     $router->AddRoute('/message/[A:action]?/[i:id]?')->Controller('message');
 
     $router->AddRoute('/news/[A:action]/[i:id]')->Controller('news');
+    $router->AddRoute('/page/[A:action]/[i:id]')->Controller('page');
     $router->AddRoute('/event/calendar/[i:year]/[i:month]/[a:entity_type]?/[i:id]?')
         ->Controller('event')->Action('calendar');
     $router->AddRoute('/event/[A:action]/[i:id]?')->Controller('event');

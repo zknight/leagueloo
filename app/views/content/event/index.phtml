@@ -5,7 +5,7 @@
 <? if (count($this->upcoming_events) < 1): ?>
     <p>None</p>
 <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Section</th>
         <th>Event Title</th>
@@ -34,13 +34,13 @@
         <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
     </tr>
     <? endforeach; ?>
-<table>
+<table class="pretty">
 <? endif; ?>
 <h2>Expired Events</h2>
 <? if (count($this->expired_events) < 1): ?>
     <p>None</p>
 <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Section</th>
         <th>Event Title</th>
@@ -69,5 +69,5 @@
         <td><?= l("Remove", Path::content_event_delete($event->id), array("method" => "delete")); ?></td>
     </tr>
     <? endforeach; ?>
-<table>
+<table class="pretty">
 <? endif; ?>

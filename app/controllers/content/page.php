@@ -49,6 +49,7 @@ class PageController extends \simp\Controller
         $this->page->UpdateFromArray($this->GetFormVariable('Page'));
         if ($this->page->Save())
         {
+            /*
             AddRecentUpdate(
                 'page',
                 $this->page->id,
@@ -57,6 +58,7 @@ class PageController extends \simp\Controller
                 "page",
                 "show",
                 $this->page->short_title);
+             */
             AddFlash("Page {$this->page->short_title} Created.");
             \Redirect(GetReturnURL());
         }
@@ -74,6 +76,7 @@ class PageController extends \simp\Controller
         $this->page->UpdateFromArray($this->GetFormVariable('Page'));
         if ($this->page->Save())
         {
+            /*
             AddRecentUpdate(
                 'page',
                 $this->page->id,
@@ -82,6 +85,7 @@ class PageController extends \simp\Controller
                 "page",
                 "show",
                 $this->page->short_title);
+             */
             AddFlash("Page {$this->page->short_title} Updated.");
             \Redirect(GetReturnURL());
         }
@@ -115,7 +119,7 @@ class PageController extends \simp\Controller
         {
             $entity = $this->GetParam('entity');
             $id = $this->GetParam('entity_id');
-            if ($this->user->CanEdit($entity, $id))
+            if ($this->GetUser()->CanEdit($entity, $id))
             {
                 $entity = \simp\Model::FindById($entity, $id);
                 return array("{$entity}:$id" => "{$entity}-{$entity->name}");

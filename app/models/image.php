@@ -15,7 +15,6 @@ class Image extends \simp\Model
 {
 
     //global $REL_PATH;
-    protected $path;
     protected $rel_path;
     protected $abs_path;
     public $image_info;
@@ -24,9 +23,9 @@ class Image extends \simp\Model
     {
         global $REL_PATH;
         global $BASE_PATH;
-        $this->path = "resources/files/img/";
-        $this->rel_path = $REL_PATH . $this->path;
-        $this->abs_path = $BASE_PATH . $this->path;
+        $path = "resources/files/img/";
+        $this->rel_path = $REL_PATH . $path;
+        $this->abs_path = $BASE_PATH . $path;
         $this->image_info = NULL;
     }
 
@@ -38,7 +37,9 @@ class Image extends \simp\Model
             return $this->rel_path . "{$this->entity_type}/{$this->entity_name}/thumbs/{$this->filename}";
             break;
         case "path":
-            return $this->rel_path . "{$this->entity_type}/{$this->entity_name}/{$this->filename}";
+            $path =  $this->rel_path . "{$this->entity_type}/{$this->entity_name}/{$this->filename}";
+            global $log; $log->logDebug("Image::__get($property) returning $path");
+            return $path;
             break;
         case 'entity_name':
             if ($this->entity_id == 0)

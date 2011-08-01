@@ -16,7 +16,7 @@
     <tr class="<?= ($r=!$r)?'odd':'even';?>">
         <td><?= $team->gender_str; ?></td>
         <td><?= $team->division; ?></td>
-        <td><?= $team->name; ?></td>
+        <td><?= l($team->name, Path::admin_teams_show($team->id)); ?></td>
         <td>
             <div style="margin:0 1px;padding:4px;font-size:8pt;">
                 <table style="width:100%">

@@ -55,6 +55,27 @@ class MainController extends \app\AppController
         return true;
     }
 
+    public function Page()
+    {
+        SetEntity('Main', 0, 'Club');
+        $this->StoreLocation();
+        // expect short_title or id?
+        if ($name = $this->GetParam("name"))
+        {
+            $this->page = \simp\Model::FindOne(
+                "Page", 
+                "entity_type = ? and entity_id = ? and short_title = ? and published = ?", 
+                array("Main", 0, $name, true)
+            );
+        }
+        else
+        {
+            $id = $this->GetParam('id');
+            $this->page = \simp\Model::FindById("Page", $id);
+        }
+        return true;
+    }
+
     public function About()
     {
         $this->page = \simp\Model::FindOne("Page", "name = ?", array("club_information"));

@@ -1,6 +1,32 @@
-- Make page links go in section menu if desired (show in menu, or show in links)
+# Make page links go in section menu if desired (show in menu, or show in links)
 - add schedule links (special links)
 - sponsor stuff
 - protect 'remove' actions for news, pages, etc.
 - add preview for page/news
-- fix recent updates to work better
+# fix recent updates to work better
+    use updated_on for:
+        camp
+        news - by entity?
+        page - by entity?
+        tournament
+    derive from updateable
+    use AfterSave() to indicate when something is updated to regenerate
+    the recently updated
+    save the entity info and id of item in recent updates after save (search for most recent 
+    updated_on fields for updatable
+
+# for pages:
+    on main/Club:
+        page/[short_title]
+    on program
+        page/[short_title]
+
+# fix image for article getting horked when edited and no new one selected
+- cache link/menu modules
+# for affiliations, if team manager, make admin for page (add ability automatically)
+# add privileged users to team admin page
+# add admin/content stuff for team manager "show" page
+# pretty up admin/program/index.phtml
+# for team name, make it compound (i.e. full_team_name -> name) such that it is uniquely identifiable
+- add user search for abilities and user edit pages
+- add site search - articles, pages, camps, tournaments

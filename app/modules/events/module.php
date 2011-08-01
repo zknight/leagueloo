@@ -63,9 +63,9 @@ class Events extends \simp\Module
             global $log;
             $log->logDebug("Events module: vars " . print_r($vars, true));
             $log->logDebug("Events module: num_days " . print_r($this->num_days, true));
-            $this->num_days->value = $vars['EventCfg']['num_days']['value'];
+            $this->num_days->value = $vars['EventCfg']['value']['num_days'];
             $this->num_days->Save();
-            $this->max_events->value = $vars['EventCfg']['max_events']['value'];
+            $this->max_events->value = $vars['EventCfg']['value']['max_events'];
             $this->max_events->Save();
             AddFlash("\"Events\" Configuration Updated.");
         }
@@ -87,6 +87,7 @@ class Events extends \simp\Module
             $var->value = $default == NULL ? "[not set]" : $default;
             $var->Save();
         }
+        if (!isset($var->value)) $var->value = $default;
         return $var;
     }
 
