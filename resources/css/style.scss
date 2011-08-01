@@ -437,6 +437,7 @@ h3.subtitle {
         .intro, .body {
             margin:0 8px;
             border-top:1px solid $navy;
+            //overflow:auto;
         }
     }
 }
@@ -781,16 +782,20 @@ table.pretty {
     //border:1px solid $orange_tan;
     border:1px solid $light_navy;
     .article {
-        height:500px;
+        height:510px;
         overflow:hidden;
         //background:$dark_navy url(../img/module-bg.png) repeat-x;
         background:$navy;
 
         .date { font-size:8pt; }
         .copy {
+            height:130px;
             clear:both;
-            overflow:auto;
             font-size:8pt;
+            .intro {
+                height:130px;
+                overflow:auto;
+            }
         }
 
         .title {

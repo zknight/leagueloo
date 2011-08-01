@@ -597,15 +597,18 @@ table.pretty {
   background: #002142;
   border: 1px solid #002e5c; }
   #news-show .article {
-    height: 500px;
+    height: 510px;
     overflow: hidden;
     background: #002142; }
     #news-show .article .date {
       font-size: 8pt; }
     #news-show .article .copy {
+      height: 130px;
       clear: both;
-      overflow: auto;
       font-size: 8pt; }
+      #news-show .article .copy .intro {
+        height: 130px;
+        overflow: auto; }
     #news-show .article .title {
       text-align: center;
       font-size: 10pt; }
