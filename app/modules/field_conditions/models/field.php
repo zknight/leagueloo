@@ -8,7 +8,8 @@ class Field extends \simp\Model
             0 => 'Open',
             1 => 'Closed (Inclement Weather)',
             2 => 'Closed (Fields Unplayable)',
-            3 => 'See Comment'
+            3 => 'Closed',
+            4 => 'See Comment'
             );
     }
 
