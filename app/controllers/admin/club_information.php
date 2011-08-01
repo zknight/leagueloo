@@ -39,6 +39,9 @@ class ClubInformationController extends \simp\Controller
         $vars = $this->GetFormVariable('Page');
         $vars['title'] = 'Club Information';
         $vars['location'] = \Page::MAIN_MENU;
+        $vars['entity_id'] = "0";
+        $vars['published'] = true;
+        $vars['entity_type'] = 'Main';
         $submit = $this->GetFormVariable('submit');
         $this->page->UpdateFromArray($vars);
         switch($submit)
