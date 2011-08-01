@@ -5,16 +5,6 @@ class StaffController extends \app\AppController
 {
     function Setup()
     {
-        $this->AddPreaction("all", "CheckAccess");
-    }
-
-    protected function CheckAccess()
-    {
-        if (!$this->GetUser()->super)
-        {
-            AddFlash("You don't have sufficient privilege for this action.");
-            \Redirect(GetReturnURL());
-        }
     }
 
     function Index()

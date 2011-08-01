@@ -1,0 +1,33 @@
+<h1 class="title"><?= $this->team->full_team_name; ?><br />Team Manager User Administration</h1>
+<p><strong>Pending Team Affiliations</strong></p>
+<table class="pretty">
+    <tr>
+        <th>User</th><th>Email</th><th>Affiliation Type</th><th>Action</th>
+    </tr>
+<? foreach($this->pending as $pending): ?>
+    <tr>
+        <td><?= "{$pending['user']->first_name} {$pending['user']->last_name} ({$pending['user']->login})" ?></td>
+        <td><?= $pending['user']->email; ?></td>
+        <td><?= Affiliation::$types[$pending['affiliation']->type]; ?></td>
+        <td>
+            <?= l("Confirm", Path::admin_user('confirm_affiliation', $pending['affiliation']->id)); ?>
+            <?= l("Deny", Path::admin_user('deny_affiliation', $pending['affiliation']->id)); ?>
+        </td>
+<? endforeach; ?>
+</table>
+<br />
+<p><strong>Team Members</strong></p>
+<table class="pretty">
+    <tr>
+        <th>User</th><th>Email</th><th>Affiliation Type</th><th>Action</th>
+    </tr>
+<? foreach($this->assocs as $assoc): ?>
+    <tr>
+        <td><?= "{$assoc['user']->first_name} {$assoc['user']->last_name} ({$assoc['user']->login})" ?></td>
+        <td><?= $assoc['user']->email; ?></td>
+        <td><?= Affiliation::$types[$assoc['affiliation']->type]; ?></td>
+        <td>
+            <?= l("Remove", Path::admin_user('remove_affiliation', $assoc['affiliation']->id)); ?>
+        </td>
+<? endforeach; ?>
+</table>

@@ -99,6 +99,17 @@ class Model extends BaseModel
         return $model;
     }
 
+    static public function FromBean($model_name, $bean)
+    {
+        $model = NULL;
+        if ($bean)
+        {
+            $model = new $model_name($bean);
+            $model->OnLoad();
+        }
+        return $model;
+    }
+
     static public function Count($model_name, $conditions = 1, $values = array())
     {
         $name = Model::TableName($model_name);

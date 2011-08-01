@@ -10,7 +10,10 @@ class UserController extends \simp\Controller
                 'show',
                 'add',
                 'edit',
-                'delete'
+                'delete',
+                'team_manager',
+                'confirm_affiliation',
+                'deny_affiliation'
             )
         );
 
@@ -18,7 +21,7 @@ class UserController extends \simp\Controller
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
 
-        $this->AddPreaction("all", "CheckAccess");
+        $this->AddPreaction("index, show, add, edit, delete", "CheckAccess");
 
     }
 
@@ -187,4 +190,80 @@ class UserController extends \simp\Controller
         \Redirect(\Path::admin_user());
     }
 
+    // url = admin/user/team_manager/<team_id>
+    function TeamManager()
+    {
+        $this->StoreLocation();
+        $user = $this->GetUser();
+        $team_id = $this->GetParam('id');
+        $this->team = \simp\Model::FindById("Team", $team_id);
+        if (!$user->CanAdmin("Team", $team_id, \Ability::ADMIN))
+        {
+            AddFlash("You have insufficient privilege for this action");
+            \Redirect(\GetReturnURL());
+        }
+        // need a list of users with affiliation requests
+        $this->pending = array();
+        $requests = \simp\Model::Find("Affiliation", "team_id = ? and confirmed = ?", array($team_id, 0));
+        foreach ($requests as $req)
+        {
+            $user = \simp\Model::FindById("User", $req->user_id);
+            $this->pending[] = array('user' => $user, 'affiliation' => $req);
+        }
+
+        // need a list of users with confirmed affiliations
+        $this->assocs = array();
+        $confirmed = \simp\Model::Find("Affiliation", "team_id = ? and confirmed = ?", array($team_id, true));
+        foreach ($confirmed as $conf)
+        {
+            $user = \simp\Model::FindById("User", $conf->user_id);
+            $this->assocs[] = array('user' => $user, 'affiliation' => $conf);
+        }
+
+        // also need a list of users with privilege (see program)
+        $this->priv_users = \User::GetPrivilegedUsers('Team', $team_id);
+
+        return true;
+    }
+
+    function ConfirmAffiliation()
+    {
+        $aff = \simp\Model::FindById('Affiliation', $this->GetParam('id'));
+        $user = \simp\Model::FindById('User', $aff->user_id);
+        $aff->confirmed = true;
+        $aff->Save();
+        if ($aff->type = \Affiliation::MANAGER)
+        {
+            // add ability to admin team
+            $ability = \simp\Model::Create('Ability');
+            $ability->entity_type = "team";
+            $abiltiy->entity_name = $aff->team_name;
+            $ability->entity_id = $aff->team_id;
+            $ability->user_id = $aff->user_id;
+            $ability->level = \Ability::ADMIN;
+            $ability->Save();
+        }
+        $site_name = GetCfgVar('site_name');
+        $subject = "[{$site_name}] Team Affiliation Confirmed";
+        $user->Notify($subject, 'affiliation_confirmed', array('affiliation' => $aff, 'user' => $user));
+        \Redirect(GetReturnURL());
+    }
+
+    function DenyAffiliation()
+    {
+        $aff = \simp\Model::FindById('Affiliation', $this->GetParam('id'));
+        $user = \simp\Model::FindById('User', $aff->user_id);
+        $site_name = GetCfgVar('site_name');
+        $subject = "[{$site_name}] Team Affiliation Denied";
+        $user->Notify($subject, 'affiliation_denied', array('affiliation' => $aff, 'user' => $user));
+        if ($aff->id > 0) $aff->Delete();
+        \Redirect(\GetReturnURL());
+    }
+
+    function RemoveAffiliation()
+    {
+        $aff = \simp\Model::FindById('Affiliation', $this->GetParam('id'));
+        $aff->Delete();
+        \Redirect(\GetReturnURL());
+    }
 }           

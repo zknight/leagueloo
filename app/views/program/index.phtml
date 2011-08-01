@@ -44,7 +44,7 @@ if ($this->UserLoggedIn()) {
             <?= TimeAgoInWords($article->updated_on); ?> ago
         </div>
     </div>
-    <div class="intro"><?= $article->intro; ?></div>
-    <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
+    <div class="intro"><?= $article->body; ?></div>
+    <!--div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div-->
 </div>
 <? endforeach; ?>

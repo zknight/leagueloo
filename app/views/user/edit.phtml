@@ -1,37 +1,38 @@
-<h2><?= $this->user->first_name; ?>'s Preferences</h2>
-<?= l("change password", Path::user("change_pass")); ?> |
+<h1 class="title"><?= $this->user->first_name; ?>'s Preferences</h1>
+<?= l("change password", Path::user("change_password")); ?> |
 <?= l("back", GetReturnURL()); ?>
 <br />
 <br />
 <?= GetErrorsFor($this->user); ?>
 <?= FormTag("edit", \simp\Request::PUT, Path::user_edit($this->user->id)); ?>
+<fieldset><legend>Account Information</legend>
 <table class="form">
     <tr>
-        <th>My User Id</th>
-        <td><?= $this->user->login; ?></td>
+        <th class="label">My User Id</th>
+        <td class="entry"><?= $this->user->login; ?></td>
     </tr>
     <tr>
-        <th>My First Name</th>
-        <td><?= TextField($this->user, "first_name"); ?></td>
+        <th class="label">My First Name</th>
+        <td class="entry"><?= TextField($this->user, "first_name", array('size' => 40)); ?></td>
     </tr>
     <tr>
-        <th>My Last Name</th>
-        <td><?= TextField($this->user, "last_name"); ?></td>
+        <th class="label">My Last Name</th>
+        <td class="entry"><?= TextField($this->user, "last_name", array('size' => 40)); ?></td>
     </tr>
     <tr>
-        <th>My Email Address</th>
-        <td><?= TextField($this->user, "email"); ?></td>
+        <th class="label">My Email Address</th>
+        <td class="entry"><?= TextField($this->user, "email", array('size' => 40)); ?></td>
     </tr>
     <tr>
-        <th>Send Emails to Me</th>
-        <td>
+        <th class="label">Send Emails to Me</th>
+        <td class="entry">
             <?= RadioButton($this->user, "email_html", 0); ?> in plain text <br />
             <?= RadioButton($this->user, "email_html", 1); ?> in HTML 
         </td>
     </tr>
     <tr>
-        <th>Send Site Notifications to Me</th>
-        <td>
+        <th class="label">Send Site Notifications to Me</th>
+        <td class="entry">
             <?= RadioButton($this->user, "notification_type", User::EMAIL); ?> via Email<br />
             <?= RadioButton($this->user, "notification_type", User::MESSAGE); ?> via Site Message<br />
             <?= RadioButton($this->user, "notification_type", User::EMAIL_AND_MESSAGE); ?> via Email and Site Message<br />
@@ -40,19 +41,42 @@
     </tr>
 <? /*
     <tr>
-        <th>Change Password</th>
-        <td><?= PasswordField($this->user, "password"); ?></td>
+        <th class="label">Change Password</th>
+        <td class="entry"><?= PasswordField($this->user, "password"); ?></td>
     </tr>
     <tr>
-        <th>Verify Password</th>
-        <td><?= PasswordField($this->user, "password_verification"); ?></td>
+        <th class="label">Verify Password</th>
+        <td class="entry"><?= PasswordField($this->user, "password_verification"); ?></td>
     </tr>
  */
 ?>
     <tr>
-        <th>My Timezone:</th><td><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
+        <th class="label">My Timezone:</th><td class="entry"><?=SimpleSelect($this->user, 'timezone', SupportedTimeZones());?>
     </tr>
 </table>
+</fieldset>
+<fieldset><legend>Team Association</legend>
+    <p>These are the teams with which you are associated with as a manager, treasurer, parent, or player.  If you request to be affiliated with a team, 
+    a message will be sent to the appropriate person for confirmation.</p>
+    <p>
+    <?= l("Request to be Associated with a Team", Path::user("request_association")); ?>
+    </p>
+    <br />
+<? if (count($this->user->affiliations) > 0): ?>
+    <table class="pretty">
+        <tr>
+            <th>Team</th><th>Affiliation Type</th><th>Confirmed</th>
+        </tr>
+<? foreach ($this->user->affiliations as $affiliation): ?>
+        <tr>
+            <td><?= $affiliation->team_name; ?></td>
+            <td><?= Affiliation::$types[$affiliation->type]; ?></td>
+            <td><?= $affiliation->confirmed ? "Yes" : "Pending"; ?></td>
+        </tr>
+<? endforeach; ?>
+    </table>
+<? endif; ?>
+</fieldset>
 <input type="submit" value="Update Profile"\>
 <?= EndForm(); ?>
     

@@ -31,17 +31,19 @@ if ($this->UserLoggedIn()) {
 </div>
 <? endif; ?>
 <? foreach ($this->news as $article): ?>
-<h3>Latest News</h3>
-<hr />
 <div class="article">
-    <h2><?= l($article->title, GetArticlePath('show', $article)); ?></h2>
-        <span class="date">
-            <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
-        </span>
+    <p class="title"><?= l($article->title, Path::news_show($article->id)); ?></p>
+    <div class="sub-title">
         <? if ($editor): ?>
-        <?= l("edit this article", Path::content_news_edit_team($this->team->id, $article->id)); ?><br />
+        <div class="link">
+            <?= l("edit this article", Path::content_news_edit_team($this->team->id, $article->id)); ?><br />
+        </div>
         <? endif; ?>
-    <p><?= $article->intro; ?></p>
-    <p><?= l("Read more...", Path::news_show($article->id)); ?></p>
+        <div class="date">
+            <?= TimeAgoInWords($article->updated_on); ?> ago
+        </div>
+    </div>
+    <div class="body"><?= $article->body; ?></div>
+    <?/*p><?= l("Read more...", Path::news_show($article->id)); ?></p*/?>
 </div>
 <? endforeach; ?>

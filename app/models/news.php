@@ -29,11 +29,13 @@ class News extends \simp\Model
     protected $rel_path;
     protected $abs_path;
     public $img_path;
+    public $default_image;
 
     public function Setup()
     {
         $this->img_path = NULL;
         $this->file_info = NULL;
+        $this->default_image = false;
         global $REL_PATH;
         global $BASE_PATH;
         $path = "resources/files/img/";
@@ -63,6 +65,7 @@ class News extends \simp\Model
         $this->_pub_time = FormatDateTime($this->publish_on, "H:i:s");
         $this->_exp_date = FormatDateTime($this->expiration, "m/d/Y");
         $this->_exp_time = FormatDateTime($this->expiration, "H:i:s");
+
         if (!$this->image)
         {
             global $REL_PATH;
@@ -251,7 +254,7 @@ class News extends \simp\Model
     {
         $errors = 0;
 
-        $this->SplitIntro();
+        //$this->SplitIntro();
         if (!$this->VerifyDateFormat('publish_date', $this->_pub_date)) $errors++;
         if (!$this->VerifyTimeFormat('publish_time', $this->_pub_time)) $errors++;
         if (!$this->VerifyDateFormat('expire_date', $this->_exp_date)) $errors++;
@@ -298,7 +301,14 @@ class News extends \simp\Model
                 substr($short_title, 0, 31) : 
                 $short_title;
         }
-        if ($errors == 0)
+        /*
+        if ($this->default_image || $this->image == "")
+        {
+            $this->image = false;
+        }
+        else*/ 
+        if ($this->default_image) $this->image = NULL;
+        if ($errors == 0 && !$this->default_image)
         {
             $img_path = $this->abs_path . "news/";
             $info = $this->file_info;
@@ -310,7 +320,7 @@ class News extends \simp\Model
                 array('max_height' => 315, 'max_width' => 420)
             );
 
-            $this->image = $name;
+            if ($name != "") $this->image = $name;
 
             if ($err != false)
             {
@@ -327,9 +337,7 @@ class News extends \simp\Model
         global $log;
         $log->logDebug("News::AfterFirstSave()");
         ob_start();
-        \R::debug(true);
         $users = \User::FindPublishers($this->entity_type, $this->entity_id);
-        \R::debug(false);
         $log->logDebug(ob_get_contents());
         ob_end_clean();
         $site_name = GetCfgVar('site_name');
@@ -345,6 +353,7 @@ class News extends \simp\Model
 
     public function AfterSave()
     {
+        \RegenerateRecentUpdates();
         return true;
     }
 
@@ -393,12 +402,15 @@ class News extends \simp\Model
                 substr($intro, 0, 0-$min_rpos);
 
             $tidy = new Tidy();
+            /*
             $tidy->parseString(
                 $intro, 
                 array('show-body-only' => true),
                 'utf8');
             $tidy->cleanRepair();
             $intro = $tidy->body()->value;
+             */
+            $intro = $tidy->repairString($intro, 'utf8');
         }
         global $log;
         $log->logDebug("saving intro: " . print_r($intro, true));

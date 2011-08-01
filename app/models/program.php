@@ -91,6 +91,7 @@ class Program extends \simp\Model
         return self::Find("Program", "type = ?", array($type));
     }
 
+    // this limits to one tournament and one camp program
     public function Types()
     {
         if (Cache::Exists("program_types"))
@@ -113,8 +114,7 @@ class Program extends \simp\Model
 
     public function Type()
     {
-        $types = Program::Types();
-        return $types[$this->type];
+        return self::$types[$this->type];
     }
 
 }

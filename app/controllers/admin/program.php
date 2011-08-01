@@ -121,6 +121,8 @@ class ProgramController extends \simp\Controller
 
     function Privileges()
     {
-        
+        $this->program = \simp\Model::FindById('Program', $this->GetParam('id'));
+        $this->users = \User::GetPrivilegedUsers('program', $this->program->id);
+        return true;
     }
 }

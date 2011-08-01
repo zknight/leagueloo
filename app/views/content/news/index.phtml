@@ -4,7 +4,7 @@
 <? if (count($this->published_articles) < 1): ?>
     <p>None</p>
 <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Section</th><th>Article Title</th><th>Expiration</th><th colspan="2">&nbsp;</th>
     </tr>
@@ -28,7 +28,7 @@
 <? if (count($this->unpublished_articles) < 1): ?>
     <p>None</p>
 <? else: ?>
-<table>
+<table class="pretty">
     <tr>
         <th>Section</th><th>Article Title</th><th>Publish On</th><th>Expires</th><th colspan="2">&nbsp;</th>
     </tr>

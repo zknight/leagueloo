@@ -66,9 +66,10 @@ div#wrapper {
     min-height:100%;
     height:auto !important;
     height:100%;
-    margin:0 auto -4em;
+    margin:0 auto -8em;
 }
 .push, #footer {
+    clear:both;
     height:8em;
 }
 
@@ -291,8 +292,9 @@ ul.admin-menu,
 #footer {
     text-align:center;
     border-top:solid 1px $navy;
-    clear:both;
-    float:left;
+    //clear:both;
+    //z-index:10;
+    //float:left;
     width:100%;
     padding-top:12px;
     background:$carolina url(../img/footer-hatch.png) top repeat-x;
@@ -820,20 +822,23 @@ table.pretty {
 
 #controls {
     height:20px;
-    background:$orange_tan;
+    padding-top:8px;
+    //border:1px solid $light-navy;
+    background:$light-navy;
+    color:$carolina;
 
     a {
         font-size:8pt;
-        color:$brown;
+        //color:$brown;
         &:hover {
-            color:$navy;
+            color:$light_navy;
         }
         padding: 0 4px;
         margin: 0 16px;
 
         &.current {
-            background:$light_orange_tan;
-            color:$navy;
+            background:$dark_carolina;
+            color:$dark_navy;;
         }
     }
 }

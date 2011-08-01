@@ -104,7 +104,7 @@ class Team extends \simp\Model
 
     public function NameForLink()
     {
-        $name = preg_replace("/\s/", "_", $this->name);
+        $name = preg_replace("/\s/", "_", $this->short_name);
         return $name;
     }
 
@@ -116,7 +116,7 @@ class Team extends \simp\Model
             return ("U" . $this->ComputeDivision());
             break;
         case "gender_str":
-            $idx = $this->ComputeDivision() > 15 ? 1 : 0;
+            $idx = $this->ComputeDivision() > 18 ? 1 : 0;
             return $this->gender_str[$this->gender][$idx];
             break;
         case "program_name":
@@ -124,7 +124,6 @@ class Team extends \simp\Model
                 "select name from program where id = ?",
                 array($this->program_id));
             break;
-
         case "program_designator":
             return "{$this->program_type}:{$this->program_id}";
             break;
@@ -173,13 +172,15 @@ class Team extends \simp\Model
     {
         $errors = 0;
 
+        $this->name = "{$this->division} {$this->short_name} {$this->gender_str[$this->gender][0]}";
+
         // check for existing on first save
         if ($this->id < 1)
         {
             $count = \simp\Model::Count(
                 'Team',
-                'name = ? and program_id = ? and gender = ? and year = ?',
-                array($this->name, $this->program_id, $this->gender, $this->year)
+                'name = ?',
+                array($this->name)
             );
             
             if ($count > 0)
@@ -238,7 +239,7 @@ class Team extends \simp\Model
         \R::debug(true);
         $link->Save();
         \R::debug(false);
-        $log->logDebug("Team::AfterSave: " . ob_get_contents());
+        //$log->logDebug("Team::AfterSave: " . ob_get_contents());
         ob_end_clean();
         //$log->logDebug("Team::AfterSave link (after save) = " . print_r($link, true));
     }

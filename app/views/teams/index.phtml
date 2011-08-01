@@ -24,7 +24,7 @@ if ($this->UserLoggedIn()) {
         <tr>
             <td><?= $team->division; ?></td>
             <td>
-                <?= l($team->name, Path::Relative(GetTeamPath("", $team))) ?>
+                <?= l($team->short_name, Path::Relative(GetTeamPath("", $team))) ?>
             </td>
         </tr>
         <?endforeach; ?>

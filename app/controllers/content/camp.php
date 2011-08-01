@@ -67,6 +67,7 @@ class CampController extends \simp\Controller
         $this->camp->file_info = $_FILES;
         if ($this->camp->Save())
         {
+            /*
             AddRecentUpdate(
                 'camp',
                 $this->camp->id,
@@ -75,6 +76,7 @@ class CampController extends \simp\Controller
                 "camp", 
                 "show", 
                 $this->camp->short_name);
+             */
             AddFlash("Camp {$this->camp->name} Created.");
             \Redirect(GetReturnURL());
         }
@@ -109,6 +111,7 @@ class CampController extends \simp\Controller
         $this->camp->file_info = $_FILES;
         if ($this->camp->Save())
         {
+            /*
             AddRecentUpdate(
                 'camp',
                 $this->camp->id,
@@ -117,6 +120,7 @@ class CampController extends \simp\Controller
                 "camp", 
                 "show", 
                 $this->camp->short_name);
+             */
             AddFlash("Camp {$this->camp->name} Updated.");
             \Redirect(GetReturnURL());
         }

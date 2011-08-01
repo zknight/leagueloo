@@ -222,6 +222,12 @@ class Camp extends \simp\Model
         return $errors == 0;
     }
 
+    public function AfterSave()
+    {
+        \RegenerateRecentUpdates();
+        return true;
+    }
+
     protected function CopyFile($file, $name)
     {
         $pdf_path = $this->abs_path . "camp/{$this->short_name}/";

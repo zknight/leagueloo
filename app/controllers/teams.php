@@ -59,7 +59,7 @@ class TeamsController extends \app\AppController
         //\R::debug(true);
         $this->team = \simp\Model::FindOne(
             'Team',
-            'gender = ? and year = ? and name = ?',
+            'gender = ? and year = ? and short_name = ?',
             array(
                 $gender,
                 \Team::GetYearFromDivision($division),

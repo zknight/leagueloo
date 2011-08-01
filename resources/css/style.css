@@ -16,9 +16,10 @@ div#wrapper {
   min-height: 100%;
   height: auto !important;
   height: 100%;
-  margin: 0 auto -4em; }
+  margin: 0 auto -8em; }
 
 .push, #footer {
+  clear: both;
   height: 8em; }
 
 a {
@@ -213,8 +214,6 @@ ul.admin-menu,
 #footer {
   text-align: center;
   border-top: solid 1px #002142;
-  clear: both;
-  float: left;
   width: 100%;
   padding-top: 12px;
   background: #d6eafe url(../img/footer-hatch.png) top repeat-x;
@@ -627,17 +626,18 @@ table.pretty {
 
 #controls {
   height: 20px;
-  background: #ffe690; }
+  padding-top: 8px;
+  background: #002e5c;
+  color: #d6eafe; }
   #controls a {
     font-size: 8pt;
-    color: #76621e;
     padding: 0 4px;
     margin: 0 16px; }
     #controls a:hover {
-      color: #002142; }
+      color: #002e5c; }
     #controls a.current {
-      background: #fff5d4;
-      color: #002142; }
+      background: #99badd;
+      color: #00152c; }
 
 .coach {
   background: #002142;

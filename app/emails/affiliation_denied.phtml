@@ -1,0 +1,17 @@
+<?php
+$user = $data['user'];
+$aff = $data['affiliation'];
+$site_name = $data['site_name'];
+?>
+<p>
+Hi, <?= $user->first_name; ?>.
+</p>
+<p>
+Your request to be associated with <?= $aff->team_name; ?> as a "<?= Affiliation::$types[$aff->type]; ?>"
+has been denied.  If you feel this is in error, please contact your club representative.
+</p>
+<p>
+Thanks!
+<br />
+<?= $site_name; ?> Robot Webmaster
+</p>

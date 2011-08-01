@@ -10,6 +10,8 @@ class UserController extends \app\AppController
         $this->MapAction('confirm', 'ConfirmPost', \simp\Request::POST);
         $this->MapAction('request_confirmation', 'RequestConfirm', \simp\Request::POST);
         $this->MapAction('edit', 'Update', \simp\Request::PUT);
+        $this->MapAction('change_password', 'UpdatePassword', \simp\Request::PUT);
+        $this->MapAction('request_association', 'ProcessAssociation', \simp\Request::POST);
         /*
         $this->AddAction('login', \simp\Request::GET, 'Login');
         $this->AddAction('login', \simp\Request::POST, 'Authorize');
@@ -153,6 +155,42 @@ class UserController extends \app\AppController
         Redirect(GetReturnURL());
     }
 
+    function RequestAssociation()
+    {
+        $this->affiliation = \simp\Model::Create('Affiliation');
+        $teams = \simp\Model::FindAll('Team');
+        $this->teams = array();
+        foreach ($teams as $team)
+        {
+            $this->teams[$team->id] = "{$team->division} {$team->name} {$team->gender_str}";
+        }
+
+        $this->user = $this->GetUser();
+        return true;
+    }
+
+    function ProcessAssociation()
+    {
+        $this->affiliation = \simp\Model::Create('Affiliation');
+        $vars = $this->GetFormVariable('Affiliation');
+        $this->affiliation->UpdateFromArray($vars);
+
+        if ($this->affiliation->Save())
+        {
+            AddFlash("Your request has been sent.");
+            \Redirect(\GetReturnURL());
+        }
+        $this->SetAction("request_association");
+        $this->teams = array();
+        foreach ($teams as $team)
+        {
+            $this->teams[$team->id] = "{$team->division} {$team->name} {$team->gender_str}";
+        }
+        $this->user = $this->GetUser();
+        return true;
+        
+    }
+
     function Edit()
     {
         $this->user = $this->GetUser();
@@ -171,6 +209,25 @@ class UserController extends \app\AppController
             return false;
         }
         AddFlash("Account updated.");
+        Redirect(GetReturnURL());
+    }
+
+    function ChangePassword()
+    {
+        $this->user = $this->GetUser();
+        return true;
+    }
+
+    function UpdatePassword()
+    {
+        $this->user = $this->GetUser();
+        $this->user->UpdateFromArray($this->GetFormVariable('User'));
+        if (!$user->Save())
+        {
+            $this->Render('change_password');
+            return false;
+        }
+        AddFlash("New Password Set.");
         Redirect(GetReturnURL());
     }
 

@@ -1,4 +1,4 @@
-<? if (count($this->links) > 0): ?>
+<? if ($this->has_links): ?>
 <div class="module">
     <div class="title">
         <ul class="menu">
@@ -10,5 +10,9 @@
     <? $target = $link->new_window ? array('target' => '_blank') : array(); ?>
     <?= l($link->text, $link->uri, $target); ?> <br />
 <? endforeach; ?>
+<? foreach ($this->page_links as $plink): ?>
+    <?= $plink; ?>
+<? endforeach; ?>
+    </div>
 </div>
 <? endif; ?>

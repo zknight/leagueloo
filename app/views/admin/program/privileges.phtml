@@ -1,0 +1,12 @@
+<h1 class="title"><?= $this->program->name; ?> User Administration</h1>
+<?= l('add privileged user', Path::admin_ability_add('Program', $this->program->id)); ?>
+<table class="pretty">
+    <tr><th>User</th><th>Privilege</th><th>Action</th></tr>
+<? foreach ($this->users as $u): ?>
+    <tr>
+        <td><?= "{$u['first_name']} {$u['last_name']} ({$u['login']})"; ?></td>
+        <td><?= Ability::$ability_level_strings[$u['level']]; ?></td>
+        <td><?= l('remove privilege', Path::admin_ability_remove('Program', $program->id, "uid={$u['id']}")); ?></td>
+    </tr>
+<? endforeach; ?>
+</table>

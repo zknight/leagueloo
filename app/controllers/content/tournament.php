@@ -75,6 +75,7 @@ class TournamentController extends \simp\Controller
         $this->tournament->file_info = $_FILES;
         if ($this->tournament->Save())
         {
+            /*
             AddRecentUpdate(
                 'tournament',
                 $this->tournament->id,
@@ -83,6 +84,7 @@ class TournamentController extends \simp\Controller
                 "tournament", 
                 "show", 
                 $this->tournament->short_name);
+             */
             AddFlash("Tournament {$this->tournament->name} Created.");
             \Redirect(GetReturnURL());
         }
@@ -118,6 +120,7 @@ class TournamentController extends \simp\Controller
         $this->tournament->file_info = $_FILES;
         if ($this->tournament->Save())
         {
+            /*
             AddRecentUpdate(
                 'tournament',
                 $this->tournament->id,
@@ -126,6 +129,7 @@ class TournamentController extends \simp\Controller
                 "tournament", 
                 "show", 
                 $this->tournament->short_name);
+             */
             AddFlash("Tournament {$this->tournament->name} Updated.");
             \Redirect(GetReturnURL());
         }

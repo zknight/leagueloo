@@ -204,6 +204,11 @@ function SiteName()
     return GetCfgVar("site_name", "Leagueloo");
 }
 
+function RegenerateRecentUpdates()
+{
+    SetCfgVar('recently_updated', true);
+}
+
 function AddRecentUpdate($type, $id, $text, $namespace, $controller, $action=NULL, $param=NULL) 
 {
     $url = '';

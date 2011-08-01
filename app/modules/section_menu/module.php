@@ -12,13 +12,11 @@ class SectionMenu extends \simp\Module
         $entity_type = $args['entity_type'];
         $entity_id = $args['entity_id'];
 
+        $pages = Page::GetPagesForLocation($entity_type, $entity_id, Page::MAIN_MENU);
+
         // $args should have current page, entity_type, entity_id
         if ($entity_type === "Main")
         {
-            $this->links['Club Information'] = array(
-                'link' => Path::main_about(),
-                'class' => ($current == 'about' ? 'selected' : ''),
-            );
             $this->links['News'] = array(
                 'link' => Path::home(),
                 'class' => ($current == 'index' ? 'selected' : ''),
@@ -27,6 +25,13 @@ class SectionMenu extends \simp\Module
                 'link' => Path::event_calendar("main", 0),
                 'class' => ($current == 'calendar' ? 'selected' : ''),
             );
+            foreach ($pages as $page)
+            {
+                $this->links[$page->title] = array(
+                    'link' => Path::main('page', $page->short_title),
+                    'class' => ($current == $page->short_title ? 'selected' : '')
+                );
+            }
         }
         else if ($entity_type === "Program")
         {
@@ -53,6 +58,13 @@ class SectionMenu extends \simp\Module
                     'class' => ($current == 'teams' ? 'selected' : ''),
                 );
             }
+            foreach ($pages as $page)
+            {
+                $this->links[$page->title] = array(
+                    'link' => Path::Relative("{$program->name}/page/show/{$page->short_title}"),
+                    'class' => ($current == $page->short_title ? 'selected' : '')
+                );
+            }
         } 
         else if ($entity_type === "Team")
         {
@@ -66,6 +78,15 @@ class SectionMenu extends \simp\Module
                 'link' => Path::event_calendar("team", $team->id),
                 'class' => ($current == 'calendar' ? 'selected' : ''),
             );
+            foreach ($pages as $page)
+            {
+                $this->links[$page->title] = array(
+                    'link' => Path::Relative("page/show/{$page->id}"),
+                    'class' => ($current == $page->short_title ? 'selected' : '')
+                );
+            }
         }
+
+
     }
 }

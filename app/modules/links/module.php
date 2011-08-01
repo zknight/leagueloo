@@ -12,5 +12,25 @@ class Links extends \simp\Module
             "entity_type = ? and entity_id = ?",
             array(SnakeCase($this->entity_type), $this->entity_id)
         );
+
+        $this->page_links = array();
+        $pages = Page::GetPagesForLocation($this->entity_type, $this->entity_id, Page::LINK_MENU);
+        foreach ($pages as $page)
+        {
+            switch ($this->entity_type)
+            {
+            case "Main":
+                $this->page_links[] = l($page->title, Path::main('page', $page->short_title));
+                break;
+            case "Team":
+                $this->page_links[] = l($page->title, Path::Relative("page/show/{$page->id}"));
+                break;
+            case "Program":
+                $this->page_links[] = l($page->title, Path::Relative("{$page->entity_name}/page/show/{$page->short_title}"));
+                break;
+            }
+        }
+
+        $this->has_links = (count($this->page_links) > 0) || (count($this->links) > 0);
     }
 }
