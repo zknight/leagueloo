@@ -1,0 +1,11 @@
+<h1 class="title"><?= $this->field->name; ?></h1>
+<?= l("back", GetReturnURL()); ?>
+<div class="field">
+<?= $this->Status($this->field); ?>
+<span class="comment"><?= $field->comment; ?></span>
+<div class="date">
+    <?= $this->Time($this->field); ?>
+</div>
+<p>The <?= $this->field->name; ?> is located at: <strong><?= $this->field->address; ?> <?= l("map", $this->field->map_link, array('external' => 'true')); ?></strong></p>
+</div>
+
