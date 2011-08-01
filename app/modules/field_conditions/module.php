@@ -27,7 +27,7 @@ class FieldConditions extends \simp\Module
     public function Status($field)
     {
         $class = ($field->status > 0) ? 'closed' : 'open';
-        return $field->status == 3 ? "" : "<div class=\"$class\">{$field->status_text}</div>";
+        return $field->status == 4 ? "" : "<div class=\"$class\">{$field->status_text}</div>";
     }
 
     public function Time($field)
