@@ -25,7 +25,7 @@
         <table style="width:100%">
         <? foreach ($events as $event): ?>
             <tr>
-                <td style="width:25%;vertical-align:top;">
+                <td style="width:30%;vertical-align:top;">
                 <? if ($event->all_day): ?>
                 All Day
                 <? else: ?>
@@ -36,7 +36,7 @@
                     <span class="event-category"><?=$event->category?></span>
                 <? endif; ?>
                 </td>
-                <td>
+                <td style="text-align:right;">
                 <?= l($event->title, Path::event_show($event->id)); ?>
                 </td>
             </tr>
