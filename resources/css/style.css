@@ -378,11 +378,11 @@ h3.subtitle {
   padding-top: 8px;
   width: 100%;
   text-align: center;
-  font-size: 9pt; }
+  font-size: 9pt;
+  border-bottom: 1px solid #002142; }
 
 .module .event {
   font-size: 8pt;
-  border-bottom: 1px solid #002142;
   padding-bottom: 8px; }
   .module .event .event-category {
     font-size: 8pt;

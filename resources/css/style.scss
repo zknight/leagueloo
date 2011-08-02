@@ -473,13 +473,14 @@ h3.subtitle {
     width:100%;
     text-align:center;
     font-size:9pt;
+    //border-bottom:1px solid $light-navy;
+    border-bottom:1px solid $navy;
 }
 
 .module .event {
     font-size:8pt;
     //text-align:center;
 
-    border-bottom:1px solid $navy;
     //padding:4px 0;
     //padding:8px 0;
     padding-bottom:8px;
