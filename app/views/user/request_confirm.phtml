@@ -6,4 +6,4 @@
 <input type="submit" value="and then click this button." />
 </p>
 <?= EndFormTag(); ?>
-<p>If you haven't received your confirmation email (or you have, but have since deleted it), <?= l("click me to request another", Path::User_RequestConfirmation($this->user->id)); ?>, and we'll send one to the account you provided straight-away!
+<p>If you haven't received your confirmation email (or you have, but have since deleted it), <?= l("click me to request another", Path::user('request_confirmation', $this->user->id)); ?>, and we'll send one to the account you provided straight-away!

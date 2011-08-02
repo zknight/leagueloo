@@ -107,8 +107,8 @@ class UserController extends \app\AppController
         $site_name = GetCfgVar("site_name");
         $subject = "A message from {$site_name}: website account confirmation";
         $this->SendSiteEmail($user, $subject, "confirmation");
-
-        return true;
+        AddFlash("A confirmation email has been sent to you at {$user->email}.");
+        \Redirect(GetReturnURL());
     }
 
     function ConfirmPost()

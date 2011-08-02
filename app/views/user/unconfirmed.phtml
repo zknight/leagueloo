@@ -8,7 +8,7 @@
 </p>
 <?= EndForm(); ?>
 <p>If you haven't received your confirmation email (or you have, but have since deleted it), <?= l("click me to request another", 
-            Path::User_RequestConfirmation($this->user->id),
+            Path::user('request_confirmation',$this->user->id),
             array('method' => 'post')); ?>
 , and we'll send one to the account you provided straight-away!
 </p>
