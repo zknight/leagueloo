@@ -24,6 +24,7 @@ class RecentUpdates extends \simp\Module
                         'time' => $update->time
                     );
                 }
+                Cache::Write("updates", $this->updates);
             }
         }
 
