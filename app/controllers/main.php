@@ -15,6 +15,7 @@ class MainController extends \app\AppController
         SetEntity('Main', 0, 'Club');
         $this->StoreLocation();
         //\R::debug(true);
+        /*
         if (\Cache::Exists('programs'))
         {
             $programs = \Cache::Read('programs');
@@ -23,6 +24,7 @@ class MainController extends \app\AppController
         {
             $programs = \simp\Model::FindAll('Program', 'order by weight asc');
         }
+         */
         //global $log; $log->logDebug("programs: " . print_r($this->program_names, true));
         $this->articles = array();
         $this->is_editor = array();
@@ -31,13 +33,15 @@ class MainController extends \app\AppController
         {
             $user = $this->GetUser();
         }
+        /*
         $this->articles["Club"] = \News::FindPublished(
             'Main',
             0,
             '1 order by publish_on, entity_id asc'
         );
-        $this->is_editor['Club'] = isset($user) ? $user->CanEdit("Main", 0) : false;
-
+         */
+        //$this->is_editor['Club'] = isset($user) ? $user->CanEdit("Main", 0) : false;
+        /*
         foreach ($programs as $program)
         {
             $this->articles[$program->name] = \News::FindPublished(
@@ -52,6 +56,13 @@ class MainController extends \app\AppController
                 //array("Program", 1, $program->id));
             $this->is_editor[$program->name] = isset($user) ? $user->CanEdit("Program", $program->id) : false;
         }
+         */
+        $this->articles = \News::FindPublished(
+            'Program',
+            NULL,
+            'front_page = ? order by publish_on asc',
+            array(true)
+        );
         return true;
     }
 

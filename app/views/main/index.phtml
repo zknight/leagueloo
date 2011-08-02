@@ -28,9 +28,9 @@ if ($this->UserLoggedIn()) {
 </ul>
 
 <div id="news-show">
-<? foreach ($this->articles as $program => $articles): ?>
-    <? if (count($articles) > 0): ?>
-        <? foreach ($articles as $article): ?>
+<?// foreach ($this->articles as  $articles): ?>
+    <?// if (count($articles) > 0): ?>
+        <? foreach ($this->articles as $article): ?>
     <div class="article">
         <div class="image_wrap">
             <div class="image"><img src="<?= $article->img_path;?>" /></div>
@@ -39,21 +39,21 @@ if ($this->UserLoggedIn()) {
             <?= l($article->title, GetArticlePath('show', $article)); ?>
         </div>
         <div class="program_name">
-            <?= l($program, Path::Relative($program)); ?>
+            <?= l($article->entity_name, Path::Relative($article->entity_name)); ?>
         </div>
         <span class="date">
             <?= TimeAgoInWords($article->updated_on); ?> ago
         </span>
-        <? if ($this->is_editor[$program]): ?>
+        <?/* if ($this->is_editor[$program]): ?>
         <?= l("[edit this article]", Path::content_news_edit($article->entity_type, $article->entity_id, $article->id)); ?><br />
-        <? endif; ?>
+        <? endif;*/ ?>
         <div class="copy">
             <div class="intro"><?= $article->body; ?></div>
             <div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div>
         </div>
     </div>
         <? endforeach; ?>
-    <? endif; ?>
-<? endforeach; ?>
+    <? //endif; ?>
+<?// endforeach; ?>
     <div id="controls"></div>
 </div>
