@@ -21,12 +21,13 @@
     </fieldset>
 </fieldset>
 <? //print_r($this->positions); ?>
-<? foreach($this->positions as $pidx => $positions): ?>
-<fieldset><legend><?= $this->position_types[$pidx]['name']; ?> Positions</legend>
+<?// foreach($this->positions as $pidx => $positions): ?>
+<? foreach ($this->position_types as $pidx => $pos_type): ?>
+<fieldset><legend><?= $pos_type['name'];//$this->position_types[$pidx]['name']; ?> Positions</legend>
     <fieldset><legend>Current Positions</legend>
         <table>
             <tr><th>Position</th><th>Weight</th></tr>
-    <? foreach($positions as $idx => $pos): ?>
+    <? foreach($this->positions[$pidx] as $idx => $pos): ?>
             <tr>
                 <td><?= TextField('staff', "positions-$pidx", array('array' => $idx, 'value' => $pos['name'])); ?></td>
                 <td><?= TextField('staff', "pos_weights-$pidx", array('array' => $idx, 'value' => $pos['weight'])); ?></td>
