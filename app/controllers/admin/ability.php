@@ -37,7 +37,7 @@ class AbilityController extends \simp\Controller
         {
             $this->pages[] = "u=$i";
         }
-        $users = \simp\Model::Find('User', "1 order by first_name collate nocase limit {$this->per_page} offset $offset", array());
+        $users = \simp\Model::Find('User', "1 order by first_name limit {$this->per_page} offset $offset", array());
         $this->users = array();
         foreach ($users as $user)
         {
