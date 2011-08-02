@@ -1,0 +1,40 @@
+<h1 class="title">Cache State</h1>
+<? if ($this->enabled === true): ?>
+<p><strong>Cache is ENABLED</strong></p>
+<?= l("Clear Cache", Path::administrator('clear_cache')); ?>
+<br />
+<br />
+<hr />
+<h2>Cache Statistics</h2>
+<table class="pretty">
+    <tr><th>Segment Count</th><th>Segment Size</th><th>Available Memory</th></tr>
+    <tr>
+        <td><?= $this->cache_stats['num_seg']; ?></td>
+        <td><?= $this->cache_stats['seg_size']; ?></td>
+        <td><?= $this->cache_stats['avail_mem']; ?></td>
+    </tr>
+</table>
+<br />
+<br />
+<h2>Cached Items</h2>
+<? foreach ($this->cache as $type => $items): ?>
+<h3><?= $type; ?></h3>
+<table class="pretty">
+    <tr>
+        <th>key</th><th>value</th><th>hit count</th><th>creation time</th><th>deletion time</th><th>last access</th>
+    <tr>
+    <? foreach ($items as $item): ?>
+    <tr>
+        <td><?= $item['key'];?></td>
+        <td><?= $item['value'];?></td>
+        <td><?= $item['num_hits'];?></td>
+        <td><?= $item['creation_time'];?></td>
+        <td><?= $item['deletion_time'];?></td>
+        <td><?= $item['access_time'];?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endforeach; ?>
+<? else: ?>
+<p><strong>Cache is DISABLED.</strong></p>
+<? endif; ?>

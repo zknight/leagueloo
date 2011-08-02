@@ -4,13 +4,13 @@
     <table>
         <tr>
             <th style="width:25%"><?= l("Site Configuration", Path::admin_configuration()); ?></th>
-            <th style="width:25%"><?= l("Clear Cache", Path::administrator("clear_cache")); ?></th>
+            <th style="width:25%"><?= l("Cache Management", Path::admin_cache()); ?></th>
             <th style="width:25%"><?= l("User Editor", Path::admin_user()); ?></th>
             <th style="width:25%"><?= l("Manage Plug-ins", Path::admin("plug_in")); ?></th>
         </tr>
         <tr>
             <td>Set site-specific configuration parameters such as Site Name, Session Timeout, Site Email, etc.</td>
-            <td>Clear the site cache (do this if things seem out of whack).</td>
+            <td>[ADVANCED] Inspect cached items, clear the site cache, etc (do this if things seem out of whack).</td>
             <td>Add/Modify user accounts</td>
             <td>Install/Enable/Disable plug-ins (special menus, modules, etc.)</td>
         </tr>
