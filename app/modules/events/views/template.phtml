@@ -20,21 +20,29 @@
 <? $age = 0; ?>
 <? foreach ($this->events as $date => $events): ?>
     <?/*<strong><?= FormatDateTime($date, "m/d/Y"); ?></strong><br />*/?>
-    <? foreach ($events as $event): ?>
+        <div class="event-date"><?= FormatDateTime($date, "m/d/Y"); ?></div>
         <div class="event age-<?= $age ?>">
-            <span class="date"><?= FormatDateTime($date, "m/d/Y"); ?>
-            <? if ($event->all_day): ?>
-            All Day
-            <? else: ?>
-            <?= FormatDateTime($event->start_time, "H:i"); ?>
-            <? endif; ?>
-            </span>
-            <? if ($this->show_category): ?>
-                <span class="event-category"><?=$event->category?></span>
-            <? endif; ?>
-            <br /><?= l($event->title, Path::event_show($event->id)); ?>
+        <table style="width:100%">
+        <? foreach ($events as $event): ?>
+            <tr>
+                <td style="width:25%;vertical-align:top;">
+                <? if ($event->all_day): ?>
+                All Day
+                <? else: ?>
+                <?= FormatDateTime($event->start_time, "g:i a"); ?>
+                <? endif; ?>
+                <? if ($this->show_category): ?>
+                    <br />
+                    <span class="event-category"><?=$event->category?></span>
+                <? endif; ?>
+                </td>
+                <td>
+                <?= l($event->title, Path::event_show($event->id)); ?>
+                </td>
+            </tr>
+        <? endforeach; ?>
+        </table>
         </div>
-    <? endforeach; ?>
     <? $age++; ?>
 <? endforeach; ?>
     </div>

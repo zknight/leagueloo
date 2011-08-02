@@ -374,16 +374,24 @@ h3.subtitle {
     padding: 12px 8px;
     color: #f5fafe; }
 
+.event-date {
+  padding-top: 8px;
+  width: 100%;
+  text-align: center;
+  font-size: 9pt; }
+
 .module .event {
   font-size: 8pt;
-  text-align: center;
   border-bottom: 1px solid #002142;
-  padding: 8px 0; }
-  .module .event .date {
-    font-size: 9pt; }
+  padding-bottom: 8px; }
   .module .event .event-category {
     font-size: 8pt;
     color: #fff5d4; }
+  .module .event table {
+    border-collapse: collapse; }
+    .module .event table td {
+      padding: 0 4px 4px 4px;
+      vertical-align: top; }
 
 .module .recent {
   font-size: 8pt;
