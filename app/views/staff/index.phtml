@@ -22,7 +22,7 @@
     <tr><th colspan="4"><?= $group; ?></th></tr>
     <? endif; ?>
     <tr>
-        <th><? if ($staff_member->image == ""): ?><img src="<?= $staff_member->img_path; ?>"/><?endif;?></th>
+        <th><? if ($staff_member->image): ?><img src="<?= $staff_member->img_path; ?>"/><?endif;?></th>
         <td><?= l("{$staff_member->first_name} {$staff_member->last_name}", Path::staff_staff($staff_member->id)); ?></td>
         <td><?= $staff_member->title; ?></td>
         <td><?= ObsEmailLink($staff_member->email); ?></td>
