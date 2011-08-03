@@ -5,7 +5,7 @@
 <? foreach($this->staff as $staff_member): ?>
     <? if ($group != $staff_member->group): ?>
         <? $group = $staff_member->group; ?>
-    <tr><th colspan="4"><?= $group; ?></th></tr>
+    <tr><th colspan="4"><h3 class="subtitle"><?= $group; ?><hr /></h3></th></tr>
     <? endif; ?>
     <tr>
         <th>
@@ -14,8 +14,8 @@
             <? endif; ?>
         </th>
 
-        <td><?= l("{$staff_member->first_name} {$staff_member->last_name}", Path::staff("staff_member", $staff_member->id)); ?></td>
         <td><?= $staff_member->title; ?></td>
+        <td><?= l("{$staff_member->first_name} {$staff_member->last_name}", Path::staff("staff_member", $staff_member->id)); ?></td>
         <td><?= ObsEmailLink($staff_member->email); ?></td>
     </tr>
 <? endforeach;?>

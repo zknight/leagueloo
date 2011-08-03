@@ -7,7 +7,7 @@
     </div>
     <div class="content" style="text-align:center;">
 <? foreach ($this->links as $link): ?>
-    <? $target = $link->new_window ? array('target' => '_blank') : array(); ?>
+    <? $target = $link->new_window ? array('target' => 'blank') : array(); ?>
     <?= l($link->text, $link->uri, $target); ?> <br />
 <? endforeach; ?>
 <? foreach ($this->page_links as $plink): ?>

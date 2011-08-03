@@ -318,7 +318,7 @@ function rand_str($length = 10)
     
 function l($text, $path, $opts = array())
 {
-    //global $REL_PATH;
+    global $REL_PATH;
     //$pathstr = $REL_PATH;
     $class = '';
     $target = '';
@@ -334,14 +334,14 @@ function l($text, $path, $opts = array())
         $target = "target='$t'";
         if ($t == 'blank')
         {
-            $text .= "[&#x2197]";
+            $text .= "<img style=\"vertical-align:bottom;\" src=\"$REL_PATH/resources/img/link_go.png\" />";
         }
     }
     if (isset($opts['external']) && $opts['external'] == true)
     {
         $target = $target == '' ? "target='blank'" : $target;
         if (strpos($path, "http://") === false) $path = "http://" . $path;
-        $text .= "[&#x2197]";
+        $text .= "<img style=\"vertical-align:bottom;\" src=\"$REL_PATH/resources/img/link_go.png\" />";
     }
     if (isset($opts['method']))
     {

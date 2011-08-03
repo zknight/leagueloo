@@ -669,3 +669,5 @@ table.pretty {
       padding: 8px 0;
       vertical-align: top;
       text-align: left; }
+    .coach table td {
+      padding: 0 8px; }
