@@ -42,7 +42,7 @@
         </tr>
         <tr>
             <th class="label">Publish Date:</th>
-            <td class="entry"><?= TextField($this->article, 'publish_date'); ?></td>
+            <td class="entry"><?= DatePicker($this->article, 'publish_date'); ?></td>
             <td class="entry">Format: mm/yy/dddd</td>
         </tr>
         <tr>
@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <th class="label">Expiration Date:<strong></th>
-            <td class="entry"><?= TextField($this->article, 'expire_date'); ?></td>
+            <td class="entry"><?= DatePicker($this->article, 'expire_date'); ?></td>
             <td class="entry">Format: mm/yy/dddd (leave blank to never expire)</td>
         </tr>
         <tr>

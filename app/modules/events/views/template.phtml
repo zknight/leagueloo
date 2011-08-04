@@ -20,7 +20,14 @@
 <? $age = 0; ?>
 <? foreach ($this->events as $date => $events): ?>
     <?/*<strong><?= FormatDateTime($date, "m/d/Y"); ?></strong><br />*/?>
-        <div class="event-date"><?= FormatDateTime($date, "m/d/Y"); ?></div>
+        <div class="event-date">
+        <? $now = time(); ?>
+        <? if (date("m/d/Y", $date) == (date("m/d/Y", $now))): ?>
+            Today
+        <? else: ?>
+            <?= FormatDateTime($date, "m/d/Y"); ?>
+        <? endif; ?>
+        </div>
         <div class="event age-<?= $age ?>">
         <table style="width:100%">
         <? foreach ($events as $event): ?>

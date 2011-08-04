@@ -27,6 +27,7 @@ class Events extends \simp\Module
         $this->entity_name = GetEntityName();
 
         $now = new \DateTime("now");
+        $now->setTime(0, 0, 0);
         $then = clone $now;
         $then->add(new \DateInterval("P{$this->num_days->value}D"));
         $conditions = NULL;
