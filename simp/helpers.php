@@ -334,14 +334,14 @@ function l($text, $path, $opts = array())
         $target = "target='$t'";
         if ($t == 'blank')
         {
-            $text .= "<img style=\"vertical-align:bottom;\" src=\"$REL_PATH/resources/img/link_go.png\" />";
+            $text .= "<img style=\"vertical-align:bottom;\" src=\"{$REL_PATH}resources/img/link_go.png\" />";
         }
     }
     if (isset($opts['external']) && $opts['external'] == true)
     {
         $target = $target == '' ? "target='blank'" : $target;
         if (strpos($path, "http://") === false) $path = "http://" . $path;
-        $text .= "<img style=\"vertical-align:bottom;\" src=\"$REL_PATH/resources/img/link_go.png\" />";
+        $text .= "<img style=\"vertical-align:bottom;\" src=\"{$REL_PATH}resources/img/link_go.png\" />";
     }
     if (isset($opts['method']))
     {
