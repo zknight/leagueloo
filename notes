@@ -30,3 +30,16 @@
 # for team name, make it compound (i.e. full_team_name -> name) such that it is uniquely identifiable
 - add user search for abilities and user edit pages
 - add site search - articles, pages, camps, tournaments
+
+team finance manager
+--------------------
+Team specific (team_id)
+Has users associated with it with various abilities
+Fees can be applied to all team members
+operates on users that are affiliated with the team
+
+views
+-----
+index - show account for logged-in user
+add
+
