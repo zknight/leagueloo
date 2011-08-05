@@ -6,11 +6,11 @@
             <td><?= SimpleSelect($this->event_info, 'entity_designator', $this->entities); ?></td>
             <td>&nbsp;</td>
         </tr>
-        <tr>
+        <? /*tr>
             <td><strong>Enter a short title:</strong></td>
             <td><?= TextField($this->event_info, 'short_title', array('size' => 32)); ?></td>
             <td>Max characters: 32</td>
-        </tr>
+        </tr */ ?>
         <tr>
             <td><strong>Enter title:</strong></td>
             <td colspan="2"><?= TextField($this->event_info, 'title', array('size' => 80));?></td>

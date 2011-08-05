@@ -218,8 +218,6 @@ class EventInfo extends \simp\Model
                 $this->days_of_week = implode(",", $this->day_mask);
             }
         }
-        $this->VerifyMaxLength('short_title', 32); 
-        $this->VerifyMinLength('short_title', 3);
         $this->VerifyMinLength('title', 3);
         $this->VerifyMinLength('location', 3);
         $this->VerifyValidDate('start_date_str');
@@ -460,7 +458,7 @@ class Event
     public function __construct($event_info, $date)
     {
         $this->title = $event_info->title;
-        $this->short_title = $event_info->short_title;
+        $this->short_title = $event_info->title;
         $this->description = $event_info->description;
         $this->all_day = $event_info->all_day;
         $this->location = $event_info->location;
