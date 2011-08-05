@@ -26,7 +26,7 @@ class TeamsController extends \simp\Controller
         $this->StoreLocation();
         $this->teams_by_program = array();
         // load programs that can have teams associated
-        $this->programs = \simp\Model::Find('Program', 'has_teams = ? order by weight asc', array(true));
+        $this->programs = \simp\Model::Find('Program', 'allow_teams = ? order by weight asc', array(true));
         foreach ($this->programs as $program)
         {
             $this->teams_by_program[$program->name] = 

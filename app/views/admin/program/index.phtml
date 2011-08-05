@@ -20,7 +20,7 @@
         <td><?= l($program->name, Path::admin_program_show($program->id)); ?></td>
         <td><?= $program->weight; ?></td>
         <td><?= $program->Type(); ?></td>
-        <td><?= $program->has_teams ? 'yes': 'no'; ?></td>
+        <td><?= $program->allow_teams ? 'yes': 'no'; ?></td>
         <td>
             <div style="margin:0 12px;padding:4px;font-size:8pt;">
                 <table>
