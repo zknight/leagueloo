@@ -33,14 +33,14 @@
     <legend>When</legend>
         All Day? <?= CheckBoxButton($this->event_info, "all_day"); ?><br />
         starting on
-        <?= TextField($this->event_info, 'start_date_str', array("id" => "start_date")); ?>
+        <?= DatePicker($this->event_info, 'start_date_str', array("id" => "start_date")); ?>
         <? if ($this->event_info->all_day == false): ?>
             at
             <?= TextField($this->event_info, 'start_time_str', array("id" => "start_time")); ?>
         <? endif; ?>
         <? if ($this->event_info->repeat_type == 0): ?>
             ending on
-            <?= TextField($this->event_info, 'end_date_str', array("id" => "end_date")); ?>
+            <?= DatePicker($this->event_info, 'end_date_str', array("id" => "end_date")); ?>
             <? if ($this->event_info->all_day == false): ?>
                 at
                 <?= TextField($this->event_info, 'end_time_str', array("id" => "end_time")); ?>
