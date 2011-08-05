@@ -47,7 +47,7 @@ if ($this->UserLoggedIn())
             <? endif; ?>
         </td>
         <td class="event" colspan="2">
-        <?= l($event->title, Path::event_show($event->id)); ?><br />
+        <?= l($event->title, Path::event_show($event->id)); ?>&nbsp;&nbsp;&nbsp;@ <?= $event->location; ?>
         </td>
     </tr>
         <? endforeach; ?>
