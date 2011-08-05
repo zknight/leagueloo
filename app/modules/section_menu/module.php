@@ -51,7 +51,7 @@ class SectionMenu extends \simp\Module
                 'link' => Path::event_calendar("program", $program->id),
                 'class' => ($current == 'calendar' ? 'selected' : ''),
             );
-            if ($program->has_teams == true)
+            if ($program->allow_teams == true)
             {
                 $this->links['Teams'] = array(
                     'link' => Path::Relative("{$program->name}/teams"),
