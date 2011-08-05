@@ -10,7 +10,48 @@ if ($this->UserLoggedIn())
     "current" => 'calendar', 
     "entity_type" => $this->entity_type,
     "entity_id" => $this->entity_id)); ?>
-<h1 class="title"><?= HumanCase($this->entity_name); ?></h1>
-<div style="text-align:center;">
-<?= ShowCalendar(Path::event(), $this->start_date, $this->dates, $editor); ?>
+<h1 class="title"><?= HumanCase($this->entity_name); ?> Event Calendar</h1>
+<div class="event-list">
+<?/*= ShowCalendar(Path::event(), $this->start_date, $this->dates, $editor); */?>
+<? $nav_dates = CalendarNavDates($this->start_date); ?>
+<table class="pretty event-list">
+    <tr>
+        <th class="nav prev" style="width:20%">
+            <p><?= l("&lt; {$nav_dates['prev_month']['text']}", Path::event("calendar", "{$nav_dates['prev_month']['link']}", "{$this->entity_type}/{$this->entity_id}")); ?></p>
+            <p><?= l("&lt;&lt; {$nav_dates['prev_year']['text']}", Path::event("calendar", "{$nav_dates['prev_year']['link']}", "{$this->entity_type}/{$this->entity_id}")); ?></p>
+        </th>
+        <th class="month">
+            <p>
+                <?= $this->start_date->format("F Y"); ?>
+            </p>
+        </th>
+        <th class="nav next">
+            <p><?= l("{$nav_dates['next_month']['text']} &gt;", Path::event("calendar", "{$nav_dates['next_month']['link']}", "{$this->entity_type}/{$this->entity_id}")); ?></p>
+            <p><?= l("{$nav_dates['next_year']['text']} &gt;&gt;", Path::event("calendar", "{$nav_dates['next_year']['link']}", "{$this->entity_type}/{$this->entity_id}")); ?></p>
+        </th>
+    </tr>
+<? foreach ($this->dates as $day): ?>
+    <? if (count($day['events']) > 0): ?>
+    <tr>
+        <? $dt = new DateTime("{$day['m']}/{$day['d']}/{$day['y']}"); ?>
+        <td class="day" colspan="3"><?= FormatDateTime($dt->getTimestamp(), "l, F jS"); ?></td>
+    </tr>
+        <? foreach ($day['events'] as $event): ?>
+    <tr>
+        <td class="time">
+            <? if ($event->all_day): ?>
+        All Day
+            <? else: ?>
+        <?= FormatDateTime($event->start_time, "g:i A"); ?> -
+        <?= FormatDateTime($event->end_time, "g:i A T"); ?>
+            <? endif; ?>
+        </td>
+        <td class="event" colspan="2">
+        <?= l($event->title, Path::event_show($event->id)); ?><br />
+        </td>
+    </tr>
+        <? endforeach; ?>
+    <? endif; ?>
+<? endforeach; ?>
+</table>
 </div>

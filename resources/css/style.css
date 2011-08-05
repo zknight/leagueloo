@@ -246,7 +246,7 @@ h1.title {
   margin: 0;
   text-align: center; }
 
-h3.subtitle {
+.subtitle {
   padding: 0;
   margin: 0;
   text-align: center; }
@@ -427,6 +427,35 @@ h3.subtitle {
   font-size: 10pt; }
 .module .age-3 {
   font-size: 9pt; }
+
+.event-list {
+  padding: 8px 4px; }
+  .event-list h2 {
+    text-align: center; }
+  .event-list th p {
+    padding: 0;
+    margin: 0; }
+  .event-list th.month {
+    width: 60%; }
+    .event-list th.month p {
+      text-align: center;
+      font-size: 12pt; }
+  .event-list th.nav {
+    width: 20%; }
+    .event-list th.nav p {
+      font-size: 8pt; }
+  .event-list th.prev {
+    text-align: left; }
+  .event-list th.next {
+    text-align: right; }
+  .event-list td.day {
+    text-align: center;
+    background: #002142; }
+  .event-list td.time {
+    color: #ffe690;
+    padding: 8px 4px; }
+  .event-list td.event {
+    padding: 8px 0; }
 
 .calendar {
   table-layout: fixed;

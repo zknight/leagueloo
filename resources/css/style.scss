@@ -333,7 +333,7 @@ h1.title {
     margin:0;
     text-align:center;
 }
-h3.subtitle {
+.subtitle {
     padding:0;
     margin:0;
     text-align:center;
@@ -548,6 +548,51 @@ h3.subtitle {
     .age-1 { font-size:11pt; }
     .age-2 { font-size:10pt; }
     .age-3 { font-size:9pt; }
+}
+
+.event-list {
+    padding:8px 4px;
+
+    h2 {
+        text-align:center;
+    }
+
+    th { 
+        p {
+            padding:0;
+            margin:0;
+        }
+        &.month {
+            width:60%;
+            p { 
+                text-align:center; 
+                font-size:12pt;
+            }
+        }
+        &.nav {
+            width:20%;
+            p {
+                font-size:8pt;
+            }
+        }
+        &.prev { text-align:left; }
+        &.next { text-align:right; }
+    }
+
+    td.day {
+        text-align:center;
+        background:$navy;
+    }
+
+    td.time {
+        color:$orange_tan;
+        padding:8px 4px;
+    }
+
+    td.event {
+        padding:8px 0;
+    }
+
 }
 
 .calendar
