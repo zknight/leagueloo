@@ -9,6 +9,7 @@ No Links.
 <? foreach ($this->links as $entity_type => $links_by_ename): ?>
     <p><strong><?= $entity_type; ?></strong></p>
     <? foreach ($links_by_ename as $entity_name => $links): ?>
+    <p><strong>&nbsp;&nbsp;<?= $entity_name; ?></strong></p>
     <table class="pretty">
         <tr><th>Text</th><th>URI</th><th>Open In</th><th>Enabled?</th><th>&nbsp;</th></tr>
         <? foreach ($links as $link): ?>
