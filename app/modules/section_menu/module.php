@@ -85,6 +85,17 @@ class SectionMenu extends \simp\Module
                     'class' => ($current == $page->short_title ? 'selected' : '')
                 );
             }
+            \R::debug(true);
+            $program_id = \R::getCell("select program_id from team where id = ?" , array($team->id));
+            \R::debug(false);
+            $program_pages = Page::GetPagesForLocation("program", $program_id, Page::MAIN_MENU);
+            foreach ($program_pages as $page)
+            {
+                $this->links[$page->title] = array(
+                    'link' => Path::Relative("{$program->name}/page/show/{$page->short_title}"),
+                    'class' => ($current == $page->short_title ? 'selected' : '')
+                );
+            }
         }
 
 

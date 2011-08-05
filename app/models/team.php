@@ -161,7 +161,7 @@ class Team extends \simp\Model
             $link = self::FindOne(
                 'Link', 
                 'entity_type = ? and entity_id = ? and text = ?',
-                array('team', $this->id, 'Gotsoccer Ranking'));
+                array('Team', $this->id, 'Gotsoccer Ranking'));
             if ($link)
                 $this->gotsoccer = $link->uri;
         }
