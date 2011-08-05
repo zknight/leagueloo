@@ -133,7 +133,7 @@ class TeamsController extends \simp\Controller
     protected function GetPrograms()
     {
         //return $this->GetUser()->ProgramsWithPrivilege(\Ability::ADMIN, "has_teams = ?", array(true));
-        return $this->GetUser()->OptionsForEntitiesWithPrivilege("Program", \Ability::ADMIN, "has_teams = ?", array(true));
+        return $this->GetUser()->OptionsForEntitiesWithPrivilege("Program", \Ability::ADMIN, "allow_teams = ?", array(true));
     }
 
 }
