@@ -30,10 +30,12 @@ $ye = \Team::GetCurrentYearEnd();
             <th class='label'>Select team gender:</th>
             <td class='entry'><?= SimpleSelect($this->team, 'gender', $this->team->GetGenders()); ?></td>
         </tr>
+        <? if ($this->GetParam('format') != 'no_template'): ?>
         <tr>
             <th class='label'>Team Photo:</th>
             <td class='entry'><?= FileSelect($this->team, 'image'); ?></td>
         </tr>
+        <? endif; ?>
         <tr>
             <th class='label'>GotSoccer Page:</th>
             <td class='entry'><?= TextField($this->team, 'gotsoccer', array('size' => 40)); ?></td>

@@ -61,6 +61,7 @@ class TeamsController extends \simp\Controller
         $this->team = \simp\Model::Create('Team');
         $vars = $this->GetFormVariable('Team');
         $vars['file_info'] = $_FILES['image'];
+        global $log; $log->logDebug("admin/teams/create File Info: " . print_r($vars['file_info'], true));
         $this->team->UpdateFromArray($vars);
         if ($this->GetParam('format') == 'json')
         {

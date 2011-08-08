@@ -196,7 +196,7 @@ class Team extends \simp\Model
 
         $errors = $this->VerifyNotEmpty('name') ? $errors : $errors+1;
 
-        if ($errors == 0)
+        if ($errors == 0 && isset($this->file_info))
         {
             $img_path = $this->abs_path . "team_pics/";
             $info = $this->file_info;

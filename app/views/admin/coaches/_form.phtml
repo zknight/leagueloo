@@ -95,7 +95,7 @@ $(function(){
                         info += "   <input type='checkbox' name='Coach[assoc_teams][";
                         info += rdata['team']['id'];
                         info += "]' size='20' value='1' checked='true' />\n";
-                        info += rdata['team']['league'] + ": " + rdata['team']['name'] + " " + rdata['team']['gender'];
+                        info += rdata['team']['league'] + ": " + rdata['team']['name'];
                         info += "\n</div>";
                         $('fieldset#teams > div#teams').append(info);
                     }
@@ -113,7 +113,7 @@ $(function(){
 <? foreach($this->teams as $team): ?>
     <div class="team" style="width:33%;float:left;">
         <?= CheckBoxField($this->coach, "assoc_teams", array('array' => $team->id)); ?>
-        <?= "{$team->program_name}: {$team->name} {$team->gender_str}" ?>
+        <?= "{$team->program_name}: {$team->name}" ?>
     </div>
 <? endforeach; ?>
     </div>
