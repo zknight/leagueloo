@@ -1,6 +1,9 @@
 * {
   margin: 0; }
 
+img {
+  border: none; }
+
 body {
   background: #00152c;
   color: #f5fafe;

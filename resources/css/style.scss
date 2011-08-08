@@ -5,6 +5,8 @@ $sans: Verdana, Kalimati, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, Geneva, 
 $serif: Georgia, "Nimbus Roman No9 L", serif;
 
 * { margin:0; }
+
+img { border:none; }
 // mixins
 @mixin three-d-border {
     border: {
