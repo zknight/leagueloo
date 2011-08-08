@@ -30,6 +30,12 @@ if ($this->UserLoggedIn()) {
     <img src="<?= $this->team->img_path; ?>" />
 </div>
 <? endif; ?>
+<div class="coaches">
+    Coach<? if (count($this->team->coaches) > 1) echo "es"; ?>:
+    <? foreach ($this->team->coaches as $coach): ?>
+        <?= l("{$coach->first_name} {$coach->last_name}", Path::staff_coach($coach->id)); ?> <br />
+    <? endforeach; ?>
+</div>
 <? foreach ($this->news as $article): ?>
 <div class="article">
     <p class="title"><?= l($article->title, Path::news_show($article->id)); ?></p>

@@ -13,7 +13,7 @@ class Team extends \simp\Model
 {
 
     protected $gender_str;
-    public $coaches;
+    //public $coaches;
     public $file_info;
     public $rel_path;
     public $abs_path;
@@ -22,7 +22,7 @@ class Team extends \simp\Model
 
     public function Setup()
     {
-        $this->coaches = array();
+        //$this->coaches = array();
         $this->img_path = NULL;
         global $REL_PATH;
         global $BASE_PATH;
@@ -127,6 +127,15 @@ class Team extends \simp\Model
         case "program_designator":
             return "{$this->program_type}:{$this->program_id}";
             break;
+        case "coaches":
+            $coach_beans = \R::related($this->_bean, 'coach');
+            $coaches = array();
+            foreach ($coach_beans as $id => $bean)
+            {
+                $coaches[$id] = new Coach($bean);
+            }
+            return $coaches;
+            break;
         default:
             return parent::__get($property);
             break;
@@ -151,11 +160,6 @@ class Team extends \simp\Model
     public function OnLoad()
     {
         $this->img_path = $this->rel_path . "team_pics/{$this->image}";
-        $coach_beans = \R::related($this->_bean, 'coach');
-        foreach ($coach_beans as $id => $bean)
-        {
-            $this->coaches[$id] = new Coach($bean);
-        }
         if ($this->id > 0)
         {
             $link = self::FindOne(
