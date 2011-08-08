@@ -32,10 +32,10 @@ class Coach extends \simp\Model
         1 => 'Assistant Director of Coaching',
         2 => 'Director of Academy',
         3 => 'Assistant Director of Academy',
-        4 => 'Senior Staff Coach',
-        5 => 'Staff Coach',
-        6 => 'Junior Staff Coach',
-        7 => 'Goalkeeper Trainer',
+        4 => 'Director of Goalkeeping',
+        5 => 'Senior Staff Coach',
+        6 => 'Staff Coach',
+        7 => 'Junior Staff Coach',
         8 => 'Fitness Trainer',
         9 => 'Trainer'
     );
