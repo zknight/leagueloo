@@ -58,11 +58,17 @@ class MainController extends \app\AppController
         }
          */
         $this->articles = \News::FindPublished(
+            'Main',
+            0,
+            '1 order by publish_on, entity_id asc'
+        );
+
+        $this->articles = array_merge($this->articles, \News::FindPublished(
             'Program',
             NULL,
             'front_page = ? order by publish_on asc',
             array(true)
-        );
+        ));
         return true;
     }
 
