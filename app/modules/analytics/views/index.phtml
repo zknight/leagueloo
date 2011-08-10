@@ -1,0 +1,6 @@
+<h1 class="title">Google Analytics Configuration</h1>
+<?= FormTag("analytics", \simp\Request::PUT); ?>
+    <strong>Analytics Account name: </strong>
+    <input type="text" name="Analytics[account]" value="<?= $this->account; ?>" />
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>
