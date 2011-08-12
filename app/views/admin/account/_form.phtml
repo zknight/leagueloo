@@ -1,0 +1,25 @@
+<?
+/*
+$user_opts = array(0 => 'None');
+foreach ($this->users as $u)
+{
+    $user_opts[$u['id']]
+}
+ */
+?>
+<fieldset><legend>Account Information</legend>
+<input type="hidden" name="Account[team_id]" value="<?= $this->team->id; ?>" />
+<table class="form">
+    <tr>
+        <th class="label">Player name:</th>
+        <td class="entry">
+            First: <?= TextField($this->account, 'first_name'); ?>
+            Last: <?= TextField($this->account, 'last_name'); ?>
+        </td>
+    </tr>
+    <tr>
+        <th class="label">Starting Balance:</th>
+        <td class="entry"><?= TextField($this->account, 'starting_balance'); ?></th>
+    </tr>
+</table>
+</fieldset>

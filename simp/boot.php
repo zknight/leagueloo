@@ -22,7 +22,7 @@ $REL_PATH = $req->GetRelativePath();
 $APP_PATH = $REL_PATH . "app";
 $log->logDebug("base path: $BASE_PATH");
 $log->logDebug("relative path: $REL_PATH");
-set_include_path(get_include_path() . PATH_SEPARATOR . "{$BASE_PATH}lib");
+set_include_path(get_include_path() . PATH_SEPARATOR . "{$BASE_PATH}lib" . PATH_SEPARATOR . "{$BASE_PATH}app/include");
 $log->logDebug("include path: " . get_include_path());
 require_once "db.php";
 require_once "base_model.php";

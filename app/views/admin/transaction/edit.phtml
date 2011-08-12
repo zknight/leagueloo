@@ -1,0 +1,6 @@
+<h1 class="title">Edit Transaction for <?= "{$this->account->first_name} {$this->account->last_name}";?></h1>
+<?= GetErrorsFor($this->transaction); ?>
+<?= FormTag("transaction", \simp\Request::PUT); ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Update" />
+<?= EndForm(); ?>

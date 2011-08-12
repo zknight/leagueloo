@@ -173,6 +173,12 @@ class Coach extends \simp\Model
         }
     }
 
+    public function BeforeDelete()
+    {
+        \R::clearRelations($this->_bean, 'team');
+        return true;
+    }
+
     protected function CopyPic($img, $info, $name)
     {
         $img_path = $this->abs_path . "coach_pics/";

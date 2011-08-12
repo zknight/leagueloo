@@ -1,0 +1,37 @@
+@import "colors";
+
+table.account {
+    border-collapse:collapse;
+    width:100%;
+    font-size:9pt;
+    background:$dark_carolina;
+
+    th {
+        border:1px solid $light_navy;
+        color:$dark_navy;
+    }
+    td {
+        padding:4px 8px;
+        background:$light_navy;
+        border: {
+            top: 1px dashed $light_navy;
+            bottom: 1px dashed $light_navy;
+        }
+    }
+
+    tr.balance td {
+        font-weight:bold;
+        background:$navy;
+        //color:$light_carolina;
+    }
+
+    td.credit {
+        text-align:right;
+        color:$light_green;
+    }
+
+    td.debit {
+        text-align:right;
+        color:$light_red;
+    }
+}

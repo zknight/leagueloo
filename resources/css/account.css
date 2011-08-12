@@ -1,0 +1,22 @@
+table.account {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 9pt;
+  background: #99badd; }
+  table.account th {
+    border: 1px solid #002e5c;
+    color: #00152c; }
+  table.account td {
+    padding: 4px 8px;
+    background: #002e5c;
+    border-top: 1px dashed #002e5c;
+    border-bottom: 1px dashed #002e5c; }
+  table.account tr.balance td {
+    font-weight: bold;
+    background: #002142; }
+  table.account td.credit {
+    text-align: right;
+    color: #b0df95; }
+  table.account td.debit {
+    text-align: right;
+    color: #ffc7aa; }

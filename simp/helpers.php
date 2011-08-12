@@ -369,15 +369,17 @@ HERE;
 function ObsEmailLink($email)
 {
     $parts = explode("@", $email);
+    //$id = "email_obs_" . str_replace('.', '-', $parts[0]);
+    $id = rand_str();
     //$domain = explode(".", $parts[1]);
     $html = <<<EOD
-<span id='email_obs_$parts[0]'>$parts[0]@<del>REMOVE</del>$parts[1]</span>
+<span id='$id'>$parts[0]@<del>REMOVE</del>$parts[1]</span>
 <script type='text/javascript'>
 <!--
     var name = "$parts[0]";
     var at = "@";
     var domain = "$parts[1]";
-    $('span#email_obs_$parts[0]').replaceWith("<a href='" + "mail" + "to:" + name + at + domain + "'>" + name + at + domain + "</a>");
+    $('span#$id').replaceWith("<a href='" + "mail" + "to:" + name + at + domain + "'>" + name + at + domain + "</a>");
 -->
 </script>
 EOD;

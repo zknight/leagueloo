@@ -31,7 +31,7 @@
 - add user search for abilities and user edit pages
 - add site search - articles, pages, camps, tournaments
 
-team finance manager
+team account manager
 --------------------
 Team specific (team_id)
 Has users associated with it with various abilities
@@ -40,6 +40,49 @@ operates on users that are affiliated with the team
 
 views
 -----
-index - show account for logged-in user
-add
+/admin/fee
+/admin/account
+    index - show account (must be team manager or team treasurer, if super show link for all accounts)
+/admin/transaction
+/account
 
+/account/index/
+    index - show account for logged-in user
+/admin/account/fee/[team_id]
+    fee - create a future fee
+/admin/account/deposit/[user_id]
+    deposit - make a deposit in a user's account
+/admin/account/apply_fee/[fee_id]
+    apply_fee - apply a fee to all users
+/admin/account/withdrawal/[user_id]
+    withdrawal - make a withdrawal from user's account 
+/admin/account/show/[user_id]
+    show - show account for specific user
+/admin/account/team/[team_id]
+    team - show team account
+/admin/account/setup/[team_id]
+    setup - create/remove/manage accounts
+
+models
+------
+account - user account
+    team_id
+    user_id
+    not_registered (user_id will be invalid)
+    first_name
+    last_name
+    starting_balance
+
+transaction
+    team_id
+    account_id
+    date
+    type (credit or debit)
+    amount
+    description
+
+fee
+    team_id
+    due_date
+    description
+    amount

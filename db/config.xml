@@ -7,10 +7,10 @@
     <database mode="production">
         <adapter>mysql</adapter>
         <type>host</type>
-        <host>localhost</host>
-        <port></port>
-        <user>root</user>
-        <password>zayne</password>
+        <host>slsc.leagueloo.com</host>
+        <port>3306</port>
+        <user>zayne</user>
+        <password>3df4tty</password>
         <schema>southlakes</schema>
     </database>
 </databases>

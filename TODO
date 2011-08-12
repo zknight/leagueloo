@@ -44,3 +44,5 @@ x enquiry form (routed to commissioner by age/division/gender)
     - "progressively enhance" to js, then ajax
 * team records
 * event submission queue
+# fix tournament display to hide schedule when not available
+* add links to map and location for fields

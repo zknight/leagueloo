@@ -1,0 +1,6 @@
+<h1 class="title">Edit Account for <?= $this->team->name; ?></h1>
+<?= GetErrorsFor($this->account); ?>
+<?= FormTag("account", \simp\Request::PUT); ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Update" />
+<?= EndForm(); ?>

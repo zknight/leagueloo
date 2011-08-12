@@ -23,7 +23,7 @@ class Affiliation extends \simp\Model
         if ($this->id > 0)
         {
             $team = \simp\Model::FindById("Team", $this->team_id);
-            $this->team_name = "{$team->division} {$team->name} {$team->gender_str}";
+            $this->team_name = $team->name; //"{$team->division} {$team->short_name} {$team->gender_str}";
         }
         else
         {
@@ -91,6 +91,26 @@ class Affiliation extends \simp\Model
         $users = array_merge($users, $supers);
         global $log; $log->logDebug("Affiliation: " . print_r($users, true));
         return $users;
+    }
+
+    public static function GetType($user_id, $team_id)
+    {
+        $aff = \simp\Model::FindOne('Affiliation', 'user_id = ? and team_id = ?', array($user_id, $team_id));
+        if (isset($aff))
+        {
+            return $aff->type;
+        }
+        return 0;
+    }
+
+    public static function GetUsers($team_id)
+    {
+        $users = array();
+        $q = "select user.* from user, affiliation ";
+        $q .= "where user.id = affiliation.user_id and affiliation.team_id = ?";
+
+        $result = \R::getAll($q, array($team_id));
+        return $result;
     }
 
 }

@@ -1,0 +1,22 @@
+<fieldset><legend>Transaction Information</legend>
+<input type="hidden" name="Txn[account_id]" value="<?= $this->account->id; ?>" />
+<input type="hidden" name="Txn[team_id]" value="<?= $this->account->team_id; ?>" />
+<table class="form">
+    <tr>
+        <th class="label">Date</th>
+        <td class="entry"><?= DatePicker($this->transaction, "date"); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Transaction Type</th>
+        <td class="entry"><?= SimpleSelect($this->transaction, "type", Txn::$types); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Amount</th>
+        <td class="entry"><?= TextField($this->transaction, "amount"); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Description</th>
+        <td class="entry"><?= TextField($this->transaction, "description", array('size' => 40)); ?></td>
+    </tr>
+</table>
+</fieldset>

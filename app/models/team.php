@@ -19,6 +19,7 @@ class Team extends \simp\Model
     public $abs_path;
     public $img_path;
     public $gotsoccer;
+    public $name;
 
     public function Setup()
     {
@@ -168,6 +169,7 @@ class Team extends \simp\Model
                 array('Team', $this->id, 'Gotsoccer Ranking'));
             if ($link)
                 $this->gotsoccer = $link->uri;
+            $this->name = "{$this->division} {$this->short_name} {$this->gender_str[$this->gender][0]}";
         }
     }
 
@@ -176,25 +178,25 @@ class Team extends \simp\Model
     {
         $errors = 0;
 
-        $this->name = "{$this->division} {$this->short_name} {$this->gender_str[$this->gender][0]}";
 
+        $this->name = "{$this->division} {$this->short_name} {$this->gender_str[$this->gender][0]}";
         // check for existing on first save
         if ($this->id < 1)
         {
             $count = \simp\Model::Count(
                 'Team',
-                'name = ?',
-                array($this->name)
+                'short_name = ? and year = ? and gender = ?',
+                array($this->short_name, $this->year, $this->gender)
             );
             
             if ($count > 0)
             {
                 $errors++;
-                $this->SetError('name', "This team already exists.");
+                $this->SetError('short_name', "This team already exists.");
             }
         }
 
-        $errors = $this->VerifyNotEmpty('name') ? $errors : $errors+1;
+        $errors = $this->VerifyNotEmpty('short_name') ? $errors : $errors+1;
 
         if ($errors == 0 && isset($this->file_info))
         {
@@ -240,11 +242,11 @@ class Team extends \simp\Model
         }
         $link->uri = $this->gotsoccer;
         ob_start();
-        \R::debug(true);
+        //\R::debug(true);
         $link->Save();
-        \R::debug(false);
+        //\R::debug(false);
         //$log->logDebug("Team::AfterSave: " . ob_get_contents());
-        ob_end_clean();
+        //ob_end_clean();
         //$log->logDebug("Team::AfterSave link (after save) = " . print_r($link, true));
     }
 

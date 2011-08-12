@@ -1,0 +1,6 @@
+<h1 class="title">Add an Account for <?= $this->team->name; ?></h1>
+<?= GetErrorsFor($this->account); ?>
+<?= FormTag("account", \simp\Request::POST); ?>
+    <? require("_form.phtml"); ?>
+    <input type="submit" value="Add" />
+<?= EndForm(); ?>
