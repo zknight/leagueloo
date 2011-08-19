@@ -74,4 +74,16 @@ class Account extends \simp\Model
         return $txns;
     }
 
+    public function Recalculate()
+    {
+        // load all transactions for this account and recompute balance
+        $txns = \simp\Model::Find("Txn", "account_id = ? order by timestamp asc", array($this->id));
+        $b = $this->start_balance;
+        foreach ($txns as $t)
+        {
+            $b += $t->value;
+        }
+        $this->balance = $b;
+        $this->Save();
+    }
 }

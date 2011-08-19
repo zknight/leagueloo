@@ -5,7 +5,6 @@ foreach ($this->users as $u)
     $user_opts[$u['id']] = "{$u['first_name']} {$u['last_name']}";
 }
 ?>
-<?= IncludeCSS("account"); ?>
 <h1 class="title">Account for <?= "{$this->account->first_name} {$this->account->last_name}" ?></h1>
 <?= l("Back to account list", Path::admin_account()); ?>
 <fieldset><legend>Website User Accounts with access</legend>
@@ -33,29 +32,50 @@ foreach ($this->users as $u)
 <? endif; ?>
 </fieldset>
 <fieldset><legend>Account Register</legend>
-    <table class="account">
-        <tr><th>Date</th><th>Description</th><th>Credit</th><th>Debit</th><th>Balance</th></tr>
+<div class="account-wrap">
+    <table class="account top">
         <tr class="balance">
-            <td>&nbsp;</td>
-            <td>Starting Balance</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td class="date">&nbsp;</td>
+            <td class="desc">Starting Balance</td>
+            <td class="amount">&nbsp;</td>
+            <td class="amount">&nbsp;</td>
     <? $class = $this->account->start_balance < 0 ? "debit" : "credit"; ?>
-            <td class="<?= $class; ?>"><?= $this->account->starting_balance; ?></td>
+            <td class="amount <?= $class; ?>"><?= $this->account->starting_balance; ?></td>
         </tr>
-    <? $balance = $this->account->start_balance; ?>
-    <? foreach ($this->transactions as $txn): ?>
-        <tr>
-            <td><?= $txn->date; ?></td>
-            <td><?= $txn->description; ?> <?= l("[edit]", Path::admin_transaction_edit($txn->id)); ?></td>
-            <td class="credit"><? $txn->type == Txn::CREDIT ? print($txn->amount) : false; ?></td>
-            <td class="debit"><? $txn->type == Txn::DEBIT ? print($txn->amount) : false; ?></td>
-        <? $balance = $balance + $txn->value; ?>
-        <? $class = $balance < 0 ? "debit" : "credit"; ?>
-            <td class="<?= $class; ?>"><?= ToDollars($balance); ?></td>
-        </tr>
-    <? endforeach; ?>
+        <tr><th>Date</th><th>Description</th><th>Credit</th><th>Debit</th><th>Balance</th></tr>
     </table>
+    <div class="account">
+        <? $balance = $this->account->start_balance; ?>
+        <? $odd = true; ?>
+        <table class="account">
+        <? foreach ($this->transactions as $txn): ?>
+            <tr class="<?=($odd=!$odd)?'odd':'even';?>">
+                <td class="date"><?= $txn->date; ?></td>
+                <td class="desc">
+                    <?= $txn->description; ?> 
+                    <?= l("[edit]", Path::admin_transaction_edit($txn->id)); ?>
+                    <?= l("[delete]", Path::admin_transaction_delete($txn->id), array('method' => 'delete')); ?>
+                </td>
+                <td class="amount credit"><? $txn->type == Txn::CREDIT ? print($txn->amount) : false; ?></td>
+                <td class="amount debit"><? $txn->type == Txn::DEBIT ? print($txn->amount) : false; ?></td>
+            <? $balance = $balance + $txn->value; ?>
+            <? $class = $balance < 0 ? "debit" : "credit"; ?>
+                <td class="amount <?= $class; ?>"><?= ToDollars($balance); ?></td>
+            </tr>
+        <? endforeach; ?>
+        </table>
+    </div>
+    <table class="account bottom">
+        <tr class="balance">
+            <td class="date"><?= FormatDateTime(time(), "m/d/Y"); ?></td>
+            <td class="desc">Current Balance</td>
+            <td class="amount">&nbsp;</td>
+            <td class="amount">&nbsp;</td>
+        <? $class = $balance < 0 ? "debit" : "credit"; ?>
+            <td class="amount <?= $class; ?>"><?= ToDollars($balance); ?></td>
+        </tr>
+    </table>
+</div>
     <p><?= l("Add transaction", Path::admin_transaction_add($this->account->id)); ?></p>
 </fieldset>
 

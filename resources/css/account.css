@@ -1,19 +1,37 @@
+div.account-wrap {
+  border: 1px solid #d6eafe;
+  background: #002142; }
+
+div.account {
+  height: 300px;
+  overflow: auto; }
+
 table.account {
   border-collapse: collapse;
   width: 100%;
   font-size: 9pt;
   background: #99badd; }
+  table.account tr.odd {
+    background: #002e5c; }
+  table.account tr.even {
+    background: #002142; }
+  table.account td.date {
+    width: 10%; }
+  table.account td.desc {
+    width: 60%;
+    border-left: 1px dashed #00152c; }
+  table.account td.amount {
+    width: 10%;
+    border-left: 1px dashed #00152c; }
   table.account th {
-    border: 1px solid #002e5c;
     color: #00152c; }
   table.account td {
-    padding: 4px 8px;
-    background: #002e5c;
-    border-top: 1px dashed #002e5c;
-    border-bottom: 1px dashed #002e5c; }
+    padding: 4px 8px; }
   table.account tr.balance td {
     font-weight: bold;
-    background: #002142; }
+    background: #00152c; }
+    table.account tr.balance td.desc {
+      text-align: right; }
   table.account td.credit {
     text-align: right;
     color: #b0df95; }

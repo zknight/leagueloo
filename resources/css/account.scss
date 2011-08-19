@@ -1,27 +1,37 @@
 @import "colors";
 
+div.account-wrap { border:1px solid $carolina; background:$navy;}
+div.account { height:300px; overflow:auto; }
 table.account {
     border-collapse:collapse;
     width:100%;
     font-size:9pt;
     background:$dark_carolina;
+    //border:1px solid $carolina;
+
+    tr.odd { background:$light_navy };
+    tr.even { background:$navy; };
+    
+    td.date { width:10%; }
+    td.desc { width:60%; border-left:1px dashed $dark_navy; }
+    td.amount { width:10%; border-left:1px dashed $dark_navy; }
 
     th {
-        border:1px solid $light_navy;
+        //border:1px solid $light_navy;
         color:$dark_navy;
     }
     td {
         padding:4px 8px;
-        background:$light_navy;
-        border: {
-            top: 1px dashed $light_navy;
-            bottom: 1px dashed $light_navy;
-        }
+        //border: {
+            //top: 1px dashed $light_navy;
+            //bottom: 1px dashed $dark_navy;
+        //}
     }
 
     tr.balance td {
         font-weight:bold;
-        background:$navy;
+        background:$dark_navy;
+        &.desc { text-align:right; }
         //color:$light_carolina;
     }
 

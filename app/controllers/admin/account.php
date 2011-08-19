@@ -20,6 +20,8 @@ class AccountController extends \simp\Controller
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
+
+        $this->AddStylesheet("account");
     }
 
     function Index()
@@ -70,13 +72,13 @@ class AccountController extends \simp\Controller
         $type = \Affiliation::GetType($this->GetUser()->id, $team_id);
         if ($type == \Affiliation::TREASURER || $type == \Affiliation::MANAGER)
         {
-            \R::debug(true);
+            //\R::debug(true);
             $this->transactions = \simp\Model::Find(
                 "Txn",
                 "account_id = ? order by timestamp asc",
                 array($this->account->id)
             );
-            \R::debug(false);
+            //\R::debug(false);
             $this->users = \Affiliation::GetUsers($team_id);
             $this->StoreLocation();
             return true;

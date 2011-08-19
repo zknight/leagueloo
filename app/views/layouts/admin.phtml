@@ -11,6 +11,11 @@
         <?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
         <?= IncludeCSS("style.css"); ?>
         <?= IncludeCSS("admin.css"); ?>
+<? 
+$ss = $this->GetStylesheets();
+foreach ($ss as $style): ?>
+        <?= IncludeCSS($style); ?>
+<? endforeach; ?>
         <!--?= IncludeCSS("ce_layout.css"); ?-->
         <script type="text/javascript">
 $(function($) {

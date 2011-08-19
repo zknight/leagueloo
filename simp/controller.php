@@ -33,6 +33,7 @@ class Controller
     protected $_authorization_params;
     protected $_current_url;
     protected $_preactions;
+    protected $_stylesheets;
 
     function __construct()
     {
@@ -60,6 +61,7 @@ class Controller
         $this->_current_user = NULL;
         $this->_authorization_params = array();
         $this->_preactions = array();
+        $this->_stylesheets = array();
         $this->Setup();
         // can override this
         $this->_default_action = "Index";
@@ -74,6 +76,16 @@ class Controller
     protected function SetLayout($layout)
     {
         $this->_layout_name = $layout;
+    }
+
+    protected function AddStylesheet($name)
+    {
+        $this->_stylesheets[] = $name . ".css";
+    }
+
+    protected function GetStylesheets()
+    {
+        return $this->_stylesheets;
     }
 
     protected function MapAction(

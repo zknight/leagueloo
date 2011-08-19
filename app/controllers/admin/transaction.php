@@ -47,13 +47,15 @@ class TransactionController extends \simp\Controller
         if ($type == \Affiliation::TREASURER || $type == \Affiliation::MANAGER)
         {
             $this->transaction->UpdateFromArray($vars);
+            $this->account = \simp\Model::FindById("Account", $vars['account_id']);
             if (!$this->transaction->Save())
             {
-                $this->account = \simp\Model::FindById("Account", $vars['account_id']);
                 $this->SetAction('add');
             }
             else
             {
+                // recalculate account
+                $this->account->Recalculate();
                 AddFlash("Transaction added.");
                 \Redirect(\GetReturnURL());
             }
@@ -93,13 +95,15 @@ class TransactionController extends \simp\Controller
         if ($type == \Affiliation::TREASURER || $type == \Affiliation::MANAGER)
         {
             $this->transaction->UpdateFromArray($vars);
+            $this->account = \simp\Model::FindById("Account", $vars['account_id']);
             if (!$this->transaction->Save())
             {
-                $this->account = \simp\Model::FindById("Account", $vars['account_id']);
                 $this->SetAction('edit');
             }
             else
             {
+                // recalculate account
+                $this->account->Recalculate();
                 AddFlash("Transaction updated.");
                 \Redirect(\GetReturnURL());
             }
@@ -114,6 +118,21 @@ class TransactionController extends \simp\Controller
 
     public function Remove()
     {
-        return true;
+        $this->transaction = \simp\Model::FindById('Txn', $this->GetParam('id'));
+        $team_id = $this->transaction->team_id;
+        $type = \Affiliation::GetType($this->GetUser()->id, $team_id);
+        if ($type == \Affiliation::TREASURER || $type == \Affiliation::MANAGER)
+        {
+            $this->account = \simp\Model::FindById("Account", $this->transaction->account_id);
+            $this->transaction->Delete();
+            $this->account->Recalculate();
+            AddFlash("Transaction deleted.");
+            \Redirect(\GetReturnURL());
+        }
+        else
+        {
+            AddFlash("You do not have privileges for this action.");
+            \Redirect(\GetReturnURL());
+        }
     }
 }
