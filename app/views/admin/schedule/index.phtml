@@ -1,0 +1,19 @@
+<h1 class="title">Schedule</h1>
+<?= l("upload schedule data (GotSoccer CSV)", Path::admin_schedule_upload()); ?>
+<? foreach ($this->matches as $div => $dates): ?>
+<h1><?= $div; ?></h1>
+    <? foreach ($dates as $date => $matches): ?>
+<h2><?= $date; ?></h2>
+<table class="pretty">
+    <tr><th>Time</th><th>Field</th><th>Home</th><th>Away</th></tr>
+        <? foreach ($matches as $match): ?>
+    <tr>
+        <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
+        <td><?= $match->field; ?></td>
+        <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
+        <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
+    </td>
+        <? endforeach; ?>
+</table>
+    <? endforeach; ?>
+<? endforeach; ?>

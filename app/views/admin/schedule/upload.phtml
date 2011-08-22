@@ -1,0 +1,6 @@
+<h1 class="title">Upload GotSoccer CSV Schedule</h1>
+<?= l("back", GetReturnURL()); ?>
+<?= FormTag("schedule", \simp\Request::POST, NULL, true); ?>
+    csv file: <input type="file" name="schedule" />
+    <input type="submit" value="Import" />
+<?= EndForm(); ?>
