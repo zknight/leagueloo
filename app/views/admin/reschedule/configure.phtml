@@ -1,0 +1,79 @@
+<h1 class="title">Rescheduler Configuration</h1>
+<?= FormTag("rescheduler", \simp\Request::PUT); ?>
+<fieldset><legend>Schedulers</legend>
+    <table class="pretty">
+        <tr><th>Name</th><th>Email Address</th></tr>
+    <? foreach ($this->schedulers as $id => $scheduler): ?>
+        <tr>
+            <td><?= $scheduler['name']; ?> <?= l("[x]", Path::admin_reschedule_delete_sched($id)); ?></td>
+            <td><?= $scheduler['email']; ?></td></tr>
+    <? endforeach; ?>
+    </table>
+    <br />
+    <fieldset><legend>Add Scheduler</legend>
+        <table class="form">
+            <tr>
+                <th class="label">Name:</th>
+                <td class="entry"><input type="text" name="scheduler[name]" /></td>
+            </tr>
+            <tr>
+                <th class="label">Email Address:</th>
+                <td class="entry"><input type="text" name="scheduler[email]" /></td>
+            </tr>
+        </table>
+        <p><input type="submit" name='button' value="Add Scheduler"/></p>
+    </fieldset>
+</fieldset>
+<br />
+<fieldset><legend>Referee Coordinators</legend>
+    <table class="pretty">
+        <tr><th>Name</th><th>Email Address</th></tr>
+    <? foreach ($this->ref_coordinators as $id => $coord): ?>
+        <tr>
+            <td><?= $coord['name']; ?> <?= l("[x]", Path::admin_reschedule_delete_coord($id)); ?>
+            </td>
+            <td><?= $coord['email']; ?></td>
+        </tr>
+    <? endforeach; ?>
+    </table>
+    <br />
+    <fieldset><legend>Add Referee Coordinator</legend>
+        <table class="form">
+            <tr>
+                <th class="label">Name:</th>
+                <td class="entry"><input type="text" name="ref_coord[name]" /></td>
+            </tr>
+            <tr>
+                <th class="label">Email Address:</th>
+                <td class="entry"><input type="text" name="ref_coord[email]" /></td>
+            </tr>
+        </table>
+        <p><input type="submit" name="button" value="Add Referee Coordinator"/></p>
+    </fieldset>
+</fieldset>
+<br />
+<fieldset><legend>Courtesy Copy Recipients</legend>
+    <table class="pretty">
+        <tr><th>Name</th><th>Email Address</th></tr>
+    <? foreach ($this->cc_emails as $id => $cc): ?>
+        <tr><td><?= $cc['name']; ?> <?= l("[x]", Path::admin_reschedule_delete_cc($id)); ?>
+</td>
+        <td><?= $cc['email']; ?></td></tr>
+    <? endforeach; ?>
+    </table>
+    <br />
+    <fieldset><legend>Add Courtesy Copy Recipient</legend>
+        <table class="form">
+            <tr>
+                <th class="label">Name:</th>
+                <td class="entry"><input type="text" name="cc_email[name]" /></td>
+            </tr>
+            <tr>
+                <th class="label">Email Address:</th>
+                <td class="entry"><input type="text" name="cc_email[email]" /></td>
+            </tr>
+        </table>
+        <p><input type="submit" name="button" value="Add CC Recipient"/></p>
+    </fieldset>
+</fieldset>
+<?= EndForm(); ?>

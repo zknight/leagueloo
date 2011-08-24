@@ -1,0 +1,25 @@
+<h1 class="title"><?= $this->complex->name; ?></h1>
+<?= l("back", GetReturnURL()); ?>
+<div class="field">
+<?= $this->Status($this->complex); ?>
+<span class="comment"><?= $this->complex->comment; ?></span>
+<div class="date">
+    <?= $this->Time($this->complex); ?>
+</div>
+<p>The <?= $this->complex->name; ?> is located at: <strong><?= $this->complex->address; ?> <?= l("map", $this->complex->map_link, array('external' => 'true')); ?></strong></p>
+</div>
+<? if (count($this->complex->fields) > 0): ?>
+<h2>Fields at this complex:</h2>
+<table class="pretty">
+    <tr><th>Field</th><th>Format</th><th>Size</th><th>Lights?</th></tr>
+    <? foreach ($this->complex->fields as $field): ?>
+    <tr>
+        <td><?= $field->name; ?></td>
+        <td><?= Field::$formats[$field->format]; ?></td>
+        <td><?= $field->dimensions; ?></td>
+        <td><?= $field->lights ? "Yes" : "No"; ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+

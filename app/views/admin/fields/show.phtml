@@ -1,0 +1,27 @@
+<h1 class="title"><?= $this->field->complex->name; ?> Field <?= $this->field->name; ?></h1>
+<table class="pretty">
+    <tr>
+        <th>GotSoccer Field Name</th><th>Dimensions</th><th>Format</th><th>Lights?</th>
+    </tr>
+    <tr>
+        <td><?= $this->field->gotsoccer_name; ?></td>
+        <td><?= $this->field->dimensions; ?></td>
+        <td><?= Field::$formats[$this->field->format]; ?></td>
+        <td><?= $this->field->lights ? "Yes" : "No"; ?></td>
+    </tr>
+</table>
+<fieldset><legend>Blackouts</legend>
+    <table class="pretty">
+        <tr>
+            <th>Date</th><th>Start</th><th>End</th><th>Description</th>
+        </tr>
+<? foreach ($this->field->blackouts as $blackout): ?>
+        <tr>
+            <td><?= $blackout->date_str; ?></td>
+            <td><?= $blackout->start_time; ?></td>
+            <td><?= $blackout->end_time; ?></td>
+            <td><?= $blackout->description; ?></td>
+        </tr>
+<? endforeach; ?>
+    </table>
+</fieldset>

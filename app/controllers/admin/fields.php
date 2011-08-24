@@ -4,25 +4,30 @@ class FieldsController extends \simp\Controller
 {
     function Setup()
     {
+        $this->SetLayout("admin");
         $this->RequireAuthorization(
             array(
                 'index',
                 'show',
                 'add',
                 'edit',
-                'delete'
+                'delete',
+                'blackout',
                 )
             );
 
         $this->MapAction("add", "Create", \simp\Request::POST);
-        $this->MapAction("edit", "Update", \simp\Request::POST);
-        $this->MapAction("delete", "Remove", \simp\Request::POST);
+        $this->MapAction("edit", "Update", \simp\Request::PUT);
+        $this->MapAction("delete", "Remove", \simp\Request::DELETE);
+        $this->MapAction("blackout", "AddBlackout", \simp\Request::POST);
+        $this->MapAction("delblackout", "RemoveBlackout", \simp\Request::DELETE);
 
     }
 
     function Index()
     {
-        $this->fields = \simp\Model::FindAll('Field');
+        $this->StoreLocation();
+        $this->complexes = \simp\Model::FindAll('Complex');
         return true;
     }
 
@@ -35,7 +40,7 @@ class FieldsController extends \simp\Controller
         }
         else
         {
-            \Redirect(\Path::admin_fields());
+            \Redirect(\GetReturnURL());
         }
     }
 
@@ -55,7 +60,7 @@ class FieldsController extends \simp\Controller
         else
         {
             AddFlash("That field doesn't exist.");
-            \Redirect(\Path::admin_field);
+            \Redirect(\GetReturnURL());
         }
     }
 
@@ -67,7 +72,7 @@ class FieldsController extends \simp\Controller
         if ($field->Save())
         {
             AddFlash("Field {$field->name} Created.");
-            \Redirect(\Path::admin_fields());
+            \Redirect(\GetReturnURL());
         }
         else
         {
@@ -85,7 +90,7 @@ class FieldsController extends \simp\Controller
         if ($field->Save())
         {
             AddFlash("Field {$field->name} Updated.");
-            \Redirect(\Path::admin_fields());
+            \Redirect(\GetReturnURL());
         }
         else
         {
@@ -109,6 +114,87 @@ class FieldsController extends \simp\Controller
         {
             AddFlash("That field is invalid.  Please contact the site administrator.");
         }
-        \Redirect(\Path::admin_fields());
+        \Redirect(\GetReturnURL());
+    }
+
+    public function Blackout()
+    {
+        $this->blackout = \simp\Model::Create("Blackout");
+        $etype = $this->GetParam("entity");
+        $eid = $this->GetParam("entity_id");
+        $this->field_opts = array();
+        if ($etype == "field")
+        {
+            $f = \simp\Model::FindById("Field", $eid);
+            $this->field_opts[$f->id] = $f->name;
+            $this->complex = $f->complex;
+        }
+        else if ($etype == "complex")
+        {
+            $this->complex = \simp\Model::FindById("Complex", $eid);
+            $this->field_opts[0] = "All Fields at this complex";
+            $fs = \simp\Model::Find("Field", "complex_id = ? order by name", array($eid));
+            foreach ($fs as $f)
+            {
+                $this->field_opts[$f->id] = $f->name;
+            }
+        }
+        else
+        {
+            AddFlash("Invalid request.");
+            \Redirect(\GetReturnURL());
+        }
+        return true;
+
+    }
+
+    public function AddBlackout()
+    {
+        $vars = $this->GetFormVariable('Blackout');
+        $field_id = $vars['field_id'];
+        if ($field_id == 0)
+        {
+            $fs = \simp\Model::Find("Field", "complex_id = ?", array($vars['complex_id']));
+            unset($vars['complex_id']);
+            foreach ($fs as $f)
+            {
+                $this->blackout = \simp\Model::Create("Blackout");
+                $vars['field_id'] = $f->id;
+                $this->blackout->UpdateFromArray($vars);
+                if (!$this->blackout->Save())
+                {
+                    $this->SetAction("blackout");
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            $this->blackout = \simp\Model::Create('Blackout');
+            unset($vars['complex_id']);
+            $this->blackout->UpdateFromArray($vars);
+            if (!$this->blackout->Save())
+            {
+                $this->SetAction("blackout");
+                return true;
+            }
+        }
+        AddFlash("Blackout saved.");
+        \Redirect(\GetReturnURL());
+    }
+
+    public function RemoveBlackout()
+    {
+    }
+
+    public function GetComplexOpts()
+    {
+        $opts = array();
+        $complexes = \simp\Model::FindAll("Complex");
+        foreach ($complexes as $complex)
+        {
+            $opts[$complex->id] = $complex->name;
+        }
+        return $opts;
     }
 }

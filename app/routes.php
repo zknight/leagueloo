@@ -96,6 +96,8 @@ function RouteSetup($router)
 
     $router->AddRoute('/staff/[A:action]?/[i:id]?')->Controller('staff');
 
+    $router->AddRoute('/reschedule/[A:action]?/[i:id]?')->Controller('reschedule');
+
     $router->AddRoute('/[a:program]/teams')->Controller('teams');
     $router->AddRoute('/[a:program]/teams/[A:gender]')->Controller('teams')->Action('by_gender');
     $router->AddRoute('/[a:program]/teams/[A:gender]/[a:division]')->Controller('teams')->Action('by_division');

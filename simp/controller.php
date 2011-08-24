@@ -338,7 +338,7 @@ class Controller
         {
             $var = \simp\Model::Create("CfgVar");
             $var->name = $name;
-            $var->value = $default == NULL ? "[not set]" : $default;
+            $var->value = $default === NULL ? "[not set]" : $default;
             $var->Save();
         }
         return $var;

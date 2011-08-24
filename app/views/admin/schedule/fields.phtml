@@ -1,0 +1,24 @@
+<h1 class='title'>Field Utilization</h1>
+<? list($all_times, $field_info) = $this->schedule->GetFieldUsageByDate(); ?>
+<? 
+$header = "<tr><th style='width:50px;'>Field</th>";
+foreach ($all_times as $t)
+{
+    $header .= "<th class='vert'><span>" . strftime("%l:%M%p", $t) . "</span></th>";
+}
+$header .= "</tr>\n";
+?>
+<? foreach ($field_info as $date => $fields): ?>
+<h2><?= $date; ?></h2>
+<table class="pretty field-u">
+    <?= $header; ?>
+    <? foreach ($fields as $field => $times): ?>
+        <tr>
+            <th class="small"><?= $field; ?></th>
+        <? foreach ($times as $time => $val): ?>
+            <td class="<?= $val == true ? 'closed' : 'open'; ?>">&nbsp;</td>
+        <? endforeach; ?>
+        </tr>
+    <? endforeach; ?>
+</table>
+<? endforeach; ?>

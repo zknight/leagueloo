@@ -5,7 +5,15 @@ class ScheduleController extends \simp\Controller
     function Setup()
     {
         $this->SetLayout("admin");
-        
+        $this->RequireAuthorization(
+            array(
+                'index',
+                'fields',
+                'upload',
+                'load'
+            )
+        );
+
         $this->MapAction("upload", "Load", \simp\Request::POST);
     } 
 
@@ -14,6 +22,13 @@ class ScheduleController extends \simp\Controller
         $this->StoreLocation();
         //$this->matches = \simp\Model::FindAll("Match");
         $this->matches = \Schedule::GetScheduleByDate();
+        return true;
+    }
+
+    function Fields()
+    {
+        $this->StoreLocation();
+        $this->schedule = new \Schedule();
         return true;
     }
 

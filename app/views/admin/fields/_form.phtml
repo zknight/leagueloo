@@ -1,0 +1,100 @@
+<p><?= l('back', GetReturnURL()); ?></p>
+<fieldset><legend>Field Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">At which complex is this field located?</th>
+            <td class="entry"><?= SimpleSelect($this->field, 'complex_id', $this->GetComplexOpts()); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Display Name</th>
+            <td class="entry"><?= TextField($this->field, 'name'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">GotSoccer Field Name</th>
+            <td class="entry"><?= TextField($this->field, 'gotsoccer_name'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Dimensions</th>
+            <td class="entry"><?= TextField($this->field, 'dimensions'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Format</th>
+            <td class="entry"><?= SimpleSelect($this->field, 'format', Field::$formats); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Lights?</th>
+            <td class="entry"><?= CheckBoxField($this->field, 'lights'); ?></td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset><legend>Availability</legend>
+    <table class="form">
+        <tr>
+            <th class="label" style="width:14%">Monday</th>
+            <th class="label" style="width:14%">Tuesday</th>
+            <th class="label" style="width:14%">Wednesday</th>
+            <th class="label" style="width:14%">Thursday</th>
+            <th class="label" style="width:14%">Friday</th>
+            <th class="label" style="width:14%">Saturday</th>
+            <th class="label" style="width:14%">Sunday</th>
+        </tr>
+        <tr>
+            <td class="">
+                <? if (!$this->field->complex->open[1]): ?> 
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[1]; ?>
+                to <?= $this->field->complex->close[1]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[2]): ?> 
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[2]; ?>
+                to <?= $this->field->complex->close[2]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[3]): ?>
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[3]; ?>
+                to <?= $this->field->complex->close[3]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[4]): ?>
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[4]; ?>
+                to <?= $this->field->complex->close[4]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[5]): ?>
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[5]; ?>
+                to <?= $this->field->complex->close[5]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[6]): ?>
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[6]; ?>
+                to <?= $this->field->complex->close[6]; ?>
+                <? endif; ?>
+            </td>
+            <td class="">
+                <? if (!$this->field->complex->open[7]): ?>
+                Closed
+                <? else: ?>
+                from <?= $this->field->complex->open[7]; ?>
+                to <?= $this->field->complex->close[7]; ?>
+                <? endif; ?>
+            </td>
+        </tr>
+    </table>
+</fieldset>

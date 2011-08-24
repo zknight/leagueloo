@@ -1,0 +1,87 @@
+<p><?= l('back', GetReturnURL()); ?></p>
+<fieldset><legend>Complex Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Enter a name for this complex</th>
+            <td class="entry"><?= TextField($this->complex, 'name', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Enter the location for this complex (e.g. street address)</th>
+            <td class="entry"><?= TextField($this->complex, 'address', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Enter a map link (e.g. google, Bing, MapQuest, etc.)</th>
+            <td class="entry"><?= TextField($this->complex, 'map_link', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Select the current status of the complex</th>
+            <td class="entry"><?= SimpleSelect($this->complex, 'status', $this->complex->status_options); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Optional Status Comment</th>
+            <td class="entry"><?= TextArea($this->complex, 'comment', 3, 40); ?></td>
+        <tr>
+            <th class="label">Todo: add map upload</th>
+            <td class="entry">&nbsp;</td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset><legend>Complex Availability</legend>
+    <table class="form">
+        <tr>
+            <th class="label" style="width:14%">Monday</th>
+            <th class="label" style="width:14%">Tuesday</th>
+            <th class="label" style="width:14%">Wednesday</th>
+            <th class="label" style="width:14%">Thursday</th>
+            <th class="label" style="width:14%">Friday</th>
+            <th class="label" style="width:14%">Saturday</th>
+            <th class="label" style="width:14%">Sunday</th>
+        </tr>
+        <tr>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 1, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 2, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 3, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 4, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 5, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 6, 'size' => 6)); ?><br />
+            </td>
+            <td class="">
+                from <?= TextField($this->complex, "open", array('array' => 7, 'size' => 6)); ?><br />
+            </td>
+        </tr>
+        <tr>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 1, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 2, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 3, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 4, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 5, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 6, 'size' => 6)); ?>
+            </td>
+            <td class="">
+                &nbsp;&nbsp;to <?= TextField($this->complex, "close", array('array' => 7, 'size' => 6)); ?>
+            </td>
+        </tr>
+    </table>
+</fieldset>

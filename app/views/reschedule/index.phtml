@@ -1,0 +1,66 @@
+<h1 class="title"><?= SiteName(); ?> Reschedule Request</h1>
+<p><strong>Before you request a reschedule, please read and consent to the following:</strong></p>
+<p>
+<strong>Note:</strong> You may only request a reschedule using this tool for:
+<ul>
+    <li>All South Lakes Soccer Club in-house recreational matches (U5-U11)<li>
+    <li>FCSA Traveling Recreational matches (U12-U18) <strong>played at South Lakes Soccer Club Complex</strong></li>
+    <li>FCSA Competitive matches (U11-U18) <strong>played at South Lakes Soccer Club Complex</strong></li>
+</ul>
+<p><em>You must have contact the opposing coach prior to proceding with a reschedule request.</em></p>
+<p>
+The Referee Assignor's job is to make sure that USSF registered referees are assigned to 
+all games played in the Club. To do this, referees must be contacted days ahead of time 
+in order to ensure their availability.  For this reason, last minute rescheduling of games 
+causes considerable problems.
+</p>
+<p>
+Therefore, <strong>rescheduling of games should only be done if absolutely necessary, as in the 
+case of a coach or coaches being out of town, or a team going to a tournament.</strong>
+</p>
+<br />
+<h3 style="text-align:center;">RESCHEDULING OF GAMES</h3>
+<p>
+Any coach who wishes to reschedule a Club game must first call the other coach to obtain agreement 
+for rescheduling.  Once agreement is obtained, the following steps must be followed:
+</p>
+<p>
+    <ol>
+        <li>
+            The original game must be canceled by the coach initiating the reschedule by 
+            requesting a reschedule no later than <strong>10:00 p.m. on the Sunday</strong> prior to the game 
+            (U12 and older) or <strong>Tuesday at 10:00 p.m.</strong>  for U5 through U10.
+        </li>
+        <li>
+            The initiating coach is responsible for coordinating with 
+            the opposing coach to select a first and second choice date and time for the 
+            rescheduled game.
+        </li>
+    </ol>
+<p><strong>Please note that a game may not be canceled:</strong></p>
+<ul>
+    <li>
+        After 10:00 p.m. on the Sunday night prior to a game.
+    </li>
+    <li>
+        Without notification of and agreement from the opposing coach.
+    </li>
+</ul>
+<p>
+If the above conditions are not met, teams who do not show up for their originally 
+scheduled game will be listed on the referee's game report as "No Shows" and the 
+referee(s) will be paid by the Club. The game may be played on another date only if 
+additional referee fees are paid by the 2 teams.
+</p>
+<br />
+<?= FormTag("resched", \simp\Request::POST); ?>
+<fieldset style="font-weight:bold;"><legend>Reschedule Agreement</legend>
+    <?= CheckBoxField("resched", "affirm"); ?> I affirm that I have contacted the opposing coach and he/she has agreed to reschedule this match.  
+I also agree that this request is being submitted BEFORE the deadline listed in the procedures 
+above -OR- both coaches understand that a referee fee will be paid by the teams in order to 
+schedule the game.
+</fieldset>
+<br />
+<input type="submit" value="Proceed with request..." />
+<?= EndForm(); ?>
+

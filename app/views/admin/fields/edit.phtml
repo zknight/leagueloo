@@ -1,0 +1,6 @@
+<h1> Modify field</h1>
+<?= GetErrorsFor($this->field); ?>
+<?= FormTag("field", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

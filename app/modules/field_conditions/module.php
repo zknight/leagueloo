@@ -1,7 +1,7 @@
 <?
 class FieldConditions extends \simp\Module
 {
-    public $fields;
+    public $complexes;
 
     protected static function OnInstall()
     {
@@ -12,8 +12,8 @@ class FieldConditions extends \simp\Module
 
     public function Setup($args)
     {
-        require_once "models/field.php";
-        $this->fields = \simp\Model::FindAll("Field");
+        //require_once "models/complex.php";
+        $this->complexes = \simp\Model::FindAll("Complex");
         $this->SetPermissions(
             array(
                 "index" => Ability::ADMIN,
@@ -24,35 +24,35 @@ class FieldConditions extends \simp\Module
         );
     }
 
-    public function Status($field)
+    public function Status($complex)
     {
-        $class = ($field->status > 0) ? 'closed' : 'open';
-        return $field->status == 4 ? "" : "<div class=\"$class\">{$field->status_text}</div>";
+        $class = ($complex->status > 0) ? 'closed' : 'open';
+        return $complex->status == 4 ? "" : "<div class=\"$class\">{$complex->status_text}</div>";
     }
 
-    public function Time($field)
+    public function Time($complex)
     {
         //$time = FormatDateTime($field->updated_on, "Y/m/d H:i:s");
-        $time = TimeAgoInWords($field->updated_on);
+        $time = TimeAgoInWords($complex->updated_on);
         return "$time ago";
     }
 
     // admin methods
     public function Index()
     {
-        $this->fields = \simp\Model::FindAll("Field");
+        $this->complex = \simp\Model::FindAll("Complex");
         return true;
     }
 
     public function Add($method, $params, $vars)
     {
-        $this->field = \simp\Model::Create("Field");
+        $this->complex = \simp\Model::Create("Complex");
         if ($method == \simp\Request::POST)
         {
-            $this->field->UpdateFromArray($vars["Field"]);
-            if ($this->field->Save())
+            $this->complex->UpdateFromArray($vars["Complex"]);
+            if ($this->complex->Save())
             {
-                AddFlash("Field {$this->field->name} created.");
+                AddFlash("Complex {$this->complex->name} created.");
                 \Redirect(\Path::module("field_conditions", "admin"));
             }
         }
@@ -64,22 +64,22 @@ class FieldConditions extends \simp\Module
         global $log; $log->logDebug("FieldConditions::Edit method => $method");
         if ($method != \simp\Request::PUT)
         {
-            $this->field = \simp\Model::FindById("Field", $params['id']);
+            $this->complex = \simp\Model::FindById("Complex", $params['id']);
             return true;
         }
         else
         {
             // update
-            $field = \simp\Model::FindById("Field", $params['id']);
-            $field->UpdateFromArray($vars["Field"]);
-            if ($field->Save())
+            $complex = \simp\Model::FindById("Complex", $params['id']);
+            $complex->UpdateFromArray($vars["Complex"]);
+            if ($complex->Save())
             {
-                AddFlash("Field {$field->name} updated.");
+                AddFlash("Complex {$complex->name} updated.");
                 \Redirect(\Path::module("field_conditions", "admin"));
             }
             else
             {
-                $this->field = $field;
+                $this->complex = $complex;
                 return true;
             }
         }
@@ -87,17 +87,17 @@ class FieldConditions extends \simp\Module
 
     public function UpdateStatus($method, $params, $vars)
     {
-        $this->field = \simp\Model::FindById("Field", $params['id']);
+        $this->complex = \simp\Model::FindById("Complex", $params['id']);
         if ($method != \simp\Request::PUT)
         {
             return true;
         }
         else
         {
-            $this->field->UpdateFromArray($vars["Field"]);
-            if ($this->field->Save())
+            $this->complex->UpdateFromArray($vars["Complex"]);
+            if ($this->complex->Save())
             {
-                AddFlash("Field {$field->name} updated.");
+                AddFlash("Complex {$complex->name} updated.");
                 \Redirect(GetReturnURL());
             }
             else
@@ -111,25 +111,25 @@ class FieldConditions extends \simp\Module
     {
         if ($method == \simp\Request::DELETE)
         {
-            $field = \simp\Model::FindById("Field", $params['id']);
-            if ($field->id > 0)
+            $complex = \simp\Model::FindById("Complex", $params['id']);
+            if ($complex->id > 0)
             {
-                $name = $field->name;
-                $field->Delete();
-                AddFlash("Field $name deleted.");
+                $name = $complex->name;
+                $complex->Delete();
+                AddFlash("Complex $name deleted.");
             }
             else
             {
-                AddFlash("That field is invalid.");
+                AddFlash("That complex is invalid.");
             }
         }
         \Redirect(\Path::module("field_conditions", "admin"));
     }
 
-    function ShowField($method, $params, $vars)
+    function ShowComplex($method, $params, $vars)
     {
         $this->SetLayout('default');
-        $this->field = \simp\Model::FindById('Field', $params['id']);
+        $this->complex = \simp\Model::FindById('Complex', $params['id']);
         return true;
     }
 

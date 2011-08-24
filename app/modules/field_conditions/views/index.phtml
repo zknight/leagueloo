@@ -1,9 +1,9 @@
-<p><strong>Fields</strong></p>
-<?= l("Add New Field", path::module('field_conditions', 'admin', 'add'));?>
-<? if (count($this->fields) > 0): ?>
+<p><strong>Complexes</strong></p>
+<?= l("Add New Complex", path::module('field_conditions', 'admin', 'add'));?>
+<? if (count($this->complexes) > 0): ?>
 <table>
     <tr>
-        <th>Field</th>
+        <th>Complex</th>
         <th>Location</th>
         <th>Status</th>
         <th>Status Date</th>
@@ -11,16 +11,16 @@
         <th>&nbsp;</th>
         <th>&nbsp;</th>
     </tr>
-    <? foreach ($this->fields as $field): ?>
+    <? foreach ($this->complexes as $complex): ?>
     <tr>
-        <td><?= $field->name; ?></td>
-        <td><?= $field->address; ?></td>
-        <td><?= $field->status_text; ?></td>
-        <td><?= FormatDateTime($field->updated_on); ?></td>
-        <td><?= l("map", $field->map_link, array("target" => 'blank')); ?></td>
-        <td><?= l("Edit", Path::module('field_conditions', 'admin', 'edit', $field->id)); ?></td>
+        <td><?= $complex->name; ?></td>
+        <td><?= $complex->address; ?></td>
+        <td><?= $complex->status_text; ?></td>
+        <td><?= FormatDateTime($complex->updated_on); ?></td>
+        <td><?= l("map", $complex->map_link, array("target" => 'blank')); ?></td>
+        <td><?= l("Edit", Path::module('field_conditions', 'admin', 'edit', $complex->id)); ?></td>
         <td>
-            <?= l("Delete", Path::module('field_conditions', 'admin', 'delete', $field->id), array("method" => "delete"));?>
+            <?= l("Delete", Path::module('field_conditions', 'admin', 'delete', $complex->id), array("method" => "delete"));?>
         </td>
     </tr>
     <? endforeach; ?>

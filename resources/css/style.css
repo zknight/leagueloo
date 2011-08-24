@@ -703,3 +703,38 @@ table.pretty {
       text-align: left; }
     .coach table td {
       padding: 0 8px; }
+
+/* schedule */
+.field-u {
+  table-layout: fixed;
+  margin: 0;
+  border-collapse: collapse; }
+  .field-u th.small {
+    font-size: 8pt; }
+  .field-u th.vert {
+    padding: 0;
+    vertical-align: middle;
+    height: 60px;
+    text-align: bottom;
+    font-size: 8pt; }
+    .field-u th.vert span {
+      display: block;
+      -moz-transform: rotate(-90deg);
+      -o-transform: rotate(-90deg);
+      -webkit-transform: rotate(-90deg);
+      filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=6.123031769111886e-17, M12=1, M21=-1, M22=6.123031769111886e-17);
+      ms-filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=6.123031769111886e-17, M12=1, M21=-1, M22=6.123031769111886e-17);
+      zoom: 1; }
+  .field-u td {
+    padding: 0;
+    width: 10px;
+    border-right: 1px dotted #002142;
+    border-bottom: 1px dashed #002142; }
+  .field-u td.open {
+    border: 1px solid #194300;
+    background: #b0df95;
+    color: #194300; }
+  .field-u td.closed {
+    border: 1px solid #4d1a00;
+    background: #ffc7aa;
+    color: #4d1a00; }

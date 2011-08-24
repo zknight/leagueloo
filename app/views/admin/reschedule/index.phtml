@@ -1,0 +1,22 @@
+<h1 class="title">Reschedule Requests</h1>
+<p><?= l("Configure", Path::admin_reschedule_configure()); ?></p>
+<h2>Pending Requests</h2>
+<? if (empty($this->pending)): ?>
+None.
+<? else: ?>
+<table class="pretty">
+    <tr><th>Game Number</th><th>Requestor</th><th>Home Team</th><th>Away Team</th><th>Date of Request</th><th>Actions</th></tr>
+    <? foreach ($this->pending as $req): ?>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<h2>Approved Requests</h2>
+<? if (empty($this->approved)): ?>
+None.
+<? else: ?>
+<table class="pretty">
+    <tr><th>Game Number</th><th>Requestor</th><th>Home Team</th><th>Away Team</th><th>Date of Request</th><th>Actions</th></tr>
+    <? foreach ($this->pending as $req): ?>
+    <? endforeach; ?>
+</table>
+<? endif; ?>

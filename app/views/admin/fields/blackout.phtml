@@ -1,0 +1,30 @@
+<h1 class="title">Add a Blackout Date/Time for Field(s) at <?= $this->complex->name; ?></h1>
+<?= GetErrorsFor($this->blackout); ?>
+<?= FormTag("blackout", \simp\Request::POST); ?>
+    <input type="hidden" name="Blackout[complex_id]" value="<?= $this->complex->id; ?>" />
+    <fieldset><legend>Blackout Date and Time</legend>
+        <table class="form">
+            <tr>
+                <th class="label">Field</th>
+                <td class="entry"><?= SimpleSelect($this->blackout, 'field_id', $this->field_opts); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Date</th>
+                <td class="entry"><?= DatePicker($this->blackout, 'date_str'); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Start Time</th>
+                <td class="entry"><?= TextField($this->blackout, 'start_time'); ?></td>
+            </tr>
+            <tr>
+                <th class="label">End Time</th>
+                <td class="entry"><?= TextField($this->blackout, 'end_time'); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Description</th>
+                <td class="entry"><?= TextField($this->blackout, 'description'); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <input type="submit" value="Add" />
+<?= EndForm(); ?>

@@ -1,29 +1,40 @@
-<p><strong>Fields</strong></p>
-<?= l("Add New Field", path::admin_fields_add());?>
-<? if (count($this->fields) > 0): ?>
-<table>
+<p><strong>Playing Complexes</strong></p>
+<?= l("Add New Complex", path::admin_complex_add());?>
+<? if (count($this->complexes) > 0): ?>
+ | <?= l("Add a Playing Field", path::admin_fields_add()); ?>
+    <? foreach ($this->complexes as $complex): ?>
+<h2><?= $complex->name; ?></h2>
+<table class="pretty">
     <tr>
         <th>Field</th>
-        <th>Location</th>
-        <th>Status</th>
-        <th>Status Date</th>
-        <th>Map Link</th>
-        <th>&nbsp;</th>
-        <th>&nbsp;</th>
+        <th>Name in GotSoccer</th>
+        <th>Size</th>
+        <th>Format</th>
+        <th>Lights</th>
+        <th>Action</th>
     </tr>
-    <? foreach ($this->fields as $field): ?>
+        <? foreach ($complex->fields as $field): ?>
     <tr>
-        <td><?= $field->name; ?></td>
-        <td><?= $field->address; ?></td>
-        <td><?= $field->status_text; ?></td>
-        <td><?= FormatDateTime($field->updated_on); ?></td>
-        <td><?= l("map", $field->map_link, array("target" => 'blank')); ?></td>
-        <td><?= l("Edit", Path::admin_fields_edit($field->id)); ?></td>
+        <td><?= "$field->name " . l("[show]", Path::admin_fields_show($field->id)); ?></td>
+        <td><?= $field->gotsoccer_name; ?></td>
+        <td><?= $field->dimensions; ?></td>
+        <td><?= Field::$formats[$field->format]; ?></td>
+        <td><?= $field->lights ? "Yes" : "No"; ?></td>
         <td>
+            <?= l("Add Blackout", Path::admin_fields_blackout_field($field->id)); ?> |
+            <?= l("Edit", Path::admin_fields_edit($field->id)); ?> |
             <?= l("Delete", Path::admin_fields_delete($field->id), array("method" => "delete"));?>
         </td>
     </tr>
-    <? endforeach; ?>
+        <? endforeach; ?>
 </table>
+<p>
+    <?= l("Modify Field Availability for This Complex", Path::admin_complex_edit($complex->id)); ?> |
+    <?= l("Add Blackout Date/Time for This Complex", Path::admin_fields_blackout_complex($complex->id)); ?>
+</p>
+<br />
+    <? endforeach; ?>
+<? else: ?>
+<p>No complexes exist.  <?= l("Create one.", Path::admin_complex_add()); ?></p>
 <? endif; ?>
 

@@ -55,6 +55,14 @@ class Schedule extends \simp\DummyModel
         $keys = array();
         $this->update_count = 0;
         $this->new_count = 0;
+        $cur_time = time();
+        $f = \simp\Model::FindAll("Field");
+        $fields = array();
+        foreach ($f as $field)
+        {
+            $fields[$field->gotsoccer_name] = $field->id;
+        }
+
         if (($handle = fopen($filename, "r")) != FALSE)
         {
             // first line is columns
@@ -78,8 +86,27 @@ class Schedule extends \simp\DummyModel
                         "gotsoccer_id = ? and division = ? and age = ? and gender = ?",
                         array($row['gotsoccer_id'], $row['division'], $row['age'], $row['gender'])
                     );
+                    
+                    // see if there is a field that matches this one
+                    if (array_key_exists($row['field'], $fields))
+                    {
+                        $match->field_id = $fields[$row['field']];
+                    }
+                    else
+                    {
+                        // create a field, default first complex
+                        $complex = \simp\Model::FindOne("Complex", "1", array());
+                        $f = \simp\Model::Create("Field");
+                        $f->gotsoccer_name = $row['field'];
+                        $f->complex_id = $complex->id;
+                        $f->name = $row['field'];
+                        $f->Save();
+                        $fields[$f->gotsoccer_name] = $f->id;
+                    }
 
                     $match->UpdateFromArray($row);
+                    $match->updated_at = $cur_time;
+                    $match->in_gotsoccer = true;
                     if ($match->id == 0) $this->new_count++;
                     else $this->update_count++;
 
@@ -177,6 +204,7 @@ class Schedule extends \simp\DummyModel
         $matches = \simp\Model::Find("Match", $conditions, $val);
 
         // generate array of times for each date
+        $times = $this->GenerateTimeSlots("7:00", "21:00", 30);
 
         // iterate matches by date and 'fill in' times that are between match dates
 
@@ -184,12 +212,50 @@ class Schedule extends \simp\DummyModel
         foreach ($matches as $match)
         {
             $date = $match->date;
+            $field = $match->field;
             if (!array_key_exists($date, $by_date))
             {
                 $by_date[$date] = array();
             }
-
+            if (!array_key_exists($field, $by_date[$date]))
+            {
+                $by_date[$date][$field] = array();
+                foreach ($times as $time)
+                {
+                    $by_date[$date][$field][$time] = false;
+                }
+            }
+            $st = strtotime($match->start_time);
+            $et = strtotime($match->end_time);
+            for ($t = $st; $t < $et; $t += 1800)
+            {
+                $by_date[$date][$field][$t] = true;
+            }
         }
 
+        return array($times, $by_date);
+    }
+
+    // increment is in minutes
+    protected function GenerateTimeSlots($start, $end, $increment)
+    {
+        $sh = 0; $sm = 0;
+        $eh = 0; $em = 0;
+        list($sh, $sm) = explode(":", $start);
+        list($eh, $em) = explode(":", $end);
+        // convert to integers (minutes)
+        $stime = $sh * 60 + $sm;
+        $etime = $eh * 60 + $em;
+        $times = array();
+
+        for ($t = $stime; $t <= $etime; $t += $increment)
+        {
+            $th = floor($t / 60);
+            $tm = $t % 60;
+            $tstr = sprintf("%d:%02d", $th, $tm);
+            $times[] = strtotime($tstr);
+        }
+
+        return $times;
     }
 }

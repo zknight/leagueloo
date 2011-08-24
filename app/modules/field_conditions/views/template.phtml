@@ -5,20 +5,20 @@
         </ul>
     </div>
     <div class="content">
-    <? foreach ($this->fields as $field): ?>
+    <? foreach ($this->complexes as $complex): ?>
         <div class="field">
             <strong>
-                <?= l("$field->name", Path::module('field_conditions', 'show_field', $field->id)); ?>
+                <?= l("$complex->name", Path::module('field_conditions', 'show_complex', $complex->id)); ?>
             </strong>
-            <div style="float:right;"><?= l("location", $field->map_link, array('external' => 'true')); ?></div>
+            <div style="float:right;"><?= l("location", $complex->map_link, array('external' => 'true')); ?></div>
             <br />
-            <?= $this->Status($field); ?>
-            <span class="comment"><?= $field->comment; ?></span>
+            <?= $this->Status($complex); ?>
+            <span class="comment"><?= $complex->comment; ?></span>
             <div class="date">
-                <?= $this->Time($field); ?>
+                <?= $this->Time($complex); ?>
             </div>
             <? if (IsLoggedIn() && $this->HasAccess(CurrentUser(), "update_status")): ?>
-            <?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $field->id)); ?>
+            <?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $complex->id)); ?>
             <? endif; ?>
         </div>
 <? endforeach; ?>

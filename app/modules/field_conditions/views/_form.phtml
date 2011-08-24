@@ -1,25 +1,25 @@
 <fieldset>
-    <legend>Field Information</legend>
+    <legend>Complex Information</legend>
     <table class="form">
         <tr>
-            <th class="label">Enter a name for this field/complex</th>
-            <td class="entry"><?= TextField($this->field, 'name', array('size' => 40)); ?></td>
+            <th class="label">Enter a name for this complex</th>
+            <td class="entry"><?= TextField($this->complex, 'name', array('size' => 40)); ?></td>
         </tr>
         <tr>
-            <th class="label">Enter the location for this field (e.g. street address)</th>
-            <td class="entry"><?= TextField($this->field, 'address', array('size' => 40)); ?></td>
+            <th class="label">Enter the location for this complex (e.g. street address)</th>
+            <td class="entry"><?= TextField($this->complex, 'address', array('size' => 40)); ?></td>
         </tr>
         <tr>
             <th class="label">Enter a map link (e.g. google, Bing, MapQuest, etc.)</th>
-            <td class="entry"><?= TextField($this->field, 'map_link', array('size' => 40)); ?></td>
+            <td class="entry"><?= TextField($this->complex, 'map_link', array('size' => 40)); ?></td>
         </tr>
         <tr>
-            <th class="label">Select the current status of the field</th>
-            <td class="entry"><?= SimpleSelect($this->field, 'status', $this->field->status_options); ?></td>
+            <th class="label">Select the current status of the complex</th>
+            <td class="entry"><?= SimpleSelect($this->complex, 'status', $this->complex->status_options); ?></td>
         </tr>
         <tr>
             <th class="label">Optional Status Comment</th>
-            <td class="entry"><?= TextArea($this->field, 'comment', 3, 40); ?></td>
+            <td class="entry"><?= TextArea($this->complex, 'comment', 3, 40); ?></td>
         <tr>
             <th class="label">Todo: add map upload</th>
             <td class="entry">&nbsp;</td>
