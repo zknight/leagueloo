@@ -63,6 +63,7 @@ class BaseModel
     // will automatically sanitize inputs unless excepted
     public function UpdateFromArray($vars)
     {
+        if (empty($vars)) return;
         foreach ($vars as $name => $val)
         {
             //$val = stripslashes(html_entity_decode($val));
@@ -187,7 +188,7 @@ class BaseModel
     protected function VerifyNotEmpty($field, $errmsg = NULL)
     {
         $ok = true;
-        if ($this->$field == "")
+        if (empty($this->$field))
         {
             $msg = $errmsg == NULL ? "{$field} must not be blank." : $errmsg;
             $this->SetError($field, $msg);
@@ -247,6 +248,16 @@ class BaseModel
         return $retval;
     }
 
-
+    protected function VerifyNotEqual($field, $value)
+    {
+        $ok = true;
+        if ($this->$field === $value)
+        {
+            $msg = $errmsg == NULL ? "{$field} must not be $value" : $errmsg;
+            $this->SetError($field, $msg);
+            $ok = false;
+        }
+        return $ok;
+    }
 }
 

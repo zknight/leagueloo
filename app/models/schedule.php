@@ -28,7 +28,7 @@ class Schedule extends \simp\DummyModel
 
     public static $column_map = array(
         'Game No.'          => 'gotsoccer_id',
-        'Date'              => 'date',
+        'Date'              => 'date_str',
         'Start'             => 'start_time',
         'End'               => 'end_time',
         'Age'               => 'age',
@@ -113,6 +113,8 @@ class Schedule extends \simp\DummyModel
                     if (!$match->Save())
                     {
                         // break out (maybe make this exception in the future?
+                        global $log;
+                        $log->logError("models/schedule: " . print_r($match->GetErrors(), true));
                         return false;
                     }
                 }
@@ -163,11 +165,11 @@ class Schedule extends \simp\DummyModel
             {
                 $by_date[$div] = array();
             }
-            if (!array_key_exists($match->date, $by_date[$div]))
+            if (!array_key_exists($match->date_str, $by_date[$div]))
             {
-                $by_date[$div][$match->date] = array();
+                $by_date[$div][$match->date_str] = array();
             }
-            $by_date[$div][$match->date][] = $match;
+            $by_date[$div][$match->date_str][] = $match;
         }
         return $by_date;
     }
@@ -211,7 +213,7 @@ class Schedule extends \simp\DummyModel
         $by_date = array();
         foreach ($matches as $match)
         {
-            $date = $match->date;
+            $date = $match->date_str;
             $field = $match->field;
             if (!array_key_exists($date, $by_date))
             {

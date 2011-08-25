@@ -10,6 +10,7 @@ class RescheduleController extends \simp\Controller
                 'index',
                 'configure',
                 'delete',
+                'fields',
                 'email',
                 'show',
                 'accept',
@@ -105,6 +106,11 @@ class RescheduleController extends \simp\Controller
             break;
         }
         \Redirect(\Path::admin_reschedule_configure());
+    }
+
+    public function Fields()
+    {
+
     }
 
     protected function LoadEmails()

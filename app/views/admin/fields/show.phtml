@@ -11,9 +11,10 @@
     </tr>
 </table>
 <fieldset><legend>Blackouts</legend>
+    <p><?= l("Remove all Blackouts for this field", Path::admin_fields_delblackout_field($this->field->id), array('method' => 'delete')); ?></p>
     <table class="pretty">
         <tr>
-            <th>Date</th><th>Start</th><th>End</th><th>Description</th>
+            <th>Date</th><th>Start</th><th>End</th><th>Description</th><th>&nbsp;</th>
         </tr>
 <? foreach ($this->field->blackouts as $blackout): ?>
         <tr>
@@ -21,6 +22,7 @@
             <td><?= $blackout->start_time; ?></td>
             <td><?= $blackout->end_time; ?></td>
             <td><?= $blackout->description; ?></td>
+            <td><?= l("Remove", Path::admin_fields_delblackout_blackout($blackout->id), array('method' => 'delete')); ?></td>
         </tr>
 <? endforeach; ?>
     </table>

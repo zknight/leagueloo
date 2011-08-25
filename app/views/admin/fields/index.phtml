@@ -30,7 +30,8 @@
 </table>
 <p>
     <?= l("Modify Field Availability for This Complex", Path::admin_complex_edit($complex->id)); ?> |
-    <?= l("Add Blackout Date/Time for This Complex", Path::admin_fields_blackout_complex($complex->id)); ?>
+    <?= l("Add Blackout Date/Time for This Complex", Path::admin_fields_blackout_complex($complex->id)); ?> |
+    <?= l("Remove All Blackouts for This Complex", Path::admin_fields_delblackout_complex($complex->id), array('method' => 'delete')); ?>
 </p>
 <br />
     <? endforeach; ?>

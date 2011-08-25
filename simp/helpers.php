@@ -102,6 +102,8 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
     if (array_key_exists('class', $attrs)) $html .= $attrs['class'];
     $html .= $attrs['size'];
     $html .= " value=\"{$attrs['value']}\"";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= "/>";
     return $html; 
 }
@@ -125,6 +127,8 @@ function DatePicker($model, $field, $opts = array())
     $html .= "\"";
     $html .= $attrs['size'];
     $html .= " value=\"{$attrs['value']}\"";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= "/>";
     return $html; 
 }
@@ -139,6 +143,8 @@ function PasswordField($model, $field, $opts = array())
     $html .= $attrs['class'];
     $html .= $attrs['size'];
     $html .= " value=\"{$attrs['value']}\"";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= "/>";
     return $html; 
 }
@@ -150,6 +156,8 @@ function RadioButton($model, $field, $value, $html_opts = array())
     $html .= $attrs['id'];
     $html .= $attrs['class'];
     if ($attrs['value'] == $value) $html .= " checked";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= " value=\"{$value}\">";
     return $html;
 }
@@ -176,6 +184,8 @@ function RadioGroup($model, $field, $options, $html_opts = array(), $radio_wrapp
         $input .= $attrs['id'];
         $input .= $attrs['class'];
         if ($attrs['value'] == $val) $input .= " checked";
+        $input .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
         $input .= " value=\"{$val}\">";
         if (isset($radio_wrapper))
         {
@@ -198,6 +208,8 @@ function CheckBoxButton($model, $field, $opts = array())
     $html .= $attrs['id'];
     $html .= $attrs['class'];
     $html .= $attrs['size'];
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
 
     $html .= " />";
     $html .= "<input type='hidden' name='{$attrs['name']}' value='{$attrs['value']}' />";
@@ -215,6 +227,8 @@ function CheckBoxField($model, $field, $opts = array())
     $html .= $attrs['class'];
     $html .= $attrs['size'];
     $html .= " value='1'";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
 
     /*
     if (isset($model))
@@ -266,6 +280,8 @@ function SimpleSelect($model, $field, $options, $opts = array())
     $html .= $attrs['id'];
     $html .= $attrs['class'];
     $html .= " name=\"{$attrs['name']}\"";
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= ">\n";
     foreach($options as $val => $text)
     {
@@ -274,7 +290,7 @@ function SimpleSelect($model, $field, $options, $opts = array())
             $html .= "\t<optgroup label=\"$val\">\n";
             foreach ($text as $val2 => $text2)
             {
-                $text = HumanCase($text2);
+                $text = $text2; //HumanCase($text2);
                 $html .= "\t<option value=\"{$val2}\"";
                 if ($val2 == $attrs['value']) $html .= " selected=\"selected\"";
                 $html .= ">{$text2}</option>\n";
@@ -284,7 +300,7 @@ function SimpleSelect($model, $field, $options, $opts = array())
         }
         else
         {
-            $text = HumanCase($text);
+            //$text = HumanCase($text);
             $html .= "\t<option value=\"{$val}\"";
             if ($val == $attrs['value']) $html .= " selected=\"selected\"";
             $html .= ">{$text}</option>\n";
@@ -300,6 +316,8 @@ function FileSelect($model, $field, $opts = array())
     $html = "<input type=\"file\"";
     $html .= $attrs['id'];
     $html .= $attrs['class'];
+    $html .= $attrs['disabled'];
+    $html .= $attrs['readonly'];
     $html .= " name=\"{$field}\" \>";
     if (isset($attrs['value'])) $html .= " currently: {$attrs['value']}";
     return $html;
@@ -446,6 +464,8 @@ function GetInputAttributes($model, $field, $opts)
     $newopts['rows'] = " rows=\"" . (isset($opts['rows']) ? $opts['rows'] : 3) . "\"";
     $newopts['cols'] = " cols=\"" . (isset($opts['cols']) ? $opts['cols'] : 80) . "\"";
     $newopts['id'] = isset($opts['id']) ? " id=\"{$opts['id']}\"" : "";
+    $newopts['disabled'] = array_key_exists('disabled', $opts) && $opts['disabled'] ? " disabled=\"disabled\"" : "";
+    $newopts['readonly'] = array_key_exists('readonly', $opts) && $opts['readonly'] ? " readonly=\"readonly\"" : "";
     $error_class = "";
 
     if (isset($model)) 

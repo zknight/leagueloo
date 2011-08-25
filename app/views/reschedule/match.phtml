@@ -1,0 +1,36 @@
+<h1 class="title">New Reschedule Request</h1>
+<?= GetErrorsFor($this->reschedule); ?>
+<?= FormTag("request", \simp\Request::POST, Path::reschedule_selectmatch($this->reschedule->id)); ?>
+
+<fieldset><legend>Select the Match you are rescheduling</legend>
+    <h3>
+        Matches for 
+        <?= "{$this->reschedule->division} {$this->reschedule->age} {$this->reschedule->gender}"; ?> 
+        on <?=$this->reschedule->orig_date_str; ?>
+    </h3>
+<table class="pretty">
+    <tr><th>&nbsp;</th><th>Match Time</th><th>Home</th><th>Away</th></tr>
+<? foreach ($this->matches as $match): ?>
+    <tr>
+        <td><?= RadioButton($this->reschedule, "match_id", $match->id); ?></td>
+        <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
+        <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
+        <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
+    </tr>
+<? endforeach; ?>
+</table>
+</fieldset>
+<fieldset><legend>Enter Candidate Dates</legend>
+<table class="form">
+    <tr>
+        <th class="label">First Choice</th>
+        <td class="entry"><?= DatePicker($this->reschedule, "first_choice_str"); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Second Choice</th>
+        <td class="entry"><?= DatePicker($this->reschedule, "second_choice_str"); ?></td>
+    </tr>
+</fieldset>
+</table>
+<input type="submit" value="Continue to Next Step..." />
+<?= EndForm(); ?>

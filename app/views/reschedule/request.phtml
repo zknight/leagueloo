@@ -1,14 +1,21 @@
 <h1 class="title">New Reschedule Request</h1>
 <?= GetErrorsFor($this->reschedule); ?>
-<?= FormTag("request", \simp\Request::POST, Path::reschedule_submit()); ?>
-    <input type="hidden" name="Reschedule['affirmed']" value="<?= $this->affirmed; ?>" />
+<?= FormTag("request", \simp\Request::POST, Path::reschedule_match()); ?>
+    <input type="hidden" name="Reschedule[affirmed]" value="<?= $this->affirmed; ?>" />
     <fieldset><legend>Match Information</legend>
         <table class="form">
+            <tr>
+                <th class="label">Division</th>
+                <td class="entry">
+                    <?= SimpleSelect($this->reschedule, 'division_spec', $this->reschedule->division_spec); ?></td>
+                <td class="help">Division game is scheduled in</td>
+            </tr>
             <tr>
                 <th class="label">Original Match Date</th>
                 <td class="entry"><?= DatePicker($this->reschedule, 'orig_date_str'); ?></td>
                 <td class="help">&nbsp;</td>
             </tr>
+<? /*
             <tr>
                 <th class="label">Match ID</th>
                 <td class="entry"><?= TextField($this->reschedule, 'match_id', array('size' => 4)); ?></td>
@@ -38,27 +45,28 @@
                 <th class="label">Comments to Rescheduler</th>
                 <td class="entry" colspan="2"><?= TextArea($this->reschedule, 'comments', 3, 40); ?> </td>
             </tr>
+ */?>
         </table> 
     </fieldset>
     <fieldset><legend>Contact Information</legend>
         <table class="form">
             <tr>
-                <th class="label">Requestor TODO make this read only</th>
-                <td class="entry"><?= TextField($this->reschedule, 'requestor_name'); ?></td>
+                <th class="label">Requestor</th>
+                <td class="entry"><?= TextField($this->reschedule, 'requestor_name', array('readonly' => true)); ?></td>
             </tr>
             <tr>
-                <th class="label"></th>
-                <td class="entry"></td>
+                <th class="label">Requestor Email</th>
+                <td class="entry"><?= TextField($this->reschedule, 'requestor_email', array('readonly' => true)); ?></td>
             </tr>
             <tr>
-                <th class="label"></th>
-                <td class="entry"></td>
+                <th class="label">Opposing Coach/Manager</th>
+                <td class="entry"><?= TextField($this->reschedule, 'opponent_name'); ?></td>
             </tr>
             <tr>
-                <th class="label"></th>
-                <td class="entry"></td>
+                <th class="label">Opposing Coach/Manager Email</th>
+                <td class="entry"><?= TextField($this->reschedule, 'opponent_email'); ?></td>
             </tr>
         </table>
     </fieldset>
-    <input type="submit" value="Submit Request" />
+    <input type="submit" value="Continue to Next Step..." />
 <?= EndForm(); ?>

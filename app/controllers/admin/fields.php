@@ -13,6 +13,7 @@ class FieldsController extends \simp\Controller
                 'edit',
                 'delete',
                 'blackout',
+                'delblackout',
                 )
             );
 
@@ -33,6 +34,7 @@ class FieldsController extends \simp\Controller
 
     function Show()
     {
+        $this->StoreLocation();
         $this->field = \simp\Model::FindById('Field', $this->GetParam('id'));
         if ($this->field->id > 0)
         {
@@ -185,6 +187,40 @@ class FieldsController extends \simp\Controller
 
     public function RemoveBlackout()
     {
+        $etype = $this->GetParam("entity");
+        $eid = $this->GetParam("entity_id");
+        $count = 0;
+        switch ($etype)
+        {
+        case "blackout":
+            $b = \simp\Model::FindById("Blackout", $eid);
+            $b->Delete();
+            $count++;
+            break;
+        case "field":
+            $bs = \simp\Model::Find("Blackout", "field_id = ?", array($eid));
+            foreach ($bs as $b)
+            {
+                $b->Delete();
+                $count++;
+            }
+            break;
+        case "complex":
+            $fs = \simp\Model::Find("Field", "complex_id = ?", array($eid));
+            foreach ($fs as $f)
+            {
+                foreach ($f->blackouts as $b)
+                {
+                    $b->Delete();
+                    $count++;
+                }
+            }
+            break;
+        }
+
+        AddFlash("$count Blackout Dates removed.");
+        \Redirect(\GetReturnURL());
+
     }
 
     public function GetComplexOpts()
