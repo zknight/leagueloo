@@ -188,7 +188,8 @@ class BaseModel
     protected function VerifyNotEmpty($field, $errmsg = NULL)
     {
         $ok = true;
-        if (empty($this->$field))
+        $val = $this->$field;
+        if (empty($val))
         {
             $msg = $errmsg == NULL ? "{$field} must not be blank." : $errmsg;
             $this->SetError($field, $msg);

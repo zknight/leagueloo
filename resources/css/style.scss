@@ -957,13 +957,15 @@ table.pretty {
     border-collapse:collapse;
     th.small { font-size:8pt; }
     th.vert {
-        padding:0;
+        padding:0 0 4px 0;
+        margin:0;
         //width:20px;
-        vertical-align:middle;
-        height:60px;
-        text-align:bottom;
-        font-size:8pt;
-        span {
+        vertical-align:bottom;
+        height:50px;
+        font-size:7pt;
+        div, span {
+            padding:0;
+            margin:0;
             display:block;
             -moz-transform: rotate(-90deg);
             -o-transform: rotate(-90deg);
@@ -976,5 +978,13 @@ table.pretty {
     td { padding:0;width:10px; border-right:1px dotted $navy;border-bottom:1px dashed $navy; }
     td.open { @include open; }
     td.closed { @include closed; }
+    td.black { background:$light-red url(../img/error.png); }
+    td.game { background:$light_navy; }
 }
 
+.field-legend {
+    td.open { @include open; }
+    td.closed { @include closed; }
+    td.black { background:$light-red url(../img/error.png); color:$red;}
+    td.game { background:$light_navy; }
+}

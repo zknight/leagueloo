@@ -18,16 +18,39 @@ class Field extends \simp\Model
     protected $_complex;
     protected $_blackouts;
 
+    public $divisions;
+
     public function Setup()
     {
         //$open = array();
         //$close = array();
+        $this->divisions = array();
         $this->_complex = FALSE;
         $this->_blackouts = array();
     }
 
     public function OnLoad()
     {
+        $div_beans = \R::related($this->_bean, 'division');
+        foreach ($div_beans as $id => $bean)
+        {
+            $this->divisions[$id] = new Division($bean);
+        }
+    }
+
+    public function BeforeDelete()
+    {
+        \R::clearRelations($this->_bean, 'division');
+        return true;
+    }
+
+    public function AddDivision($div)
+    {
+        if (!array_key_exists($div->id, $this->divisions))
+        {
+            \R::associate($this->_bean, $div->Bean());
+            $this->divisions[$div->id] = $div;
+        }
     }
 
     public function __get($property)
@@ -54,6 +77,64 @@ class Field extends \simp\Model
     public function BeforeSave()
     {
         return $this->HasErrors() == false;
+    }
+
+    public function GetAvailability($date, $times)
+    {
+        //$fields = \simp\Model::Find('Field', 'format = ?', 
+
+        $avail = array();
+        //$times = GenerateTimeSlots($start_time, $end_time, 30);
+
+        $matches = \simp\Model::Find(
+            "Match", 
+            "date = ? and field_id = ?",
+            array($date, $this->id)
+        );
+
+        $blackout = \simp\Model::FindOne("Blackout", "field_id = ? and date = ?", array($this->id, $date));
+        
+        // what is dow?
+        $dow = strftime("%u", $date);
+        $open = strtotime($this->complex->open[$dow]);
+        $close = strtotime($this->complex->close[$dow]);
+
+
+        foreach ($times as $t)
+        {
+            $avail[$t] = 'closed';
+            //echo "$time c Comparing $t >= $open && $t <= $close";
+            if ($t >= $open && $t < $close)
+            {
+                $avail[$t] = 'open';
+            }
+            if ($blackout)
+            {
+                $bs = strtotime($blackout->start_time);
+                $be = strtotime($blackout->end_time);
+
+                if ($t >= $bs && $t < $be)
+                {
+                    $avail[$t] = 'black';
+                }
+            }
+        }
+
+        foreach ($matches as $match)
+        {
+            $ms = strtotime($match->start_time);
+            $me = strtotime($match->end_time);
+            foreach ($times as $t)
+            {
+                //echo "m comparing $t >= $ms && $t < $me";
+                if ($t >= $ms && $t < $me)
+                {
+                    $avail[$t] = "game";
+                }
+            }
+        }
+
+        return $avail;
     }
 
 }

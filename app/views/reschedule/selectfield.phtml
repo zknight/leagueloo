@@ -1,0 +1,61 @@
+<? 
+$times = GenerateTimeSlots("7:00", "21:00", 30); 
+$header = "<tr><th style='width:50px;'>Field</th>";
+foreach ($times as $t)
+{
+    $header .= "<th class='vert'><span>" . strftime("%l:%M%p", $t) . "</span></th>";
+}
+$header .= "</tr>\n";
+$fields = $this->division->fields;
+?>
+<h1 class="title">New Reschedule Request</h1>
+<h3 style="text-align:center;">Field Availability for <?= $this->reschedule->first_choice_str; ?></h3>
+<table class="pretty field-u">
+    <?= $header; ?>
+<? foreach ($fields as $field): ?>
+    <tr>
+        <th class="small"><?= $field->name; ?></th>
+    <? foreach ($field->GetAvailability($this->reschedule->first_choice, $times) as $slot): ?>
+        <td class="<?= $slot; ?>">&nbsp;</td>
+    <? endforeach; ?>
+    </tr>
+<? endforeach; ?>
+</table>
+<table class="pretty field-legend">
+<tr><th>Legend</th><td class="closed">Closed</td><td class="open">Open</td><td class="game">Game</td><td class="black">Blackout</td>
+</table>
+
+<h3 style="text-align:center;">Field Availability for <?= $this->reschedule->second_choice_str; ?></h3>
+<table class="pretty field-u">
+    <?= $header; ?>
+<? foreach ($fields as $field): ?>
+    <tr>
+        <th class="small"><?= $field->name; ?></th>
+    <? foreach ($field->GetAvailability($this->reschedule->second_choice, $times) as $slot): ?>
+        <td class="<?= $slot; ?>">&nbsp;</td>
+    <? endforeach; ?>
+    </tr>
+<? endforeach; ?>
+</table>
+<table class="pretty field-legend">
+<tr><th>Legend</th><td class="closed">Closed</td><td class="open">Open</td><td class="game">Game</td><td class="black">Blackout</td>
+</table>
+<?= GetErrorsFor($this->reschedule); ?>
+<?= FormTag("request", \simp\Request::POST, Path::reschedule_submit($this->reschedule->id)); ?>
+<fieldset><legend>Choose Time of Day</legend>
+<table class="form">
+    <tr>
+        <th class="label">Select Time of Day for <?= $this->reschedule->first_choice_str; ?></th>
+        <td class="entry"><?= SimpleSelect($this->reschedule, 'first_tod', Reschedule::$tod_opts); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Select Time of Day for <?= $this->reschedule->second_choice_str; ?></th>
+        <td class="entry"><?= SimpleSelect($this->reschedule, 'second_tod', Reschedule::$tod_opts); ?></td>
+    </tr>
+</table>
+</fieldset>
+<fieldset><legend>Comments to Scheduler</legend>
+    <?= TextArea($this->reschedule, 'comments', 3, 60); ?>
+</fieldset>
+<input type="submit" value="Submit Request" />
+<?= EndForm(); ?>

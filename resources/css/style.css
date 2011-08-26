@@ -712,12 +712,14 @@ table.pretty {
   .field-u th.small {
     font-size: 8pt; }
   .field-u th.vert {
-    padding: 0;
-    vertical-align: middle;
-    height: 60px;
-    text-align: bottom;
-    font-size: 8pt; }
-    .field-u th.vert span {
+    padding: 0 0 4px 0;
+    margin: 0;
+    vertical-align: bottom;
+    height: 50px;
+    font-size: 7pt; }
+    .field-u th.vert div, .field-u th.vert span {
+      padding: 0;
+      margin: 0;
       display: block;
       -moz-transform: rotate(-90deg);
       -o-transform: rotate(-90deg);
@@ -738,3 +740,21 @@ table.pretty {
     border: 1px solid #4d1a00;
     background: #ffc7aa;
     color: #4d1a00; }
+  .field-u td.black {
+    background: #ffc7aa url(../img/error.png); }
+  .field-u td.game {
+    background: #002e5c; }
+
+.field-legend td.open {
+  border: 1px solid #194300;
+  background: #b0df95;
+  color: #194300; }
+.field-legend td.closed {
+  border: 1px solid #4d1a00;
+  background: #ffc7aa;
+  color: #4d1a00; }
+.field-legend td.black {
+  background: #ffc7aa url(../img/error.png);
+  color: #4d1a00; }
+.field-legend td.game {
+  background: #002e5c; }

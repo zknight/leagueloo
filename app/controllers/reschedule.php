@@ -10,13 +10,13 @@ class RescheduleController extends \app\AppController
                 'index',
                 'submit',
                 'match',
-                'selectmatch',
+                'selectfield',
             )
         );
 
         $this->MapAction('index', 'Request', \simp\Request::POST);
         $this->MapAction('match', 'Index', \simp\Request::GET);
-        $this->MapAction('selectmatch', 'Index', \simp\Request::GET);
+        $this->MapAction('selectfield', 'Index', \simp\Request::GET);
     }
 
     function Index()
@@ -59,6 +59,7 @@ class RescheduleController extends \app\AppController
             $this->SetAction('request');
         }
 
+        $this->affirmed = $this->reschedule->affirmed;
         $this->matches = \simp\Model::Find(
             "Match", 
             "date = ? and division = ? and age = ? and gender = ?",
@@ -73,7 +74,7 @@ class RescheduleController extends \app\AppController
         return true;
     }
 
-    function Selectmatch()
+    function Selectfield()
     {
         //print_r($this->_form_vars); return false;
         $vars = $this->GetFormVariable('Reschedule');
@@ -94,6 +95,11 @@ class RescheduleController extends \app\AppController
                 )
             );
             $this->SetAction("match");
+        }
+        else
+        {
+            //$this->schedule = \simp\Model::Create('Schedule');
+            $this->division = \simp\Model::FindOne('Division', 'name = ?', array($this->reschedule->division));
         }
 
         return true;

@@ -57,10 +57,16 @@ class Schedule extends \simp\DummyModel
         $this->new_count = 0;
         $cur_time = time();
         $f = \simp\Model::FindAll("Field");
+        $d = \simp\Model::FindAll("Divisions");
         $fields = array();
+        $divisions = array();
         foreach ($f as $field)
         {
-            $fields[$field->gotsoccer_name] = $field->id;
+            $fields[$field->gotsoccer_name] = $field;
+        }
+        foreach ($d as $division)
+        {
+            $divisions[$division->name] = $division;
         }
 
         if (($handle = fopen($filename, "r")) != FALSE)
@@ -86,11 +92,28 @@ class Schedule extends \simp\DummyModel
                         "gotsoccer_id = ? and division = ? and age = ? and gender = ?",
                         array($row['gotsoccer_id'], $row['division'], $row['age'], $row['gender'])
                     );
-                    
+
+                    // see if there is a division that matches this one
+                    if (array_key_exists($row['division'], $divisions))
+                    {
+                        $d = $divisions[$row['division']];
+                        $match->division_id = $d->id;
+                    }
+                    else
+                    {
+                        $d = \simp\Model::Create("Division");
+                        $d->name = $row['division'];
+                        $d->Save();
+                        $divisions[$d->name] = $d;
+                    }
+
                     // see if there is a field that matches this one
                     if (array_key_exists($row['field'], $fields))
                     {
-                        $match->field_id = $fields[$row['field']];
+                        $f = $fields[$row['field']];
+                        $match->field_id = $f->id;
+                        $f->AddDivision($divisions[$row['division']]);
+                        //$fields[$row['field']->AddDivision($match->division, $match->age, $match->gender);
                     }
                     else
                     {
@@ -100,8 +123,9 @@ class Schedule extends \simp\DummyModel
                         $f->gotsoccer_name = $row['field'];
                         $f->complex_id = $complex->id;
                         $f->name = $row['field'];
+                        $f->AddDivision($divisions[$row['division']]);
                         $f->Save();
-                        $fields[$f->gotsoccer_name] = $f->id;
+                        $fields[$f->gotsoccer_name] = $f;
                     }
 
                     $match->UpdateFromArray($row);
@@ -117,7 +141,12 @@ class Schedule extends \simp\DummyModel
                         $log->logError("models/schedule: " . print_r($match->GetErrors(), true));
                         return false;
                     }
+
                 }
+            }
+            foreach ($fields as $f)
+            {
+                $f->Save();
             }
         }
         return true;

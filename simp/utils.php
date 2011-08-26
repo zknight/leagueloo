@@ -271,4 +271,35 @@ function DateTimeDefaultFormat()
 {
     return "U";
 }
-?>
+
+function defaults($defaults, $assoc)
+{
+    $a = array();
+    foreach ($defaults as $key => $val)
+    {
+        $a[$key] = isset($assoc[$key]) ? $assoc[$key] : $val;
+    }
+    return $a;
+}
+
+function GenerateTimeSlots($start, $end, $increment)
+{
+    $sh = 0; $sm = 0;
+    $eh = 0; $em = 0;
+    list($sh, $sm) = explode(":", $start);
+    list($eh, $em) = explode(":", $end);
+    // convert to integers (minutes)
+    $stime = $sh * 60 + $sm;
+    $etime = $eh * 60 + $em;
+    $times = array();
+
+    for ($t = $stime; $t <= $etime; $t += $increment)
+    {
+        $th = floor($t / 60);
+        $tm = $t % 60;
+        $tstr = sprintf("%d:%02d", $th, $tm);
+        $times[] = strtotime($tstr);
+    }
+
+    return $times;
+}

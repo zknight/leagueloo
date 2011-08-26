@@ -27,3 +27,7 @@
 <? endforeach; ?>
     </table>
 </fieldset>
+<fieldset><legend>Divisions</legend>
+<? foreach ($this->field->divisions as $div): ?>
+<?= $div->name; ?>&nbsp; 
+<? endforeach; ?>
