@@ -1,12 +1,13 @@
 <h1 class="title"><?= SiteName(); ?> Reschedule Request</h1>
-<p><strong>Before you request a reschedule, please read and consent to the following:</strong></p>
-<p>
 <strong>Note:</strong> You may only request a reschedule using this tool for:
 <ul>
     <li>All South Lakes Soccer Club in-house recreational matches (U5-U11)</li>
     <li>FCSA Traveling Recreational matches (U12-U18) <strong>played at South Lakes Soccer Club Complex</strong></li>
     <li>FCSA Competitive matches (U11-U18) <strong>played at South Lakes Soccer Club Complex</strong></li>
 </ul>
+<p><strong>Before you request a reschedule, please read and consent to the following:</strong></p>
+<div class="article">
+<p><?= l("Check Field Availability", Path::fields()); ?></p>
 <p><em>You must have contact the opposing coach prior to proceding with a reschedule request.</em></p>
 <p>
 The Referee Assignor's job is to make sure that USSF registered referees are assigned to 
@@ -63,4 +64,4 @@ schedule the game.
 <br />
 <input type="submit" value="Proceed with request..." />
 <?= EndForm(); ?>
-
+</div>

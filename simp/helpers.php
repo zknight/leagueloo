@@ -112,13 +112,16 @@ function DatePicker($model, $field, $opts = array())
 {
     $attrs = GetInputAttributes($model, $field, $opts);
 
-    $errors = $model->GetErrors();
-    $error_class = "";
-    //print_r($field);
-    //print_r($errors);
-    if (array_key_exists($field, $errors))
+    if (is_object($model))
     {
-        $error_class = "error";
+        $errors = $model->GetErrors();
+        $error_class = "";
+        //print_r($field);
+        //print_r($errors);
+        if (array_key_exists($field, $errors))
+        {
+            $error_class = "error";
+        }
     }
     $html = "<input type=\"text\" name=\"{$attrs['name']}\"";
     $html .= $attrs['id'];

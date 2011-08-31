@@ -1,0 +1,16 @@
+<h1 class="title">Field Availability</h1>
+<?= FormTag("fields", \simp\Request::POST); ?>
+<fieldset><legend>Enter Date/Time To Check Availability</legend>
+<table class="form">
+    <tr>
+        <th class="label">Division</th>
+        <td class="entry"><?= SimpleSelect("info", "division", Field::DivisionOpts()); ?></th>
+    </tr>
+    <tr>
+        <th class="label">Date</th>
+        <td class="entry"><?= DatePicker("info", "date"); ?></th>
+    </tr>
+</table>
+</fieldset>
+<input type="submit" value="Check..." />
+<?= EndForm(); ?>

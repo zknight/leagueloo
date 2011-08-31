@@ -137,4 +137,17 @@ class Field extends \simp\Model
         return $avail;
     }
 
+    public static function DivisionOpts()
+    {
+        $q = "select distinct division, age, gender from match order by division, age, gender;";
+        $divisions = \R::getAll($q);
+        $opts = array();
+        foreach ($divisions as $div)
+        {
+            $did = implode(':', $div);
+            $opts[$did] = implode(' ', $div);
+        }
+        return $opts;
+    }
+
 }
