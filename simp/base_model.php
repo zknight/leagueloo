@@ -60,6 +60,11 @@ class BaseModel
         return $this->BeforeSave();
     }
 
+    public function Check()
+    {
+        return $this->BeforeSave();
+    }
+
     // will automatically sanitize inputs unless excepted
     public function UpdateFromArray($vars)
     {

@@ -1,14 +1,15 @@
 <h1 class="title">Field Availability</h1>
+<?= GetErrorsFor($this->elements); ?>
 <?= FormTag("fields", \simp\Request::POST); ?>
 <fieldset><legend>Enter Date/Time To Check Availability</legend>
 <table class="form">
     <tr>
         <th class="label">Division</th>
-        <td class="entry"><?= SimpleSelect("info", "division", Field::DivisionOpts()); ?></th>
+        <td class="entry"><?= SimpleSelect($this->elements, "division", Field::DivisionOpts()); ?></th>
     </tr>
     <tr>
         <th class="label">Date</th>
-        <td class="entry"><?= DatePicker("info", "date"); ?></th>
+        <td class="entry"><?= DatePicker($this->elements, "date"); ?></th>
     </tr>
 </table>
 </fieldset>

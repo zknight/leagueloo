@@ -1,0 +1,29 @@
+<?
+$times = GenerateTimeSlots("7:00", "21:00", 30);
+$header = "<tr><th style='width:50px;'>Field</th>";
+foreach ($times as $t)
+{
+    $header .= "<th class='vert'><span>" . strftime("%l:%M%p", $t) . "</span></th>";
+}
+$header .= "</tr>\n";
+$fields = $this->division->fields;
+?>
+<h1 class="title">
+Field Availability
+</h1> 
+<h2><?= $this->division->name; ?></h2>
+<h3><?= FormatDateTime($this->date, "l, F j, Y"); ?></h3>
+<table class="pretty field-u">
+    <?= $header; ?>
+<? foreach ($fields as $field): ?>
+    <tr>
+        <th class="small"><?= $field->name; ?></th>
+    <? foreach ($field->GetAvailability($this->date, $times) as $slot): ?>
+        <td class="<?= $slot; ?>">&nbsp;</td>
+    <? endforeach; ?>
+    </tr>
+<? endforeach; ?>
+</table>
+<table class="pretty field-legend">
+<tr><th>Legend</th><td class="closed">Closed</td><td class="open">Available</td><td class="game">Unavailable</td><td class="black">Blackout</td>
+</table>

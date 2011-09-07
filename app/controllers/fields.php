@@ -11,9 +11,11 @@ class FieldsController extends \app\AppController
     function Index()
     {
         $this->StoreLocation();
-        $this->info = new \Info(
-            'date' => \Info::DATE,
-            'division' => \Info::TEXT,
+        $this->elements = new \FormElement(
+            array(
+                'date' => \FormElement::DATE,
+                'division' => \FormElement::TEXT,
+            )
         );
 
         return true;
@@ -21,20 +23,20 @@ class FieldsController extends \app\AppController
 
     function Show()
     {
-        $vars = $this->GetFormVariable('Info');
-        $this->info = new \Info(
-            'date' => \Info::DATE,
-            'division' => \Info::TEXT,
+        $vars = $this->GetFormVariable('FormElement');
+        $this->elements = new \FormElement(
+            array(
+                'date' => \FormElement::DATE,
+                'division' => \FormElement::TEXT,
+            )
         );
-        $this->info->UpdateFromArray('vars');
-        if (!$this->info->Save())
+        $this->elements->UpdateFromArray($vars);
+        if ($this->elements->Check())
         {
-            $this->SetAction('index');
-        }
-        else
-        {
-            $this->division = \simp\Model::FindOne('Division', 'name = ?', array($vars['division'])); 
-            $this->date = $vars['date'];
+            list ($div, $age, $gen) = explode(":", $this->elements->division);
+            $this->division = \simp\Model::FindOne('Division', 'name = ?', array($div));
+            $this->date = strtotime($this->elements->date);
+            $this->SetAction('show');
         }
         return true;
     }
