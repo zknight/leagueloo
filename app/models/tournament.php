@@ -116,7 +116,9 @@ class Tournament extends \simp\Model
         switch ($property)
         {
         case "past_deadline":
-            return $this->deadline < time();
+            $dl = new \DateTime("@{$this->deadline}");
+            $dl->add(new \DateInterval("P1D"));
+            return $dl->getTimestamp() < time();
             break;
         case "leagues":
             $assoc_leagues = $this->assoc_leagues;

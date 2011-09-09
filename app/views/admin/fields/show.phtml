@@ -28,6 +28,15 @@
     </table>
 </fieldset>
 <fieldset><legend>Divisions</legend>
+<? $levels = array(); ?>
 <? foreach ($this->field->divisions as $div): ?>
-<?= $div->name; ?>&nbsp; 
+    <? if (!isset($levels[$div->level])) $levels[$div->level] = array(); ?>
+    <? $levels[$div->level][] = $div; ?>
+<? endforeach; ?>
+<? foreach ($levels as $level => $divs): ?>
+    <table class="pretty"><tr><th><?= Division::$levelopts[$level]; ?></th></tr>
+    <? foreach ($divs as $div): ?>
+    <tr><td><?= $div->name; ?></td></tr>
+    <? endforeach; ?>
+    </table>
 <? endforeach; ?>

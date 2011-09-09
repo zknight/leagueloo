@@ -111,6 +111,16 @@ function TextField($model, $field, $opts = array()) //$size = "20", $class = NUL
 function DatePicker($model, $field, $opts = array())
 {
     $attrs = GetInputAttributes($model, $field, $opts);
+    if (isset($opts['args'])) $args = isset($opts['args']) ? $opts['args'] : "";
+    if ($attrs['id'] == "") 
+    {
+        $dpid = rand_str();
+        $attrs['id'] = " id=\"$dpid\"";
+    }
+    else
+    {
+        $dpid = $opts['id'];
+    }
 
     if (is_object($model))
     {
@@ -133,6 +143,18 @@ function DatePicker($model, $field, $opts = array())
     $html .= $attrs['disabled'];
     $html .= $attrs['readonly'];
     $html .= "/>";
+
+    $html .= <<<EOSCRIPT
+<script type='text/javascript'>
+$(function($) {
+    $(document).ready(function() {
+        $("#$dpid").datepicker({
+            $args
+        });
+    });
+});
+</script>
+EOSCRIPT;
     return $html; 
 }
 

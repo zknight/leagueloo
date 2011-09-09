@@ -34,10 +34,16 @@ class Email
             "MIME-Version: 1.0" . "\r\n" .
             "Content-type: text/html; charset=iso-8859-1" . "\r\n"
             :
-            "";
+            "MIME-Version: 1.0" . "\r\n" .
+            "Content-type: text/plain; charset=iso-8859-1" . "\r\n";
         $headers .= 
             "From: " . $email_data['from'] . "\r\n" .
-            "Reply-To: " . $email_data['from'] . "\r\n" .
+            "Reply-To: " . $email_data['from'] . "\r\n";
+        if (isset($email_data['cc']))
+        {
+            $headers .= "Cc: " . $email_data['cc'] . "\r\n";
+        }
+        $headers .=
             "X-Mailer: PHP/:" . phpversion();
         return mail($email_data['to'], $email_data['subject'], $message, $headers);
     }

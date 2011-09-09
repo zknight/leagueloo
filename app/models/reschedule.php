@@ -9,11 +9,12 @@ class Reschedule extends \simp\Model
     const AFTERNOON = 2;
 
     public static $tod_opts = array(
-        MORNING => "Morning (before Noon)",
-        AFTERNOON => "Afternoon (prior to 7:00p)",
+        self::MORNING => "Morning (before Noon)",
+        self::AFTERNOON => "Afternoon (prior to 7:00p)",
     );
 
-    protected $_divisions;
+    protected $_schedule;
+    protected $_match;
     public $step;
     public $orig_date_str;
     public $first_choice_str;
@@ -34,16 +35,21 @@ class Reschedule extends \simp\Model
     {
         switch ($property)
         {
-        case 'divisions':
-            if (empty($this->_divisions))
+        case 'schedule':
+            if (empty($this->_schedule))
             {
-                $q = "select distinct division, age, gender from match order by division, age, gender;";
-                $this->_divisions = \R::getAll($q);
+                //$q = "select distinct division, age, gender from match where schedule_id = ? order by division, age, gender;";
+                //$this->_divisions = \R::getAll($q, $this->schedule_id);
+                $this->_schedule = \simp\Model::FindById("Schedule", $this->schedule_id);
             }
-            return $this->_divisions;
+            return $this->_schedule;
             break;
-        case 'division_spec':
-            return $this->DivisionOpts();
+        case 'match':
+            if (empty($this->_match))
+            {
+                $this->_match = \simp\Model::FindById("Match", $this->match_id);
+            }
+            return $this->_match;
             break;
         default:
             return parent::__get($property);
@@ -54,9 +60,6 @@ class Reschedule extends \simp\Model
     {
         switch($property)
         {
-        case 'division_spec':
-            list($this->division, $this->age, $this->gender) = explode(":", $val);
-            break;
         default:
             parent::__set($property, $val);
             break;
@@ -65,12 +68,12 @@ class Reschedule extends \simp\Model
 
     public function DivisionOpts()
     {
-        $divs = $this->divisions;
+        $sched = $this->schedule;
+        $divs = $sched->divisions;
         $opts = array();
         foreach ($divs as $div)
         {
-            $did = implode(':', $div);
-            $opts[$did] = implode(' ', $div);
+            $opts[$div->id] = $div->name;
         }
         return $opts;
     }
@@ -94,6 +97,54 @@ class Reschedule extends \simp\Model
             $this->second_choice = strtotime($this->second_choice_str);
         }
 
+        $this->updated_at = time();
+
         return !$this->HasErrors();
+    }
+
+    public function SendRequestEmail()
+    {
+        $site_name = GetCfgVar('site_name');
+        $subject = "[$site_name] Match Reschedule Request";
+        $schedulers = unserialize(GetCfgVar('resched:schedulers', $def));
+        $ref_coordinators = unserialize(GetCfgVar('resched:ref_coordinators', $def));
+        $cc_emails = unserialize(GetCfgVar('resched:cc_emails', $def));
+        $to = array(); 
+        $cc = array();
+        foreach ($schedulers as $scheduler)
+        {
+            $to[] = "{$scheduler['name']} <{$scheduler['email']}>";
+        }
+
+        foreach ($ref_coordinators as $ref)
+        {
+            $cc[] = "{$ref['name']} <{$ref['email']}>";
+        }
+
+        foreach ($cc_emails as $cce)
+        {
+            $cc[] = "{$cce['name']} <{$cce['email']}>";
+        }
+        
+        $cc[] = "{$this->requestor_name} <{$this->requestor_email}>";
+        $cc[] = "{$this->opponent_name} <{$this->opponent_email}>";
+
+        $data = array(
+            'reschedule' => $this,
+            'site_name' => $site_name,
+            'host' => GetCfgVar('site_address'),
+        );
+         
+        $email_data = array(
+            'to' => implode(', ', $to),
+            'cc' => implode(', ', $cc),
+            'from' => "$site_name <" . GetCfgVar('site_email') . ">",
+            'subject' => $subject,
+            'type' => "plain",
+            'data' => $data
+        );
+
+        return \simp\Email::Send("reschedule_request", $email_data);
+
     }
 }

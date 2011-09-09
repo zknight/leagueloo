@@ -24,11 +24,12 @@
 <table class="form">
     <tr>
         <th class="label">First Choice</th>
-        <td class="entry"><?= DatePicker($this->reschedule, "first_choice_str"); ?></td>
+<? $args = "maxDate: '+4m', minDate: '+0d', changeYear: false, changeMonth: true, showOn: 'both', showAnim: 'drop', showButtonPanel: 'true', yearRange: 'c-18:c+18'"; ?>
+        <td class="entry"><?= DatePicker($this->reschedule, "first_choice_str", array('args' => $args)); ?></td>
     </tr>
     <tr>
         <th class="label">Second Choice</th>
-        <td class="entry"><?= DatePicker($this->reschedule, "second_choice_str"); ?></td>
+        <td class="entry"><?= DatePicker($this->reschedule, "second_choice_str", array('args' => $args)); ?></td>
     </tr>
 </fieldset>
 </table>

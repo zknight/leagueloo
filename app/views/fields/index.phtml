@@ -5,11 +5,12 @@
 <table class="form">
     <tr>
         <th class="label">Division</th>
-        <td class="entry"><?= SimpleSelect($this->elements, "division", Field::DivisionOpts()); ?></th>
+        <td class="entry"><?= SimpleSelect($this->elements, "format", Field::$formats); ?></th>
     </tr>
     <tr>
         <th class="label">Date</th>
-        <td class="entry"><?= DatePicker($this->elements, "date"); ?></th>
+<? $args = "maxDate: '+4m', minDate: '+0d', changeYear: false, changeMonth: true, showOn: 'both', showAnim: 'drop', showButtonPanel: 'true', yearRange: 'c-18:c+18'"; ?>
+        <td class="entry"><?= DatePicker($this->elements, "date", array('args' => $args)); ?></th>
     </tr>
 </table>
 </fieldset>

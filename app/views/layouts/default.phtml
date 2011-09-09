@@ -6,8 +6,29 @@
         </title>
         <link rel="shortcut icon" href="favicon.ico" />
         <?= IncludeCSS("style.css"); ?>
+        <?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
         <?= IncludeJS("jquery.js"); ?>
+        <?= IncludeJS("jquery-ui.js"); ?>
         <? \simp\Module::Show("Analytics"); ?>
+<? /*script type="text/javascript">
+$(function($) {
+    $(document).ready(function() {
+        //loadEditor($("textarea.wysiwyg"), "<?= GetJSPath("tiny_mce/tiny_mce.js"); ?>" );
+        $(".date-picker").datepicker({
+            maxDate: '+4m',
+                minDate: '+0d',
+                changeYear: true,
+                changeMonth: true,
+                showOn: 'both',
+                showAnim: 'drop',
+                showButtonPanel: 'true',
+                yearRange: 'c-18:c+18'
+
+        });
+    });
+});
+ */?>
+        </script>
     </head>
     <body>
     <div id="wrapper">

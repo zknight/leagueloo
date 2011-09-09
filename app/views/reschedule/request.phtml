@@ -1,18 +1,21 @@
 <h1 class="title">New Reschedule Request</h1>
+<h2 class="subtitle"><?= $this->reschedule->schedule->name; ?></h2>
 <?= GetErrorsFor($this->reschedule); ?>
 <?= FormTag("request", \simp\Request::POST, Path::reschedule_match()); ?>
     <input type="hidden" name="Reschedule[affirmed]" value="<?= $this->affirmed; ?>" />
+    <input type="hidden" name="Reschedule[schedule_id]" value="<?= $this->reschedule->schedule_id; ?>" />
     <fieldset><legend>Match Information</legend>
         <table class="form">
             <tr>
                 <th class="label">Division</th>
                 <td class="entry">
-                    <?= SimpleSelect($this->reschedule, 'division_spec', $this->reschedule->division_spec); ?></td>
+                    <?= SimpleSelect($this->reschedule, 'division_id', $this->reschedule->DivisionOpts()); ?></td>
                 <td class="help">Division game is scheduled in</td>
             </tr>
             <tr>
                 <th class="label">Original Match Date</th>
-                <td class="entry"><?= DatePicker($this->reschedule, 'orig_date_str'); ?></td>
+<? $args = "maxDate: '+4m', minDate: '+0d', changeYear: false, changeMonth: true, showOn: 'both', showAnim: 'drop', showButtonPanel: 'true', yearRange: 'c-18:c+18'"; ?>
+                <td class="entry"><?= DatePicker($this->reschedule, 'orig_date_str', array('args' => $args)); ?></td>
                 <td class="help">&nbsp;</td>
             </tr>
 <? /*

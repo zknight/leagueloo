@@ -14,7 +14,7 @@ class FieldsController extends \app\AppController
         $this->elements = new \FormElement(
             array(
                 'date' => \FormElement::DATE,
-                'division' => \FormElement::TEXT,
+                'format' => \FormElement::TEXT,
             )
         );
 
@@ -27,15 +27,16 @@ class FieldsController extends \app\AppController
         $this->elements = new \FormElement(
             array(
                 'date' => \FormElement::DATE,
-                'division' => \FormElement::TEXT,
+                'format' => \FormElement::TEXT,
             )
         );
         $this->elements->UpdateFromArray($vars);
         if ($this->elements->Check())
         {
-            list ($div, $age, $gen) = explode(":", $this->elements->division);
-            $this->division = \simp\Model::FindOne('Division', 'name = ?', array($div));
+            //list ($div, $age, $gen) = explode(":", $this->elements->division);
+            $this->format = $this->elements->format; //\simp\Model::FindOne('Division', 'name = ?', array($div));
             $this->date = strtotime($this->elements->date);
+            $this->fields = \simp\Model::Find("Field", "format = ?", array($this->format));
             $this->SetAction('show');
         }
         return true;

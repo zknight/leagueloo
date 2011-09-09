@@ -1,0 +1,28 @@
+<h1 class="title">Schedule Request Submitted</h1>
+<p>
+    An email notification has been sent to the club scheduler, opponent representative, 
+    and referee assignor(s) with the following information:
+</p>
+<br />
+<h3>Original Match Information</h3>
+<table class="form">
+    <tr><th class="label">Schedule</th><td class="entry"><?= $this->reschedule->schedule->name; ?></td></tr>
+    <tr><th class="label">Division</th><td class="entry"><?= $this->reschedule->match->division; ?></td></tr>
+    <tr><th class="label">Match ID</th><td class="entry"><?= $this->reschedule->match->gotsoccer_id; ?></td></tr>
+    <tr><th class="label">Original Date</th><td class="entry"><?= $this->reschedule->orig_date_str; ?></td></tr>
+    <tr><th class="label">Original Time</th><td class="entry"><?= $this->reschedule->match->start_time; ?></td></tr>
+    <tr><th class="label">Home Team</th><td class="entry"><?= $this->reschedule->match->home_club; ?> <?= $this->reschedule->match->home; ?></td></tr>
+    <tr><th class="label">Away Team</th><td class="entry"><?= $this->reschedule->match->away_club; ?> <?= $this->reschedule->match->away; ?></td></tr>
+</table>
+<br />
+<h3>Reschedule Information</h3>
+<table class="form">
+    <tr><th class="label">First Date Choice</th><td class="entry"><?= $this->reschedule->first_choice_str; ?> <?= Reschedule::$tod_opts[$this->reschedule->first_tod]; ?></td></tr>
+    <tr><th class="label">Second Date Choice</th><td class="entry"><?= $this->reschedule->second_choice_str;?> <?= Reschedule::$tod_opts[$this->reschedule->second_tod]; ?></td></tr>
+    <tr><th class="label">Requestor</th><td class="entry"><?= $this->reschedule->requestor_name; ?> <?= ObsEmailLink($this->reschedule->requestor_email); ?></td></tr>
+    <tr><th class="label">Opponent Representative</th><td class="entry"><?= $this->reschedule->opponent_name; ?> <?= ObsEmailLink($this->reschedule->opponent_email); ?></td></tr>
+    <tr><th class="label">Comments to Scheduler</th><td class="entry"><?= $this->reschedule->comments; ?></td></tr>
+</table>
+<p>
+    You will be contacted via email when this reschedule is accepted or denied.
+</p>

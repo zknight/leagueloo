@@ -1,0 +1,40 @@
+<p><?= l('back', GetReturnURL()); ?></p>
+<fieldset><legend>Schedule Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Name</th>
+            <td class="entry"><?= TextField($this->schedule, 'name'); ?></td>
+            <td class="help">Something descriptive, for example, 'Fall 2011 U5-U12 Recreational'</td>
+        </tr>
+        <tr>
+            <th class="label">Level</th>
+            <td class="entry"><?= SimpleSelect($this->schedule, 'level', Division::$levelopts); ?></td>
+            <td class="help">&nbsp;</td>
+        </tr>
+        <tr>
+            <th class="label">Start Date</th>
+            <td class="entry"><?= DatePicker($this->schedule, 'start_date_str'); ?></td>
+            <td class="help">First day games will be played</td>
+        </tr>
+        <tr>
+            <th class="label">End Date</th>
+            <td class="entry"><?= DatePicker($this->schedule, 'end_date_str'); ?></td>
+            <td class="help">Last day games will be played</td>
+        </tr>
+        <tr>
+            <th class="label">Allow Reschedules?</th>
+            <td class="entry"><?= CheckBoxField($this->schedule, 'allow_reschedules'); ?></td>
+            <td class="help">Check this to allow coaches/managers to reschedule matches</td>
+        </tr>
+    </table>
+</fieldset>
+<fieldset><legend>Game Format by Age</legend>
+<table class="form">
+<? foreach (Schedule::$ages as $age): ?>
+    <tr>
+        <th class="label"><?=$age;?></th>
+        <td class="entry"><?= SimpleSelect($this->schedule, "format", Field::$formats, array('array' => $age)); ?></td>
+    </tr>
+<? endforeach; ?>
+</table>
+</fieldset>

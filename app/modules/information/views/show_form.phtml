@@ -12,12 +12,12 @@
         <td class="entry"><?= TextField($this->info_request, 'email', array('size' => 40)); ?></td>
     </tr>
 <? if ($this->category->classification == Category::AGE): ?>
-<?= IncludeCSS("custom-theme/jquery-ui.css"); ?>
-<?= IncludeJS("jquery-ui.js"); ?>
-<script type="text/javascript">
+<?//= IncludeCSS("custom-theme/jquery-ui.css"); ?>
+<?//= IncludeJS("jquery-ui.js"); ?>
+<?/*<script type="text/javascript">
 $(function($) {
     $(document).ready(function() {
-        $(".date-picker").datepicker({
+        $("#dob").datepicker({
                 maxDate: '-4y', 
                 minDate: '-18y', 
                 changeYear: true,
@@ -29,10 +29,12 @@ $(function($) {
         });
     });
 });
+ */?>
 </script>
     <tr>
         <th class="label">Player's Date of Birth:</th> 
-        <td class="entry"><?= DatePicker($this->info_request, 'birthdate'); ?></td>
+<? $args = "maxDate: '-4y', minDate: '-18y', changeYear: true, changeMonth: true, showOn: 'both', showAnim: 'drop', showButtonPanel: true, yearRange: 'c-18:c+18'" ?>
+        <td class="entry"><?= DatePicker($this->info_request, 'birthdate', array('args' => $args)); ?></td>
     </tr>
     <tr>
         <th class="label">Player's Gender:</th>

@@ -29,7 +29,7 @@ class RescheduleController extends \simp\Controller
         {
             \Redirect(\Path::admin_reschedule_configure());
         }
-        $this->pending = \simp\Model::Find("Reschedule", "state = ?", array(\Reschedule::PENDING));
+        $this->pending = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::PENDING));
         $this->approved = \simp\Model::Find("Reschedule", "state = ?", array(\Reschedule::APPROVED));
 
         return true;

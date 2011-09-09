@@ -5,8 +5,15 @@
 None.
 <? else: ?>
 <table class="pretty">
-    <tr><th>Game Number</th><th>Requestor</th><th>Home Team</th><th>Away Team</th><th>Date of Request</th><th>Actions</th></tr>
+    <tr><th>Game Number</th><th>Requestor</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
     <? foreach ($this->pending as $req): ?>
+    <tr>
+        <td><?= $req->match->gotsoccer_id; ?></td>
+        <td><?= $req->requestor_name;?></td>
+        <td><?= $req->match->home_club;?> <?= $req->match->home; ?></td>
+        <td><?= $req->match->away_club;?> <?= $req->match->away; ?></td>
+        <td><?= FormatDateTime($req->updated_at); ?></td>
+    </tr>
     <? endforeach; ?>
 </table>
 <? endif; ?>

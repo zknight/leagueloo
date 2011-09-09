@@ -1,0 +1,43 @@
+<?
+global $REL_PATH;
+$request = $data['reschedule'];
+$site_name = $data['site_name'];
+$host = $data['host'];
+?>
+<?= $request->requestor_name; ?> has requested that the following match be rescheduled:
+
+<?= $request->schedule->name; ?>
+
+<?= $request->match->division; ?>
+
+Match ID: <?= $request->match->gotsoccer_id; ?>
+
+Original Date: <?= $request->orig_date_str; ?>
+
+Original Time: <?= $request->match->start_time; ?>
+
+Home Team: <?= $request->match->home_club; ?> <?= $request->match->home; ?>
+
+Away Team: <?= $request->match->away_club; ?> <?= $request->match->away; ?>
+
+
+Opponent Representative: <?= $request->opponent_name; ?> <?= $request->opponent_email; ?>
+
+
+The requested dates to reschedule are:
+
+    First Choice: <?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?>
+
+    Second Choice: <?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?>
+
+Comments to scheduler:
+---------------------
+<?= $request->comments; ?>
+
+
+Go to http://<?= $host . $REL_PATH; ?>reschedule/approve/<?= $request->id; ?> to take action.
+
+Thanks!
+<?= $site_name; ?> Robot Webmaster
+
+

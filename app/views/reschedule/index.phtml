@@ -55,6 +55,10 @@ additional referee fees are paid by the 2 teams.
 </p>
 <br />
 <?= FormTag("resched", \simp\Request::POST); ?>
+<fieldset style="font-weight:bold;"><legend>Select Match Schedule</legend>
+Select the schedule that contains your match:
+<?= SimpleSelect("resched", "schedule", $this->schedopts); ?>
+</fieldset>
 <fieldset style="font-weight:bold;"><legend>Reschedule Agreement</legend>
     <?= CheckBoxField("resched", "affirm"); ?> I affirm that I have contacted the opposing coach and he/she has agreed to reschedule this match.  
 I also agree that this request is being submitted BEFORE the deadline listed in the procedures 

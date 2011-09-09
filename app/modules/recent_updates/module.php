@@ -57,7 +57,7 @@ class RecentUpdates extends \simp\Module
             {
                 $items[$page->updated_on] = array(
                     'text' => $page->title,
-                    'url' => "/{$page->entity_name}/page/{$page->short_title}",
+                    'url' => "{$page->entity_name}/page/{$page->short_title}",
                     'time' => $page->updated_on);
             }
 
@@ -69,7 +69,7 @@ class RecentUpdates extends \simp\Module
             {
                 $items[$camp->updated_on] = array(
                     'text' => $camp->name,
-                    'url' => "/camps/camp/show/{$camp->short_name}",
+                    'url' => "camps/camp/show/{$camp->short_name}",
                     'time' => $camp->updated_on);
             }
 
@@ -81,7 +81,7 @@ class RecentUpdates extends \simp\Module
             {
                 $items[$tournament->updated_on] = array(
                     'text' => $tournament->name,
-                    'url' => "/tournaments/tournament/show/{$tournament->short_name}",
+                    'url' => "tournaments/tournament/show/{$tournament->short_name}",
                     'time' => $tournament->updated_on);
             }
 

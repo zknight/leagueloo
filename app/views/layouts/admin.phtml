@@ -57,6 +57,8 @@ $(function($) {
                 <li><?= l("Site Configuration", Path::admin_configuration()); ?></li>
                 <li><?= l("Users", Path::admin_user()); ?></li>
                 <li><?= l("Coaches", Path::admin_coaches()); ?></li>
+                <li><?= l("Fields", Path::admin_fields()); ?></li>
+                <li><?= l("Schedule", Path::admin_schedule()); ?></li>
                 <? endif; ?>
                 <? if ($user->CanAccessAny("Team", Ability::ADMIN)): ?>
                 <li><?= l("Teams", Path::admin_teams()); ?></li>

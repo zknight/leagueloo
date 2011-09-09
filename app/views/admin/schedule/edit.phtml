@@ -1,0 +1,6 @@
+<h1 class="title">Edit a Schedule</h1>
+<?= GetErrorsFor($this->schedule); ?>
+<?= FormTag("schedule", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

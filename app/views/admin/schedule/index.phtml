@@ -1,19 +1,43 @@
-<h1 class="title">Schedule</h1>
-<?= l("upload schedule data (GotSoccer CSV)", Path::admin_schedule_upload()); ?>
-<? foreach ($this->matches as $div => $dates): ?>
-<h1><?= $div; ?></h1>
-    <? foreach ($dates as $date => $matches): ?>
-<h2><?= $date; ?></h2>
+<h1 class="title">Schedules</h1>
+<h2>Current Schedules</h2>
+<? if (count($this->schedules) > 0): ?>
 <table class="pretty">
-    <tr><th>Time</th><th>Field</th><th>Home</th><th>Away</th></tr>
-        <? foreach ($matches as $match): ?>
+    <tr><th>Schedule</th><th>Level</th><th>Start</th><th>End</th><th>Reschedules Allowed</th><th>Divisions</th><th>Actions</th></tr>
+    <? foreach ($this->schedules as $schedule): ?>
     <tr>
-        <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
-        <td><?= $match->field; ?></td>
-        <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
-        <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
-    </td>
+        <td><?= l($schedule->name, Path::admin_schedule_show($schedule->id)); ?></td>
+        <td><?= Division::$levelopts[$schedule->level]; ?></td>
+        <td><?= $schedule->start_date_str; ?></td>
+        <td><?= $schedule->end_date_str; ?></td>
+        <td><?= $schedule->allow_reschedules == true ? "Yes" : "No"; ?></td>
+        <td>
+        <? foreach ($schedule->divisions as $div): ?>
+            <?= $div->name; ?><br />
         <? endforeach; ?>
-</table>
+        </td>
+        <td><?= l("edit", Path::admin_schedule_edit($schedule->id)); ?></td>
+    </tr>
     <? endforeach; ?>
-<? endforeach; ?>
+</table>
+<?= l("Create new schedule", Path::admin_schedule_add()); ?>
+<? else: ?>
+    None.  <?= l("Add one.", Path::admin_schedule_add()); ?>
+<? endif; ?>
+<br />
+<h2>Past Schedules</h2>
+<? if (count($this->past_schedules) > 0): ?>
+<table class="pretty">
+    <tr><th>Schedule</th><th>Level</th><th>Start</th><th>End</th><th>Actions</th></tr>
+    <? foreach ($this->past_schedules as $schedule): ?>
+    <tr>
+        <td><?= l($schedule->name, Path::admin_schedule_show($schedule->id)); ?></td>
+        <td><?= Division::$levelopts[$schedule->level]; ?></td>
+        <td><?= $schedule->start_date_str; ?></td>
+        <td><?= $schedule->end_date_str; ?></td>
+        <td><?= l("edit", Path::admin_schedule_edit($schedule->id)); ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? else: ?>
+    None.  
+<? endif; ?>

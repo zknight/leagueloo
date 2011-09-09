@@ -8,11 +8,11 @@ class Field extends \simp\Model
     const ELEVENVELEVEN = 5;
 
     public static $formats = array(
-        THREEVTHREE => '3 v 3 (U5, U6)',
-        FOURVFOUR => '4 v 4 (U7, U8)',
-        SIXVSIX => '6 v 6 (U9, U10)',
-        EIGHTVEIGHT => '8 v 8 (Academy, U11, U12rec)',
-        ELEVENVELEVEN => '11 v 11 (Academy, U12comp, U13-U18)',
+        self::THREEVTHREE => '3 v 3 (U5, U6)',
+        self::FOURVFOUR => '4 v 4 (U7, U8)',
+        self::SIXVSIX => '6 v 6 (U9, U10)',
+        self::EIGHTVEIGHT => '8 v 8 (Academy, U11, U12rec)',
+        self::ELEVENVELEVEN => '11 v 11 (Academy, U12comp, U13-U18)',
     );
 
     protected $_complex;

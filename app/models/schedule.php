@@ -23,8 +23,9 @@ by division
     by age
     by gender
 */
-class Schedule extends \simp\DummyModel
+class Schedule extends \simp\Model
 {
+
 
     public static $column_map = array(
         'Game No.'          => 'gotsoccer_id',
@@ -47,7 +48,77 @@ class Schedule extends \simp\DummyModel
 
     public $new_count;
     public $update_count;
-    public $matches;
+    public $start_date_str;
+    public $end_date_str;
+    protected $_divisions;
+    protected $_formats;
+
+    public static $ages = array(
+        "U5", "U6", "U7", "U8", 
+        "U9", "U10", "U11", "U12", 
+        "U13", "U14", "U15", "U16",
+        "U17", "U18", "U19");
+
+    public function Setup()
+    {
+        $_divisions = array();
+        $_formats = array();
+    }
+
+    public function OnLoad()
+    {
+        $this->start_date_str = FormatDateTime($this->start_date, "m/d/Y");
+        $this->end_date_str = FormatDateTime($this->end_date, "m/d/Y");
+    }
+
+    public function __get($property)
+    {
+        switch ($property)
+        {
+        case "divisions":
+            if (empty($this->_matches))
+            {
+                $this->_divisions = \simp\Model::Find("Division", "schedule_id = ? order by name asc", array($this->id));
+            }
+            return $this->_divisions;
+            break;
+        case "format":
+            if (empty($this->_formats))
+            {
+                $this->_formats = unserialize($this->formats);
+            }
+            return $this->_formats;
+            break;
+        default:
+            return parent::__get($property);
+        }
+    }
+
+    public function __set($property, $value)
+    {
+        switch($property)
+        {
+        case "format":
+            $this->formats = serialize($value);
+            break;
+        default:
+            parent::__set($property, $value);
+            break;
+        }
+    }
+
+    public function BeforeSave()
+    {
+        $this->VerifyNotEmpty("start_date_str");
+        $this->VerifyNotEmpty("end_date_str");
+        $this->VerifyNotEmpty("name");
+        $this->VerifyDateFormat("start_date_str", $this->start_date_str);
+        $this->VerifyDateFormat("end_date_str", $this->end_date_str);
+        $this->start_date = strtotime($this->start_date_str);
+        $this->end_date = strtotime($this->end_date_str);
+
+        return !$this->HasErrors();
+    }
 
     public function ImportFile($filename)
     {
@@ -57,7 +128,7 @@ class Schedule extends \simp\DummyModel
         $this->new_count = 0;
         $cur_time = time();
         $f = \simp\Model::FindAll("Field");
-        $d = \simp\Model::FindAll("Divisions");
+        $d = \simp\Model::Find("Division", "schedule_id = ?", array($this->id));
         $fields = array();
         $divisions = array();
         foreach ($f as $field)
@@ -103,6 +174,9 @@ class Schedule extends \simp\DummyModel
                     {
                         $d = \simp\Model::Create("Division");
                         $d->name = $row['division'];
+                        $d->level = $this->level;
+                        $d->schedule_id = $this->id;
+                        $d->format = $this->format[$row['age']];
                         $d->Save();
                         $divisions[$d->name] = $d;
                     }
@@ -130,6 +204,7 @@ class Schedule extends \simp\DummyModel
 
                     $match->UpdateFromArray($row);
                     $match->updated_at = $cur_time;
+                    //$match->schedule_id = $this->id;
                     $match->in_gotsoccer = true;
                     if ($match->id == 0) $this->new_count++;
                     else $this->update_count++;
