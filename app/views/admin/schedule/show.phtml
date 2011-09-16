@@ -8,7 +8,7 @@
     <tr>
         <td><?= $match->date_str; ?></td>
         <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
-        <td><?= $match->field; ?></td>
+        <td><?= $match->field->name; ?></td>
         <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
         <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
     </td>

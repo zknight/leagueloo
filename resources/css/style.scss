@@ -312,6 +312,18 @@ ul.admin-menu,
     padding-top:12px;
     background:$carolina url(../img/footer-hatch.png) top repeat-x;
     color:$dark_carolina;
+
+    h1 {
+        font-size:12pt;
+        font-weight:bold;
+        text-align:center;
+    }
+    
+    .copyright {
+        font-size:8pt;
+        color:$light_orange_tan;
+        font-family:$serif;
+    }
 }
 
 input.error, textarea.error {

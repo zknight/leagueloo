@@ -1,0 +1,54 @@
+<h1 class="title"><?= Reschedule::$approval_state[$this->request->state]; ?> Reschedule Request</h1>
+<h2 style="text-align:center"><?= $this->request->schedule->name; ?></h2>
+<fieldset><legend>Original Match Information</legend>
+<table class="form">
+    <tr>
+        <th class="label">GotSoccer Game Number</th>
+        <td class="entry"><?= $this->request->match->gotsoccer_id; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Home</th>
+        <td class="entry"><?= $this->request->match->home_club; ?> <?= $this->request->match->home; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Visitor</th>
+        <td class="entry"><?= $this->request->match->away_club; ?> <?= $this->request->match->away; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date</th>
+        <td class="entry"><?= $this->request->match->date_str; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Time</th>
+        <td class="entry"><?= $this->request->match->start_time; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Field</th>
+        <td class="entry"><?= $this->request->match->field->name; ?></td>
+    </tr>
+</table>
+</fieldset>
+<fieldset><legend>Request Information</legend>
+<table class="form">
+    <tr>
+        <th class="label">Requestor</th>
+        <td class="entry"><?= $this->request->requestor_name; ?> <?= ObsEmailLink($this->request->requestor_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Opponent Coach/Manager</th>
+        <td class="entry"><?= $this->request->opponent_name; ?> <?= ObsEmailLink($this->request->opponent_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time First Choice</th>
+        <td class="entry"><?= $this->request->first_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->first_tod]; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time Second Choice</th>
+        <td class="entry"><?= $this->request->second_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->second_tod]; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Comments</th>
+        <td class="entry"><?= $this->request->comments; ?></td>
+    </tr>
+</table>
+</fieldset>

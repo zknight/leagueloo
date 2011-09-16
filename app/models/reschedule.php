@@ -13,12 +13,19 @@ class Reschedule extends \simp\Model
         self::AFTERNOON => "Afternoon (prior to 7:00p)",
     );
 
+    public static $approval_state = array(
+        self::PENDING => "Pending",
+        self::APPROVED => "Approved",
+        self::DENIED => "Denied"
+    );
+
     protected $_schedule;
     protected $_match;
     public $step;
     public $orig_date_str;
     public $first_choice_str;
     public $second_choice_str;
+    public $new_date_str;
 
     public function Setup()
     {
@@ -29,6 +36,7 @@ class Reschedule extends \simp\Model
         $this->orig_date_str = FormatDateTime($this->orig_date, "m/d/Y");
         $this->first_choice_str = FormatDateTime($this->first_choice, "m/d/Y");
         $this->second_choice_str = FormatDateTime($this->second_choice, "m/d/Y");
+        $this->new_date_str = FormatDateTime($this->new_date, "m/d/Y");
     }
 
     public function __get($property)
@@ -96,16 +104,35 @@ class Reschedule extends \simp\Model
             $this->first_choice = strtotime($this->first_choice_str);
             $this->second_choice = strtotime($this->second_choice_str);
         }
+        if ($this->state == self::APPROVED)
+        {
+            $this->VerifyValidDate('new_date_str');
+            $this->VerifyNotEmpty('new_start_time');
+            $this->VerifyNotEmpty('new_end_time');
+            $this->VerifyTimeFormat('new_start_time', $this->new_start_time);
+            $this->VerifyTimeFormat('new_end_time', $this->new_end_time);
+            $this->new_date = strtotime($this->new_date_str);
+        }
+
+        if ($this->state == self::DENIED)
+        {
+            $this->VerifyNotEmpty('denial_reason');
+        }
 
         $this->updated_at = time();
 
         return !$this->HasErrors();
     }
 
-    public function SendRequestEmail()
+    public function AfterSave()
+    {
+        unset($this->_match);
+    }
+
+    public function SendEmail($subject_, $template)
     {
         $site_name = GetCfgVar('site_name');
-        $subject = "[$site_name] Match Reschedule Request";
+        $subject = "[$site_name] $subject_";
         $schedulers = unserialize(GetCfgVar('resched:schedulers', $def));
         $ref_coordinators = unserialize(GetCfgVar('resched:ref_coordinators', $def));
         $cc_emails = unserialize(GetCfgVar('resched:cc_emails', $def));
@@ -140,11 +167,26 @@ class Reschedule extends \simp\Model
             'cc' => implode(', ', $cc),
             'from' => "$site_name <" . GetCfgVar('site_email') . ">",
             'subject' => $subject,
-            'type' => "plain",
+            'type' => "html",
             'data' => $data
         );
 
-        return \simp\Email::Send("reschedule_request", $email_data);
+        return \simp\Email::Send($template, $email_data);
 
+    }
+
+    public function SendRequestEmail()
+    {
+        $this->SendEmail("Match Reschedule Request", "reschedule_request");
+    }
+
+    public function SendAcceptEmail()
+    {
+        $this->SendEmail("Match Reschedule Approved", "reschedule_approved");
+    }
+
+    public function SendDenyEmail()
+    {
+        $this->SendEmail("Match Reschedule Denied", "reschedule_denied");
     }
 }

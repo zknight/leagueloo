@@ -221,6 +221,14 @@ ul.admin-menu,
   padding-top: 12px;
   background: #d6eafe url(../img/footer-hatch.png) top repeat-x;
   color: #99badd; }
+  #footer h1 {
+    font-size: 12pt;
+    font-weight: bold;
+    text-align: center; }
+  #footer .copyright {
+    font-size: 8pt;
+    color: #fff5d4;
+    font-family: Georgia, "Nimbus Roman No9 L", serif; }
 
 input.error, textarea.error {
   background: #ffc7aa url(../img/error.png);

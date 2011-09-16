@@ -20,6 +20,8 @@ class RescheduleController extends \simp\Controller
 
         $this->MapAction('configure', 'Update', \simp\Request::PUT);
         $this->MapAction('delete', 'DelEmail', \simp\Request::GET);
+        $this->MapAction('accept', 'DoAccept', \simp\Request::PUT);
+        $this->MapAction('deny', 'DoDeny', \simp\Request::PUT);
     }
 
     public function Index()
@@ -29,10 +31,94 @@ class RescheduleController extends \simp\Controller
         {
             \Redirect(\Path::admin_reschedule_configure());
         }
+        $this->StoreLocation();
         $this->pending = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::PENDING));
-        $this->approved = \simp\Model::Find("Reschedule", "state = ?", array(\Reschedule::APPROVED));
+        $this->approved = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::APPROVED));
+        $this->denied = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::DENIED));
 
         return true;
+    }
+
+    public function Show()
+    {
+        $this->StoreLocation();
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        return true;
+    }
+
+    public function Accept()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $division = \simp\Model::FindById("Division", $this->request->division_id);
+        $this->fields = array();
+        foreach ($division->fields as $field)
+        {
+            $this->fields[$field->id] = $field->name;
+        }
+        return true;
+    }
+
+    public function DoAccept()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $vars = $this->GetFormVariable("Reschedule");
+        $this->request->UpdateFromArray($vars);
+        $this->request->state = \Reschedule::APPROVED;
+        if (!$this->request->Save())
+        {
+            $this->SetAction("accept");
+            $division = \simp\Model::FindById("Division", $this->request->division_id);
+            $this->fields = array();
+            foreach ($division->fields as $field)
+            {
+                $this->fields[$field->id] = $field->name;
+            }
+        }
+        else
+        {
+            // find the match and update it
+            $match = \simp\Model::FindById("Match", $this->request->match_id);
+            $match->start_time = $this->request->new_start_time;
+            $match->end_time = $this->request->new_end_time;
+            $match->date_str = $this->request->new_date_str;
+            $match->field_id = $this->request->field_id;
+            if (!$match->Save())
+            {
+                AddFlash("Something went wrong.  Tell Zayne to fix it.");
+                \Redirect(\GetReturnURL());
+            }
+            $this->request->SendAcceptEmail();
+            AddFlash("Reschedule request has been approved.");
+            \Redirect(\GetReturnURL());
+        }
+
+        return true;
+    }
+
+    public function Deny()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        return true;
+    }
+
+    public function DoDeny()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $vars = $this->GetFormVariable("Reschedule");
+        $this->request->UpdateFromArray($vars);
+        $this->request->state = \Reschedule::DENIED;
+        if (!$this->request->Save())
+        {
+            $this->SetAction("deny");
+        }
+        else
+        {
+            $this->request->SendDenyEmail();
+            AddFlash("Reschedule request denied.");
+            \Redirect(\GetReturnURL());
+        }
+
+        return true; 
     }
 
     public function Configure()

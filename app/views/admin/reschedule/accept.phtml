@@ -1,0 +1,41 @@
+<h1 class="title">Accept Reschedule Request</h1>
+<fieldset><legend>Request Information</legend>
+<table class="form">
+    <tr>
+        <th class="label">Match Number</th>
+        <td class="entry"><?= $this->request->schedule->name; ?> Match No. <?= $this->request->match->gotsoccer_id; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Requestor</th>
+        <td class="entry"><?= $this->request->requestor_name; ?> <?= ObsEmailLink($this->request->requestor_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Opponent Coach/Manager</th>
+        <td class="entry"><?= $this->request->opponent_name; ?> <?= ObsEmailLink($this->request->opponent_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time First Choice</th>
+        <td class="entry"><?= $this->request->first_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->first_tod]; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time Second Choice</th>
+        <td class="entry"><?= $this->request->second_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->second_tod]; ?></td>
+    </tr>
+</table>
+</fieldset>
+<?= GetErrorsFor($this->request); ?>
+<?= FormTag("accept", \simp\Request::PUT); ?>
+    <fieldset style="font-weight:normal;"><legend>Accept Comment:</legend>
+        <? /*textarea style="width:100%" rows="3"  name="comments"><?= $this->request->comments; ?></textarea><br /*/?>
+        <?= TextArea($this->request, "comments", array("rows" => "3")); ?>
+    </fieldset>
+    <fieldset style="font-weight:normal;"><legend>New Match Info</legend>
+    <? $args = "maxDate: '+4m', minDate: '+0d', changeYear: false, changeMonth: true, showOn: 'both', showAnim: 'drop', showButtonPanel: 'true', yearRange: 'c-18:c+18'"; ?>
+        New Date: <?= DatePicker($this->request, "new_date_str", array('size' => 8, 'args' => $args)) ?>
+        New Time: <?= TextField($this->request, "new_start_time", array('size' => 8)); ?> to
+        <?= TextField($this->request, "new_end_time", array('size' => 8)); ?>
+        New Field: <?= SimpleSelect($this->request, "field_id", $this->fields); ?>
+    </fieldset>
+    <input type="submit" value="Accept" />
+<?= EndForm(); ?>
+ 

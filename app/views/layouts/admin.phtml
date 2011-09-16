@@ -21,7 +21,7 @@ foreach ($ss as $style): ?>
 $(function($) {
     $(document).ready(function() {
         loadEditor($("textarea.wysiwyg"), "<?= GetJSPath("tiny_mce/tiny_mce.js"); ?>" );
-        $(".date-picker").datepicker();
+        //$(".date-picker").datepicker();
     });
 });
         </script>
@@ -59,6 +59,7 @@ $(function($) {
                 <li><?= l("Coaches", Path::admin_coaches()); ?></li>
                 <li><?= l("Fields", Path::admin_fields()); ?></li>
                 <li><?= l("Schedule", Path::admin_schedule()); ?></li>
+                <li><?= l("Reschedule", Path::admin_reschedule()); ?></li>
                 <? endif; ?>
                 <? if ($user->CanAccessAny("Team", Ability::ADMIN)): ?>
                 <li><?= l("Teams", Path::admin_teams()); ?></li>

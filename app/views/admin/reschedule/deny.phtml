@@ -1,0 +1,38 @@
+<h1 class="title">Deny Reschedule Request</h1>
+<fieldset><legend>Request Information</legend>
+<table class="form">
+    <tr>
+        <th class="label">Match Number</th>
+        <td class="entry"><?= $this->request->schedule->name; ?> Match No. <?= $this->request->match->gotsoccer_id; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Requestor</th>
+        <td class="entry"><?= $this->request->requestor_name; ?> <?= ObsEmailLink($this->request->requestor_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Opponent Coach/Manager</th>
+        <td class="entry"><?= $this->request->opponent_name; ?> <?= ObsEmailLink($this->request->opponent_email); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time First Choice</th>
+        <td class="entry"><?= $this->request->first_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->first_tod]; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Date/Time Second Choice</th>
+        <td class="entry"><?= $this->request->second_choice_str; ?> <?= Reschedule::$tod_opts[$this->request->second_tod]; ?></td>
+    </tr>
+    <tr>
+        <th class="label">Comments</th>
+        <td class="entry"><?= $this->request->comments; ?></td>
+    </tr>
+</table>
+</fieldset>
+<?= GetErrorsFor($this->request); ?>
+<?= FormTag("deny", \simp\Request::PUT); ?>
+    <fieldset style="font-weight:normal;"><legend>Reason for Denial:</legend>
+        <?= TextArea($this->request, "denial_reason", array("rows" => "3")); ?>
+    </fieldset>
+    <input type="submit" value="Accept" />
+<?= EndForm(); ?>
+ 
+

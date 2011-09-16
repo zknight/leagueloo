@@ -4,25 +4,22 @@ $request = $data['reschedule'];
 $site_name = $data['site_name'];
 $host = $data['host'];
 ?>
-<p><?= $request->requestor_name; ?> has requested that the following match be rescheduled:</p>
+<p>The following reschedule request has been denied:</p>
 <table>
 <tr><td><?= $request->schedule->name; ?></td> <td><?= $request->match->division; ?></td></tr>
 <tr><td>Match ID:</td><td><?= $request->match->gotsoccer_id; ?></td></tr>
 <tr><td>Original Date:</td><td><?= $request->orig_date_str; ?></td></tr>
-<tr><td>Original Time:</td><td><?= $request->match->start_time; ?></td></tr>
 <tr><td>Home Team:</td><td><?= $request->match->home_club; ?> <?= $request->match->home; ?></td></tr>
 <tr><td>Away Team:</td><td><?= $request->match->away_club; ?> <?= $request->match->away; ?></td></tr>
+<tr><td>Requestor:</td><td><?= $request->requestor_name;?> <?= $request->requestor_email; ?></td></tr>
 <tr><td>Opponent Representative:</td><td><?= $request->opponent_name; ?> <?= $request->opponent_email; ?></td></tr>
+<tr><td>First Choice:</td><td><?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?></td></tr>
+<tr><td>Second Choice:</td><td><?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?></td></tr>
 </table>
-<p>The requested dates to reschedule are:</p>
-<table>
-    <tr><td>First Choice:</td><td><?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?></td></tr>
-    <tr><td>Second Choice:</td><td><?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?></td></tr>
-</table>
-<p>Comments to scheduler:</p>
+<p>Reason for denial:</p>
 <pre>
 ---------------------
-<?= $request->comments; ?>
+<?= $request->denial_reason; ?>
 </pre>
 Scheduler, <?= l("click here to view pending requests", Path::admin_reschedule_accept($request->id)); ?>
 <p>

@@ -35,7 +35,7 @@ class Schedule extends \simp\Model
         'Age'               => 'age',
         'Sex'               => 'gender',
         'Division'          => 'division',
-        'Field'             => 'field',
+        'Field'             => 'field_name',
         'Home Team'         => 'home',
         'Home Club'         => 'home_club',
         'Home Final Score'  => 'home_score',
@@ -158,22 +158,25 @@ class Schedule extends \simp\Model
                             $row[$col] = $val;
                         }
                     }
+                    $division_name = "[{$row['age']} {$row['gender']}] {$row['division']}";
                     $match = \simp\Model::FindOrCreate(
                         "Match", 
-                        "gotsoccer_id = ? and division = ? and age = ? and gender = ?",
-                        array($row['gotsoccer_id'], $row['division'], $row['age'], $row['gender'])
+                        "gotsoccer_id = ? and division_name = ?",
+                        array($row['gotsoccer_id'], $division_name)
+                        //"gotsoccer_id = ? and division_name = ? and age = ? and gender = ?",
+                        //array($row['gotsoccer_id'], $row['division'], $row['age'], $row['gender'])
                     );
 
                     // see if there is a division that matches this one
-                    if (array_key_exists($row['division'], $divisions))
+                    if (array_key_exists($division_name, $divisions))
                     {
-                        $d = $divisions[$row['division']];
+                        $d = $divisions[$division_name];
                         $match->division_id = $d->id;
                     }
                     else
                     {
                         $d = \simp\Model::Create("Division");
-                        $d->name = $row['division'];
+                        $d->name = $division_name;
                         $d->level = $this->level;
                         $d->schedule_id = $this->id;
                         $d->format = $this->format[$row['age']];
@@ -182,11 +185,11 @@ class Schedule extends \simp\Model
                     }
 
                     // see if there is a field that matches this one
-                    if (array_key_exists($row['field'], $fields))
+                    if (array_key_exists($row['field_name'], $fields))
                     {
-                        $f = $fields[$row['field']];
+                        $f = $fields[$row['field_name']];
                         $match->field_id = $f->id;
-                        $f->AddDivision($divisions[$row['division']]);
+                        $f->AddDivision($divisions[$division_name]);
                         //$fields[$row['field']->AddDivision($match->division, $match->age, $match->gender);
                     }
                     else
@@ -194,10 +197,10 @@ class Schedule extends \simp\Model
                         // create a field, default first complex
                         $complex = \simp\Model::FindOne("Complex", "1", array());
                         $f = \simp\Model::Create("Field");
-                        $f->gotsoccer_name = $row['field'];
+                        $f->gotsoccer_name = $row['field_name'];
                         $f->complex_id = $complex->id;
-                        $f->name = $row['field'];
-                        $f->AddDivision($divisions[$row['division']]);
+                        $f->name = $row['field_name'];
+                        $f->AddDivision($divisions[$division_name]);
                         $f->Save();
                         $fields[$f->gotsoccer_name] = $f;
                     }

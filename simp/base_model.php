@@ -224,6 +224,10 @@ class BaseModel
         return $ok;
     }
 
+    protected function VerifyValidTime($field)
+    {
+    }
+
     protected function VerifyDateFormat($field, &$date)
     {
         $retval = true;
@@ -238,6 +242,7 @@ class BaseModel
         }
         return $retval;
     }
+
 
     protected function VerifyTimeFormat($field, &$time)
     {
