@@ -21,8 +21,8 @@
             <th class="label">Optional Status Comment</th>
             <td class="entry"><?= TextArea($this->complex, 'comment', 3, 40); ?></td>
         <tr>
-            <th class="label">Todo: add map upload</th>
-            <td class="entry">&nbsp;</td>
+            <th class="label">Complex Map (png, gif, jpg or pdf)</th>
+            <td class="entry"><?= FileSelect($this->complex, 'field_map'); ?></td>
         </tr>
     </table>
 </fieldset>

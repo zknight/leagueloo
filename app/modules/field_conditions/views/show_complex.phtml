@@ -7,6 +7,9 @@
     <?= $this->Time($this->complex); ?>
 </div>
 <p>The <?= $this->complex->name; ?> is located at: <strong><?= $this->complex->address; ?> <?= l("map", $this->complex->map_link, array('external' => 'true')); ?></strong></p>
+<? if ($this->complex->field_map != ""): ?>
+<p><?= l("Complex Field Map", "{$this->complex->img_path}"); ?></p>
+<? endif; ?>
 </div>
 <? if (count($this->complex->fields) > 0): ?>
 <h2>Fields at this complex:</h2>

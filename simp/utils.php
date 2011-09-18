@@ -228,6 +228,36 @@ function ProcessImage($info, $path, &$name, $opts = array())
     return false;
 }
 
+function ProcessPDF($info, $path, &$name)
+{
+    global $log;
+    $name = preg_replace('/\s/', '_', $info['name']);
+    if ($info['error'] != 0 &&
+        $info['error'] != UPLOAD_ERR_NO_FILE)
+    {
+        return "{$info['name']} upload failed: " . GetUploadError($info['error']);
+    }
+
+    if ($info['error'] == 0)
+    {
+        if (!is_dir($path))
+        {
+            $ok = mkdir($path, 0755, true);
+            if ($ok == false)
+            {
+                $log->logError("ProcessPDF(): Failed to create path: $path");
+                return "Failed to create upload path.  Contact system administrator.";
+            }
+        }
+        if (move_uploaded_file($info['tmp_name'], $path . $name) == false)
+        {
+            $log->logError("ProcessPDF(): Failed to copy file: {$info['tmp']} to {$path}{$name}");
+            return ("Failed to copy pdf.  Contact system administrator.");
+        }
+    }
+    return false;
+}
+
 function GetUploadError($err)
 {
     switch($err)
