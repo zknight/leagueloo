@@ -49,6 +49,14 @@ class Path
         global $REL_PATH;
         return "{$REL_PATH}{$path}";
     }
+
+    public static function Absolute($path)
+    {
+        $host = GetCfgVar('site_address');
+        if ($host == "") $host = $_SERVER['SERVER_NAME'];
+        return "{$host}{$path}";
+    }
+
 }
 
 function h($str)
