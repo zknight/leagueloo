@@ -82,7 +82,7 @@ class Complex extends \simp\Model
         $this->open_times = serialize($this->open);
         $this->close_times = serialize($this->close);
 
-        if ($errors == 0)
+        if ($errors == 0 && (!empty($this->file_info)))
         {
             $img_path = $this->abs_path . "complex/";
             $info = $this->file_info;
