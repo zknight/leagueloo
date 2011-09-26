@@ -45,6 +45,7 @@ $(function($) {
                 ?>
                     <li>Logged in as: <?= $user->login?></li>
                     <li><?= l($link_img, Path::message()); ?></li>
+<? /*
                     <li><?= l("logout", Path::user_logout()); ?> </li>
                     <li><?= l("preferences", Path::user_edit()); ?> </li>
                 <? if ($this->GetUser()->super): ?>
@@ -54,6 +55,7 @@ $(function($) {
             <? else: ?>
                     <li><?= l("login", Path::user_login()); ?></li>
                     <li><?= l("create account", Path::user_signup()); ?></li>
+ */ ?>
             <? endif; ?>
                 </ul>
             </div>
@@ -99,12 +101,30 @@ $(function($) {
         </div>
     </div>
     <div id="footer">
-        <h1>User Actions</h1>
+<? if ($this->UserLoggedIn()): ?>
+<?     $user = $this->GetUser(); ?>
         <table>
             <tr>
-                <td><?= l("Request a reschedule", Path::reschedule()); ?></td>
+                <td class="left_col"><?= l("logout", Path::user_logout()); ?></td>
+                <td class="right_col"><?= l("request a reschedule", Path::reschedule()); ?></td>
+            </tr>
+            <tr>
+                <td class="left_col"><?= l("preferences", Path::user_edit()); ?></td>
+                <td class="right_col"><?= $user->super ? l("site administration", Path::administrator()) : "&nbsp;"; ?></td>
+            </tr>
+            <tr>
+                <td class="left_col"><?= l("messages", Path::message()); ?></td>
+                <td class="right_col"><?= $user->super ? l("content management", Path::content()) : "&nbsp;"; ?></td>
             </tr>
         </table>
+<? else: ?>
+        <table>
+            <tr>
+                <td><?= l("login", Path::user_login()); ?></td>
+                <td><?= l("create account", Path::user_signup()); ?></td>
+            </tr>
+        </table>
+<? endif; ?>
         <span class="copyright">&copy; 2011 South Lakes Soccer Club</span>
     </div>
     </body>

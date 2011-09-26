@@ -1,6 +1,6 @@
 <h1 class="title">Add a Complex</h1>
 <?= GetErrorsFor($this->complex); ?>
-<?= FormTag("complex", \simp\Request::POST); ?>
+<?= FormTag("complex", \simp\Request::POST, NULL, true); ?>
     <? require "_form.phtml"; ?>
     <input type="submit" value="Create"/>
 <?= EndForm(); ?>

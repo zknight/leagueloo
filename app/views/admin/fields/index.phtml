@@ -3,7 +3,7 @@
 <? if (count($this->complexes) > 0): ?>
  | <?= l("Add a Playing Field", path::admin_fields_add()); ?>
     <? foreach ($this->complexes as $complex): ?>
-<h2><?= $complex->name; ?></h2>
+        <h2><?= $complex->name; ?> <?= l("[edit]", Path::admin_complex_edit($complex->id)); ?> </h2>
 <table class="pretty">
     <tr>
         <th>Field</th>

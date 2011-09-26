@@ -312,14 +312,34 @@ ul.admin-menu,
     padding-top:12px;
     background:$carolina url(../img/footer-hatch.png) top repeat-x;
     color:$dark_carolina;
+    a {
+        text-decoration:underline;
+        &:hover { color:$light_carolina; }
+    }
 
     h1 {
         font-size:12pt;
         font-weight:bold;
         text-align:center;
     }
+    table {
+        font-family:$serif;
+        border-collapse:collapse;
+        margin-left:auto;
+        margin-right:auto;
+        //width:50%;
+        margin-bottom:16px;
+        td {
+            padding:8px 0;
+            width:150px;
+            font-size:8pt;
+            &.left_col { text-align:center; border-right:solid 1px $navy;}
+            &.right_col { text-align:center; }
+        }
+    }
     
     .copyright {
+        display:block;
         font-size:8pt;
         color:$light_orange_tan;
         font-family:$serif;

@@ -15,10 +15,20 @@ class ComplexController extends \simp\Controller
             )
         );
 
+        $this->AddPreaction("all", "CheckAccess");
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
         // tODO: check auth
+    }
+
+    protected function CheckAccess()
+    {
+        if (!$this->GetUser()->super)
+        {
+            AddFlash("You don't have sufficient privilege for this action.");
+            \Redirect(GetReturnURL());
+        }
     }
 
     function Index()
@@ -44,6 +54,7 @@ class ComplexController extends \simp\Controller
     {
         $this->complex = \simp\Model::Create("Complex");
         $vars = $this->GetFormVariable('Complex');
+        $vars['file_info'] = $_FILES['field_map'];
         $this->complex->UpdateFromArray($vars);
         if ($this->complex->Save())
         {
@@ -61,6 +72,7 @@ class ComplexController extends \simp\Controller
     {
         $this->complex = \simp\Model::FindById("Complex", $this->GetParam('id'));
         $vars = $this->GetFormVariable('Complex');
+        $vars['file_info'] = $_FILES['field_map'];
         $this->complex->UpdateFromArray($vars);
         if ($this->complex->Save())
         {

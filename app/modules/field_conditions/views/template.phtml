@@ -1,7 +1,7 @@
 <div class="module">
     <div class="title">
         <ul class="menu">
-            <li>Field Conditions</li>
+            <li>Fields</li>
         </ul>
     </div>
     <div class="content">
@@ -10,13 +10,17 @@
             <strong>
                 <?= l("$complex->name", Path::module('field_conditions', 'show_complex', $complex->id)); ?>
             </strong>
-            <div style="float:right;"><?= l("location", $complex->map_link, array('external' => 'true')); ?></div>
+            <!--div style="float:right;"><?= l("location", $complex->map_link, array('external' => 'true')); ?></div-->
             <br />
             <?= $this->Status($complex); ?>
             <span class="comment"><?= $complex->comment; ?></span>
             <div class="date">
                 <?= $this->Time($complex); ?>
             </div>
+            <div style="float:left;"><?= l("location", $complex->map_link, array('external' => 'true')); ?></div>
+        <? if ($complex->field_map != ""): ?>
+            <div style="float:right;"><?= l("field map", $complex->img_path, array('external' => 'true')); ?></div>
+        <? endif; ?>
             <? if (IsLoggedIn() && $this->HasAccess(CurrentUser(), "update_status")): ?>
             <?= l("Update Status", Path::module('field_conditions', 'admin', 'update_status', $complex->id)); ?>
             <? endif; ?>

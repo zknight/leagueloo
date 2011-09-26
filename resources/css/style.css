@@ -221,11 +221,31 @@ ul.admin-menu,
   padding-top: 12px;
   background: #d6eafe url(../img/footer-hatch.png) top repeat-x;
   color: #99badd; }
+  #footer a {
+    text-decoration: underline; }
+    #footer a:hover {
+      color: #f5fafe; }
   #footer h1 {
     font-size: 12pt;
     font-weight: bold;
     text-align: center; }
+  #footer table {
+    font-family: Georgia, "Nimbus Roman No9 L", serif;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 16px; }
+    #footer table td {
+      padding: 8px 0;
+      width: 150px;
+      font-size: 8pt; }
+      #footer table td.left_col {
+        text-align: center;
+        border-right: solid 1px #002142; }
+      #footer table td.right_col {
+        text-align: center; }
   #footer .copyright {
+    display: block;
     font-size: 8pt;
     color: #fff5d4;
     font-family: Georgia, "Nimbus Roman No9 L", serif; }
