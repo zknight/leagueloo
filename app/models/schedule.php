@@ -158,13 +158,11 @@ class Schedule extends \simp\Model
                             $row[$col] = $val;
                         }
                     }
-                    $division_name = "[{$row['age']} {$row['gender']}] {$row['division']}";
+                    $division_name = "{$row['age']} {$row['gender']} - {$row['division']}";
                     $match = \simp\Model::FindOrCreate(
                         "Match", 
                         "gotsoccer_id = ? and division_name = ?",
                         array($row['gotsoccer_id'], $division_name)
-                        //"gotsoccer_id = ? and division_name = ? and age = ? and gender = ?",
-                        //array($row['gotsoccer_id'], $row['division'], $row['age'], $row['gender'])
                     );
 
                     // see if there is a division that matches this one
