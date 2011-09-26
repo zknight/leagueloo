@@ -16,7 +16,6 @@ class PageController extends \app\AppController
 
     function Show()
     {
-        $this->StoreLocation();
         if ($this->GetParam("name"))
         {
             $entity_type = $this->GetParam('type');
@@ -29,6 +28,12 @@ class PageController extends \app\AppController
             $id = $this->GetParam('id');
             $this->page = \Page::FindById("Page", $id);
         }
+        if ($this->page->protected == true)
+        {
+            AddFlash("You must be logged in to access that page.");
+            \Redirect(\GetReturnURL());
+        }
+        $this->StoreLocation();
         if ($this->page->id < 1)
         {
             AddFlash("page not found.");
