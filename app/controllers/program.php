@@ -70,6 +70,7 @@ class ProgramController extends \app\AppController
             break;
         case \Program::TOURNAMENT:
             $this->upcoming_tournaments = \Tournament::GetUpcoming();
+            $this->current_tournaments = \Tournament::GetCurrent();
             $this->past_tournaments = \Tournament::GetPast();
             $this->SetAction("tournament_index");
             break;

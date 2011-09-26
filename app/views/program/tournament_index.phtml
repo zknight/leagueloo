@@ -35,6 +35,20 @@ if ($this->UserLoggedIn()) {
     */ ?>
 </ul>
 <? endif; ?>
+<? if (count($this->current_tournaments > 0)): ?>
+<h3>Current Tournaments</h3>
+<table class="pretty">
+    <tr><th>Tournament</th><th>Level</th><th>When</th></tr>
+    <? $r=false; ?>
+    <? foreach ($this->current_tournaments as $t): ?>
+    <tr class="<?= ($r=!$r)?'odd':'even';?>">
+        <td><?= l($t->name, Path::tournaments_tournament_show($t->short_name)); ?></td>
+        <td><?= implode(" and ", $t->leagues); ?></td>
+        <td><?= $t->start_date; ?> through <?= $t->end_date; ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
 <h3>Upcoming Tournaments</h3>
 <? if (count($this->upcoming_tournaments) < 1): ?>
 <p>No upcoming tournaments.</p>

@@ -64,8 +64,18 @@ class Tournament extends \simp\Model
         $dt = new \DateTime("now");
         return \simp\Model::Find(
             'Tournament',
-            'start >= ? order by start',
-            array($dt->getTimestamp())
+            'start >= ? and end >= ? order by start',
+            array($dt->getTimestamp(), $dt->getTimestamp())
+        );
+    }
+
+    public static function GetCurrent()
+    {
+        $dt = new \DateTime("now");
+        return \simp\Model::Find(
+            'Tournament',
+            'end >= ? and start <= ? order by start',
+            array($dt->getTimestamp(), $dt->getTimestamp())
         );
     }
 
@@ -74,7 +84,7 @@ class Tournament extends \simp\Model
         $dt = new \DateTime("now");
         return \simp\Model::Find(
             'Tournament',
-            'start < ? order by start',
+            'end < ? order by start',
             array($dt->getTimestamp())
         );
     }
