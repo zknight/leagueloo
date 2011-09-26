@@ -1,7 +1,7 @@
-<h2>Login</h2>
 <?= GetErrorsFor($this->user); ?>
 <?= FormTag("authorize", \simp\Request::POST); ?>
-<table>
+<fieldset><legend>Login</legend>
+<table> 
     <tr>
         <td><strong>Login</strong></td>
         <td><?= TextField($this->user, "login"); ?></td>
@@ -11,11 +11,15 @@
         <td><?= PasswordField($this->user, "password"); ?></td>
     </tr>
     <tr>
-        <td colspan='2'>
+        <td colspan="2">
             <?= CheckBoxField($this->user, "request_password"); ?>
             <em>I forgot my password and I want you to send me a new one via email</em>
         </td>
     </tr>
 </table>
+</fieldset>
 <input type="submit" value="Submit"/>
 <?= EndForm(); ?>
+<p>
+    I don't have an account.  <?= l("I would like to create one.", Path::user_signup()); ?>
+</p>

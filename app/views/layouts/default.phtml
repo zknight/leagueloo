@@ -120,8 +120,11 @@ $(function($) {
 <? else: ?>
         <table>
             <tr>
-                <td><?= l("login", Path::user_login()); ?></td>
-                <td><?= l("create account", Path::user_signup()); ?></td>
+                <td class="left_col"><?= l("login", Path::user_login()); ?></td>
+                <td class="right_col"><?= l("create account", Path::user_signup()); ?></td>
+            </tr>
+            <tr>
+                <td colspan="2"><?= l("request a reschedule", Path::reschedule()); ?></td>
             </tr>
         </table>
 <? endif; ?>

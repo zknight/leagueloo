@@ -70,7 +70,7 @@ class Page extends \simp\Model
 
     public static function GetUnpublishedPages($user)
     {
-        return self::GetPagesForUser($user, false);
+        return self::GetPagesForUser($user, 0);
     }
 
     public static function GetPagesForUser($user, $published)

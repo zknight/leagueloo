@@ -28,13 +28,13 @@ class LinkController extends \simp\Controller
         $entities = $this->GetUser()->GetEntitiesWithPrivilege(\Ability::PUBLISH, array('PlugIn'));
         foreach ($entities as $nfo)
         {
-            \R::debug(true);
+            //\R::debug(true);
             $links = \simp\Model::find(
                 'Link',
                 'entity_type = ? and entity_id = ? order by disabled asc',
                 array($nfo['type'], $nfo['id'])
             );
-            \R::debug(false);
+            //\R::debug(false);
             if (count($links) > 0)
             {
                 if (!array_key_exists($nfo['type'], $this->links))

@@ -22,5 +22,9 @@
             <th class="label">Published?:</th>
             <td colspan="2" class="entry"><?= CheckBoxField($this->page, 'published'); ?></td>
         </tr>
+        <tr>
+            <th class="label">Require Login to view?:</th>
+            <td colspan="2" class="entry"><?= CheckBoxField($this->page, 'protected'); ?></td>
+        </tr>
     </table>
 </fieldset>
