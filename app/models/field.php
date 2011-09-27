@@ -86,8 +86,8 @@ class Field extends \simp\Model
         $avail = array();
         //$times = GenerateTimeSlots($start_time, $end_time, 30);
 
-        $matches = \simp\Model::Find(
-            "Match", 
+        $games = \simp\Model::Find(
+            "Game", 
             "date = ? and field_id = ?",
             array($date, $this->id)
         );
@@ -120,10 +120,10 @@ class Field extends \simp\Model
             }
         }
 
-        foreach ($matches as $match)
+        foreach ($games as $game)
         {
-            $ms = strtotime($match->start_time);
-            $me = strtotime($match->end_time);
+            $ms = strtotime($game->start_time);
+            $me = strtotime($game->end_time);
             foreach ($times as $t)
             {
                 //echo "m comparing $t >= $ms && $t < $me";
@@ -139,7 +139,7 @@ class Field extends \simp\Model
 
     public static function DivisionOpts()
     {
-        $q = "select distinct division, age, gender from match order by division, age, gender;";
+        $q = "select distinct division, age, gender from game order by division, age, gender;";
         $divisions = \R::getAll($q);
         $opts = array();
         foreach ($divisions as $div)

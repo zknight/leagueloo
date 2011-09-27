@@ -76,7 +76,7 @@ class Schedule extends \simp\Model
         switch ($property)
         {
         case "divisions":
-            if (empty($this->_matches))
+            if (empty($this->_games))
             {
                 $this->_divisions = \simp\Model::Find("Division", "schedule_id = ? order by name asc", array($this->id));
             }
@@ -159,17 +159,17 @@ class Schedule extends \simp\Model
                         }
                     }
                     $division_name = "{$row['age']} {$row['gender']} - {$row['division']}";
-                    $match = \simp\Model::FindOrCreate(
-                        "Match", 
+                    $game = \simp\Model::FindOrCreate(
+                        "Game", 
                         "gotsoccer_id = ? and division_name = ?",
                         array($row['gotsoccer_id'], $division_name)
                     );
 
-                    // see if there is a division that matches this one
+                    // see if there is a division that game this one
                     if (array_key_exists($division_name, $divisions))
                     {
                         $d = $divisions[$division_name];
-                        $match->division_id = $d->id;
+                        $game->division_id = $d->id;
                     }
                     else
                     {
@@ -182,13 +182,13 @@ class Schedule extends \simp\Model
                         $divisions[$d->name] = $d;
                     }
 
-                    // see if there is a field that matches this one
+                    // see if there is a field that game this one
                     if (array_key_exists($row['field_name'], $fields))
                     {
                         $f = $fields[$row['field_name']];
-                        $match->field_id = $f->id;
+                        $game->field_id = $f->id;
                         $f->AddDivision($divisions[$division_name]);
-                        //$fields[$row['field']->AddDivision($match->division, $match->age, $match->gender);
+                        //$fields[$row['field']->AddDivision($game->division, $game->age, $game->gender);
                     }
                     else
                     {
@@ -203,18 +203,18 @@ class Schedule extends \simp\Model
                         $fields[$f->gotsoccer_name] = $f;
                     }
 
-                    $match->UpdateFromArray($row);
-                    $match->updated_at = $cur_time;
-                    //$match->schedule_id = $this->id;
-                    $match->in_gotsoccer = true;
-                    if ($match->id == 0) $this->new_count++;
+                    $game->UpdateFromArray($row);
+                    $game->updated_at = $cur_time;
+                    //$game->schedule_id = $this->id;
+                    $game->in_gotsoccer = true;
+                    if ($game->id == 0) $this->new_count++;
                     else $this->update_count++;
 
-                    if (!$match->Save())
+                    if (!$game->Save())
                     {
                         // break out (maybe make this exception in the future?
                         global $log;
-                        $log->logError("models/schedule: " . print_r($match->GetErrors(), true));
+                        $log->logError("models/schedule: " . print_r($game->GetErrors(), true));
                         return false;
                     }
 
@@ -261,20 +261,20 @@ class Schedule extends \simp\Model
         }
         $conditions .= " order by date, start_time";
 
-        $matches = \simp\Model::Find("Match", $conditions, $val);
+        $games = \simp\Model::Find("Game", $conditions, $val);
         $by_date = array();
-        foreach ($matches as $match) 
+        foreach ($games as $game) 
         {
-            $div = "{$match->division} {$match->age} {$match->gender}";
+            $div = "{$game->division} {$game->age} {$game->gender}";
             if (!array_key_exists($div, $by_date))
             {
                 $by_date[$div] = array();
             }
-            if (!array_key_exists($match->date_str, $by_date[$div]))
+            if (!array_key_exists($game->date_str, $by_date[$div]))
             {
-                $by_date[$div][$match->date_str] = array();
+                $by_date[$div][$game->date_str] = array();
             }
-            $by_date[$div][$match->date_str][] = $match;
+            $by_date[$div][$game->date_str][] = $game;
         }
         return $by_date;
     }
@@ -307,19 +307,19 @@ class Schedule extends \simp\Model
         }
         $conditions .= " order by date, field, start_time";
 
-        // get all matches matching conditions
-        $matches = \simp\Model::Find("Match", $conditions, $val);
+        // get all games matching conditions
+        $games = \simp\Model::Find("game", $conditions, $val);
 
         // generate array of times for each date
         $times = $this->GenerateTimeSlots("7:00", "21:00", 30);
 
-        // iterate matches by date and 'fill in' times that are between match dates
+        // iterate games by date and 'fill in' times that are between game dates
 
         $by_date = array();
-        foreach ($matches as $match)
+        foreach ($games as $game)
         {
-            $date = $match->date_str;
-            $field = $match->field;
+            $date = $game->date_str;
+            $field = $game->field;
             if (!array_key_exists($date, $by_date))
             {
                 $by_date[$date] = array();
@@ -332,8 +332,8 @@ class Schedule extends \simp\Model
                     $by_date[$date][$field][$time] = false;
                 }
             }
-            $st = strtotime($match->start_time);
-            $et = strtotime($match->end_time);
+            $st = strtotime($game->start_time);
+            $et = strtotime($game->end_time);
             for ($t = $st; $t < $et; $t += 1800)
             {
                 $by_date[$date][$field][$t] = true;

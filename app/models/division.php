@@ -15,11 +15,11 @@ class Division extends \simp\Model
     );
 
     protected $_fields;
-    protected $_matches;
+    protected $_games;
     public function Setup()
     {
         $this->_fields = array();
-        $this->_matches = array();
+        $this->_games = array();
     }
 
     public function OnLoad()
@@ -44,12 +44,12 @@ class Division extends \simp\Model
             }
             return $this->_fields;
             break;
-        case "matches":
-            if (empty($this->_matches) && $this->id > 0)
+        case "games":
+            if (empty($this->_games) && $this->id > 0)
             {
-                $this->_matches = \simp\Model::Find("Match", "division_id = ? order by date asc", array($this->id));
+                $this->_games = \simp\Model::Find("Game", "division_id = ? order by date asc", array($this->id));
             }
-            return $this->_matches;
+            return $this->_games;
             break;
         default:
             return parent::__get($property);

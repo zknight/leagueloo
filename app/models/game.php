@@ -1,5 +1,5 @@
 <?php
-class Match extends \simp\Model
+class Game extends \simp\Model
 {
     public $date_str;
     protected $_field;

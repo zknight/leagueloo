@@ -1,30 +1,30 @@
 <h1 class="title"><?= Reschedule::$approval_state[$this->request->state]; ?> Reschedule Request</h1>
 <h2 style="text-align:center"><?= $this->request->schedule->name; ?></h2>
-<fieldset><legend>Original Match Information</legend>
+<fieldset><legend>Original game Information</legend>
 <table class="form">
     <tr>
         <th class="label">GotSoccer Game Number</th>
-        <td class="entry"><?= $this->request->match->gotsoccer_id; ?></td>
+        <td class="entry"><?= $this->request->game->gotsoccer_id; ?></td>
     </tr>
     <tr>
         <th class="label">Home</th>
-        <td class="entry"><?= $this->request->match->home_club; ?> <?= $this->request->match->home; ?></td>
+        <td class="entry"><?= $this->request->game->home_club; ?> <?= $this->request->game->home; ?></td>
     </tr>
     <tr>
         <th class="label">Visitor</th>
-        <td class="entry"><?= $this->request->match->away_club; ?> <?= $this->request->match->away; ?></td>
+        <td class="entry"><?= $this->request->game->away_club; ?> <?= $this->request->game->away; ?></td>
     </tr>
     <tr>
         <th class="label">Date</th>
-        <td class="entry"><?= $this->request->match->date_str; ?></td>
+        <td class="entry"><?= $this->request->game->date_str; ?></td>
     </tr>
     <tr>
         <th class="label">Time</th>
-        <td class="entry"><?= $this->request->match->start_time; ?></td>
+        <td class="entry"><?= $this->request->game->start_time; ?></td>
     </tr>
     <tr>
         <th class="label">Field</th>
-        <td class="entry"><?= $this->request->match->field->name; ?></td>
+        <td class="entry"><?= $this->request->game->field->name; ?></td>
     </tr>
 </table>
 </fieldset>

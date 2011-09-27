@@ -77,12 +77,12 @@ class RescheduleController extends \simp\Controller
         else
         {
             // find the match and update it
-            $match = \simp\Model::FindById("Match", $this->request->match_id);
-            $match->start_time = $this->request->new_start_time;
-            $match->end_time = $this->request->new_end_time;
-            $match->date_str = $this->request->new_date_str;
-            $match->field_id = $this->request->field_id;
-            if (!$match->Save())
+            $game = \simp\Model::FindById("Game", $this->request->game_id);
+            $game->start_time = $this->request->new_start_time;
+            $game->end_time = $this->request->new_end_time;
+            $game->date_str = $this->request->new_date_str;
+            $game->field_id = $this->request->field_id;
+            if (!$game->Save())
             {
                 AddFlash("Something went wrong.  Tell Zayne to fix it.");
                 \Redirect(\GetReturnURL());

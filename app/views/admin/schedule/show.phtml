@@ -4,13 +4,13 @@
 <h2><?= $division->name; ?></h2>
 <table class="pretty">
     <tr><th>Date</th><th>Time</th><th>Field</th><th>Home</th><th>Away</th></tr>
-        <? foreach ($division->matches as $match): ?>
+        <? foreach ($division->games as $game): ?>
     <tr>
-        <td><?= $match->date_str; ?></td>
-        <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
-        <td><?= $match->field->name; ?></td>
-        <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
-        <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
+        <td><?= $game->date_str; ?></td>
+        <td><?= $game->start_time; ?> - <?= $game->end_time; ?></td>
+        <td><?= $game->field->name; ?></td>
+        <td><?= $game->home != false ? $game->home : $game->home_club; ?></td>
+        <td><?= $game->away != false ? $game->away : $game->away_club; ?></td>
     </td>
         <? endforeach; ?>
 </table>

@@ -78,8 +78,8 @@ class RescheduleController extends \app\AppController
         }
 
         $this->affirmed = $this->reschedule->affirmed;
-        $this->matches = \simp\Model::Find(
-            "Match", 
+        $this->games = \simp\Model::Find(
+            "Game", 
             "date = ? and division_id = ?", // and age = ? and gender = ?",
             array(
                 $this->reschedule->orig_date, 
@@ -102,8 +102,8 @@ class RescheduleController extends \app\AppController
 
         if (!$this->reschedule->Save())
         {
-            $this->matches = \simp\Model::Find(
-                "Match", 
+            $this->games = \simp\Model::Find(
+                "Game", 
                 "date = ? and division_id = ?", // and age = ? and gender = ?",
                 array(
                     $this->reschedule->orig_date, 

@@ -20,7 +20,7 @@ class Reschedule extends \simp\Model
     );
 
     protected $_schedule;
-    protected $_match;
+    protected $_game;
     public $step;
     public $orig_date_str;
     public $first_choice_str;
@@ -46,18 +46,18 @@ class Reschedule extends \simp\Model
         case 'schedule':
             if (empty($this->_schedule))
             {
-                //$q = "select distinct division, age, gender from match where schedule_id = ? order by division, age, gender;";
+                //$q = "select distinct division, age, gender from game where schedule_id = ? order by division, age, gender;";
                 //$this->_divisions = \R::getAll($q, $this->schedule_id);
                 $this->_schedule = \simp\Model::FindById("Schedule", $this->schedule_id);
             }
             return $this->_schedule;
             break;
-        case 'match':
-            if (empty($this->_match))
+        case 'game':
+            if (empty($this->_game))
             {
-                $this->_match = \simp\Model::FindById("Match", $this->match_id);
+                $this->_game = \simp\Model::FindById("Game", $this->game_id);
             }
-            return $this->_match;
+            return $this->_game;
             break;
         default:
             return parent::__get($property);
@@ -97,8 +97,8 @@ class Reschedule extends \simp\Model
         }
         if ($this->step == 2)
         {
-            $this->VerifyNotEmpty('match_id');
-            $this->VerifyNotEqual('match_id', 0);
+            $this->VerifyNotEmpty('game_id');
+            $this->VerifyNotEqual('game_id', 0);
             $this->VerifyValidDate('first_choice_str');
             $this->VerifyValidDate('second_choice_str');
             $this->first_choice = strtotime($this->first_choice_str);
@@ -126,7 +126,7 @@ class Reschedule extends \simp\Model
 
     public function AfterSave()
     {
-        unset($this->_match);
+        unset($this->_game);
     }
 
     public function SendEmail($subject_, $template)

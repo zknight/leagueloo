@@ -2,20 +2,20 @@
 <?= GetErrorsFor($this->reschedule); ?>
 <?= FormTag("request", \simp\Request::POST, Path::reschedule_selectfield($this->reschedule->id)); ?>
 
-<fieldset><legend>Select the Match you are rescheduling</legend>
+<fieldset><legend>Select the game you are rescheduling</legend>
     <h3>
-        Matches for 
+        games for 
         <?= "{$this->reschedule->division} {$this->reschedule->age} {$this->reschedule->gender}"; ?> 
         on <?=$this->reschedule->orig_date_str; ?>
     </h3>
 <table class="pretty">
-    <tr><th>&nbsp;</th><th>Match Time</th><th>Home</th><th>Away</th></tr>
-<? foreach ($this->matches as $match): ?>
+    <tr><th>&nbsp;</th><th>game Time</th><th>Home</th><th>Away</th></tr>
+<? foreach ($this->games as $game): ?>
     <tr>
-        <td><?= RadioButton($this->reschedule, "match_id", $match->id); ?></td>
-        <td><?= $match->start_time; ?> - <?= $match->end_time; ?></td>
-        <td><?= $match->home != false ? $match->home : $match->home_club; ?></td>
-        <td><?= $match->away != false ? $match->away : $match->away_club; ?></td>
+        <td><?= RadioButton($this->reschedule, "game_id", $game->id); ?></td>
+        <td><?= $game->start_time; ?> - <?= $game->end_time; ?></td>
+        <td><?= $game->home != false ? $game->home : $game->home_club; ?></td>
+        <td><?= $game->away != false ? $game->away : $game->away_club; ?></td>
     </tr>
 <? endforeach; ?>
 </table>

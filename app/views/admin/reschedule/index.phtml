@@ -9,7 +9,7 @@ None.
     <? foreach ($this->pending as $req): ?>
     <tr>
         <td><?= $req->schedule->name; ?></td>
-        <td><?= $req->match->gotsoccer_id; ?></td>
+        <td><?= $req->game->gotsoccer_id; ?></td>
         <td><?= $req->requestor_name;?></td>
         <td>
             <table>
@@ -20,13 +20,13 @@ None.
         </td>
         <td>
             <table>
-                <tr><td>Date:</td><td><?= $req->match->date_str; ?></td></tr>
-                <tr><td>Time:</td><td><?= $req->match->start_time; ?></td></tr>
-                <tr><td>Field:</td><td><?= $req->match->field->name; ?></td></tr>
+                <tr><td>Date:</td><td><?= $req->game->date_str; ?></td></tr>
+                <tr><td>Time:</td><td><?= $req->game->start_time; ?></td></tr>
+                <tr><td>Field:</td><td><?= $req->game->field->name; ?></td></tr>
             </table>
         </td>
-        <td><?= $req->match->home_club;?><br /><?= $req->match->home; ?></td>
-        <td><?= $req->match->away_club;?><br /><?= $req->match->away; ?></td>
+        <td><?= $req->game->home_club;?><br /><?= $req->game->home; ?></td>
+        <td><?= $req->game->away_club;?><br /><?= $req->game->away; ?></td>
         <td><?= FormatDateTime($req->updated_at); ?></td>
         <td>
             <?= l("[show]", Path::admin_reschedule_show($req->id));?>
@@ -46,17 +46,17 @@ None.
     <? foreach ($this->approved as $req): ?>
     <tr>
         <td><?= $req->schedule->name; ?></td>
-        <td><?= $req->match->gotsoccer_id; ?></td>
+        <td><?= $req->game->gotsoccer_id; ?></td>
         <td><?= $req->requestor_name;?></td>
         <td>
             <table>
-                <tr><td>Date:</td><td><?= $req->match->date_str; ?></td></tr>
-                <tr><td>Time:</td><td><?= $req->match->start_time; ?></td></tr>
-                <tr><td>Field:</td><td><?= $req->match->field->name; ?></td></tr>
+                <tr><td>Date:</td><td><?= $req->game->date_str; ?></td></tr>
+                <tr><td>Time:</td><td><?= $req->game->start_time; ?></td></tr>
+                <tr><td>Field:</td><td><?= $req->game->field->name; ?></td></tr>
             </table>
         </td>
-        <td><?= $req->match->home_club;?><br /><?= $req->match->home; ?></td>
-        <td><?= $req->match->away_club;?><br /><?= $req->match->away; ?></td>
+        <td><?= $req->game->home_club;?><br /><?= $req->game->home; ?></td>
+        <td><?= $req->game->away_club;?><br /><?= $req->game->away; ?></td>
         <td><?= FormatDateTime($req->updated_at); ?></td>
     </tr>
     <? endforeach; ?>
@@ -71,7 +71,7 @@ None.
     <? foreach ($this->denied as $req): ?>
     <tr>
         <td><?= $req->schedule->name; ?></td>
-        <td><?= $req->match->gotsoccer_id; ?></td>
+        <td><?= $req->game->gotsoccer_id; ?></td>
         <td><?= $req->requestor_name;?></td>
         <td>
             <table>
@@ -83,13 +83,13 @@ None.
         <td><?= $req->denial_reason; ?></td>
         <td>
             <table>
-                <tr><td>Date:</td><td><?= $req->match->date_str; ?></td></tr>
-                <tr><td>Time:</td><td><?= $req->match->start_time; ?></td></tr>
-                <tr><td>Field:</td><td><?= $req->match->field->name; ?></td></tr>
+                <tr><td>Date:</td><td><?= $req->game->date_str; ?></td></tr>
+                <tr><td>Time:</td><td><?= $req->game->start_time; ?></td></tr>
+                <tr><td>Field:</td><td><?= $req->game->field->name; ?></td></tr>
             </table>
         </td>
-        <td><?= $req->match->home_club;?><br /><?= $req->match->home; ?></td>
-        <td><?= $req->match->away_club;?><br /><?= $req->match->away; ?></td>
+        <td><?= $req->game->home_club;?><br /><?= $req->game->home; ?></td>
+        <td><?= $req->game->away_club;?><br /><?= $req->game->away; ?></td>
         <td><?= FormatDateTime($req->updated_at); ?></td>
     </tr>
     <? endforeach; ?>
