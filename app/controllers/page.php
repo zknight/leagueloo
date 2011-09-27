@@ -28,7 +28,7 @@ class PageController extends \app\AppController
             $id = $this->GetParam('id');
             $this->page = \Page::FindById("Page", $id);
         }
-        if ($this->page->protected == true)
+        if ($this->page->protected == true && !IsLoggedIn())
         {
             AddFlash("You must be logged in to access that page.");
             \Redirect(\GetReturnURL());
