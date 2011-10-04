@@ -70,7 +70,7 @@ class RescheduleController extends \app\AppController
         $deadlines = unserialize(GetCfgVar('resched:deadlines'));
         $format = $div->format;
         print_r($deadlines);
-        $days_before = 6 - $deadlines[$format]['day'];
+        $days_before = 5 - $deadlines[$format]['day'];
         if ($days_before < 1) $days_before += 7;
         echo "days before = $days_before";
         $now = new \DateTime(now);
