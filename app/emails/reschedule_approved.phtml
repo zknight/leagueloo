@@ -6,14 +6,18 @@ $host = $data['host'];
 ?>
 <p>The following reschedule has been approved:</p>
 <table>
-<tr><td><?= $request->schedule->name; ?></td> <td><?= $request->game->division; ?></td></tr>
+<tr><td><?= $request->schedule->name; ?></td> <td><?= $request->division->name; ?></td></tr>
 <tr><td>Match ID:</td><td><?= $request->game->gotsoccer_id; ?></td></tr>
 <tr><td>Original Date:</td><td><?= $request->orig_date_str; ?></td></tr>
+<tr><td>Original Time:</td><td><?= $request->original_time; ?></td></tr>
+<tr><td>Original Field:</td><td><?= $request->original_field; ?></td></tr>
 <tr><td>Home Team:</td><td><?= $request->game->home_club; ?> <?= $request->game->home; ?></td></tr>
 <tr><td>Away Team:</td><td><?= $request->game->away_club; ?> <?= $request->game->away; ?></td></tr>
 <tr><td>Requestor:</td><td><?= $request->requestor_name;?> <?= $request->requestor_email; ?></td></tr>
 <tr><td>Opponent Representative:</td><td><?= $request->opponent_name; ?> <?= $request->opponent_email; ?></td></tr>
 </table>
+<p>Reschedule Reason: <?= Reschedule::$reschedule_reasons[$request->reschedule_reason]; ?></p>
+<br />
 <p><strong>New Match Information</strong></p>
 <table>
     <tr><td>Date:</td><td><?= $request->new_date_str; ?></td></tr>

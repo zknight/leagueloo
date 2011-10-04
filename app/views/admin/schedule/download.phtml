@@ -1,0 +1,30 @@
+<h1 class="title">CSV Schedule Download</h1>
+<?= FormTag("scheduledownload", \simp\Request::POST); ?>
+<fieldset><legend>Schedule Filter</legend>
+<table class="form">
+    <tr>
+        <th class="label">Schedule(s) to include:</th>
+        <td class="entry">
+<? foreach ($this->scheds as $id => $name): ?>
+            <input type="checkbox" name="sched[]" value="<?=$id;?>"> <?= $name; ?></input><br />
+<? endforeach; ?>
+        </td>
+    </tr>
+    <tr>
+        <th class="label">Date span:</th>
+        <td class="entry"><?=DatePicker(null, "start"); ?><?=DatePicker(null, "stop"); ?></td>
+    </tr>
+    <tr>
+        <th class="label">Format:</th>
+        <td class="entry">
+            <select name="format">
+<? foreach($this->formats as $i => $f): ?>
+            <option value="<?=$i;?>"><?=$f;?></option>
+<? endforeach; ?>
+            </select>
+        </td>
+    </tr>
+</table>
+</fieldset>
+<input type="submit" value="Get Me Some" />
+<?= EndForm(); ?>

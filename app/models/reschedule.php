@@ -19,8 +19,16 @@ class Reschedule extends \simp\Model
         self::DENIED => "Denied"
     );
 
+    public static $reschedule_reasons = array(
+        "At Tournament",
+        "Coach Conflict",
+        "Complex Closed",
+        "See Comment"
+    );
+
     protected $_schedule;
     protected $_game;
+    protected $_division;
     public $step;
     public $orig_date_str;
     public $first_choice_str;
@@ -59,6 +67,12 @@ class Reschedule extends \simp\Model
             }
             return $this->_game;
             break;
+        case 'division':
+            if (empty($this->_division) and $this->id > 0)
+            {
+                $this->_division = \simp\Model::FindById("Division", $this->division_id);
+            }
+            return $this->_division;
         default:
             return parent::__get($property);
         }
@@ -188,5 +202,10 @@ class Reschedule extends \simp\Model
     public function SendDenyEmail()
     {
         $this->SendEmail("Match Reschedule Denied", "reschedule_denied");
+    }
+
+    public function SendModifyEmail()
+    {
+        $this->SendEmail("Match Reschedule Modified", "reschedule_modified");
     }
 }

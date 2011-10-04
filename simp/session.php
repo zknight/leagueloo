@@ -23,18 +23,18 @@ function sess_close()
 
 function sess_read($id)
 {
-    global $log;
+    //global $log;
 
     $session = Session::FindOne("Session", "sess_id =?", array($id));
     $new_session = true;
     if ($session)
     {
-        $log->logDebug("session exists");
+        //$log->logDebug("session exists");
         return $session->data;
     }
     else
     {
-        $log->logDebug("adding session $id");
+        //$log->logDebug("adding session $id");
         $session = Session::Create("Session");
         $session->sess_id = $id;
         $session->data = '';
@@ -46,8 +46,8 @@ function sess_read($id)
 
 function sess_write($id, $data)
 {
-    global $log;
-    $log->logDebug("Attempthing to write $data to $id");
+    //global $log;
+    //$log->logDebug("Attempthing to write $data to $id");
     $session = \simp\Model::FindOne("Session", "sess_id =?", array($id));
     $session->touch = time();
     $session->data = $data;
@@ -70,7 +70,7 @@ function sess_gc($maxlife)
 
 function check_current_session_timeout()
 {
-    global $log;
+    //global $log;
     if ($_COOKIE["PHPSESSID"])
     {
         $id = $_COOKIE["PHPSESSID"];
@@ -83,12 +83,12 @@ function check_current_session_timeout()
             $max_session_min = GetCfgVar("max_session", 10);
             $max_session = $max_session_min * 60;
             $curtime = time();
-            $log->logDebug("\$curtime = " . print_r($curtime, true));
+            //$log->logDebug("\$curtime = " . print_r($curtime, true));
             $delta = $curtime - $session->touch;
-            $log->logDebug("\$delta = $delta");
+            //$log->logDebug("\$delta = $delta");
             if ($delta > $max_session)
             {
-                $log->logDebug("session timeout.  deleting $id");
+                //$log->logDebug("session timeout.  deleting $id");
                 unset($_COOKIE["PHPSESSID"]);
                 $session->Delete();
             }
@@ -98,21 +98,21 @@ function check_current_session_timeout()
     $res = $db->Fetch("sessions", "touch", array('sess_id' => $id));
     if (is_array($res))
     {
-      $log->logDebug(print_r($res, true));
+      //$log->logDebug(print_r($res, true));
       $touch = $res[0]['touch'];
       $max_session_m = $db->Fetch("cfg_var", "value", array('name' => 'session_timeout'));
-      $log->logDebug("\$max_session_m = " . print_r($max_session_m, true));
+      //$log->logDebug("\$max_session_m = " . print_r($max_session_m, true));
       $max_session = $max_session_m[0]['value'] * 60;
       if ($max_session == 0)
       {
         $max_session = MAX_SESSION;
       }
-      $log->logDebug("\$max_session = $max_session");
+      //$log->logDebug("\$max_session = $max_session");
 
       $curtime = time();
-      $log->logDebug("\$curtime = " . print_r($curtime, true));
+      //$log->logDebug("\$curtime = " . print_r($curtime, true));
       $delta = $curtime - $touch;
-      $log->logDebug("\$delta = $delta");
+      //$log->logDebug("\$delta = $delta");
       if ($delta > $max_session)
       {
         unset($_COOKIE["PHPSESSID"]);

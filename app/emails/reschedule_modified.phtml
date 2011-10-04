@@ -4,23 +4,31 @@ $request = $data['reschedule'];
 $site_name = $data['site_name'];
 $host = $data['host'];
 ?>
-<p>The following reschedule request has been denied:</p>
+<p>The following approved reschedule has been MODIFIED:</p>
 <table>
-<tr><td><?= $request->schedule->name; ?></td> <td><?= $request->game->division; ?></td></tr>
+<tr><td><?= $request->schedule->name; ?></td> <td><?= $request->division->name; ?></td></tr>
 <tr><td>Match ID:</td><td><?= $request->game->gotsoccer_id; ?></td></tr>
-<tr><td>Original Date:</td><td><?= $request->orig_date_str; ?></td></tr>
+<tr><td>Original Reschedule Date:</td><td><?= $request->orig_date_str; ?></td></tr>
+<tr><td>Original Reschedule Time:</td><td><?= $request->original_time; ?></td></tr>
+<tr><td>Original Reschedule Field:</td><td><?= $request->original_field; ?></td></tr>
 <tr><td>Home Team:</td><td><?= $request->game->home_club; ?> <?= $request->game->home; ?></td></tr>
 <tr><td>Away Team:</td><td><?= $request->game->away_club; ?> <?= $request->game->away; ?></td></tr>
 <tr><td>Requestor:</td><td><?= $request->requestor_name;?> <?= $request->requestor_email; ?></td></tr>
 <tr><td>Opponent Representative:</td><td><?= $request->opponent_name; ?> <?= $request->opponent_email; ?></td></tr>
-<tr><td>First Choice:</td><td><?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?></td></tr>
-<tr><td>Second Choice:</td><td><?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?></td></tr>
 </table>
-<p>Reschedule Reason: <?= Reschedule::$reschedule_reasons[$request->reschedule_reason]; ?></p>
-<p>Reason for denial:</p>
+<p><strong>MODIFIED Match Information</strong></p>
+<table>
+    <tr><td>Date:</td><td><?= $request->new_date_str; ?></td></tr>
+    <tr><td>Time:</td><td><?= $request->new_start_time; ?></td></tr>
+    <tr><td>Location:</td><td><?= $request->game->field->name; ?></td></tr>
+</table>
+<p>Comments:</p>
 <pre>
 ---------------------
-<?= $request->denial_reason; ?>
+<pre><?= $request->comments; ?></pre>
+<br />
+<pre><?= $request->modification_reason; ?></pre>
+
 </pre>
 Scheduler, <?= l("click here to view pending requests", Path::admin_reschedule_accept($request->id)); ?>
 <p>

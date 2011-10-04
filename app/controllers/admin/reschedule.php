@@ -2,6 +2,10 @@
 namespace app\admin;
 class RescheduleController extends \simp\Controller
 {
+    public static $deadline_opts = array(
+        'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
+    );
+
     function Setup()
     {
         $this->SetLayout("admin");
@@ -9,19 +13,23 @@ class RescheduleController extends \simp\Controller
             array(
                 'index',
                 'configure',
+                'deadlines',
                 'delete',
                 'fields',
                 'email',
                 'show',
                 'accept',
                 'deny',
+                'modify',
             )
         );
 
         $this->MapAction('configure', 'Update', \simp\Request::PUT);
+        $this->MapAction('deadlines', 'UpdateDeadlines', \simp\Request::PUT);
         $this->MapAction('delete', 'DelEmail', \simp\Request::GET);
         $this->MapAction('accept', 'DoAccept', \simp\Request::PUT);
         $this->MapAction('deny', 'DoDeny', \simp\Request::PUT);
+        $this->MapAction('modify', 'DoModify', \simp\Request::PUT);
     }
 
     public function Index()
@@ -78,6 +86,8 @@ class RescheduleController extends \simp\Controller
         {
             // find the match and update it
             $game = \simp\Model::FindById("Game", $this->request->game_id);
+            $this->request->original_time = $game->start_time;
+            $this->request->original_field = $game->field->name;
             $game->start_time = $this->request->new_start_time;
             $game->end_time = $this->request->new_end_time;
             $game->date_str = $this->request->new_date_str;
@@ -89,6 +99,57 @@ class RescheduleController extends \simp\Controller
             }
             $this->request->SendAcceptEmail();
             AddFlash("Reschedule request has been approved.");
+            \Redirect(\GetReturnURL());
+        }
+
+        return true;
+    }
+
+    public function Modify()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $division = \simp\Model::FindById("Division", $this->request->division_id);
+        $this->fields = array();
+        foreach ($division->fields as $field)
+        {
+            $this->fields[$field->id] = $field->name;
+        }
+        return true;
+    }
+
+    public function DoModify()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $vars = $this->GetFormVariable("Reschedule");
+        $this->request->UpdateFromArray($vars);
+        $this->request->state = \Reschedule::APPROVED;
+        if (!$this->request->Save())
+        {
+            $this->SetAction("modify");
+            $division = \simp\Model::FindById("Division", $this->request->division_id);
+            $this->fields = array();
+            foreach ($division->fields as $field)
+            {
+                $this->fields[$field->id] = $field->name;
+            }
+        }
+        else
+        {
+            // find the match and update it
+            $game = \simp\Model::FindById("Game", $this->request->game_id);
+            $this->request->original_time = $game->start_time;
+            $this->request->original_field = $game->field->name;
+            $game->start_time = $this->request->new_start_time;
+            $game->end_time = $this->request->new_end_time;
+            $game->date_str = $this->request->new_date_str;
+            $game->field_id = $this->request->field_id;
+            if (!$game->Save())
+            {
+                AddFlash("Something went wrong.  Tell Zayne to fix it.");
+                \Redirect(\GetReturnURL());
+            }
+            $this->request->SendModifyEmail();
+            AddFlash("Reschedule request has been modified.");
             \Redirect(\GetReturnURL());
         }
 
@@ -124,6 +185,23 @@ class RescheduleController extends \simp\Controller
     public function Configure()
     {
         $this->LoadEmails();
+        return true;
+    }
+
+    public function Deadlines()
+    {
+        $this->LoadDeadlines();
+        return true;
+    }
+
+    public function UpdateDeadlines()
+    {
+        $this->LoadDeadlines();
+        $var = $this->GetFormVariable('deadline');
+        $this->deadlines = $var;
+        SetCfgVar('resched:deadlines', serialize($var));
+        $this->SetAction('deadlines');
+        AddFlash("Deadlines Modified.");
         return true;
     }
 
@@ -205,5 +283,16 @@ class RescheduleController extends \simp\Controller
         $this->schedulers = unserialize(GetCfgVar('resched:schedulers', $def));
         $this->ref_coordinators = unserialize(GetCfgVar('resched:ref_coordinators', $def));
         $this->cc_emails = unserialize(GetCfgVar('resched:cc_emails', $def));
+    }
+
+    protected function LoadDeadlines()
+    {
+        $default = array();
+        foreach (\Field::$formats as $format => $text)
+        {
+            $default[$format] = array('day' => 0, 'amount' => '$14');
+        }
+        $def = serialize($default);
+        $this->deadlines = unserialize(GetCfgVar('resched:deadlines', $def));
     }
 }

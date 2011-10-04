@@ -9,12 +9,12 @@ class BaseModel
 
     public static function LoadModel($classname)
     {
-        global $log;
+        //global $log;
         global $APP_BASE_PATH;
         $filename = SnakeCase($classname) . ".php";
         $path = $APP_BASE_PATH . "/models/" . $filename;
         $module_path = $APP_BASE_PATH . "/modules/";
-        $log->logDebug("attempting to find $classname @ $path");
+        //$log->logDebug("attempting to find $classname @ $path");
         if (file_exists($path))
         {
             //echo("attempting to find $classname @ $path");

@@ -43,7 +43,7 @@ class Model extends BaseModel
     // Create a new model
     static public function Create($model_name)
     {
-        global $log;
+        //global $log;
         return new $model_name(\R::dispense(Model::TableName($model_name)));
     }
 

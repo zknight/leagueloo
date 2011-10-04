@@ -37,8 +37,8 @@ class Module
         global $APP_BASE_PATH;
         $module_path = $APP_BASE_PATH . "/modules/" . SnakeCase($classname);
         $filename = $module_path . "/module.php";
-        global $log; 
-        $log->logDebug("attempting to find $classname @ $filename");
+        //global $log; 
+        //$log->logDebug("attempting to find $classname @ $filename");
         if (file_exists($filename))
         {
             //echo("attempting to find $classname @ $path");

@@ -7,12 +7,12 @@
 <h3>Original Match Information</h3>
 <table class="form">
     <tr><th class="label">Schedule</th><td class="entry"><?= $this->reschedule->schedule->name; ?></td></tr>
-    <tr><th class="label">Division</th><td class="entry"><?= $this->reschedule->match->division; ?></td></tr>
-    <tr><th class="label">Match ID</th><td class="entry"><?= $this->reschedule->match->gotsoccer_id; ?></td></tr>
+    <tr><th class="label">Division</th><td class="entry"><?= $this->reschedule->game->division; ?></td></tr>
+    <tr><th class="label">Match ID</th><td class="entry"><?= $this->reschedule->game->gotsoccer_id; ?></td></tr>
     <tr><th class="label">Original Date</th><td class="entry"><?= $this->reschedule->orig_date_str; ?></td></tr>
-    <tr><th class="label">Original Time</th><td class="entry"><?= $this->reschedule->match->start_time; ?></td></tr>
-    <tr><th class="label">Home Team</th><td class="entry"><?= $this->reschedule->match->home_club; ?> <?= $this->reschedule->match->home; ?></td></tr>
-    <tr><th class="label">Away Team</th><td class="entry"><?= $this->reschedule->match->away_club; ?> <?= $this->reschedule->match->away; ?></td></tr>
+    <tr><th class="label">Original Time</th><td class="entry"><?= $this->reschedule->game->start_time; ?></td></tr>
+    <tr><th class="label">Home Team</th><td class="entry"><?= $this->reschedule->game->home_club; ?> <?= $this->reschedule->game->home; ?></td></tr>
+    <tr><th class="label">Away Team</th><td class="entry"><?= $this->reschedule->game->away_club; ?> <?= $this->reschedule->game->away; ?></td></tr>
 </table>
 <br />
 <h3>Reschedule Information</h3>

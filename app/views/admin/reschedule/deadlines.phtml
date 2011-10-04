@@ -1,0 +1,25 @@
+<h1 class="title">Rescheduling Deadlines</h1>
+<?= l("back", GetReturnURL()); ?>
+<?= FormTag("deadlines", \simp\Request::PUT); ?>
+<fieldset><legend>Reschedule Deadlines</legend>
+    <table class="form">
+        <tr><th class="label">Game Format</th><th class="label">Deadline</th><th class="label">Referee Fee</th></tr>
+<? foreach ($this->deadlines as $format => $deadline): ?>
+        <tr>
+            <th class="label"><?= Field::$formats[$format]; ?></th>
+            <td class="entry" >
+                <select name="deadline[<?=$format;?>][day]">
+<? foreach(app\admin\RescheduleController::$deadline_opts as $val => $text): ?>
+                <option value="<?=$val;?>" <?= $val == $deadline['day'] ? "selected=\"selected\"" : ""; ?>><?= $text; ?></option>
+<? endforeach; ?>
+                </select> 
+            </td>
+            <td class="entry" >
+                    <input type="text" name="deadline[<?=$format;?>][amount]" value="<?= $deadline['amount']; ?>" />
+            </td>
+        </tr>
+<? endforeach; ?>
+    </table>
+</fieldset>
+<input type='submit' value='Modify' />
+<? EndForm(); ?>

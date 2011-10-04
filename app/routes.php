@@ -84,6 +84,7 @@ function RouteSetup($router)
 
     $router->AddRoute('/user/[A:action]')->Controller('user');
     $router->AddRoute('/user/[A:action]/[i:id]')->Controller('user');
+    $router->AddRoute('/user/[A:action]/[i:id]/[a:token]')->Controller('user');
 
     $router->AddRoute('/message/[A:action]?/[i:id]?')->Controller('message');
 

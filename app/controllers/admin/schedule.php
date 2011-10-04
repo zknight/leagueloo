@@ -13,11 +13,13 @@ class ScheduleController extends \simp\Controller
                 'edit',
                 'fields',
                 'upload',
+                'download',
                 'load'
             )
         );
 
         $this->MapAction("upload", "Load", \simp\Request::POST);
+        $this->MapAction("download", "Send", \simp\Request::POST);
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
     } 
@@ -101,6 +103,18 @@ class ScheduleController extends \simp\Controller
         return true;
     }
 
+    function Download()
+    {
+        $this->formats = array("GotSoccer", "Arbiter", "Leagueloo");
+        $this->scheds = array();
+        $schedules = \simp\Model::FindAll("Schedule");
+        foreach ($schedules as $s)
+        {
+            $this->scheds[$s->id] = $s->name;
+        }
+        return true;
+    }        
+
     function Load()
     {
         //$this->schedule = new \Schedule();//;\simp\Model::Create("Schedule");
@@ -124,5 +138,62 @@ class ScheduleController extends \simp\Controller
             $this->SetAction('upload');
         }
         return true;
+    }
+
+    function Send()
+    {
+        //echo "<pre>";
+        //print_r($this->_form_vars);
+        $sched = $this->GetFormVariable('sched');
+        $start = $this->GetFormVariable('start');
+        $stop = $this->GetFormVariable('stop');
+        $format = $this->GetFormVariable('format');
+
+        $start_dt = $start != NULL ? new \DateTime($start) : new \DateTime("1/1/1970");
+        $stop_dt = $stop != NULL ? new \DateTime($stop) : new \DateTime("12/31/2037");
+        
+        $q = "SELECT id FROM division where schedule_id in (" . implode(",", $sched) . ")";
+        //$dids = \R::getAll($q);
+        $dids = \R::getCol($q);
+        //print_r($dids);
+        $matches = \simp\Model::Find("game", "date >= ? and date <= ? and division_id in (" . implode(",", $dids) .")", 
+            array($start_dt->getTimestamp(), $stop_dt->getTimestamp()));
+        //print_r($matches);
+
+        switch ($format)
+        {
+        case 0: // GotSoccer
+            break;
+        case 1: // Arbiter
+            $rows = array();
+            $rows[] = array(
+                "Date", "Time", "Game", "Sport", "Level", "Home-Team", "Home-Level",
+                "Away-Team", "Away-Level", "Site", "Sub-site", "Bill-To", "Officials");
+            foreach ($matches as $m)
+            {
+                // TODO: Fix "SLSC" to be configurable
+                $rows[] = array(
+                    $m->date_str, $m->start_time, "", "SLSC", "{$m->age} {$m->gender} {$m->division}",
+                    "{$m->home_club} {$m->home}", "", "{$m->away_club} {$m->away}", "",
+                    $m->field->gotsoccer_name, "", "", ""
+                );
+            }
+
+            break;
+        case 2: // Leagueloo
+            break;
+        }
+
+        ob_start();
+        foreach ($rows as $row)
+        {
+            header('Content-type: txt/plain');
+            header('Content-Disposition: attachment; filename="schedule_arb.csv"');
+            echo implode(",", $row) . "\n";
+        }
+        $content = ob_get_contents();
+        ob_end_clean();
+        echo $content;
+        return false;
     }
 }

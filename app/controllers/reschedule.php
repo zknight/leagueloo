@@ -12,6 +12,7 @@ class RescheduleController extends \app\AppController
                 'match',
                 'selectfield',
                 'submit',
+                'feerequired',
             )
         );
 
@@ -65,6 +66,26 @@ class RescheduleController extends \app\AppController
         $vars = $this->GetFormVariable('Reschedule');
         $this->reschedule = \simp\Model::Create("Reschedule");
         $this->reschedule->UpdateFromArray($vars);
+        $div = \simp\Model::FindById("Division", $this->reschedule->division_id);
+        $deadlines = unserialize(GetCfgVar('resched:deadlines'));
+        $format = $div->format;
+        print_r($deadlines);
+        $days_before = 6 - $deadlines[$format]['day'];
+        if ($days_before < 1) $days_before += 7;
+        echo "days before = $days_before";
+        $now = new \DateTime(now);
+        echo " original: {$this->reschedule->orig_date_str}";
+        echo " format = {$div->format}";
+        $game_date = new \DateTime($this->reschedule->orig_date_str);
+        $interval = $now->diff($game_date);
+        print_r($interval);
+        $this->reschedule->fee_required = false;
+        if ($interval->d < $days_before)
+        {
+            $this->reschedule->fee_required = true;
+            $this->reschedule->fee = $deadlines[$format]['amount'];
+        }
+
         $this->reschedule->step = 1;
         if (!$this->reschedule->affirmed)
         {
@@ -99,6 +120,22 @@ class RescheduleController extends \app\AppController
         $this->reschedule = \simp\Model::FindById("Reschedule", $this->GetParam('id'));
         $this->reschedule->UpdateFromArray($vars);
         $this->reschedule->step = 2;
+
+        if ($this->reschedule->fee_required && !$this->reschedule->pay_fee)
+        {
+            AddFlash("You must agree to pay the referee fee or this game cannot be rescheduled.");
+            $this->games = \simp\Model::Find(
+                "Game", 
+                "date = ? and division_id = ?", // and age = ? and gender = ?",
+                array(
+                    $this->reschedule->orig_date, 
+                    $this->reschedule->division_id, 
+                    //$this->reschedule->age, 
+                    //$this->reschedule->gender
+                )
+            );
+            $this->SetAction("match");
+        }
 
         if (!$this->reschedule->Save())
         {

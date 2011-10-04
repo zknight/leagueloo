@@ -18,6 +18,18 @@
                 <td class="entry"><?= DatePicker($this->reschedule, 'orig_date_str', array('args' => $args)); ?></td>
                 <td class="help">&nbsp;</td>
             </tr>
+            <tr>
+                <th class="label">Reason for Reschedule</th>
+                <td class="entry"><?= SimpleSelect($this->reschedule, 'reschedule_reason', Reschedule::$reschedule_reasons); ?></td>
+                <td class="help">
+                    Select the reason for a reschedule.  Note that "Coach Conflict" refers 
+                    to a coach not able to attend a match due to another club soccer game.
+                    Reschedules should not be taken lightly as finding open fields and referees can
+                    be a complicated, time-consuming process. As such, a request may not be approved
+                    for certain reasons, including but not limited to, "OU/TX football game," 
+                    "Birthday Party," "Weather is forecast to be too cold," etc.
+                </td>
+                    
 <? /*
             <tr>
                 <th class="label">Match ID</th>

@@ -1,14 +1,14 @@
 <h1 class="title">Reschedule Requests</h1>
-<p><?= l("Configure", Path::admin_reschedule_configure()); ?></p>
+<p><?= l("Configure", Path::admin_reschedule_configure()); ?> | <?= l("Set Deadlines", Path::admin_reschedule_deadlines()); ?></p>
 <h2>Pending Requests</h2>
 <? if (empty($this->pending)): ?>
 None.
 <? else: ?>
 <table class="pretty">
-    <tr><th>Schedule</th><th>Game Number</th><th>Requestor</th><th>Request</th><th>Original</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
+    <tr><th>Division</th><th>Game Number</th><th>Requestor</th><th>Request</th><th>Original</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
     <? foreach ($this->pending as $req): ?>
     <tr>
-        <td><?= $req->schedule->name; ?></td>
+        <td><?= $req->schedule->name; ?> <?= $req->division->name; ?></td>
         <td><?= $req->game->gotsoccer_id; ?></td>
         <td><?= $req->requestor_name;?></td>
         <td>
@@ -16,6 +16,7 @@ None.
                 <tr><td>First Choice:</td><td><?= $req->first_choice_str; ?> <?= Reschedule::$tod_opts[$req->first_tod]; ?></td></tr>
                 <tr><td>Second Choice:</td><td><?= $req->second_choice_str; ?> <?= Reschedule::$tod_opts[$req->second_tod]; ?></td></tr>
                 <tr><td>Comment:</td><td><?= $req->comments; ?></td></tr>
+                <tr><td>Reason:</td><td><?= Reschedule::$reschedule_reasons[$req->reschedule_reason]; ?></td></tr>
             </table>
         </td>
         <td>
@@ -42,10 +43,10 @@ None.
 None.
 <? else: ?>
 <table class="pretty">
-    <tr><th>Schedule</th><th>Game Number</th><th>Requestor</th><th>Match Info</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
+    <tr><th>Division</th><th>Game Number</th><th>Requestor</th><th>Match Info</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
     <? foreach ($this->approved as $req): ?>
     <tr>
-        <td><?= $req->schedule->name; ?></td>
+        <td><?= $req->schedule->name; ?> <?= $req->division->name; ?></td>
         <td><?= $req->game->gotsoccer_id; ?></td>
         <td><?= $req->requestor_name;?></td>
         <td>
@@ -58,6 +59,10 @@ None.
         <td><?= $req->game->home_club;?><br /><?= $req->game->home; ?></td>
         <td><?= $req->game->away_club;?><br /><?= $req->game->away; ?></td>
         <td><?= FormatDateTime($req->updated_at); ?></td>
+        <td>
+            <?= l("[show]", Path::admin_reschedule_show($req->id));?>
+            <?= l("[modify]", Path::admin_reschedule_modify($req->id));?>
+        </td>
     </tr>
     <? endforeach; ?>
 </table>

@@ -1,5 +1,6 @@
 <h1 class="title">Schedules</h1>
 <h2>Current Schedules</h2>
+<p><?= l("Download CSV", Path::admin_schedule_download()); ?></p>
 <? if (count($this->schedules) > 0): ?>
 <table class="pretty">
     <tr><th>Schedule</th><th>Level</th><th>Start</th><th>End</th><th>Reschedules Allowed</th><th>Divisions</th><th>Actions</th></tr>

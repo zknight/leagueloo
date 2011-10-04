@@ -1,7 +1,16 @@
 <h1 class="title">New Reschedule Request</h1>
 <?= GetErrorsFor($this->reschedule); ?>
 <?= FormTag("request", \simp\Request::POST, Path::reschedule_selectfield($this->reschedule->id)); ?>
-
+<? if ($this->reschedule->fee_required): ?>
+<fieldset style="font-weight:bold;"><legend>Request after Deadline</legend>
+<p>
+You have requested a reschedule after the deadline for this date.  In order to proceed, you
+must agree to pay for the referees.  This fee is at least <span style="color:yellow"><?= $this->reschedule->fee; ?></span>
+and must be paid prior to the match being rescheduled.
+</p>
+<p>"I agree to pay the fee" <?= CheckBoxField("resched", "pay_fee"); ?></p>
+</fieldset>
+<? endif; ?>
 <fieldset><legend>Select the game you are rescheduling</legend>
     <h3>
         games for 
