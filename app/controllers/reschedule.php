@@ -69,16 +69,16 @@ class RescheduleController extends \app\AppController
         $div = \simp\Model::FindById("Division", $this->reschedule->division_id);
         $deadlines = unserialize(GetCfgVar('resched:deadlines'));
         $format = $div->format;
-        print_r($deadlines);
+        //print_r($deadlines);
         $days_before = 5 - $deadlines[$format]['day'];
         if ($days_before < 1) $days_before += 7;
-        echo "days before = $days_before";
+        //echo "days before = $days_before";
         $now = new \DateTime(now);
-        echo " original: {$this->reschedule->orig_date_str}";
-        echo " format = {$div->format}";
+        //echo " original: {$this->reschedule->orig_date_str}";
+        //echo " format = {$div->format}";
         $game_date = new \DateTime($this->reschedule->orig_date_str);
         $interval = $now->diff($game_date);
-        print_r($interval);
+        //print_r($interval);
         $this->reschedule->fee_required = false;
         if ($interval->d < $days_before)
         {
