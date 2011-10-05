@@ -4,10 +4,10 @@
 <? foreach ($this->schedule->divisions as $division): ?>
 <h2><?= $division->name; ?></h2>
 <table class="pretty">
-    <tr><th style="width:5%;">No.</th><th style="width:5%;">Date</th><th style="width:15%;">Time</th><th style="width:5%;">Field</th><th style="width:35%;">Home</th><th style="width:35%;">Away</th></tr>
+    <tr><th style="width:10%;">No.</th><th style="width:5%;">Date</th><th style="width:15%;">Time</th><th style="width:5%;">Field</th><th style="width:32%;">Home</th><th style="width:32%;">Away</th></tr>
         <? foreach ($division->games as $game): ?>
     <tr>
-        <td><?= $game->gotsoccer_id; ?><?=l("[m]", Path::admin_schedule_modifymatch($game->id)); ?></td>
+        <td><?= $game->gotsoccer_id; ?><?=l("[m]", Path::admin_schedule_modifymatch($game->id)); ?><?=l("[x]", Path::admin_schedule_delmatch($game->id), array("method" => "delete")); ?></td>
         <td><?= $game->date_str; ?></td>
         <td><?= $game->start_time; ?> - <?= $game->end_time; ?></td>
         <td><?= $game->field->name; ?></td>

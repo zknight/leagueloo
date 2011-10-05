@@ -18,6 +18,7 @@ class ScheduleController extends \simp\Controller
                 'load',
                 'addmatch',
                 'modifymatch',
+                'delmatch',
             )
         );
 
@@ -28,6 +29,7 @@ class ScheduleController extends \simp\Controller
         $this->MapAction("addmatch", "Creatematch", \simp\Request::PUT);
         $this->MapAction("modifymatch", "Updatematch", \simp\Request::PUT);
         $this->MapAction("delete", "Remove", \simp\Request::DELETE);
+        $this->MapAction("delmatch", "RemMatch", \simp\Request::DELETE);
     } 
 
     function Index()
@@ -259,5 +261,12 @@ class ScheduleController extends \simp\Controller
         }
 
         return true;
+    }
+
+    public function RemMatch()
+    {
+        $match = \simp\Model::FindById("Game", $this->GetParam('id'));
+        $match->Delete();
+        \Redirect(\GetReturnURL());
     }
 }
