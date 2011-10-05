@@ -1,0 +1,6 @@
+<h1 class="title">Modify Match <?= $this->game->gotsoccer_id; ?></h1>
+<?= GetErrorsFor($this->game); ?>
+<?= FormTag("game", \simp\Request::PUT); ?>
+    <? require "_matchform.phtml"; ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

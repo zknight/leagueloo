@@ -1,0 +1,59 @@
+<p><?= l('back', GetReturnURL()); ?></p>
+<fieldset><legend>Match Information</legend>
+<? /*
+`field_id` INTEGER,
+`gotsoccer_id` INTEGER,
+`start_time` TEXT,
+`end_time` TEXT,
+`age` TEXT,
+`gender` TEXT,
+`division` TEXT,
+`field_name` TEXT,
+`home_club` TEXT,
+`home` TEXT,
+`away_club ` TEXT,
+`away ` TEXT,
+`updated_at ` INTEGER,
+`in_gotsoccer ` INTEGER,
+`date ` INTEGER,
+`division_id ` INTEGER,
+`home_score ` TEXT,
+`away_score` TEXT, 
+`home_full_name` TEXT, 
+`away_full_name` TEXT
+ */?>
+    <table class="form">
+        <tr>
+            <th class="label">Date:</th>
+            <td class="entry"><?= DatePicker($this->game, "date_str"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Start Time:</th>
+            <td class="entry"><?= TextField($this->game, "start_time"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">End Time:</th>
+            <td class="entry"><?= TextField($this->game, "end_time"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Field:</th>
+            <td class="entry"><?= SimpleSelect($this->game, "field_id", $this->field_opts); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Home Club:</th>
+            <td class="entry"><?= TextField($this->game, "home_club"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Home Team:</th>
+            <td class="entry"><?= TextField($this->game, "home"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Away Club:</th>
+            <td class="entry"><?= TextField($this->game, "away_club"); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Away Team:</th>
+            <td class="entry"><?= TextField($this->game, "away"); ?></td>
+        </tr>
+    </table>
+</fieldset>

@@ -13,6 +13,9 @@ None.
         <td><?= $req->requestor_name;?></td>
         <td>
             <table>
+        <? if ($req->fee_required): ?>
+                <strong><?= $req->fee; ?> late fee required</strong>
+        <? endif; ?>
                 <tr><td>First Choice:</td><td><?= $req->first_choice_str; ?> <?= Reschedule::$tod_opts[$req->first_tod]; ?></td></tr>
                 <tr><td>Second Choice:</td><td><?= $req->second_choice_str; ?> <?= Reschedule::$tod_opts[$req->second_tod]; ?></td></tr>
                 <tr><td>Comment:</td><td><?= $req->comments; ?></td></tr>

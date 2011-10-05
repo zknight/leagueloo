@@ -14,7 +14,9 @@ class ScheduleController extends \simp\Controller
                 'fields',
                 'upload',
                 'download',
-                'load'
+                'load',
+                'addmatch',
+                'modifymatch',
             )
         );
 
@@ -22,6 +24,8 @@ class ScheduleController extends \simp\Controller
         $this->MapAction("download", "Send", \simp\Request::POST);
         $this->MapAction("add", "Create", \simp\Request::POST);
         $this->MapAction("edit", "Update", \simp\Request::PUT);
+        $this->MapAction("addmatch", "Creatematch", \simp\Request::PUT);
+        $this->MapAction("modifymatch", "Updatematch", \simp\Request::PUT);
     } 
 
     function Index()
@@ -195,5 +199,54 @@ class ScheduleController extends \simp\Controller
         ob_end_clean();
         echo $content;
         return false;
+    }
+
+    public function Addmatch()
+    {
+    }
+
+    public function Creatematch()
+    {
+    }
+
+    public function Modifymatch()
+    {
+        $this->game = \simp\Model::FindById("Game", $this->GetParam('id'));
+        $division = \simp\Model::FindById("Division", $this->game->division_id);
+        $this->field_opts = array();
+        foreach ($division->fields as $f)
+        {
+            $this->field_opts[$f->id] = $f->name;
+        }
+
+        return true;
+    }
+
+    public function Updatematch()
+    {
+        $this->game = \simp\Model::FindById("Game", $this->GetParam('id'));
+        $vars = $this->GetFormVariable('Game');
+        $this->game->UpdateFromArray($vars);
+        $this->game->field_name = $this->game->field->gotsoccer_name;
+        $this->game->home_full_name = "{$this->game->home_club} {$this->game->home}";
+        $this->game->away_full_name = "{$this->game->away_club} {$this->game->away}";
+
+        if (!$this->game->Save())
+        {
+            $division = \simp\Model::FindById("Division", $this->game->division_id);
+            $this->field_opts = array();
+            foreach ($division->fields as $f)
+            {
+                $this->field_opts[$f->id] = $f->name;
+            }
+            $this->SetAction("modifymatch");
+        }
+        else
+        {
+            AddFlash("Match {$this->game->gotsoccer_id} updated.");
+            \Redirect(\GetReturnURL());
+        }
+
+        return true;
     }
 }

@@ -35,6 +35,7 @@ class Game extends \simp\Model
         //print_r($this);
         $this->VerifyDateFormat("date_str", $this->date_str);
         $this->date = strtotime($this->date_str);
+        $this->updated_at = time();
         return !$this->HasErrors();
     }
 }

@@ -5,6 +5,11 @@ $site_name = $data['site_name'];
 $host = $data['host'];
 ?>
 <p><?= $request->requestor_name; ?> has requested that the following match be rescheduled:</p>
+<? if ($request->fee_required): ?>
+<p><strong>NOTE:</strong>This reschedule request is after the reschedule deadline <strong><?= $request->deadline; ?></strong>.  A reschedule fee
+of <strong><?= $request->fee; ?></strong> is required prior to rescheduling.
+</p>
+<? endif; ?>
 <table>
 <tr><td><?= $request->schedule->name; ?></td> <td><?= $request->division->name; ?></td></tr>
 <tr><td>Match ID:</td><td><?= $request->game->gotsoccer_id; ?></td></tr>

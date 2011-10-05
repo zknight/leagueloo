@@ -4,11 +4,12 @@
 <? if ($this->reschedule->fee_required): ?>
 <fieldset style="font-weight:bold;"><legend>Request after Deadline</legend>
 <p>
-You have requested a reschedule after the deadline for this date.  In order to proceed, you
+You have requested a reschedule after the deadline 
+<span style="color:yellow;"><?= $this->reschedule->deadline; ?></span> for this game.  In order to proceed, you
 must agree to pay for the referees.  This fee is at least <span style="color:yellow"><?= $this->reschedule->fee; ?></span>
 and must be paid prior to the match being rescheduled.
 </p>
-<p>"I agree to pay the fee" <?= CheckBoxField("resched", "pay_fee"); ?></p>
+<p>"I agree to pay the fee" <?= CheckBoxField($this->reschedule, "pay_fee"); ?></p>
 </fieldset>
 <? endif; ?>
 <fieldset><legend>Select the game you are rescheduling</legend>

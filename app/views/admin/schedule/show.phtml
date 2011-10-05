@@ -1,16 +1,18 @@
 <h1 class="title"><?= $this->schedule->name; ?></h1>
-<?= l("upload schedule data (GotSoccer CSV)", Path::admin_schedule_upload($this->schedule->id)); ?>
+<p><?= l("upload schedule data (GotSoccer CSV)", Path::admin_schedule_upload($this->schedule->id)); ?> <?/* |
+<?= l("create match", Path::admin_schedule_addmatch()); */?></p>
 <? foreach ($this->schedule->divisions as $division): ?>
 <h2><?= $division->name; ?></h2>
 <table class="pretty">
-    <tr><th>Date</th><th>Time</th><th>Field</th><th>Home</th><th>Away</th></tr>
+    <tr><th style="width:5%;">No.</th><th style="width:5%;">Date</th><th style="width:15%;">Time</th><th style="width:5%;">Field</th><th style="width:35%;">Home</th><th style="width:35%;">Away</th></tr>
         <? foreach ($division->games as $game): ?>
     <tr>
+        <td><?= $game->gotsoccer_id; ?><?=l("[m]", Path::admin_schedule_modifymatch($game->id)); ?></td>
         <td><?= $game->date_str; ?></td>
         <td><?= $game->start_time; ?> - <?= $game->end_time; ?></td>
         <td><?= $game->field->name; ?></td>
-        <td><?= $game->home != false ? $game->home : $game->home_club; ?></td>
-        <td><?= $game->away != false ? $game->away : $game->away_club; ?></td>
+        <td><?= $game->home != false ? "{$game->home_club} {$game->home}" : $game->home_club; ?></td>
+        <td><?= $game->away != false ? "{$game->away_club} {$game->away}" : $game->away_club; ?></td>
     </td>
         <? endforeach; ?>
 </table>

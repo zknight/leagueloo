@@ -70,17 +70,25 @@ class RescheduleController extends \app\AppController
         $deadlines = unserialize(GetCfgVar('resched:deadlines'));
         $format = $div->format;
         //print_r($deadlines);
-        $days_before = 5 - $deadlines[$format]['day'];
+
+        /*
+        $days_before = 6 - $deadlines[$format]['day'];
+        
         if ($days_before < 1) $days_before += 7;
-        //echo "days before = $days_before";
+        echo "days before = $days_before";
         $now = new \DateTime(now);
-        //echo " original: {$this->reschedule->orig_date_str}";
-        //echo " format = {$div->format}";
-        $game_date = new \DateTime($this->reschedule->orig_date_str);
+        echo " original: {$this->reschedule->orig_date_str}";
+        echo " format = {$div->format}";
+        $game_date = new \DateTime("{$this->reschedule->orig_date_str} 5:00 PM");
         $interval = $now->diff($game_date);
-        //print_r($interval);
+        print_r($interval);
         $this->reschedule->fee_required = false;
         if ($interval->d < $days_before)
+         */
+        $now = new \DateTime(now);
+        $deadline = $this->GetDeadline($deadlines[$format]['day'], $this->reschedule->orig_date_str);
+        $this->reschedule->deadline = $deadline->format("D m/d/Y g:i A");
+        if ($now->getTimestamp() > $deadline->getTimestamp())
         {
             $this->reschedule->fee_required = true;
             $this->reschedule->fee = $deadlines[$format]['amount'];
@@ -177,6 +185,25 @@ class RescheduleController extends \app\AppController
             $this->SetAction("selectfield");
         }
         return true;
+    }
+
+    protected function GetDeadline($dead_day, $game)
+    {
+        echo "<pre>";
+        echo "date: $game\n";
+        echo "dead day: $dead_day\n";
+        $game_date = new \DateTime($game);
+        $dow = $game_date->format("w");
+        echo "dow: $dow\n";
+        $x = 7- (($dow + 1) % 7);
+        $int = 13 - $dead_day - $x;
+        echo "x: $x\n";
+        echo "int: $int\n";
+        $deaddate = new \DateTime($game);
+        $deaddate->modify("-{$int} day");
+        $deadline = new \DateTime($deaddate->format("m/d/Y") . " 5:00PM");
+        echo "</pre>";
+        return $deadline;
     }
 }
         
