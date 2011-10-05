@@ -56,4 +56,14 @@ class Division extends \simp\Model
         }
     }
 
+    public function BeforeDelete()
+    {
+        // make sure games are removed
+        $q = "delete from game where division_id = ?";
+        \R::debug(true);
+        \R::getAll($q, array($this->id));
+        \R::debug(false);
+        return true;
+    }
+
 }

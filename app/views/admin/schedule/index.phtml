@@ -16,7 +16,7 @@
             <?= $div->name; ?><br />
         <? endforeach; ?>
         </td>
-        <td><?= l("edit", Path::admin_schedule_edit($schedule->id)); ?></td>
+            <td><?= l("edit", Path::admin_schedule_edit($schedule->id)); ?> <?= l("delete", Path::admin_schedule_delete($schedule->id), array("method" => "delete"));?></td>
     </tr>
     <? endforeach; ?>
 </table>

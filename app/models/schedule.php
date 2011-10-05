@@ -120,6 +120,17 @@ class Schedule extends \simp\Model
         return !$this->HasErrors();
     }
 
+    public function BeforeDelete()
+    {
+        // make sure divisions are removed...
+        foreach ($this->divisions as $division)
+        {
+            $division->Delete();
+        }
+
+        return true;
+    }
+
     public function ImportFile($filename)
     {
         $row_data = array();
@@ -161,8 +172,8 @@ class Schedule extends \simp\Model
                     $division_name = "{$row['age']} {$row['gender']} - {$row['division']}";
                     $game = \simp\Model::FindOrCreate(
                         "Game", 
-                        "gotsoccer_id = ? and division_name = ?",
-                        array($row['gotsoccer_id'], $division_name)
+                        "gotsoccer_id = ? and division = ? and gender = ? and age = ?",
+                        array($row['gotsoccer_id'], $row['division'], $row['gender'], $row['age'])
                     );
 
                     // see if there is a division that game this one
@@ -179,6 +190,7 @@ class Schedule extends \simp\Model
                         $d->schedule_id = $this->id;
                         $d->format = $this->format[$row['age']];
                         $d->Save();
+                        $game->division_id = $d->id;
                         $divisions[$d->name] = $d;
                     }
 

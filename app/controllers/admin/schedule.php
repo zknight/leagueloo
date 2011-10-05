@@ -11,6 +11,7 @@ class ScheduleController extends \simp\Controller
                 'add',
                 'show',
                 'edit',
+                'delete',
                 'fields',
                 'upload',
                 'download',
@@ -26,6 +27,7 @@ class ScheduleController extends \simp\Controller
         $this->MapAction("edit", "Update", \simp\Request::PUT);
         $this->MapAction("addmatch", "Creatematch", \simp\Request::PUT);
         $this->MapAction("modifymatch", "Updatematch", \simp\Request::PUT);
+        $this->MapAction("delete", "Remove", \simp\Request::DELETE);
     } 
 
     function Index()
@@ -85,6 +87,15 @@ class ScheduleController extends \simp\Controller
         }
         return true;
     }
+
+    function Remove()
+    {
+        $this->schedule = \simp\Model::FindById("Schedule", $this->GetParam('id'));
+        $this->schedule->Delete();
+        AddFlash("Schedule Removed.");
+        \Redirect(\GetReturnURL());
+    }
+
 
     function Show()
     {
