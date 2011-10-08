@@ -7,6 +7,7 @@ class MainMenu extends \simp\Module
     public static $current_program = "";
 //    private static $_breadcrumb = array();
     private $_programs;
+    private $_sub_links;
 
     protected function Setup($args)
     {
@@ -23,11 +24,32 @@ class MainMenu extends \simp\Module
             $this->_programs = \simp\Model::FindAll("Program", "order by weight asc");
             Cache::Write("programs", $this->_programs);
         }
+
+        $this->_sub_links = array();
+        foreach ($this->_programs as $p)
+        {
+            //\R::debug(true);
+            $pages = Page::GetPagesForLocation("Program", $p->id, Page::MAIN_MENU);
+            //\R::debug(false);
+            //print_r($pages);
+            $page_links = array();
+            foreach ($pages as $page)
+            {
+                $page_links[] = l($page->title, Path::Relative("{$page->entity_name}/page/show/{$page->short_title}"), array("class" => "sub"));
+            }
+            $this->_sub_links[$p->id] = $page_links;
+            //print_r($this->_sub_links);
+        }
     }
 
     public function GetPrograms()
     {
         return $this->_programs;
+    }
+
+    public function GetSubLinks($id)
+    {
+        return $this->_sub_links[$id];
     }
 
     /*

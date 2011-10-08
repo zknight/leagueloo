@@ -379,6 +379,12 @@ function l($text, $path, $opts = array())
         $c = $opts['class'];
         $class = "class='$c'";
     }
+    if (isset($opts['id']))
+    {
+        $i = $opts['id'];
+        $id = "id='$i'";
+    }
+    if (isset($opts['target']))
     if (isset($opts['target']))
     {
         $t = $opts['target'];
@@ -411,7 +417,7 @@ HERE;
     }
     else
     {
-        $html = "<a href='$path' $class $target>$text</a>";
+        $html = "<a href='$path' $id $class $target>$text</a>";
     }
     
     return $html;

@@ -173,7 +173,7 @@ ul.admin-menu,
         position:relative;
         top:55px;
         margin:0 20px 0 355px;
-        background:url(../img/menu.png) repeat-x;
+        background:url(../img/main-menu2.png) repeat-x;
         height:30px;
         border: {
             left:1px solid $dark_carolina;
@@ -182,22 +182,26 @@ ul.admin-menu,
         padding:10px 0 0 0;
         text-align:center;
 
-        ul {
+        ul.top {
             display:block;
 
-            li {
+            li.item {
                 padding:0 4px;
                 display:inline;
                 position:relative;
 
-                a {
+                a.top {
                     font: {
                         weight:bold;
                         size:11pt;
                     }
                     color:$dark_navy;
                     text-decoration:none;
-                    &:hover { color:$light_navy; }
+                    height:100%;
+                    width:100%;
+                    &:hover { 
+                        color:$light_navy; 
+                    }
                 }
                 a.selected {
                     color:$light_navy;
@@ -1020,3 +1024,44 @@ table.pretty {
     td.black { background:$light-red url(../img/error.png); color:$red;}
     td.game { background:$light_navy; }
 }
+
+/* experimental */
+.top div {
+    position:absolute;
+    top:16px;
+    left:-2px;
+    width:100%;
+    padding-bottom:7px;
+    background:$carolina url(../img/dropmenu.png) bottom repeat-x;
+    ul.drop {
+        margin-top:7px;
+        //border:1px solid black;
+        z-index:10;
+        padding:0;
+        float:none;
+        li.sub {
+            overflow:hidden;
+            list-style-type:none;
+            text-align:center;
+            padding:0;
+            margin:0;
+            border-bottom:1px solid $light_carolina;
+            a.sub {
+                font-weight:bold;
+                color:$dark_navy;
+                &:hover { 
+                    color:$carolina; 
+                    background:$light_navy; 
+                    text-decoration:none;
+                    }
+                font-size:8pt;
+                padding:4px; 
+                width:100%;
+                display:block;
+            }
+        }
+    }
+}
+
+.showme { display:block; }
+.hideme { display:none; }

@@ -96,26 +96,28 @@ ul.admin-menu,
     position: relative;
     top: 55px;
     margin: 0 20px 0 355px;
-    background: url(../img/menu.png) repeat-x;
+    background: url(../img/main-menu2.png) repeat-x;
     height: 30px;
     border-left: 1px solid #99badd;
     border-right: 1px solid #99badd;
     padding: 10px 0 0 0;
     text-align: center; }
-    #header #main-menu ul {
+    #header #main-menu ul.top {
       display: block; }
-      #header #main-menu ul li {
+      #header #main-menu ul.top li.item {
         padding: 0 4px;
         display: inline;
         position: relative; }
-        #header #main-menu ul li a {
+        #header #main-menu ul.top li.item a.top {
           font-weight: bold;
           font-size: 11pt;
           color: #00152c;
-          text-decoration: none; }
-          #header #main-menu ul li a:hover {
+          text-decoration: none;
+          height: 100%;
+          width: 100%; }
+          #header #main-menu ul.top li.item a.top:hover {
             color: #002e5c; }
-        #header #main-menu ul li a.selected {
+        #header #main-menu ul.top li.item a.selected {
           color: #002e5c;
           text-shadow: #e0ba3a 0 0 4px; }
     #header #main-menu .submenu {
@@ -786,3 +788,41 @@ table.pretty {
   color: #4d1a00; }
 .field-legend td.game {
   background: #002e5c; }
+
+/* experimental */
+.top div {
+  position: absolute;
+  top: 16px;
+  left: -2px;
+  width: 100%;
+  padding-bottom: 7px;
+  background: #d6eafe url(../img/dropmenu.png) bottom repeat-x; }
+  .top div ul.drop {
+    margin-top: 7px;
+    z-index: 10;
+    padding: 0;
+    float: none; }
+    .top div ul.drop li.sub {
+      overflow: hidden;
+      list-style-type: none;
+      text-align: center;
+      padding: 0;
+      margin: 0;
+      border-bottom: 1px solid #f5fafe; }
+      .top div ul.drop li.sub a.sub {
+        font-weight: bold;
+        color: #00152c;
+        font-size: 8pt;
+        padding: 4px;
+        width: 100%;
+        display: block; }
+        .top div ul.drop li.sub a.sub:hover {
+          color: #d6eafe;
+          background: #002e5c;
+          text-decoration: none; }
+
+.showme {
+  display: block; }
+
+.hideme {
+  display: none; }

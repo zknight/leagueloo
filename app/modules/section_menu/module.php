@@ -12,7 +12,7 @@ class SectionMenu extends \simp\Module
         $entity_type = $args['entity_type'];
         $entity_id = $args['entity_id'];
 
-        $pages = Page::GetPagesForLocation($entity_type, $entity_id, Page::MAIN_MENU);
+        $pages = Page::GetPagesForLocation($entity_type, $entity_id, Page::CAT_MENU);
 
         // $args should have current page, entity_type, entity_id
         if ($entity_type === "Main")

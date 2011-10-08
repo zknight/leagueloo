@@ -1,12 +1,48 @@
-<ul class="menu">
-    <? $class = $this->current == 'main' || $this->current == '' ? array('class' => 'selected') : NULL; ?>
-    <li><?= l("Home", Path::home(), $class); ?></li>
-    <? $class = NULL; ?>
+<ul class="menu top">
+    <? $class = $this->current == 'main' || $this->current == '' ? array('class' => 'top selected') : array('class' => 'top'); ?>
+    <li class="item"><?= l("Home", Path::home(), $class); ?></li>
     <? foreach ($this->GetPrograms() as $program): ?>
+        <? $class = array('class' => 'top', 'id' => "anchor-{$program->id}");  ?>
         <? if (SnakeCase($this->current) == SnakeCase($program->name))
-                $class = array('class' => 'selected'); 
+                $class = array('class' => 'top selected'); 
         ?>
-    <li><?= l($program->name, \Path::Relative(SnakeCase($program->name)), $class); ?></li>
-        <? $class = NULL; ?>
+    <li class="item" id="item-<?=$program->id?>">
+        <?= l($program->name, \Path::Relative(SnakeCase($program->name)), $class); ?>
+<?      $sub_links = $this->GetSubLinks($program->id);  ?>
+<?      if (!empty($sub_links)): ?>
+<script type="text/javascript">
+$(function($) {
+    $(document).ready(function() {
+        var data = {state: 0};
+        $("#item-<?=$program->id;?>").mouseenter(data, function() {
+            //$("#drop-<?=$program->id;?>").addClass('showme').removeClass('hideme');
+            if (data['state'] == 0)
+            {
+                $("#drop-<?=$program->id;?>").show("slide", {direction:"up"});
+                data['state'] = 1;
+            }
+        })
+        $("#item-<?=$program->id;?>").mouseleave(data, function() {
+            //$("#drop-<?=$program->id;?>").removeClass('showme').addClass('hideme');
+            if (data['state'] == 1)
+            {
+                $("#drop-<?=$program->id;?>").hide("slide", {direction:"up"});
+                data['state'] = 0;
+            }
+        })
+    })
+});
+</script>
+        <div id="drop-<?=$program->id;?>" class="hideme">
+        <ul class="drop">
+<?          foreach ($sub_links as $link): ?>
+            <li class="sub"><?= $link; ?></li>
+<?          endforeach; ?>
+        </ul>
+        </div>
+<?      endif; ?>
+    </li>
     <? endforeach; ?>
 </ul>
+
+    

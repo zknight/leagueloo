@@ -13,13 +13,15 @@ class Page extends \simp\Model
 
     // link locations
     const FRONT = 0; // entity main page
-    const MAIN_MENU = 1;
+    const MAIN_MENU = 3;
     const LINK_MENU = 2;
+    const CAT_MENU = 1;
 
     public static $locations = array(
         //self::FRONT => "In list on category landing page (default)",
         self::MAIN_MENU => "On main menu for category",
-        self::LINK_MENU => "In link menu for category"
+        self::LINK_MENU => "In link menu for category",
+        self::CAT_MENU => "On Category sub-menu"
     );
 
     public function Setup()
