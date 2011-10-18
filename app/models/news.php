@@ -146,7 +146,6 @@ class News extends \simp\Model
             $values = array_merge($values, $vals);
         }
 
-        $params .= " order by updated_on desc";
         return News::Find("news", $params, $values);
     }
 
