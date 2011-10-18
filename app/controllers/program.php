@@ -36,9 +36,7 @@ class ProgramController extends \app\AppController
             // load news for this program
             $this->news = \News::FindPublished(
                 'Program',
-                $this->program->id,
-                "order by updated_at desc",
-                array()
+                $this->program->id
             );
 
             $this->RenderSpecialProgram();
