@@ -1,0 +1,6 @@
+<h1>Add a new Sponsor</h1>
+<?= GetErrorsFor($this->sponsor); ?>
+<?= FormTag("sponsor", \simp\Request::POST, NULL, true); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Create"/>
+<?= EndForm(); ?>

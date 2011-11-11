@@ -1,0 +1,6 @@
+<h1>Edit Sponsor Information</h1>
+<?= GetErrorsFor($this->sponsor); ?>
+<?= FormTag("sponsor", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Update"/>
+<?= EndForm(); ?>

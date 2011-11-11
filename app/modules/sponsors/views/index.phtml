@@ -1,0 +1,22 @@
+<p><strong>Sponsors</strong></p>
+<?= l("Add New Sponsor", Path::module('sponsors', 'admin', 'add')); ?>
+<? if (count($this->sponsors) > 0): ?>
+<table>
+    <tr>
+        <th>Sponsor</th><th>Published?</th><th>Text</th><th>Link</th><th>Action</th>
+    </tr>
+    <? foreach ($this->sponsors as $sponsor): ?>
+    <tr>
+        <td><?= $sponsor->name; ?></td>
+        <td><?= $sponsor->publish ? "Yes": "No"; ?></td>
+        <td><?= $sponsor->text; ?></td>
+        <td><?= l($sponsor->url, $sponsor->url, array('external' => true)); ?></td>
+        <td>
+            <?= l("[Edit]", Path::module('sponsors', 'admin', 'edit', $sponsor->id)); ?>
+            <?= l("[X]", Path::module('sponsors', 'admin', 'delete', $sponsor->id), array("method" => "delete")); ?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<p>There are no Sponsors. <?= l("Add one.", Path::module('sponsors', 'admin', 'add')); ?></p>

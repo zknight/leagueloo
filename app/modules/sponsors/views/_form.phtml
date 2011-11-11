@@ -1,0 +1,25 @@
+<fieldset>
+    <legend>Sponsor Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Name of Sponsor</th>
+            <td class="entry"><?= TextField($this->sponsor, 'name', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Sponsor's website</th>
+            <td class="entry"><?= TextField($this->sponsor, 'url', array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Additional Text to display</th>
+            <td class="entry"><?= Wysiwyg($this->sponsor, 'text'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Publish this sponsor?</th>
+            <td class="entry"><?= CheckBoxField($this->sponsor, 'publish'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">(Optional) Logo</th>
+            <td class="entry"><?= FileSelect($this->sponsor, 'logo'); ?></td>
+        </tr>
+    </table>
+</fieldset>

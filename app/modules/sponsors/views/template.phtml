@@ -1,0 +1,14 @@
+<? if (!empty($this->sponsors)): ?>
+<div class="module">
+    <div class="title">
+        <ul class="menu">
+            <li>Sponsors</li>
+        </ul>
+    </div>
+    <div class="content" style="text-align:center;">
+    <? foreach ($this->sponsors as $sponsor): ?>
+        <?= l("<img src=". $sponsor->img_path ." />", AbsLink($sponsor->url)); ?>
+    <? endforeach; ?>
+    </div>
+</div>
+<? endif; ?>

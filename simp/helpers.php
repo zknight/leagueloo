@@ -423,6 +423,12 @@ HERE;
     return $html;
 }
 
+function AbsLink($link)
+{
+    if (strpos($link, "http://") === false) $link = "http://" . $link;
+    return $link;
+}
+
 function ObsEmailLink($email)
 {
     $parts = explode("@", $email);
