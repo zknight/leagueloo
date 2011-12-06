@@ -57,7 +57,7 @@ class RecentUpdates extends \simp\Module
             {
                 $items[$page->updated_on] = array(
                     'text' => $page->title,
-                    'url' => "{$page->entity_name}/page/{$page->short_title}",
+                    'url' => "{$page->entity_name}/page/show/{$page->short_title}",
                     'time' => $page->updated_on);
             }
 
