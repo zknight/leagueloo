@@ -14,6 +14,10 @@
             <td class="entry"><?= TextField($this->link, 'uri', array('size' => 40)); ?></td>
         </tr>
         <tr>
+            <th class="label">Weight of link in menu</th>
+            <td class="entry"><?= TextField($this->link, 'weight', array('size' => 5)); ?></td>
+        </tr>
+        <tr>
             <th class="label">Open in new browser window?</th>
             <td class="entry"><?= CheckBoxField($this->link, 'new_window'); ?></td>
         </tr>

@@ -9,6 +9,7 @@
 ///     entity_type: program or team
 ///     entity_id: id of entity owner
 ///     entity_name: name of entity
+///     weight: relative order
 ///     disabled
 class Link extends \simp\Model
 {

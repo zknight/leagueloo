@@ -9,7 +9,7 @@ class Links extends \simp\Module
 
         $this->links = \simp\Model::Find(
             "Link",
-            "entity_type = ? and entity_id = ?",
+            "entity_type = ? and entity_id = ? order by weight",
             array(SnakeCase($this->entity_type), $this->entity_id)
         );
 
