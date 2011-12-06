@@ -397,7 +397,7 @@ function l($text, $path, $opts = array())
     if (isset($opts['external']) && $opts['external'] == true)
     {
         $target = $target == '' ? "target='blank'" : $target;
-        if (strpos($path, "http://") === false) $path = "http://" . $path;
+        if (strpos($path, "http") === false) $path = "http://" . $path;
         $text .= "<img style=\"vertical-align:bottom;\" src=\"{$REL_PATH}resources/img/link_go.png\" />";
     }
     if (isset($opts['method']))
@@ -425,7 +425,7 @@ HERE;
 
 function AbsLink($link)
 {
-    if (strpos($link, "http://") === false) $link = "http://" . $link;
+    if (strpos($link, "http") === false) $link = "http://" . $link;
     return $link;
 }
 
