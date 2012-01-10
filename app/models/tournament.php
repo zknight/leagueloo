@@ -20,6 +20,7 @@ class Tournament extends \simp\Model
     );
 
     public static $formats = array(
+        19 => '8 v 8/11 v 11',
         11 => '11 v 11',
         8 => '8 v 8',
         6 => '6 v 6',
