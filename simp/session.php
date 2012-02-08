@@ -71,6 +71,15 @@ function sess_gc($maxlife)
 function check_current_session_timeout()
 {
     //global $log;
+    ///// Changing to see if we can just delete all sessions that have expired instead of just this one
+
+    $q = "delete from session where touch < ?";
+    $max_session_min = GetCfgVar("max_session", 10);
+    $max_session = $max_session_min * 60;
+    $curtime = time();
+    $exp_touch = $curtime - $max_session;
+    \R::getAll($q, array($exp_touch));
+    /* OLD WAY
     if ($_COOKIE["PHPSESSID"])
     {
         $id = $_COOKIE["PHPSESSID"];
@@ -94,33 +103,7 @@ function check_current_session_timeout()
             }
         }
     }
-    /*
-    $res = $db->Fetch("sessions", "touch", array('sess_id' => $id));
-    if (is_array($res))
-    {
-      //$log->logDebug(print_r($res, true));
-      $touch = $res[0]['touch'];
-      $max_session_m = $db->Fetch("cfg_var", "value", array('name' => 'session_timeout'));
-      //$log->logDebug("\$max_session_m = " . print_r($max_session_m, true));
-      $max_session = $max_session_m[0]['value'] * 60;
-      if ($max_session == 0)
-      {
-        $max_session = MAX_SESSION;
-      }
-      //$log->logDebug("\$max_session = $max_session");
-
-      $curtime = time();
-      //$log->logDebug("\$curtime = " . print_r($curtime, true));
-      $delta = $curtime - $touch;
-      //$log->logDebug("\$delta = $delta");
-      if ($delta > $max_session)
-      {
-        unset($_COOKIE["PHPSESSID"]);
-        $db->Delete("sessions", array('sess_id' => $id));
-      }
-    }
-  }
-     */
+     END OLD WAY*/
 }
 
 session_set_save_handler(
