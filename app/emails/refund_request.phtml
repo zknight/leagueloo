@@ -19,6 +19,6 @@ $host = $data['host'];
     <?= $refund->city; ?>, <?= Refund::$states[$refund->state]; ?> <?= $refund->zip; ?><br />
 </p>
 <p>
-Treasurer, <?= l("click here to process refunds.", Path::module("admin", "refunds")); ?>.
+Treasurer, <?= l("click here to process refunds.", Path::Absolute(Path::module("refunds", "admin", "show_refunds"))); ?>.
 </p>
 <p>Thanks!<br /><?= $site_name; ?> Robot Webmaster</p>
