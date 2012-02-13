@@ -4,12 +4,14 @@ $request = $data['reschedule'];
 $site_name = $data['site_name'];
 $host = $data['host'];
 ?>
-<p><?= $request->requestor_name; ?> has requested that the following match be rescheduled:</p>
-<? if ($request->fee_required): ?>
-<p><strong>NOTE:</strong>This reschedule request is after the reschedule deadline <strong><?= $request->deadline; ?></strong>.  A reschedule fee
-of <strong><?= $request->fee; ?></strong> is required prior to rescheduling.
+<p>A reschedule request has been submitted for a match by <strong><?= $request->requestor_name; ?></strong>
+and you have been designated as the opponent representative.
 </p>
-<? endif; ?>
+<p>To ensure all parties are in agreement, as the opponent representative you must validate the request by following this
+<a href="http://<?= $host . $REL_PATH; ?>reschedule/validate/<?= $request->id ?>/<?= $request->verification_string; ?>">validation link</a>.
+</p>
+<p>( You're validation token is: <em><?= $request->verification_string; ?></em> )</p>
+<strong>Match Information</strong>
 <table>
 <tr><td><?= $request->schedule->name; ?></td> <td><?= $request->division->name; ?></td></tr>
 <tr><td>Match ID:</td><td><?= $request->game->gotsoccer_id; ?></td></tr>
@@ -18,25 +20,19 @@ of <strong><?= $request->fee; ?></strong> is required prior to rescheduling.
 <tr><td>Original Field:</td><td><?= $request->game->field->name; ?></td></tr>
 <tr><td>Home Team:</td><td><?= $request->game->home_club; ?> <?= $request->game->home; ?></td></tr>
 <tr><td>Away Team:</td><td><?= $request->game->away_club; ?> <?= $request->game->away; ?></td></tr>
-<tr><td>Opponent Representative:</td><td><?= $request->opponent_name; ?> <?= $request->opponent_email; ?></td></tr>
 </table>
 <p>The requested dates to reschedule are:</p>
-<table>
-    <tr><td>First Choice:</td><td><?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?></td></tr>
-    <tr><td>Second Choice:</td><td><?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?></td></tr>
-</table>
 <p>Reason: <?= Reschedule::$reschedule_reasons[$request->reschedule_reason]; ?></p>
 <p>Comments to scheduler:</p>
 <pre>
 ---------------------
 <?= $request->comments; ?>
 </pre>
-<p>
-Scheduler, <?= l("click here to view pending requests", Path::admin_reschedule()); ?>
-</p>
+<table>
+    <tr><td>First Choice:</td><td><?= $request->first_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->first_tod]; ?></td></tr>
+    <tr><td>Second Choice:</td><td><?= $request->second_choice_str; ?> <?= Reschedule::$tod_opts[$reschedule->second_tod]; ?></td></tr>
+</table>
 <p>
 Thanks!<br />
 <?= $site_name; ?> Robot Webmaster
 </p>
-
-

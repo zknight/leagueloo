@@ -117,6 +117,10 @@ $(function($) {
                 <td class="left_col"><?= l("messages", Path::message()); ?></td>
                 <td class="right_col"><?= $user->super ? l("content management", Path::content()) : "&nbsp;"; ?></td>
             </tr>
+            <tr>
+                <td class="left_col"><? \simp\Module::Show("Refunds"); ?></td>
+                <td class="right_col">&nbsp;</td>
+            </tr>
         </table>
 <? else: ?>
         <table>
@@ -125,7 +129,8 @@ $(function($) {
                 <td class="right_col"><?= l("create account", Path::user_signup()); ?></td>
             </tr>
             <tr>
-                <td colspan="2"><?= l("request a reschedule", Path::reschedule()); ?></td>
+                <td class="left_col"><?= l("request a reschedule", Path::reschedule()); ?></td>
+                <td class="right_col"><? \simp\Module::Show("Refunds"); ?></td>
             </tr>
         </table>
 <? endif; ?>

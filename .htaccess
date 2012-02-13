@@ -1,10 +1,12 @@
 Options +FollowSymLinks
 RewriteEngine On
+RewriteRule ^([^/]+/)*favicon\.ico$ favicon.ico [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.js$
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.css$
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.png$
 RewriteRule .* index.php [L]
+
 
 # Requires mod_expires to be enabled.
 <IfModule mod_expires.c>

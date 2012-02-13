@@ -1,9 +1,16 @@
-<h1 class="title">Schedule Request Submitted</h1>
+<h1 class="title">Reschedule Request Validation</h1>
+<? if ($this->show_form == true): ?>
 <p>
-    An email notification has been sent to the opponent representative 
-    for validation.
+<?= $this->message; ?>
 </p>
-<br />
+<p>
+<?= FormTag("resched", \simp\Request::POST); ?>
+Please enter the token you received via email:<br/>
+<input type="text" name="token" size="40"/>
+<input type="submit" value="Submit" />
+<?= EndForm(); ?>
+</p>
+<? else: ?>
 <h3>Original Match Information</h3>
 <table class="form">
     <tr><th class="label">Schedule</th><td class="entry"><?= $this->reschedule->schedule->name; ?></td></tr>
@@ -26,3 +33,4 @@
 <p>
     You will be contacted via email when this reschedule is accepted or denied.
 </p>
+<? endif; ?>

@@ -1,0 +1,12 @@
+<fieldset><legend>Refundable Program Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Name of Program</th>
+            <td class="entry"><?= TextField($this->refundable, 'name', array('size' => 50)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Refund Cut-off Date</th>
+            <td class="entry"><?= DatePicker($this->refundable, 'expiry_str'); ?></td>
+        </tr>
+    </table>
+</fieldset>

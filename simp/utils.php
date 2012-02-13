@@ -75,6 +75,7 @@ function Redirect($path)
 {
     //global $REL_PATH;
     //header("Location: /" . $REL_PATH . $path);
+    /*
     global $log;
     if (isset($_SESSION['redirect']) && $_SESSION['redirect'] === $path)
     {
@@ -82,6 +83,7 @@ function Redirect($path)
     }
     $log->logDebug("Redirecting to $path");
     $_SESSION['redirect'] = $path;
+     */
     session_commit();
     header("Location: " . $path);
     exit();
@@ -150,6 +152,7 @@ function ProcessImage($info, $path, &$name, $opts = array())
 
     if ($info['error'] == 0)
     {
+        $log->logDebug("ProcessImage: info = " . print_r($info, true));
         $gd_img = GetPNGImg($info);
         $filename = preg_replace('/\s/', '_', $info['name']);
         list($name, $junk) = explode('.', $filename);

@@ -1,0 +1,6 @@
+<h1 class="title">Modify Refundable Program</h1>
+<?= GetErrorsFor($this->refundable); ?>
+<?= FormTag("refundable", \simp\Request::PUT); ?>
+    <? require "_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>

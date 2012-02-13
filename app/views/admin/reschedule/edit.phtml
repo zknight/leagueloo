@@ -1,0 +1,25 @@
+<h1 class="title">Editing Unvalidated Reschedule Request</h1>
+<?= GetErrorsFor($this->request); ?>
+<?= FormTag("request", \simp\Request::PUT); ?>
+    <fieldset><legend>Contact Information</legend>
+        <table class="form">
+            <tr>
+                <th class="label">Requestor</th>
+                <td class="entry"><?= TextField($this->request, 'requestor_name', array('readonly' => true)); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Requestor Email</th>
+                <td class="entry"><?= TextField($this->request, 'requestor_email', array('readonly' => true)); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Opposing Coach/Manager</th>
+                <td class="entry"><?= TextField($this->request, 'opponent_name'); ?></td>
+            </tr>
+            <tr>
+                <th class="label">Opposing Coach/Manager Email</th>
+                <td class="entry"><?= TextField($this->request, 'opponent_email'); ?></td>
+            </tr>
+        </table>
+    </fieldset>
+    <input type="submit" value="Update" /> and resend validation email
+<?= EndForm(); ?>

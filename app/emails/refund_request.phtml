@@ -1,0 +1,24 @@
+<?
+global $REL_PATH;
+$refund = $data['refund'];
+$site_name = $data['site_name'];
+$host = $data['host'];
+?>
+<p><?= $refund->requestor; ?> has requested a refund.<p>
+<table>
+<tr><td><strong>Player</strong></td><td><?= $refund->player; ?></td></tr>
+<tr><td><strong>Program</strong></td><td><?= $refund->program->name; ?></td></tr>
+<tr><td><strong>Amount</strong></td><td><?= $refund->amount; ?></td></tr>
+</table>
+<p><strong>Reason for Request:</strong></p>
+<p><?= $refund->reason; ?></p>
+<p><strong>Address</strong></p>
+<p>
+    <?= $refund->address_1; ?><br />
+    <? if ($refund->address_2 != "") echo $refund->address_2 . "<br />"; ?>
+    <?= $refund->city; ?>, <?= Refund::$states[$refund->state]; ?> <?= $refund->zip; ?><br />
+</p>
+<p>
+Treasurer, <?= l("click here to process refunds.", Path::module("admin", "refunds")); ?>.
+</p>
+<p>Thanks!<br /><?= $site_name; ?> Robot Webmaster</p>

@@ -1,0 +1,7 @@
+<h1 class="title">Modify Email Recipient</h1>
+<?= GetErrorsFor($this->email); ?>
+<?= FormTag("refund_email", \simp\Request::PUT); ?>
+    <? require "_remail_form.phtml"; ?>
+    <input type="submit" value="Modify" />
+<?= EndForm(); ?>
+

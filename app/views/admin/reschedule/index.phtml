@@ -1,6 +1,47 @@
 <h1 class="title">Reschedule Requests</h1>
 <p><?= l("Configure", Path::admin_reschedule_configure()); ?> | <?= l("Set Deadlines", Path::admin_reschedule_deadlines()); ?></p>
-<h2>Pending Requests</h2>
+<h2>Validated Requests</h2>
+<? if (empty($this->valid)): ?>
+None.
+<? else: ?>
+<table class="pretty">
+    <tr><th>Division</th><th>Game Number</th><th>Requestor</th><th>Request</th><th>Original</th><th>Home Team</th><th>Away Team</th><th>Last Update</th><th>Actions</th></tr>
+    <? foreach ($this->valid as $req): ?>
+    <tr>
+        <td><?= $req->schedule->name; ?> <?= $req->division->name; ?></td>
+        <td><?= $req->game->gotsoccer_id; ?></td>
+        <td><?= $req->requestor_name;?></td>
+        <td>
+            <table>
+        <? if ($req->fee_required): ?>
+                <strong><?= $req->fee; ?> late fee required</strong>
+        <? endif; ?>
+                <tr><td>First Choice:</td><td><?= $req->first_choice_str; ?> <?= Reschedule::$tod_opts[$req->first_tod]; ?></td></tr>
+                <tr><td>Second Choice:</td><td><?= $req->second_choice_str; ?> <?= Reschedule::$tod_opts[$req->second_tod]; ?></td></tr>
+                <tr><td>Comment:</td><td><?= $req->comments; ?></td></tr>
+                <tr><td>Reason:</td><td><?= Reschedule::$reschedule_reasons[$req->reschedule_reason]; ?></td></tr>
+            </table>
+        </td>
+        <td>
+            <table>
+                <tr><td>Date:</td><td><?= $req->game->date_str; ?></td></tr>
+                <tr><td>Time:</td><td><?= $req->game->start_time; ?></td></tr>
+                <tr><td>Field:</td><td><?= $req->game->field->name; ?></td></tr>
+            </table>
+        </td>
+        <td><?= $req->game->home_club;?><br /><?= $req->game->home; ?></td>
+        <td><?= $req->game->away_club;?><br /><?= $req->game->away; ?></td>
+        <td><?= FormatDateTime($req->updated_at); ?></td>
+        <td>
+            <?= l("[show]", Path::admin_reschedule_show($req->id));?>
+            <?= l("[ACCEPT]", Path::admin_reschedule_accept($req->id));?>
+            <?= l("[DENY]", Path::admin_reschedule_deny($req->id));?>
+        </td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<h2>Requests Pending Validation</h2>
 <? if (empty($this->pending)): ?>
 None.
 <? else: ?>
@@ -34,8 +75,7 @@ None.
         <td><?= FormatDateTime($req->updated_at); ?></td>
         <td>
             <?= l("[show]", Path::admin_reschedule_show($req->id));?>
-            <?= l("[ACCEPT]", Path::admin_reschedule_accept($req->id));?>
-            <?= l("[DENY]", Path::admin_reschedule_deny($req->id));?>
+            <?= l("[fix opponent email]", Path::admin_reschedule_edit($req->id));?>
         </td>
     </tr>
     <? endforeach; ?>

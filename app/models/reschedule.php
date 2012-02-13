@@ -4,6 +4,7 @@ class Reschedule extends \simp\Model
     const PENDING = 0;
     const APPROVED = 1;
     const DENIED = 2;
+    const VERIFIED = 3;
 
     const MORNING = 1;
     const AFTERNOON = 2;
@@ -16,7 +17,8 @@ class Reschedule extends \simp\Model
     public static $approval_state = array(
         self::PENDING => "Pending",
         self::APPROVED => "Approved",
-        self::DENIED => "Denied"
+        self::DENIED => "Denied",
+        self::VERIFIED => "Verified",
     );
 
     public static $reschedule_reasons = array(
@@ -118,6 +120,10 @@ class Reschedule extends \simp\Model
             $this->first_choice = strtotime($this->first_choice_str);
             $this->second_choice = strtotime($this->second_choice_str);
         }
+        if ($this->step == 3 && $this->state != self::VERIFIED)
+        {
+            $this->verification_string = sha1($this->opponent_name . RandStr(40));
+        }
         if ($this->state == self::APPROVED)
         {
             $this->VerifyValidDate('new_date_str');
@@ -141,6 +147,33 @@ class Reschedule extends \simp\Model
     public function AfterSave()
     {
         unset($this->_game);
+    }
+
+    public function SendVerifyEmail()
+    {
+        $site_name = GetCfgVar('site_name');
+        $subject = "[$site_name] ACTION REQUIRED: Verify Reschedule Request";
+        $to = "{$this->opponent_name} <{$this->opponent_email}>";
+        $schedulers = unserialize(GetCfgVar('resched:schedulers', $def));
+        foreach ($schedulers as $scheduler)
+        {
+            $bcc = "{$scheduler['name']} <{$scheduler['email']}>";
+        }
+        $data = array(
+            'reschedule' => $this,
+            'site_name' => $site_name,
+            'host' => GetCfgVar('site_address'),
+        );
+
+        $email_data = array(
+            'to' => $to,
+            'bcc' => $bcc,
+            'from' => "$site_name <" . GetCfgVar('site_email') . ">",
+            'subject' => $subject,
+            'type' => "html",
+            'data' => $data
+        );
+        return \simp\Email::Send('reschedule_validation', $email_data);
     }
 
     public function SendEmail($subject_, $template)
@@ -192,9 +225,10 @@ class Reschedule extends \simp\Model
     public function SendRequestEmail()
     {
         $this->SendEmail("Match Reschedule Request", "reschedule_request");
+        //$this->SendVerifyEmail();
     }
 
-    public function SendAcceptEmail()
+    public function SendApproveEmail()
     {
         $this->SendEmail("Match Reschedule Approved", "reschedule_approved");
     }

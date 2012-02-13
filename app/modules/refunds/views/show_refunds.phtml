@@ -1,0 +1,77 @@
+<script type="text/javascript">
+$(function() {
+    $('input#selectall').bind('click', function() {
+        if ($(this).attr('checked'))
+        { 
+            $('input.checkbox').each(function() {
+                //alert($(this).attr('id'));
+                $(this).val(1).attr('checked', true);
+            })
+        }
+        else
+        {
+            $('input.checkbox').each(function() {
+                //alert($(this).attr('id'));
+                $(this).val(0).attr('checked', false);
+            })
+        }
+    })
+    $('input.checkbox').bind('click', function() {
+        if ($(this).attr('checked') != 'checked')
+        {
+            $('input#selectall').attr('checked', false);
+        }
+    })
+});
+</script>
+<h1 class="title">Refunds Administration</h1>
+<p>
+<?= l("Download Report (CSV)", Path::module("refunds", "admin", "download_refunds")); ?>
+<h2>Pending Refunds</h2>
+<? if (count($this->pending) == 0): ?>
+Yay!  There are no pending refund requests!
+<? else: ?>
+<?= FormTag("pending", \simp\Request::PUT); ?>
+    <table class="pretty">
+        <tr>
+            <th>Process?<br/><input id="selectall" type='checkbox'/> all</th>
+            <th>Submitted</th>
+            <th>Requestor</th>
+            <th>Player</th>
+            <th>Program</th>
+            <th>Amount</th>
+        </tr>
+<? foreach ($this->pending as $request): ?>
+        <tr>
+            <td><input class='checkbox' id='<?=$request->id; ?>' type='checkbox' name='Request[<?= $request->id; ?>]' value='1'/></td>
+            <td><?= $request->submit_date_str; ?></td>
+            <td><?= $request->requestor; ?></td>
+            <td><?= $request->player; ?></td>
+            <td><?= $request->program->name; ?></td>
+            <td><?= $request->amount; ?></td>
+        </tr>
+<? endforeach; ?>
+    </table>
+    <input type = "submit" value="Process Selected (download CSV)" />
+<?= EndForm(); ?>
+<? endif; ?>
+<h2>Processed Refunds</h2>
+<? if (count($this->processed) == 0): ?>
+There are no refunds that have been processed.
+<? else: ?>
+    <table class="pretty">
+        <tr><th>Date Processed</th><th>Requestor</th><th>Player</th><th>Program</th><th>Amount</th><th>&nbsp;</th></tr>
+<? foreach ($this->processed as $request): ?>
+        <tr>
+            <td><?= $request->process_date_str; ?></td>
+            <td><?= $request->requestor; ?></td>
+            <td><?= $request->player; ?></td>
+            <td><?= $request->program->name; ?></td>
+            <td><?= $request->amount; ?></td>
+            <td><?= l('[x]', Path::module("refunds", "admin", "remove_refund", $request->id), array('method' => 'delete')); ?></td>
+        </tr>
+<? endforeach; ?>
+    </table>
+        <p><?= l("Remove all processed refunds", Path::module("refunds", "admin", "remove_processed"), array('method' => 'delete')); ?></p>
+<? endif; ?>
+

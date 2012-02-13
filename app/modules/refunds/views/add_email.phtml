@@ -1,0 +1,7 @@
+<h1 class="title">Add Email Recipient</h1>
+<?= GetErrorsFor($this->email); ?>
+<?= FormTag("refund_email", \simp\Request::POST); ?>
+    <? require "_remail_form.phtml"; ?>
+    <input type="submit" value="Create" />
+<?= EndForm(); ?>
+

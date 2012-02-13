@@ -1,0 +1,56 @@
+<h1 class="title">Refund Request for <em><?= $this->refundable->name; ?></em></h1>
+<?= GetErrorsFor($this->refund); ?>
+<?= FormTag("refund", \simp\Request::POST); ?>
+    <table class="form">
+        <tr>
+            <th class="label">Your Full Name</th>
+            <td class="entry"><?= TextField($this->refund, 'requestor'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Player's Full Name</th>
+            <td class="entry"><?= TextField($this->refund, 'player'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Payment Method Used</th>
+            <td class="entry"><?= SimpleSelect($this->refund, 'payment_method', Refund::$payment_methods); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Amount Paid</th>
+            <td class="entry"><?= TextField($this->refund, 'amount'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Reason for Refund</th>
+            <td class="entry"><?= TextArea($this->refund, 'reason', 4, 40); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Your email address</th>
+            <td class="entry"><?= TextField($this->refund, 'email'); ?></td>
+        </tr>
+    </table>
+    <fieldset><legend>Where shall we send your refund?</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Address Line 1</th>
+            <td class="entry"><?= TextField($this->refund, 'address_1'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Address Line 2</th>
+            <td class="entry"><?= TextField($this->refund, 'address_2'); ?></td>
+        </tr>
+        <tr>
+            <th class="label">City, State</th>
+            <td class="entry">
+                <?= TextField($this->refund, 'city', array('size' => 30)); ?>
+                <?= SimpleSelect($this->refund, 'state', Refund::$states); ?>
+            </td>
+        </tr>
+        <tr>
+            <th class="label">Zip Code</th>
+            <td class="entry">
+                <?= TextField($this->refund, 'zip', array('size' => '9')); ?>
+            </td>
+        </tr>
+    </table>
+    </fieldset>
+    <input type="submit" value="Submit" />
+<?= EndForm(); ?>

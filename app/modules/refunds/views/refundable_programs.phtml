@@ -1,0 +1,40 @@
+<h1 class="title">Request a refund</h1>
+<p>
+<? if (count($this->refundables) == 0): ?>
+<p>There are no programs available for refund.</p>
+<? else: ?>
+<p>Select a program for which you would like a refund:  </p>
+<table class="pretty">
+    <tr><th colspan="2">Program</th><th>Last date refund is available</th></tr>
+<? foreach($this->refundables as $refundable): ?>
+    <tr>
+        <td><?= $refundable->name; ?></td>
+        <td><?= l("Request Refund", Path::module('refunds', 'request', $refundable->id)); ?></td>
+        <td><?= $refundable->expiry_str; ?>*</td>
+    </tr>
+<? endforeach; ?>
+</table>
+<p>
+    <em style="font-size:8pt;">*Note: Refunds must be requested on or before the date listed for a given program.  Refund requests will not be honored after this date.</em>
+</p>
+<?endif;?>
+<? /*
+<?= FormTag("refundable", \simp\Request::POST); ?>
+<table class="form">
+    <tr>
+        <th class="label">For which program are you requesting a refund?</th>
+        <td class="entry">
+            <select name="refundables">
+            <? foreach($this->refundables as $refundable): ?>
+                <option value="<?= $refundable->id; ?>">
+                    <?= $refundable->name; ?>
+                </option>
+            <? endforeach; ?>
+            </select>
+        </td>
+    </tr>
+</table>
+<input type="submit" value="Request Refund" />
+<?= EndForm(); ?>
+</p>
+ */?>

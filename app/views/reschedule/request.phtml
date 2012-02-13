@@ -68,18 +68,27 @@
             <tr>
                 <th class="label">Requestor</th>
                 <td class="entry"><?= TextField($this->reschedule, 'requestor_name', array('readonly' => true)); ?></td>
+                <td class="help">&nbsp;</td>
             </tr>
             <tr>
                 <th class="label">Requestor Email</th>
                 <td class="entry"><?= TextField($this->reschedule, 'requestor_email', array('readonly' => true)); ?></td>
+                <td class="help">&nbsp;</td>
             </tr>
             <tr>
                 <th class="label">Opposing Coach/Manager</th>
                 <td class="entry"><?= TextField($this->reschedule, 'opponent_name'); ?></td>
+                <td class="help">&nbsp;</td>
             </tr>
             <tr>
                 <th class="label">Opposing Coach/Manager Email</th>
                 <td class="entry"><?= TextField($this->reschedule, 'opponent_email'); ?></td>
+                <td class="help">
+                    An email will be sent to this address for the opponent representative
+                    to verify this request.  Rescheduling will not proceed until the request
+                    has been verified by the opponent, therefore, please ensure that this
+                    email address is correct.
+                </td>
             </tr>
         </table>
     </fieldset>

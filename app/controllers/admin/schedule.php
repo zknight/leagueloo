@@ -202,10 +202,10 @@ class ScheduleController extends \simp\Controller
         }
 
         ob_start();
+        header('Content-type: txt/plain');
+        header('Content-Disposition: attachment; filename="schedule_arb.csv"');
         foreach ($rows as $row)
         {
-            header('Content-type: txt/plain');
-            header('Content-Disposition: attachment; filename="schedule_arb.csv"');
             echo implode(",", $row) . "\n";
         }
         $content = ob_get_contents();

@@ -20,6 +20,7 @@ class RescheduleController extends \app\AppController
         $this->MapAction('match', 'Index', \simp\Request::GET);
         $this->MapAction('selectfield', 'Index', \simp\Request::GET);
         $this->MapAction('submit', 'Index', \simp\Request::GET);
+        //$this->MapAction('validate', 'ValidatePost', \simp\Request::POST);
     }
 
     function Index()
@@ -168,6 +169,61 @@ class RescheduleController extends \app\AppController
         return true;
     }
 
+    public function ValidatePost()
+    {
+        $token = $this->GetFormVariable('token');
+        $id = $this->GetParam('id');
+        \Redirect("/reschedule/validate/{$id}/$token");
+    }
+
+    public function Validate()
+    {
+        $this->show_form = false;
+        $this->message = '';
+        $token = "";
+        $id = $this->GetParam('id'); 
+        if ($this->_method == \simp\Request::POST)
+        {
+            $token = $this->GetFormVariable('token');
+        }
+        else
+        {
+            $token = $this->GetParam('token');
+            global $log;
+            $log->logDebug("checking token {$token}");
+        }
+        $this->reschedule = \simp\Model::FindById("Reschedule", $id);
+        if (!$this->reschedule)
+        {
+            \AddFlash("Invalid reschedule request.");
+            \Redirect(\GetReturnURL());
+        }
+        if (!$token)
+        {
+            $this->show_form = true;
+        }
+        elseif ($token == $this->reschedule->verification_string)
+        {
+            $this->reschedule->state = \Reschedule::VERIFIED;
+            if ($this->reschedule->Save())
+            {
+                $this->reschedule->SendRequestEmail();
+                AddFlash("Requst has been validated.");
+            }
+        }
+        else
+        {
+            global $log;
+            $log->logDebug("did not match {$this->reschedule->verification_string}");
+            $email = GetCfgVar('site_email');
+            $this->message = "The token you entered does not match.  Please double-check your email and try again. ";
+            $this->message .= "If you require further assistance, please contact the site administrator: ";
+            $this->message .= "<a href='mailto:{$email}'>{$email}</a>";
+            $this->show_form = true;
+        }
+        return true;
+    }
+
     public function Submit()
     {
         $this->reschedule = \simp\Model::FindById("Reschedule", $this->GetParam('id'));
@@ -177,7 +233,7 @@ class RescheduleController extends \app\AppController
         $this->reschedule->step = 3;
         if ($this->reschedule->Save())
         {
-            $this->reschedule->SendRequestEmail();
+            $this->reschedule->SendVerifyEmail();
         }
         else 
         {

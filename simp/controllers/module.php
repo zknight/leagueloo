@@ -25,7 +25,8 @@ class ModuleController extends \simp\Controller
             }
             else
             {
-                \Redirect(\Path::Home());
+                //\Redirect(\Path::Home());
+                return false;
             }
         }
 

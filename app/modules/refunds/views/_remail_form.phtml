@@ -1,0 +1,16 @@
+<fieldset><legend>Refund Email Recipient Information</legend>
+    <table class="form">
+        <tr>
+            <th class="label">Name of Recipient</th>
+            <td class="entry"><?= TextField($this->email, "name", array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Email Address</th>
+            <td class="entry"><?= TextField($this->email, "email", array('size' => 40)); ?></td>
+        </tr>
+        <tr>
+            <th class="label">Send as Courtesy Copy</th>
+            <td class="entry"><?= CheckBoxField($this->email, "cc_only"); ?></td>
+        </tr>
+    </table>
+</fieldset>

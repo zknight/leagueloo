@@ -60,9 +60,9 @@ class Division extends \simp\Model
     {
         // make sure games are removed
         $q = "delete from game where division_id = ?";
-        \R::debug(true);
+        //\R::debug(true);
         \R::getAll($q, array($this->id));
-        \R::debug(false);
+        //\R::debug(false);
         return true;
     }
 

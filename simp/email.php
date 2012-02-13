@@ -43,6 +43,10 @@ class Email
         {
             $headers .= "Cc: " . $email_data['cc'] . "\r\n";
         }
+        if (isset($email_data['bcc']))
+        {
+            $headers .= "Bcc: " . $email_data['bcc'] . "\r\n";
+        }
         $headers .=
             "X-Mailer: PHP/:" . phpversion();
         return mail($email_data['to'], $email_data['subject'], $message, $headers);

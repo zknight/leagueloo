@@ -21,6 +21,7 @@ class RescheduleController extends \simp\Controller
                 'accept',
                 'deny',
                 'modify',
+                'edit',
             )
         );
 
@@ -30,6 +31,7 @@ class RescheduleController extends \simp\Controller
         $this->MapAction('accept', 'DoAccept', \simp\Request::PUT);
         $this->MapAction('deny', 'DoDeny', \simp\Request::PUT);
         $this->MapAction('modify', 'DoModify', \simp\Request::PUT);
+        $this->MapACtion('edit', 'DoEdit', \simp\Request::PUT);
     }
 
     public function Index()
@@ -40,6 +42,7 @@ class RescheduleController extends \simp\Controller
             \Redirect(\Path::admin_reschedule_configure());
         }
         $this->StoreLocation();
+        $this->valid = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::VERIFIED));
         $this->pending = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::PENDING));
         $this->approved = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::APPROVED));
         $this->denied = \simp\Model::Find("Reschedule", "state = ? order by updated_at asc", array(\Reschedule::DENIED));
@@ -97,7 +100,7 @@ class RescheduleController extends \simp\Controller
                 AddFlash("Something went wrong.  Tell Zayne to fix it.");
                 \Redirect(\GetReturnURL());
             }
-            $this->request->SendAcceptEmail();
+            $this->request->SendApproveEmail();
             AddFlash("Reschedule request has been approved.");
             \Redirect(\GetReturnURL());
         }
@@ -181,6 +184,20 @@ class RescheduleController extends \simp\Controller
 
         return true; 
     }
+
+    public function Edit()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        return true;
+    }
+
+    public function DoEdit()
+    {
+        $this->request = \simp\Model::FindById("Reschedule", $this->GetParam("id"));
+        $vars = $this->GetFormVariable("Reschedule");
+        $this->request->UpdateFromArray($vars);
+    }
+
 
     public function Configure()
     {

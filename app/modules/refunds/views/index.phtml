@@ -1,0 +1,60 @@
+<h1 class="title">Refunds Administration</h1>
+<p>
+<?= l("Show Refund Requests", Path::module("refunds", "admin", "show_refunds")); ?> |
+<?= l("Add Refundable Program", Path::module('refunds', 'admin', 'add_refundable')); ?> |
+<?= l("Add Email Recipient", Path::module('refunds', 'admin', 'add_email')); ?>
+</p>
+<h2>Email Recipients</h2>
+<? if (count($this->emails) == 0): ?>
+None.
+<?= l("Add Email Recipient", Path::module('refunds', 'admin', 'add_email')); ?>
+<? else: ?>
+<table class="pretty">
+    <tr><th>Name</th><th>Email</th><th>Courtesy Copy Only?</th></tr>
+    <? foreach ($this->emails as $email): ?>
+    <tr>
+        <td><?= $email->name; ?></td>
+        <td><?= $email->email; ?></td>
+        <td><?= $email->cc_only ? "YES" : "no"; ?></td>
+    </tr>
+    <? endforeach; ?>
+</table>
+<? endif; ?>
+<h2>Refundable Programs</h2>
+<h3>Current</h3>
+<? if (count($this->refundables) == 0): ?>
+None.
+<? else: ?>
+<table class="pretty">
+    <tr><th>Name</th><th>Expiration</th><th>&nbsp;</th></tr>
+<? foreach ($this->refundables as $refundable): ?>
+    <tr>
+        <td><?= $refundable->name; ?></td>
+        <td><?= $refundable->expiry_str; ?></td>
+        <td>
+            <?= l("[edit]", Path::module('refunds', 'admin', 'edit_refundable', $refundable->id)); ?>
+            <?= l("[x]", Path::module('refunds', 'admin', 'remove_refundable', $refundable->id), array('method' => 'delete')); ?>
+        </td>
+    </tr>
+<? endforeach; ?>
+<? endif; ?>
+</table>
+<h3>Expired</h3>
+<? if (count($this->expired) == 0): ?>
+None.
+<?= l("Add Refundable Program", Path::module('refunds', 'admin', 'add_refundable')); ?>
+<? else: ?>
+<table class="pretty">
+    <tr><th>Name</th><th>Expiration</th><th>&nbsp;</th></tr>
+<? foreach ($this->expired as $refundable): ?>
+    <tr>
+        <td><?= $refundable->name; ?></td>
+        <td><?= $refundable->expiry_str; ?></td>
+        <td>
+            <?= l("[edit]", Path::module('refunds', 'admin', 'edit_refundable', $refundable->id)); ?>
+            <?= l("[x]", Path::module('refunds', 'admin', 'remove_refundable', $refundable->id), array('method' => 'delete')); ?>
+        </td>
+    </tr>
+<? endforeach; ?>
+<? endif; ?>
+</table>
