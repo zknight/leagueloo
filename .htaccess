@@ -1,12 +1,17 @@
 Options +FollowSymLinks
 RewriteEngine On
+# Dreamhost stats
+RewriteBase /
+RewriteCond %{REQUEST_URI} ^/(stats|failed_auth\.html).*$ [NC]
+RewriteRule . - [L]
+
+# Leagueloo
 RewriteRule ^([^/]+/)*favicon\.ico$ favicon.ico [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.js$
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.css$
 RewriteCond %{REQUEST_FILENAME} !^(.+)\.png$
 RewriteRule .* index.php [L]
-
 
 # Requires mod_expires to be enabled.
 <IfModule mod_expires.c>
@@ -15,8 +20,13 @@ RewriteRule .* index.php [L]
 
   # Cache all files for 2 weeks after access (A).
   ExpiresDefault A1209600
+  ExpiresByType image/png "modification plus 30 days"
+  ExpiresByType image/jpeg "modification plus 30 days"
+  ExpiresByType application/pdf "modification plus 30 days"
 
   # Do not cache dynamically generated pages.
   ExpiresByType text/html A1
+  ExpiresByType text/css A1
+
 </IfModule>
 
