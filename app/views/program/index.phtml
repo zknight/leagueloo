@@ -44,6 +44,9 @@ if ($this->UserLoggedIn()) {
             <?= TimeAgoInWords($article->updated_on); ?> ago
         </div>
     </div>
+    <? if ($article->image): ?>
+    <div class="image_wrap"><div class="image"><img src="<?= $article->img_path; ?>" /></div></div>
+    <? endif; ?>
     <div class="intro"><?= $article->body; ?></div>
     <!--div class="more"><?= l("Read more...", GetArticlePath('show', $article)); ?></div-->
 </div>

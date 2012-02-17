@@ -349,6 +349,17 @@ h1.title {
   background: #00152c url(../img/module-bg.png) repeat-x;
   border: 1px solid #002e5c;
   margin-bottom: 8px; }
+  .section .article .image_wrap {
+    background: #002142 url(../img/striped-fade-bg.png);
+    border-right: 1px solid #002e5c;
+    border-bottom: 1px solid #002e5c;
+    border-top: 1px solid #00152c;
+    border-left: 1px solid #00152c;
+    text-align: center; }
+    .section .article .image_wrap .image {
+      width: 420px;
+      height: 323px;
+      margin: 4px auto; }
   .section .article p.title {
     width: 100%;
     margin: 0;

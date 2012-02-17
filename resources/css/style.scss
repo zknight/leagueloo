@@ -460,6 +460,22 @@ h1.title {
         border:1px solid $light-navy;
         margin-bottom:8px;
 
+        .image_wrap {
+            background:$navy url(../img/striped-fade-bg.png);
+            border: {
+                right: 1px solid $light_navy;
+                bottom: 1px solid $light_navy;
+                top: 1px solid $dark_navy;
+                left: 1px solid $dark_navy;
+            }
+            text-align:center;
+            .image {
+                width:420px;
+                height:323px;
+                margin:4px auto;
+            }
+        }
+
         p.title { 
             width:100%; 
             margin:0;

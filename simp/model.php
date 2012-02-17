@@ -47,6 +47,16 @@ class Model extends BaseModel
         return new $model_name(\R::dispense(Model::TableName($model_name)));
     }
 
+    // Create model from query result
+    static public function CreateFromQueryResult($model_name, $result)
+    {
+        $bean = \R::dispense(Model::TableName($model_name));
+        $bean->import($result);
+        $model = new $model_name($bean);
+        $model->OnLoad();
+        return $model;
+    }
+
     static public function FindOrCreate($model_name, $conditions, $values)
     {
         $model = Model::FindOne($model_name, $conditions, $values);

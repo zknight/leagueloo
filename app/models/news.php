@@ -116,9 +116,13 @@ class News extends \simp\Model
             );
             if (isset($result))
             {
+                /*
                 $bean = \R::dispense("news");
                 $bean->import($result);
-                return new News($bean);
+                $article = new News($bean);
+                return $article;
+                 */
+                return \simp\Model::CreateFromQueryResult("News", $result);
             }
         }
         return null;

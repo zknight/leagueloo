@@ -10,6 +10,11 @@ if ($this->UserLoggedIn()) {
 ?>
 <? \simp\Module::Show("SectionMenu", array("current" => 'index', "entity_type" => $this->article->entity_type, "entity_id" => $this->article->entity_id)); ?>
 <div class="article">
+    <? if ($this->article->image): ?>
+    <div class="image_wrap"><div class="image">
+        <img src="<?= $this->article->img_path; ?>" />
+    </div></div>
+    <? endif; ?>
     <p class="title"><?= $this->article->title; ?></p>
     <div class="sub-title">
     <? if ($editor): ?>

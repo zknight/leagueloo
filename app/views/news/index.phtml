@@ -5,6 +5,9 @@
         <span class="date">
             <?= FormatDateTime($article->updated_on, "D M d, Y"); ?>
         </span>
+    <? if ($article->image): ?>
+    <div class="image"><img src="<? $article->img_path; ?>" /></div>
+    <? endif; ?>
     <p><?= $article->intro; ?></p>
     <p><?= l("Read more...", Path::news($article->id)); ?>
 </div>
