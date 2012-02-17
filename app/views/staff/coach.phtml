@@ -12,10 +12,11 @@
             <th>Current Club Teams:</th>
             <td>
             <? foreach($this->coach->teams as $team): ?>
-                <?= l("{$team->name} {$team->gender_str}", Path::relative(GetTeamPath("", $team))); ?><br />
+                <?= l($team->name, Path::relative(GetTeamPath("", $team))); ?><br />
             <? endforeach; ?>
             </td>
         </tr>
+        <? if (count($this->coach->coaching_licenses) > 0): ?>
         <tr>
             <th>Coaching Licenses and Certifications:</th>
             <td>
@@ -24,21 +25,30 @@
             <? endforeach; ?>
             </td>
         </tr>
+        <? endif; ?>
+        <? if ($this->coach->years_with_club > 0): ?>
         <tr>
             <th>Years with <?= SiteName(); ?>:</th>
             <td> <?= $this->coach->years_with_club; ?></td>
         </tr>
+        <? endif; ?>
+        <? if ($this->coach->coaching_history): ?>
         <tr>
             <th>Coaching Experience:</th>
             <td><?= $this->coach->coaching_history; ?></td>
         </tr>
+        <? endif; ?>
+        <? if ($this->coach->playing_experience): ?>
         <tr>
             <th>Playing Experience:</th>
             <td><?= $this->coach->playing_experience; ?></td>
         </tr>
+        <? endif; ?>
+        <? if ($this->coach->bio): ?>
         <tr>
             <th>Bio:</th>
             <td><?= $this->coach->bio; ?></td>
         </tr>
+        <? endif; ?>
     </table>
 </div>

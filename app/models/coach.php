@@ -105,6 +105,7 @@ class Coach extends \simp\Model
         foreach ($team_beans as $id => $bean)
         {
             $this->teams[$id] = new Team($bean);
+            $this->teams[$id]->OnLoad();
             $this->assoc_teams[$id] = true;
         }
   
@@ -123,7 +124,7 @@ class Coach extends \simp\Model
 
         if (!$this->VerifyNotEmpty('first_name')) $errors++;
         if (!$this->VerifyNotEmpty('last_name')) $errors++;
-        if (!$this->VerifyNotEmpty('title')) $errors++;
+        //if (!$this->VerifyNotEmpty('title')) $errors++;
 
         if ($errors == 0)
         {
