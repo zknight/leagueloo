@@ -108,6 +108,8 @@ class NewsController extends \simp\Controller
         //print_r($this->_params);
         $this->user = CurrentUser();
         $this->article = \simp\Model::Create('News');
+        $this->article->entity_type = $this->GetParam("entity");
+        $this->article->entity_id = $this->GetParam("entity_id");
         $this->entities = $this->GetEntities();
         $this->CheckForEvent();
         return true;

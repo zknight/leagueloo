@@ -352,7 +352,7 @@ class News extends \simp\Model
             $user->Notify($subject, 'new_article', array('article' => $this));
         }
 
-        return AfterSave();
+        return $this->AfterSave();
     }
 
     public function AfterSave()
