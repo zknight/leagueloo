@@ -30,7 +30,7 @@ class Coach extends \simp\Model
     static public $coach_titles = array(
         0 => 'Director of Coaching',
         1 => 'Assistant Director of Coaching',
-        2 => 'Director of Academy',
+        2 => 'Director of Player Development',
         3 => 'Assistant Director of Academy',
         4 => 'Director of Goalkeeping',
         5 => 'Senior Staff Coach',
